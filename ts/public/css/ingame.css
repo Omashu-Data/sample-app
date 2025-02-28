@@ -138,3 +138,164 @@ button.logCopy:hover {
   background: #8d8d8d;
   color: #ffffff;
 }
+
+/* In-game page ------------------------------*/
+
+.in-game {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+#metrics-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto auto;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.metrics-panel {
+  background: rgba(15, 15, 35, 0.8);
+  border: 1px solid #4985e2;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0, 110, 255, 0.3);
+}
+
+.metrics-panel h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #4985e2;
+  font-size: 18px;
+  border-bottom: 1px solid #4985e2;
+  padding-bottom: 5px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.stat-label {
+  color: #ddd;
+  font-weight: 500;
+}
+
+.stat-value {
+  color: #00DEFA;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.match-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.events-container {
+  max-height: 150px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.event-item {
+  padding: 5px;
+  border-left: 3px solid #4985e2;
+  background: rgba(25, 25, 50, 0.6);
+  margin-bottom: 5px;
+  transition: opacity 0.3s;
+}
+
+.event-item.kill {
+  border-left-color: #2ecc71;
+}
+
+.event-item.death {
+  border-left-color: #e74c3c;
+}
+
+.event-item.assist {
+  border-left-color: #f1c40f;
+}
+
+.ad-space {
+  width: 100%;
+  height: 90px;
+  margin-top: auto;
+  background: rgba(30, 30, 50, 0.7);
+  border: 1px dashed #555;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clip-notification {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  background: rgba(20, 120, 20, 0.9);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: transform 0.3s, opacity 0.3s;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.clip-notification.hidden {
+  transform: translateY(-100px);
+  opacity: 0;
+}
+
+/* Estilos para resaltar cambios en las estadísticas */
+.stat-value.highlight {
+  animation: highlight-change 1s ease;
+}
+
+@keyframes highlight-change {
+  0% { color: #00DEFA; }
+  50% { color: #ffff00; }
+  100% { color: #00DEFA; }
+}
+
+/* Barras de desplazamiento personalizadas */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4985e2;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a76d0;
+}

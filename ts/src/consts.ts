@@ -243,5 +243,5 @@ export const kWindowNames = {
 };
 
 export const kHotkeys = {
-  toggle: 'sample_app_ts_showhide'
+  toggle: 'lol_metrics_showhide'
 };

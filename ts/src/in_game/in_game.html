@@ -6,16 +6,16 @@
   <link rel="stylesheet" href="../../css/header.css" />
   <link rel="stylesheet" href="../../css/ingame.css" />
   <link rel="stylesheet" href="../../css/modal.css" />
-  <title>Overwolf Sample App - In-Game page</title>
+  <title>League of Legends - Métricas en Tiempo Real</title>
 </head>
 <body class="in-game">
   <!-- -------------------------------- Header ------------------------------- -->
 
   <header id="header" class="app-header">
     <img src="../../img/header_icon.svg" />
-    <h1>Sample App / in-game window</h1>
+    <h1>League of Legends Metrics</h1>
     <h1 class="hotkey-text">
-      Show/Hide Hotkey:
+      Mostrar/Ocultar:
       <kbd id="hotkey"></kbd>
     </h1>
     <div class="window-controls-group">
@@ -27,26 +27,84 @@
 
   <!-- --------------------------------- Main -------------------------------- -->
   <main>
-    <div id="logs">
-      <div id="events" class="logColumn">
-        <h1>Game Events</h1>
-        <div id="eventsLog" class="dataText">
+    <div id="metrics-container">
+      <div id="player-stats" class="metrics-panel">
+        <h2>Estadísticas del Jugador</h2>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">Kills:</span>
+            <span id="kills-value" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Deaths:</span>
+            <span id="deaths-value" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Assists:</span>
+            <span id="assists-value" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">CS:</span>
+            <span id="cs-value" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Nivel:</span>
+            <span id="level-value" class="stat-value">1</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Oro:</span>
+            <span id="gold-value" class="stat-value">0</span>
+          </div>
         </div>
       </div>
-      <div id="infoUpdates" class="logColumn">
-        <h1>Info Updates</h1>
-        <div id="infoLog" class="dataText"></div>
+      
+      <div id="match-info" class="metrics-panel">
+        <h2>Información de Partida</h2>
+        <div class="match-info-content">
+          <div class="stat-item">
+            <span class="stat-label">Tiempo de Partida:</span>
+            <span id="game-time-value" class="stat-value">00:00</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Modo de Juego:</span>
+            <span id="game-mode-value" class="stat-value">--</span>
+          </div>
+        </div>
+      </div>
+      
+      <div id="performance-metrics" class="metrics-panel">
+        <h2>Rendimiento</h2>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">DPS:</span>
+            <span id="dps-value" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">KDA:</span>
+            <span id="kda-value" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">CS/min:</span>
+            <span id="cspm-value" class="stat-value">0</span>
+          </div>
+        </div>
+      </div>
+      
+      <div id="recent-events" class="metrics-panel">
+        <h2>Eventos Recientes</h2>
+        <div id="events-log" class="events-container">
+          <!-- Los eventos se añadirán dinámicamente aquí -->
+        </div>
       </div>
     </div>
-    <div id="other">
-      <h1>Real-time Game Data</h1>
-      <p id="infoParagraph">
-        The background controller of this app is listening to all the game
-        events and info updates, and sends them to this window, that prints
-        them to the screen. Some specific events (Match Start/End, Kill and
-        Death) are painted in <span style="color: #00DEFA">teal</span> and
-        logged to the developers console.
-      </p>
+    
+    <!-- Contenedor para anuncios -->
+    <div id="ad-container" class="ad-space">
+      <!-- Anuncios de Overwolf se insertarán aquí -->
+    </div>
+    
+    <div id="clip-notification" class="clip-notification hidden">
+      <span>¡Clip guardado!</span>
     </div>
   </main>
 

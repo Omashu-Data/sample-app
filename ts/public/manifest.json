@@ -2,12 +2,12 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-    "name": "Sample App",
-    "author": "Overwolf",
-    "version": "3.0.3",
+    "name": "League of Legends Metrics",
+    "author": "LoL Metrics",
+    "version": "1.0.0",
     "minimum-overwolf-version": "0.160.0",
-    "description": "An example app for developers new to Overwolf",
-    "dock_button_title": "Sample - TS",
+    "description": "Muestra métricas en tiempo real para League of Legends",
+    "dock_button_title": "LoL Metrics",
     "icon": "icons/IconMouseOver.png",
     "icon_gray": "icons/IconMouseNormal.png",
     "launcher_icon": "icons/desktop-icon.ico",
@@ -15,13 +15,18 @@
   },
   "permissions": [
     "Hotkeys",
-    "GameInfo"
+    "GameInfo",
+    "Media",
+    "Extensions",
+    "Streaming",
+    "FileSystem",
+    "Clipboard"
   ],
   "data": {
     "start_window": "background",
     "hotkeys": {
-      "sample_app_ts_showhide": {
-        "title": "Show/Hide In-Game Window",
+      "lol_metrics_showhide": {
+        "title": "Mostrar/Ocultar Ventana en Juego",
         "action-type": "toggle",
         "default": "Ctrl+F"
       }
@@ -65,75 +70,30 @@
         "file": "in_game.html",
         "in_game_only": true,
         "focus_game_takeover": "ReleaseOnHidden",
-        "focus_game_takeover_release_hotkey": "sample_app_ts_showhide",
+        "focus_game_takeover_release_hotkey": "lol_metrics_showhide",
         "resizable": true,
         "transparent": true,
         "override_on_update": true,
         "size": {
-          "width": 1212,
-          "height": 699
+          "width": 600,
+          "height": 500
         },
         "min_size": {
-          "width": 1212,
-          "height": 699
+          "width": 400,
+          "height": 300
         }
       }
     },
     "game_targeting": {
       "type": "dedicated",
-      "game_ids": [
-        21216,
-        7764,
-        5426,
-        21634,
-        8032,
-        10844,
-        10906,
-        10826,
-        21404,
-        7212,
-        21640,
-        7314,
-        21626,
-        8954
-      ]
+      "game_ids": [5426]
     },
-    "game_events": [
-      21216,
-      7764,
-      5426,
-      21634,
-      8032,
-      10844,
-      10906,
-      10826,
-      21404,
-      7212,
-      21640,
-      7314,
-      21626,
-      8954
-    ],
+    "game_events": [5426],
     "launch_events": [
       {
         "event": "GameLaunch",
         "event_data": {
-          "game_ids": [
-            21216,
-            7764,
-            5426,
-            21634,
-            8032,
-            10844,
-            10906,
-            10826,
-            21404,
-            7212,
-            21640,
-            7314,
-            21626,
-            8954
-          ]
+          "game_ids": [5426]
         },
         "start_minimized": true
       }
