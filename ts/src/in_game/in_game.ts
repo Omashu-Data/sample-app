@@ -64,111 +64,166 @@ class InGameLOL extends AppWindow {
   private _isRecording: boolean = false;
   private _lastDamageValues: number[] = [];
   private _gameClassId: number = null;
+  
+  // Intervalo para consultar la API de Live Client Data
+  private _liveClientInterval: number = null;
 
   private constructor() {
     super(kWindowNames.inGame);
 
-    // Inicializar elementos HTML
-    this._killsValue = document.getElementById('kills-value');
-    this._deathsValue = document.getElementById('deaths-value');
-    this._assistsValue = document.getElementById('assists-value');
-    this._csValue = document.getElementById('cs-value');
-    this._levelValue = document.getElementById('level-value');
-    this._goldValue = document.getElementById('gold-value');
-    this._gameTimeValue = document.getElementById('game-time-value');
-    this._gameModeValue = document.getElementById('game-mode-value');
-    this._dpsValue = document.getElementById('dps-value');
-    this._kdaValue = document.getElementById('kda-value');
-    this._cspmValue = document.getElementById('cspm-value');
-    this._eventsLog = document.getElementById('events-log');
-    this._clipNotification = document.getElementById('clip-notification');
-    this._adContainer = document.getElementById('ad-container');
-
-    this.setToggleHotkeyBehavior();
-    this.setToggleHotkeyText();
-    
-    // Inicializar captura de clips
-    this.initializeClipCapture();
-    
-    // Configurar los anuncios
-    this.setupAds();
-    
-    // Iniciar el temporizador para actualizar métricas regulares
-    setInterval(() => this.updatePerformanceMetrics(), 5000);
+    this._gameEventsListener = null;
   }
 
-  public static instance() {
+  public static instance(): InGameLOL {
     if (!this._instance) {
       this._instance = new InGameLOL();
     }
+
     return this._instance;
   }
 
   public async run() {
-    this._gameClassId = await this.getCurrentGameClassId();
-    
-    // Verificar si el juego es League of Legends (ID: 5426)
-    if (this._gameClassId !== 5426) {
-      console.log('El juego actual no es League of Legends');
+    const gameClassId = await this.getCurrentGameClassId();
+    if (!gameClassId) {
       return;
     }
 
-    const gameFeatures = kGamesFeatures.get(this._gameClassId);
+    this._gameClassId = gameClassId;
 
-    if (gameFeatures && gameFeatures.length) {
-      this._gameEventsListener = new OWGamesEvents(
-        {
-          onInfoUpdates: this.onInfoUpdates.bind(this),
-          onNewEvents: this.onNewEvents.bind(this)
-        },
-        gameFeatures
-      );
+    console.log(`Juego detectado: ${gameClassId}`);
+    this.logEvent("Sistema", `Juego detectado: League of Legends`);
 
-      this._gameEventsListener.start();
+    // Iniciar y registrar el listener de eventos del juego
+    this.registerToGEP();
+
+    // Inicializar elementos UI
+    this.initializeUIElements();
+
+    // Resetear estadísticas
+    this.resetStats();
+
+    // Iniciar intervalo para consultar datos de Live Client
+    this.startLiveClientPolling();
+  }
+
+  private initializeUIElements() {
+    try {
+      // Obtener referencias a todos los elementos de la UI
+      this._killsValue = document.getElementById('kills-value');
+      this._deathsValue = document.getElementById('deaths-value');
+      this._assistsValue = document.getElementById('assists-value');
+      this._csValue = document.getElementById('cs-value');
+      this._levelValue = document.getElementById('level-value');
+      this._goldValue = document.getElementById('gold-value');
+      this._gameTimeValue = document.getElementById('game-time-value');
+      this._gameModeValue = document.getElementById('game-mode-value');
+      this._dpsValue = document.getElementById('dps-value');
+      this._kdaValue = document.getElementById('kda-value');
+      this._cspmValue = document.getElementById('cspm-value');
+      this._eventsLog = document.getElementById('events-log');
+      this._clipNotification = document.getElementById('clip-notification');
       
-      console.log('Inicializado el escuchador de eventos para League of Legends');
-      this.logEvent("Sistema", "Plugin inicializado y conectado correctamente");
+      // Verificar que todos los elementos existen
+      if (!this._killsValue || !this._deathsValue || !this._assistsValue || 
+          !this._csValue || !this._levelValue || !this._goldValue || 
+          !this._gameTimeValue || !this._gameModeValue || !this._dpsValue || 
+          !this._kdaValue || !this._cspmValue || !this._eventsLog || 
+          !this._clipNotification) {
+        console.error('No se pudieron inicializar todos los elementos UI');
+        this.logEvent("Error", "No se pudieron inicializar todos los elementos UI");
+      } else {
+        console.log('Elementos UI inicializados correctamente');
+        this.logEvent("Sistema", "Interfaz de usuario inicializada");
+      }
+    } catch (e) {
+      console.error('Error inicializando elementos UI:', e);
     }
   }
 
   private onInfoUpdates(info) {
-    console.log('Info update recibido:', info);
+    console.log('Info update recibido:', JSON.stringify(info));
     
     try {
-      // Actualizar información del juego
-      if (info.game_info) {
-        if (info.game_info.game_mode) {
-          this._playerStats.gameMode = info.game_info.game_mode;
-          this.updateUI('gameMode', info.game_info.game_mode);
+      // Función para actualizar elementos directamente
+      const updateElementText = (id, value) => {
+        this.updateElementText(id, value);
+      };
+
+      // Actualizar CS desde múltiples fuentes posibles para mayor robustez
+      const updateCS = (cs) => {
+        if (cs !== undefined && !isNaN(parseInt(cs))) {
+          this._playerStats.cs = parseInt(cs);
+          updateElementText('cs-value', cs);
+          console.log(`CS actualizado: ${cs}`);
+          
+          // Actualizar también CSPM
+          this.updatePerformanceMetrics();
+        }
+      };
+      
+      // Comprobación específica para información de League of Legends
+      if (info.live_client_data) {
+        // Intentar obtener información del tiempo de juego
+        if (info.live_client_data.game_data && info.live_client_data.game_data.gameTime) {
+          const gameTime = Math.floor(parseFloat(info.live_client_data.game_data.gameTime));
+          this._playerStats.gameTime = gameTime;
+          updateElementText('game-time-value', this.formatGameTime(gameTime));
         }
         
-        if (info.game_info.time) {
-          const timeInSeconds = parseInt(info.game_info.time);
-          this._playerStats.gameTime = timeInSeconds;
-          this.updateUI('gameTime', this.formatGameTime(timeInSeconds));
+        // Intentar obtener información del jugador activo
+        if (info.live_client_data.active_player) {
+          // Oro
+          if (info.live_client_data.active_player.currentGold) {
+            const gold = parseInt(info.live_client_data.active_player.currentGold);
+            this._playerStats.gold = gold;
+            updateElementText('gold-value', gold);
+          }
+          
+          // Puntuación de CS
+          if (info.live_client_data.active_player.minionsKilled) {
+            updateCS(info.live_client_data.active_player.minionsKilled);
+          }
+          
+          // CS alternativo (scores)
+          if (info.live_client_data.active_player.scores && 
+              (info.live_client_data.active_player.scores.creepScore !== undefined || 
+               info.live_client_data.active_player.scores.minionsKilled !== undefined)) {
+            const cs = info.live_client_data.active_player.scores.creepScore || 
+                       info.live_client_data.active_player.scores.minionsKilled;
+            updateCS(cs);
+          }
         }
       }
       
-      // Actualizar contadores
+      // Actualizar contadores (formato original)
       if (info.counters) {
         if (info.counters.gold) {
           this._playerStats.gold = parseInt(info.counters.gold);
-          this.updateUI('gold', info.counters.gold);
+          updateElementText('gold-value', info.counters.gold);
         }
         
+        // Comprobar múltiples nombres posibles para CS
         if (info.counters.minions_killed) {
-          this._playerStats.cs = parseInt(info.counters.minions_killed);
-          this.updateUI('cs', info.counters.minions_killed);
+          updateCS(info.counters.minions_killed);
+        }
+        
+        if (info.counters.cs) {
+          updateCS(info.counters.cs);
+        }
+        
+        if (info.counters.creep_score) {
+          updateCS(info.counters.creep_score);
+        }
+        
+        if (info.counters.creepScore) {
+          updateCS(info.counters.creepScore);
         }
       }
       
-      // Actualizar nivel
-      if (info.level) {
-        this._playerStats.level = parseInt(info.level);
-        this.updateUI('level', info.level);
-      }
+      // Actualizar métricas de rendimiento
+      this.updatePerformanceMetrics();
     } catch (e) {
-      console.error('Error procesando actualizaciones de información:', e);
+      console.error('Error procesando actualización de información:', e);
     }
   }
 
@@ -180,11 +235,23 @@ class InGameLOL extends AppWindow {
     }
     
     try {
+      // Función para actualizar elementos directamente
+      const updateElementText = (id, value) => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.textContent = value.toString();
+        } else {
+          console.error(`No se encontró el elemento con ID: ${id}`);
+        }
+      };
+
       e.events.forEach(event => {
+        console.log(`Procesando evento: ${event.name}`, event);
+        
         switch (event.name) {
           case 'kill':
             this._playerStats.kills++;
-            this.updateUI('kills', this._playerStats.kills.toString());
+            updateElementText('kills-value', this._playerStats.kills);
             this.logEvent("Kill", "¡Has conseguido una kill!");
             this.captureClip();
             this.sendEventToServer('kill');
@@ -192,21 +259,31 @@ class InGameLOL extends AppWindow {
             
           case 'death':
             this._playerStats.deaths++;
-            this.updateUI('deaths', this._playerStats.deaths.toString());
+            updateElementText('deaths-value', this._playerStats.deaths);
             this.logEvent("Muerte", "Has muerto");
             break;
             
           case 'assist':
             this._playerStats.assists++;
-            this.updateUI('assists', this._playerStats.assists.toString());
+            updateElementText('assists-value', this._playerStats.assists);
             this.logEvent("Asistencia", "Has conseguido una asistencia");
             break;
             
           case 'level':
             if (event.data) {
-              this._playerStats.level = parseInt(event.data.level);
-              this.updateUI('level', event.data.level);
-              this.logEvent("Nivel", `Has subido al nivel ${event.data.level}`);
+              let level = event.data.level;
+              // Manejar correctamente los datos de nivel
+              if (typeof level === 'object') {
+                if (level.hasOwnProperty('value')) {
+                  level = level.value;
+                } else {
+                  level = 1; // Valor predeterminado
+                }
+              }
+              
+              this._playerStats.level = parseInt(level) || 1;
+              updateElementText('level-value', this._playerStats.level);
+              this.logEvent("Nivel", `Has subido al nivel ${this._playerStats.level}`);
             }
             break;
             
@@ -219,6 +296,12 @@ class InGameLOL extends AppWindow {
               if (this._lastDamageValues.length > 10) {
                 this._lastDamageValues.shift();
               }
+              
+              // Actualizar el valor de DPS
+              const dps = this._lastDamageValues.length > 0 
+                ? (this._lastDamageValues.reduce((a, b) => a + b, 0) / this._lastDamageValues.length).toFixed(0)
+                : '0';
+              updateElementText('dps-value', dps);
             }
             break;
             
@@ -234,54 +317,69 @@ class InGameLOL extends AppWindow {
             this.sendMatchSummaryToServer();
             break;
         }
+        
+        // Actualizar KDA después de cada evento relevante
+        if (['kill', 'death', 'assist'].includes(event.name)) {
+          const kda = this._playerStats.deaths > 0 
+            ? ((this._playerStats.kills + this._playerStats.assists) / this._playerStats.deaths).toFixed(2)
+            : (this._playerStats.kills + this._playerStats.assists).toString();
+          updateElementText('kda-value', kda);
+        }
       });
     } catch (e) {
       console.error('Error procesando eventos:', e);
     }
   }
 
-  // Actualiza los elementos de la UI con nuevos valores
   private updateUI(stat: string, value: string) {
     try {
-      let element: HTMLElement = null;
+      console.log(`Intentando actualizar UI para ${stat} con valor ${value}`);
       
+      let elementId = '';
+      
+      // Mapear el nombre de la estadística al ID del elemento
       switch (stat) {
         case 'kills':
-          element = this._killsValue;
+          elementId = 'kills-value';
           break;
         case 'deaths':
-          element = this._deathsValue;
+          elementId = 'deaths-value';
           break;
         case 'assists':
-          element = this._assistsValue;
+          elementId = 'assists-value';
           break;
         case 'cs':
-          element = this._csValue;
+          elementId = 'cs-value';
           break;
         case 'level':
-          element = this._levelValue;
+          elementId = 'level-value';
           break;
         case 'gold':
-          element = this._goldValue;
+          elementId = 'gold-value';
           break;
         case 'gameTime':
-          element = this._gameTimeValue;
+          elementId = 'game-time-value';
           break;
         case 'gameMode':
-          element = this._gameModeValue;
+          elementId = 'game-mode-value';
           break;
         case 'dps':
-          element = this._dpsValue;
+          elementId = 'dps-value';
           break;
         case 'kda':
-          element = this._kdaValue;
+          elementId = 'kda-value';
           break;
         case 'cspm':
-          element = this._cspmValue;
+          elementId = 'cspm-value';
           break;
       }
       
+      // Intentar obtener el elemento por su ID
+      const element = document.getElementById(elementId);
+      
       if (element) {
+        console.log(`Elemento encontrado: ${elementId}, valor actual: ${element.textContent}, nuevo valor: ${value}`);
+        
         // Guardar el valor anterior para detectar cambios
         const oldValue = element.textContent;
         element.textContent = value;
@@ -293,46 +391,65 @@ class InGameLOL extends AppWindow {
             element.classList.remove('highlight');
           }, 1000);
         }
+      } else {
+        console.error(`No se encontró el elemento con ID: ${elementId}`);
+        
+        // Intentar encontrar el elemento usando un enfoque alternativo
+        console.log(`Intentando búsqueda alternativa para ${stat}`);
+        const possibleElements = document.querySelectorAll(`[id*="${stat}"], [id*="${stat.toLowerCase()}"], [class*="${stat}"], [class*="${stat.toLowerCase()}"]`);
+        console.log(`Elementos alternativos encontrados: ${possibleElements.length}`);
+        possibleElements.forEach(el => {
+          console.log(`  - Elemento: ${el.tagName}, ID: ${el.id}, Clase: ${el.className}`);
+        });
       }
     } catch (e) {
       console.error('Error actualizando la UI:', e);
     }
   }
 
-  // Calcula y actualiza las métricas de rendimiento
   private updatePerformanceMetrics() {
     try {
+      // Función para actualizar elementos directamente
+      const updateElementText = (id, value) => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.textContent = value.toString();
+        } else {
+          console.error(`No se encontró el elemento con ID: ${id}`);
+        }
+      };
+      
       // Calcular KDA
       const kda = this._playerStats.deaths > 0 
         ? ((this._playerStats.kills + this._playerStats.assists) / this._playerStats.deaths).toFixed(2)
         : (this._playerStats.kills + this._playerStats.assists).toString();
-      this.updateUI('kda', kda);
+      updateElementText('kda-value', kda);
       
       // Calcular CS por minuto
       const gameTimeMinutes = this._playerStats.gameTime / 60;
       const cspm = gameTimeMinutes > 0 
         ? (this._playerStats.cs / gameTimeMinutes).toFixed(1)
         : '0';
-      this.updateUI('cspm', cspm);
+      updateElementText('cspm-value', cspm);
       
       // Calcular DPS promedio
       const dps = this._lastDamageValues.length > 0 
         ? (this._lastDamageValues.reduce((a, b) => a + b, 0) / this._lastDamageValues.length).toFixed(0)
         : '0';
-      this.updateUI('dps', dps);
+      updateElementText('dps-value', dps);
+      
+      console.log('Métricas de rendimiento actualizadas: KDA=' + kda + ', CSPM=' + cspm + ', DPS=' + dps);
     } catch (e) {
       console.error('Error actualizando métricas de rendimiento:', e);
     }
   }
 
-  // Formatea el tiempo de juego a mm:ss
   private formatGameTime(timeInSeconds: number): string {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
-  // Registra eventos en el log visual
   private logEvent(category: string, message: string) {
     try {
       const eventItem = document.createElement('div');
@@ -362,7 +479,6 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  // Inicializa la captura de clips
   private initializeClipCapture() {
     try {
       overwolf.media.replays.onCaptureError.addListener(error => {
@@ -395,7 +511,6 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  // Captura un clip cuando el jugador realiza una kill
   private captureClip() {
     try {
       // Si ya está grabando, no intentar iniciar otra grabación
@@ -423,7 +538,6 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  // Muestra una notificación cuando se ha guardado un clip
   private showClipNotification() {
     try {
       this._clipNotification.classList.remove('hidden');
@@ -436,7 +550,6 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  // Configura los anuncios de Overwolf
   private setupAds() {
     try {
       // Implementación básica de anuncios
@@ -454,7 +567,6 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  // Envía un evento al servidor web
   private sendEventToServer(eventType: string) {
     try {
       fetch("https://tu-servidor.com/api/event", {
@@ -475,7 +587,6 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  // Envía un resumen de la partida al servidor
   private sendMatchSummaryToServer() {
     try {
       fetch("https://tu-servidor.com/api/match/summary", {
@@ -497,9 +608,18 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  // Resetea las estadísticas para una nueva partida
   private resetStats() {
     try {
+      // Función para actualizar elementos directamente
+      const updateElementText = (id, value) => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.textContent = value.toString();
+        } else {
+          console.error(`No se encontró el elemento con ID: ${id}`);
+        }
+      };
+      
       this._playerStats = {
         kills: 0,
         deaths: 0,
@@ -513,26 +633,29 @@ class InGameLOL extends AppWindow {
       
       this._lastDamageValues = [];
       
-      // Actualizar UI
-      this.updateUI('kills', '0');
-      this.updateUI('deaths', '0');
-      this.updateUI('assists', '0');
-      this.updateUI('cs', '0');
-      this.updateUI('level', '1');
-      this.updateUI('gold', '0');
-      this.updateUI('gameTime', '00:00');
-      this.updateUI('dps', '0');
-      this.updateUI('kda', '0');
-      this.updateUI('cspm', '0');
+      // Actualizar UI directamente
+      updateElementText('kills-value', '0');
+      updateElementText('deaths-value', '0');
+      updateElementText('assists-value', '0');
+      updateElementText('cs-value', '0');
+      updateElementText('level-value', '1');
+      updateElementText('gold-value', '0');
+      updateElementText('game-time-value', '00:00');
+      updateElementText('dps-value', '0');
+      updateElementText('kda-value', '0');
+      updateElementText('cspm-value', '0');
+      updateElementText('game-mode-value', 'CLASSIC');
       
       // Limpiar log de eventos
       this._eventsLog.innerHTML = '';
+      
+      console.log('Estadísticas reseteadas correctamente');
+      this.logEvent("Sistema", "Estadísticas reseteadas para nueva partida");
     } catch (e) {
       console.error('Error al resetear estadísticas:', e);
     }
   }
 
-  // Displays the toggle minimize/restore hotkey in the window header
   private async setToggleHotkeyText() {
     try {
       const gameClassId = await this.getCurrentGameClassId();
@@ -544,7 +667,6 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  // Sets toggleInGameWindow as the behavior for the Ctrl+F hotkey
   private async setToggleHotkeyBehavior() {
     try {
       const toggleInGameWindow = async (
@@ -575,6 +697,278 @@ class InGameLOL extends AppWindow {
     } catch (e) {
       console.error('Error al obtener el ID de clase del juego:', e);
       return null;
+    }
+  }
+
+  private async init() {
+    try {
+      console.log('Inicializando la interfaz...');
+      
+      // Establecer datos iniciales
+      this._playerStats = {
+        kills: 0,
+        deaths: 0,
+        assists: 0,
+        cs: 0,
+        gold: 0,
+        gameTime: 0,
+        level: 1,
+        gameMode: 'Classic'
+      };
+  
+      // Inicializar la UI con datos por defecto - usar directamente los IDs
+      document.getElementById('kills-value').textContent = '0';
+      document.getElementById('deaths-value').textContent = '0';
+      document.getElementById('assists-value').textContent = '0';
+      document.getElementById('kda-value').textContent = '0.0';
+      document.getElementById('cs-value').textContent = '0';
+      document.getElementById('gold-value').textContent = '0';
+      document.getElementById('game-time-value').textContent = '00:00';
+      document.getElementById('level-value').textContent = '1';
+      document.getElementById('game-mode-value').textContent = 'Classic';
+  
+      // Registrar el evento de inicialización
+      this.logEvent("Sistema", "Aplicación inicializada");
+  
+      // Cargar un anuncio simulado
+      this.loadSimulatedAd();
+      console.log('Interfaz inicializada correctamente');
+      
+      return true;
+    } catch (error) {
+      console.error('Error al inicializar la interfaz:', error);
+      return false;
+    }
+  }
+
+  private loadSimulatedAd() {
+    try {
+      const adContainer = document.getElementById('ad-container');
+      if (adContainer) {
+        // Crear un anuncio simulado con estilo omashu.gg
+        const adContent = document.createElement('div');
+        adContent.className = 'simulated-ad';
+        adContent.innerHTML = `
+          <div style="background: linear-gradient(135deg, #130b37, #271664); color: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(109, 61, 255, 0.3); animation: pulse 2s infinite;">
+            <h3 style="margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; color: rgb(188, 166, 255);">omashu.gg</h3>
+            <p style="margin: 0 0 15px 0; font-size: 14px;">Mejora tu experiencia de juego con herramientas premium</p>
+            <div style="display: flex; justify-content: center; gap: 10px;">
+              <button style="background: rgba(92, 52, 227, 1); border: none; color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.3s;">Suscribirse</button>
+              <button style="background: rgba(19, 11, 55, 0.8); border: 1px solid rgba(109, 61, 255, 0.3); color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.3s;">Más información</button>
+            </div>
+          </div>
+          <style>
+            @keyframes pulse {
+              0% { transform: scale(1); }
+              50% { transform: scale(1.02); }
+              100% { transform: scale(1); }
+            }
+          </style>
+        `;
+        adContainer.innerHTML = '';
+        adContainer.appendChild(adContent);
+        
+        // Registrar evento
+        this.logEvent("Publicidad", "Anuncio de omashu.gg cargado");
+        console.log('Anuncio de omashu.gg cargado en el contenedor:', adContainer.id);
+      } else {
+        console.error('No se encontró el contenedor de anuncios');
+      }
+    } catch (e) {
+      console.error('Error al cargar el anuncio simulado:', e);
+    }
+  }
+
+  private registerEvents() {
+    // Registrar manejadores de eventos de juego
+    overwolf.games.events.onInfoUpdates2.addListener(this.onInfoUpdates.bind(this));
+    overwolf.games.events.onNewEvents.addListener(this.onNewEvents.bind(this));
+    
+    this.logEvent("Sistema", "Eventos del juego registrados");
+  }
+
+  private setupButtons() {
+    // Botón para cerrar la ventana
+    const closeButton = document.getElementById('closeButton');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        overwolf.windows.getCurrentWindow(result => {
+          if (result.success) {
+            overwolf.windows.close(result.window.id);
+          }
+        });
+      });
+    }
+
+    // Botón para minimizar la ventana
+    const minimizeButton = document.getElementById('minimizeButton');
+    if (minimizeButton) {
+      minimizeButton.addEventListener('click', () => {
+        overwolf.windows.getCurrentWindow(result => {
+          if (result.success) {
+            overwolf.windows.minimize(result.window.id);
+          }
+        });
+      });
+    }
+
+    this.logEvent("Sistema", "Botones configurados");
+  }
+
+  private startLiveClientPolling() {
+    // Realizar polling cada 5 segundos
+    setInterval(async () => {
+      try {
+        await this.fetchLiveClientData();
+      } catch (error) {
+        console.error('Error en el polling de datos de League of Legends:', error);
+      }
+    }, 5000);
+    
+    console.log('Polling a la API Live Client iniciado');
+    this.logEvent("Sistema", "Conexión a API de League of Legends iniciada");
+  }
+  
+  private async fetchLiveClientData() {
+    try {
+      // Función para actualizar elementos directamente
+      const updateElementText = (id, value) => {
+        this.updateElementText(id, value);
+      };
+      
+      // Intentar obtener datos de la API Live Client
+      const response = await fetch('https://127.0.0.1:2999/liveclientdata/allgamedata');
+      if (!response.ok) {
+        throw new Error(`Error de conexión: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Datos obtenidos de API Live Client:', data);
+      
+      if (data.activePlayer) {
+        // Obtener datos relevantes
+        const activePlayer = data.activePlayer;
+        const playerStats = activePlayer.championStats;
+        const currentGold = activePlayer.currentGold;
+        
+        // Actualizar oro
+        this._playerStats.gold = currentGold;
+        updateElementText('gold-value', currentGold);
+        
+        // Actualizar CS - verificamos múltiples posibles ubicaciones
+        if (activePlayer.scores && 
+           (activePlayer.scores.creepScore !== undefined || 
+            activePlayer.scores.minionsKilled !== undefined)) {
+          const cs = activePlayer.scores.creepScore || activePlayer.scores.minionsKilled;
+          this._playerStats.cs = cs;
+          updateElementText('cs-value', cs);
+          console.log(`CS actualizado desde API Live Client: ${cs}`);
+        }
+        
+        // Intentar obtener CS desde otras ubicaciones posibles
+        if (activePlayer.minionsKilled !== undefined) {
+          this._playerStats.cs = activePlayer.minionsKilled;
+          updateElementText('cs-value', activePlayer.minionsKilled);
+          console.log(`CS actualizado desde minionsKilled: ${activePlayer.minionsKilled}`);
+        }
+        
+        // Actualizar nivel
+        if (activePlayer.level !== undefined) {
+          this._playerStats.level = activePlayer.level;
+          updateElementText('level-value', activePlayer.level);
+        }
+        
+        // Actualizar KDA
+        if (activePlayer.scores) {
+          const { kills, deaths, assists } = activePlayer.scores;
+          if (kills !== undefined) this._playerStats.kills = kills;
+          if (deaths !== undefined) this._playerStats.deaths = deaths;
+          if (assists !== undefined) this._playerStats.assists = assists;
+          
+          updateElementText('kills-value', this._playerStats.kills);
+          updateElementText('deaths-value', this._playerStats.deaths);
+          updateElementText('assists-value', this._playerStats.assists);
+        }
+      }
+      
+      // Buscar el jugador en la lista de jugadores si no tenemos todos los datos
+      if (data.allPlayers && this._playerStats.cs === 0) {
+        // Intentar encontrar nuestro jugador por nombre
+        const summonerName = data.activePlayer?.summonerName;
+        if (summonerName) {
+          const player = data.allPlayers.find(p => p.summonerName === summonerName);
+          if (player && player.scores) {
+            if (player.scores.creepScore !== undefined) {
+              this._playerStats.cs = player.scores.creepScore;
+              updateElementText('cs-value', player.scores.creepScore);
+              console.log(`CS actualizado desde allPlayers: ${player.scores.creepScore}`);
+            }
+          }
+        }
+      }
+      
+      // Actualizar tiempo de partida
+      if (data.gameData && data.gameData.gameTime !== undefined) {
+        const gameTime = Math.floor(data.gameData.gameTime);
+        this._playerStats.gameTime = gameTime;
+        updateElementText('game-time-value', this.formatGameTime(gameTime));
+      }
+      
+      // Actualizar métricas de rendimiento
+      this.updatePerformanceMetrics();
+      
+      this.logEvent("API", "Datos actualizados desde la API de League");
+    } catch (error) {
+      console.error('Error al obtener datos de la API Live Client:', error);
+    }
+  }
+
+  // Registra el listener al Game Events Provider de Overwolf
+  private registerToGEP() {
+    try {
+      // Verificar si el juego es League of Legends (ID: 5426)
+      if (this._gameClassId !== 5426) {
+        console.log('El juego actual no es League of Legends');
+        return;
+      }
+
+      const gameFeatures = kGamesFeatures.get(this._gameClassId);
+  
+      if (gameFeatures && gameFeatures.length) {
+        this._gameEventsListener = new OWGamesEvents(
+          {
+            onInfoUpdates: this.onInfoUpdates.bind(this),
+            onNewEvents: this.onNewEvents.bind(this)
+          },
+          gameFeatures
+        );
+  
+        this._gameEventsListener.start();
+        
+        console.log('Inicializado el escuchador de eventos para League of Legends');
+        this.logEvent("Sistema", "Plugin inicializado y conectado correctamente");
+      }
+    } catch (error) {
+      console.error('Error al registrar al GEP:', error);
+    }
+  }
+
+  // Función auxiliar para actualizar el texto de un elemento
+  private updateElementText(id: string, value: any) {
+    try {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = value.toString();
+        // Añadir efecto de highlight
+        element.classList.add('highlight');
+        setTimeout(() => {
+          element.classList.remove('highlight');
+        }, 1000);
+      } else {
+        console.error(`No se encontró el elemento con ID: ${id}`);
+      }
+    } catch (e) {
+      console.error(`Error al actualizar elemento ${id}:`, e);
     }
   }
 }

@@ -6,14 +6,17 @@
   <link rel="stylesheet" href="../../css/header.css" />
   <link rel="stylesheet" href="../../css/ingame.css" />
   <link rel="stylesheet" href="../../css/modal.css" />
-  <title>League of Legends - Métricas en Tiempo Real</title>
+  <link rel="stylesheet" href="../../css/omashu-theme.css" />
+  <title>omashu.gg - League of Legends</title>
 </head>
-<body class="in-game">
+<body class="in-game" id="app-container">
   <!-- -------------------------------- Header ------------------------------- -->
 
   <header id="header" class="app-header">
-    <img src="../../img/header_icon.svg" />
-    <h1>League of Legends Metrics</h1>
+    <div class="logo-container">
+      <img src="../../img/header_icon.svg" class="omashu-logo" alt="omashu.gg logo" />
+      <h1>omashu.gg</h1>
+    </div>
     <h1 class="hotkey-text">
       Mostrar/Ocultar:
       <kbd id="hotkey"></kbd>
@@ -25,86 +28,132 @@
     </div>
   </header>
 
+  <!-- Banner de anuncios - Parte superior -->
+  <div id="standard-banner" class="ad-container top-banner">
+    <div id="standard-banner-placeholder" class="ad-placeholder" style="width: 728px; height: 90px;">
+      <span>Anuncio 728x90</span>
+    </div>
+  </div>
+
+  <!-- Sistema de pestañas -->
+  <div class="tabs-container">
+    <div class="tabs-navigation">
+      <button class="tab-button active" data-tab="stats">Estadísticas</button>
+      <button class="tab-button" data-tab="events">Eventos</button>
+      <button class="tab-button" data-tab="performance">Rendimiento</button>
+    </div>
+  </div>
+
   <!-- --------------------------------- Main -------------------------------- -->
-  <main>
-    <div id="metrics-container">
-      <div id="player-stats" class="metrics-panel">
-        <h2>Estadísticas del Jugador</h2>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-label">Kills:</span>
-            <span id="kills-value" class="stat-value">0</span>
+  <main class="with-ads">
+    <div class="content-wrapper">
+      <!-- Contenido de pestañas -->
+      <div class="tab-content">
+        <!-- Pestaña de Estadísticas (activa por defecto) -->
+        <div id="stats-tab" class="tab-pane active">
+          <div id="metrics-container">
+            <div id="player-stats" class="metrics-panel stats-panel">
+              <h2>Estadísticas del Jugador</h2>
+              <div class="stats-grid">
+                <div class="stat-item metric-container">
+                  <span class="stat-label metric-label">Kills:</span>
+                  <span id="kills-value" class="stat-value metric-value">0</span>
+                </div>
+                <div class="stat-item metric-container">
+                  <span class="stat-label metric-label">Deaths:</span>
+                  <span id="deaths-value" class="stat-value metric-value">0</span>
+                </div>
+                <div class="stat-item metric-container">
+                  <span class="stat-label metric-label">Assists:</span>
+                  <span id="assists-value" class="stat-value metric-value">0</span>
+                </div>
+                <div class="stat-item metric-container">
+                  <span class="stat-label metric-label">CS:</span>
+                  <span id="cs-value" class="stat-value metric-value">0</span>
+                </div>
+                <div class="stat-item metric-container">
+                  <span class="stat-label metric-label">Nivel:</span>
+                  <span id="level-value" class="stat-value metric-value">1</span>
+                </div>
+                <div class="stat-item metric-container">
+                  <span class="stat-label metric-label">Oro:</span>
+                  <span id="gold-value" class="stat-value metric-value">0</span>
+                </div>
+              </div>
+            </div>
+            
+            <div id="match-info" class="metrics-panel stats-panel">
+              <h2>Información de Partida</h2>
+              <div class="match-info-content">
+                <div class="stat-item metric-container">
+                  <span class="stat-label metric-label">Tiempo de Partida:</span>
+                  <span id="game-time-value" class="stat-value metric-value">00:00</span>
+                </div>
+                <div class="stat-item metric-container">
+                  <span class="stat-label metric-label">Modo de Juego:</span>
+                  <span id="game-mode-value" class="stat-value metric-value">--</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="stat-item">
-            <span class="stat-label">Deaths:</span>
-            <span id="deaths-value" class="stat-value">0</span>
+        </div>
+        
+        <!-- Pestaña de Eventos -->
+        <div id="events-tab" class="tab-pane">
+          <div id="recent-events" class="metrics-panel stats-panel">
+            <h2>Eventos Recientes</h2>
+            <div id="events-log" class="events-container">
+              <!-- Los eventos se añadirán dinámicamente aquí -->
+            </div>
           </div>
-          <div class="stat-item">
-            <span class="stat-label">Assists:</span>
-            <span id="assists-value" class="stat-value">0</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">CS:</span>
-            <span id="cs-value" class="stat-value">0</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Nivel:</span>
-            <span id="level-value" class="stat-value">1</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Oro:</span>
-            <span id="gold-value" class="stat-value">0</span>
+        </div>
+        
+        <!-- Pestaña de Rendimiento -->
+        <div id="performance-tab" class="tab-pane">
+          <div id="performance-metrics" class="metrics-panel stats-panel">
+            <h2>Rendimiento</h2>
+            <div class="stats-grid">
+              <div class="stat-item metric-container">
+                <span class="stat-label metric-label">DPS:</span>
+                <span id="dps-value" class="stat-value metric-value">0</span>
+              </div>
+              <div class="stat-item metric-container">
+                <span class="stat-label metric-label">KDA:</span>
+                <span id="kda-value" class="stat-value metric-value">0</span>
+              </div>
+              <div class="stat-item metric-container">
+                <span class="stat-label metric-label">CS/min:</span>
+                <span id="cspm-value" class="stat-value metric-value">0</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       
-      <div id="match-info" class="metrics-panel">
-        <h2>Información de Partida</h2>
-        <div class="match-info-content">
-          <div class="stat-item">
-            <span class="stat-label">Tiempo de Partida:</span>
-            <span id="game-time-value" class="stat-value">00:00</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Modo de Juego:</span>
-            <span id="game-mode-value" class="stat-value">--</span>
-          </div>
-        </div>
-      </div>
-      
-      <div id="performance-metrics" class="metrics-panel">
-        <h2>Rendimiento</h2>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-label">DPS:</span>
-            <span id="dps-value" class="stat-value">0</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">KDA:</span>
-            <span id="kda-value" class="stat-value">0</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">CS/min:</span>
-            <span id="cspm-value" class="stat-value">0</span>
-          </div>
-        </div>
-      </div>
-      
-      <div id="recent-events" class="metrics-panel">
-        <h2>Eventos Recientes</h2>
-        <div id="events-log" class="events-container">
-          <!-- Los eventos se añadirán dinámicamente aquí -->
-        </div>
+      <div id="clip-notification" class="clip-notification hidden">
+        <span>¡Clip guardado!</span>
       </div>
     </div>
     
-    <!-- Contenedor para anuncios -->
-    <div id="ad-container" class="ad-space">
-      <!-- Anuncios de Overwolf se insertarán aquí -->
-    </div>
-    
-    <div id="clip-notification" class="clip-notification hidden">
-      <span>¡Clip guardado!</span>
+    <!-- Anuncio rectangular - Lateral derecho -->
+    <div id="medium-rectangle" class="ad-container right-rectangle">
+      <!-- Mensaje promocional de omashu.gg -->
+      <div id="omashu-premium" class="omashu-premium-container" style="width: 300px; height: 250px;">
+        <div class="premium-content">
+          <h3>omashu.gg PREMIUM</h3>
+          <p>Mejora tu experiencia de juego con herramientas premium y obtén beneficios exclusivos:</p>
+          <ul class="premium-benefits">
+            <li>Análisis detallado de partidas</li>
+            <li>Estadísticas avanzadas en tiempo real</li>
+            <li>Grabación automática mejorada</li>
+            <li>Sin anuncios</li>
+          </ul>
+          <div class="premium-buttons">
+            <button class="premium-subscribe">Suscribirse</button>
+            <button class="premium-info">Más información</button>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -125,6 +174,33 @@
     ga('set', 'checkProtocolTask', function () { });
     ga('require', 'displayfeatures');
     ga('send', 'pageview', '/in_game.html');
+  </script>
+  
+  <!-- Script para el sistema de pestañas -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+      
+      // Función para cambiar de pestaña
+      function changeTab(tabId) {
+        // Desactivar todas las pestañas
+        tabButtons.forEach(button => button.classList.remove('active'));
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+        
+        // Activar la pestaña seleccionada
+        document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+        document.getElementById(`${tabId}-tab`).classList.add('active');
+      }
+      
+      // Agregar eventos a los botones de pestañas
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const tabId = this.getAttribute('data-tab');
+          changeTab(tabId);
+        });
+      });
+    });
   </script>
 </body>
 </html>

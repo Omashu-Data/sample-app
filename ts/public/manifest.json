@@ -2,12 +2,12 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-    "name": "League of Legends Metrics",
-    "author": "LoL Metrics",
+    "name": "omashu.gg League of Legends",
+    "author": "omashu.gg",
     "version": "1.0.0",
     "minimum-overwolf-version": "0.160.0",
-    "description": "Muestra métricas en tiempo real para League of Legends",
-    "dock_button_title": "LoL Metrics",
+    "description": "Herramienta premium para League of Legends. Métricas en tiempo real, grabación automática y más.",
+    "dock_button_title": "omashu.gg",
     "icon": "icons/IconMouseOver.png",
     "icon_gray": "icons/IconMouseNormal.png",
     "launcher_icon": "icons/desktop-icon.ico",
@@ -75,13 +75,17 @@
         "transparent": true,
         "override_on_update": true,
         "size": {
-          "width": 600,
-          "height": 500
+          "width": 1000,
+          "height": 700
         },
         "min_size": {
           "width": 400,
           "height": 300
-        }
+        },
+        "block_top_window_navigation": true,
+        "popup_blocker": true,
+        "mute": true,
+        "keep_window_location": true
       }
     },
     "game_targeting": {
@@ -101,7 +105,29 @@
     "developer": {
       "enable_auto_refresh": true,
       "reload_delay": 1000,
-      "filter": "*.*"
+      "filter": "*.*",
+      "auto_enable": false
+    },
+    "ow_defines": {
+      "monetization": {
+        "enabled": true
+      },
+      "ads": {
+        "standard_banner": {
+          "size": {
+            "width": 728,
+            "height": 90
+          },
+          "position": "top"
+        },
+        "medium_rectangle": {
+          "size": {
+            "width": 300,
+            "height": 250
+          },
+          "position": "right"
+        }
+      }
     }
   }
 }

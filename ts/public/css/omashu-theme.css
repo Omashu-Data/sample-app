@@ -1,0 +1,186 @@
+/* Tema Omashu.gg para Overwolf League of Legends Plugin */
+
+/* Variables globales */
+:root {
+  --omashu-background: #090521;
+  --omashu-header: rgb(109, 61, 255, 0.1);
+  --omashu-border: 1px solid rgb(109, 61, 255, 0.3);
+  --omashu-button-border: 1px solid rgba(92, 52, 227, 0.3);
+  --omashu-color-white: #ffffff;
+  --omashu-white-50: rgba(255, 255, 255, 0.5);
+  --omashu-purple-light: rgb(188, 166, 255, 1);
+  --omashu-purple-dark: #271664;
+  --omashu-highlight: rgba(92, 52, 227, 1);
+  --omashu-active: rgba(109, 61, 255, 1);
+  --omashu-error: #ff3257;
+}
+
+/* Estilos generales */
+#app-container {
+  background: var(--omashu-background);
+  color: var(--omashu-color-white);
+  font-family: 'Arial', sans-serif; /* Fallback a Matter cuando esté disponible */
+}
+
+/* Header */
+.app-header {
+  background: var(--omashu-header);
+  border-bottom: var(--omashu-border);
+}
+
+/* Paneles */
+.stats-panel {
+  background: rgba(19, 11, 55, 0.8);
+  border-radius: 4px;
+  border: var(--omashu-border);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.stats-panel:hover {
+  box-shadow: 0 0 10px rgba(109, 61, 255, 0.3);
+}
+
+.stats-panel h2 {
+  color: var(--omashu-purple-light);
+  border-bottom: 1px solid var(--omashu-purple-dark);
+}
+
+/* Métricas */
+.metric-container {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--omashu-purple-dark);
+}
+
+.metric-label {
+  font-size: 14px;
+  color: var(--omashu-white-50);
+}
+
+.metric-value {
+  font-size: 16px;
+  color: var(--omashu-color-white);
+  margin-left: auto;
+  font-weight: bold;
+}
+
+/* Valores destacados */
+.highlight {
+  animation: pulse 1s;
+  color: var(--omashu-purple-light) !important;
+}
+
+/* Eventos */
+.event-item {
+  padding: 6px 10px;
+  border-left: 3px solid var(--omashu-purple-dark);
+  margin-bottom: 5px;
+  background: rgba(19, 11, 55, 0.4);
+  border-radius: 0 2px 2px 0;
+  font-size: 13px;
+}
+
+.event-item.kill {
+  border-left-color: #2ecc71;
+}
+
+.event-item.death {
+  border-left-color: var(--omashu-error);
+}
+
+.event-item.assist {
+  border-left-color: var(--omashu-active);
+}
+
+/* Anuncios */
+.simulated-ad {
+  background: linear-gradient(135deg, #130b37, #271664);
+  border: var(--omashu-border);
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.ad-space {
+  background: rgba(19, 11, 55, 0.4);
+  border: 1px dashed var(--omashu-purple-dark);
+  border-radius: 4px;
+}
+
+/* Clip notification */
+#clip-notification {
+  background: var(--omashu-highlight);
+  color: var(--omashu-color-white);
+  border-radius: 4px;
+  padding: 8px 16px;
+  box-shadow: 0 0 10px rgba(92, 52, 227, 0.5);
+  animation: fadeInOut 3s;
+}
+
+/* Botones */
+button {
+  background: rgba(109, 61, 255, 0.1);
+  color: var(--omashu-color-white);
+  border: var(--omashu-button-border);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background: var(--omashu-highlight);
+}
+
+/* Animaciones */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Logo y branding */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.omashu-logo {
+  height: 30px;
+  width: auto;
+}
+
+.logo-text {
+  color: var(--omashu-purple-light);
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--omashu-purple-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--omashu-active);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--omashu-highlight);
+} 
