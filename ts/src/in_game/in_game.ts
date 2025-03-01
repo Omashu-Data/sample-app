@@ -1,7 +1,8 @@
 import {
   OWGames,
   OWGamesEvents,
-  OWHotkeys
+  OWHotkeys,
+  OWWindow
 } from "@overwolf/overwolf-api-ts";
 
 import { AppWindow } from "../AppWindow";
@@ -72,6 +73,9 @@ class InGameLOL extends AppWindow {
     super(kWindowNames.inGame);
 
     this._gameEventsListener = null;
+
+    // Configurar las teclas rápidas cuando se carga la ventana
+    this.setupHotkeys();
   }
 
   public static instance(): InGameLOL {
@@ -656,37 +660,87 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  private async setToggleHotkeyText() {
+  private async setupHotkeys() {
     try {
-      const gameClassId = await this.getCurrentGameClassId();
-      const hotkeyText = await OWHotkeys.getHotkeyText(kHotkeys.toggle, gameClassId);
-      const hotkeyElem = document.getElementById('hotkey');
-      hotkeyElem.textContent = hotkeyText;
+      await this.setToggleHotkeyText();
+      await this.setToggleHotkeyBehavior();
     } catch (e) {
-      console.error('Error al configurar texto de hotkey:', e);
+      console.error('Error al configurar hotkeys:', e);
+    }
+  }
+  
+  private async setToggleHotkeyBehavior() {
+    try {
+      console.log('Configurando comportamiento de hotkey...');
+      
+      const gameClassId = await this.getCurrentGameClassId();
+      console.log(`Registrando hotkey ${kHotkeys.toggle} para el juego ${gameClassId}`);
+      
+      overwolf.settings.hotkeys.onPressed.addListener(async (result) => {
+        if (!result || result.name !== kHotkeys.toggle) {
+          return;
+        }
+        
+        console.log(`¡Hotkey presionada! ${result.name}`);
+        const inGameState = await this.getWindowState();
+        console.log(`Estado actual de la ventana: ${inGameState.window_state}`);
+
+        if (inGameState.window_state === overwolf.windows.WindowStateEx.NORMAL ||
+            inGameState.window_state === overwolf.windows.WindowStateEx.MAXIMIZED) {
+          console.log('Minimizando ventana...');
+          this.currWindow.minimize();
+        } else if (inGameState.window_state === overwolf.windows.WindowStateEx.MINIMIZED ||
+                  inGameState.window_state === overwolf.windows.WindowStateEx.CLOSED) {
+          console.log('Restaurando ventana...');
+          this.currWindow.restore();
+        }
+      });
+      
+      console.log('Hotkey registrada con éxito');
+    } catch (e) {
+      console.error('Error al configurar comportamiento de hotkey:', e);
     }
   }
 
-  private async setToggleHotkeyBehavior() {
+  private async setToggleHotkeyText() {
     try {
-      const toggleInGameWindow = async (
-        hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent
-      ): Promise<void> => {
-        console.log(`pressed hotkey for ${hotkeyResult.name}`);
-        const inGameState = await this.getWindowState();
-
-        if (inGameState.window_state === WindowState.NORMAL ||
-          inGameState.window_state === WindowState.MAXIMIZED) {
-          this.currWindow.minimize();
-        } else if (inGameState.window_state === WindowState.MINIMIZED ||
-          inGameState.window_state === WindowState.CLOSED) {
-          this.currWindow.restore();
+      console.log('Configurando texto de hotkey...');
+      const gameClassId = await this.getCurrentGameClassId();
+      console.log(`Obteniendo texto de hotkey para ${kHotkeys.toggle} del juego ${gameClassId}`);
+      
+      overwolf.settings.hotkeys.get(result => {
+        if (!result || !result.success) {
+          console.error('Error al obtener hotkeys');
+          return;
         }
-      }
-
-      OWHotkeys.onHotkeyDown(kHotkeys.toggle, toggleInGameWindow);
+        
+        let hotkeyText = 'TECLA NO ASIGNADA';
+        let hotkey: overwolf.settings.hotkeys.IHotkey;
+        
+        if (gameClassId !== undefined && result.games && result.games[gameClassId]) {
+          hotkey = result.games[gameClassId].find(h => h.name === kHotkeys.toggle);
+        }
+        
+        if (!hotkey) {
+          hotkey = result.globals.find(h => h.name === kHotkeys.toggle);
+        }
+        
+        if (hotkey) {
+          hotkeyText = hotkey.binding;
+        }
+        
+        console.log(`Texto de hotkey obtenido: ${hotkeyText}`);
+        
+        const hotkeyElem = document.getElementById('hotkey');
+        if (hotkeyElem) {
+          hotkeyElem.textContent = hotkeyText;
+          console.log('Texto de hotkey actualizado en el elemento HTML');
+        } else {
+          console.error('No se encontró el elemento HTML con ID "hotkey"');
+        }
+      });
     } catch (e) {
-      console.error('Error al configurar comportamiento de hotkey:', e);
+      console.error('Error al configurar texto de hotkey:', e);
     }
   }
 
