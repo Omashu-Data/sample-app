@@ -43,12 +43,12 @@ body {
 }
 
 .tab-button:hover {
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
+    background-color: rgba(92, 52, 227, 0.3);
 }
 
 .tab-button.active {
-    background: rgba(92, 52, 227, 0.6);
+    background: linear-gradient(to bottom, rgba(92, 52, 227, 0.8), rgba(92, 52, 227, 0.6));
+    box-shadow: 0 0 10px rgba(92, 52, 227, 0.5);
     color: #fff;
 }
 
@@ -128,13 +128,20 @@ main.with-ads {
 .omashu-premium-container {
     width: 100%;
     height: 60px; /* Mismo tamaño que el banner superior */
-    background-color: rgba(19, 11, 55, 0.9);
+    background: linear-gradient(135deg, rgba(19, 11, 55, 0.95), rgba(41, 19, 97, 0.95)); /* Gradiente más atractivo */
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid rgba(92, 52, 227, 0.5);
     box-shadow: 0 0 15px rgba(92, 52, 227, 0.3);
     margin-top: 10px;
-    margin-bottom: 10px;
+    position: relative; /* Para efectos de brillo */
+    animation: pulse-subtle 3s infinite alternate; /* Animación sutil de pulso */
+}
+
+/* Animación sutil de pulso para atraer atención */
+@keyframes pulse-subtle {
+  0% { box-shadow: 0 0 15px rgba(92, 52, 227, 0.3); }
+  100% { box-shadow: 0 0 20px rgba(92, 52, 227, 0.5); }
 }
 
 .premium-content {
@@ -161,6 +168,7 @@ main.with-ads {
     letter-spacing: 1px;
     color: rgb(188, 166, 255);
     font-weight: bold;
+    text-shadow: 0 0 5px rgba(188, 166, 255, 0.5); /* Añadir sombra para destacar */
 }
 
 .premium-content p {
@@ -188,6 +196,10 @@ main.with-ads {
     align-items: center;
 }
 
+.premium-benefits li strong {
+    color: rgb(188, 166, 255); /* Destacar palabras clave */
+}
+
 .premium-buttons {
     display: flex;
     justify-content: center;
@@ -200,21 +212,26 @@ main.with-ads {
     font-size: 11px; /* Reducir tamaño de fuente */
     border-radius: 3px; /* Reducir radio de borde */
     white-space: nowrap;
+    transition: all 0.2s ease; /* Transición suave */
+    cursor: pointer;
 }
 
 .premium-subscribe {
-    background: rgba(92, 52, 227, 1);
+    background: linear-gradient(to right, rgba(92, 52, 227, 1), rgba(109, 61, 255, 1)); /* Gradiente más atractivo */
     border: none;
     color: white;
     padding: 8px 15px;
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
 }
 
 .premium-subscribe:hover {
-    background: rgba(108, 70, 233, 1);
+    transform: translateY(-2px); /* Efecto de elevación */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra al pasar el cursor */
 }
 
 .premium-info {
@@ -225,11 +242,11 @@ main.with-ads {
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    transition: background 0.3s;
 }
 
 .premium-info:hover {
-    background: rgba(30, 20, 70, 0.8);
+    background: rgba(19, 11, 55, 1);
+    border-color: rgba(109, 61, 255, 0.5);
 }
 
 .clip-notification {
@@ -874,4 +891,897 @@ main.with-ads {
     gap: 8px;
     overflow-y: auto;
     max-height: 380px;
+}
+
+/* Estilos para elementos de neuromarketing */
+.live-indicator {
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-left: 8px;
+  animation: blink 2s infinite;
+  vertical-align: middle;
+  font-weight: normal;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.highlight-value {
+  color: rgb(188, 166, 255);
+  text-shadow: 0 0 5px rgba(188, 166, 255, 0.3);
+  font-weight: bold;
+}
+
+.performance-insight {
+  display: flex;
+  align-items: center;
+  background: rgba(19, 11, 55, 0.7);
+  border-left: 3px solid rgb(188, 166, 255);
+  padding: 8px 12px;
+  margin-top: 10px;
+  border-radius: 0 4px 4px 0;
+}
+
+.insight-icon {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.insight-text {
+  font-size: 12px;
+  color: #ddd;
+}
+
+/* Mejoras para los paneles de estadísticas */
+.metrics-panel {
+  transition: transform 0.2s ease;
+  border: 1px solid rgba(92, 52, 227, 0.3);
+}
+
+.metrics-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-color: rgba(92, 52, 227, 0.5);
+}
+
+/* Estilos para elementos de neuromarketing en estadísticas */
+.data-status {
+  background-color: rgba(92, 52, 227, 0.7);
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-left: 8px;
+  vertical-align: middle;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+}
+
+.stat-trend {
+  font-size: 14px;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.stat-trend.positive {
+  color: #4CAF50;
+}
+
+.stat-trend.negative {
+  color: #F44336;
+}
+
+.stat-trend.neutral {
+  color: #FFC107;
+}
+
+/* Estilos para barras de impacto */
+.impact-stat {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.impact-bar {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.impact-fill {
+  height: 100%;
+  background: linear-gradient(to right, rgba(92, 52, 227, 0.7), rgba(109, 61, 255, 0.9));
+  border-radius: 2px;
+  transition: width 1s ease-out;
+}
+
+/* Mejoras para los paneles de estadísticas */
+.metrics-panel h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: rgb(188, 166, 255);
+  border-bottom: 1px solid rgba(92, 52, 227, 0.3);
+  padding-bottom: 8px;
+}
+
+.stat-value {
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.stat-item:hover .stat-value {
+  color: rgb(188, 166, 255);
+}
+
+/* Mejoras para la visualización de eventos */
+.events-container {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.event-item {
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid rgba(92, 52, 227, 0.7);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.event-item:hover {
+  transform: translateX(3px);
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Mejoras para la pestaña de mapa */
+.map-container {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.map-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(92, 52, 227, 0.3);
+}
+
+.zone-value {
+  position: relative;
+  padding-right: 15px;
+}
+
+.zone-value::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #00DEFA;
+}
+
+/* Nuevo diseño de tarjetas para estadísticas */
+.stats-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.stats-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.stat-card {
+  background: rgba(19, 11, 55, 0.7);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(92, 52, 227, 0.3);
+  display: flex;
+  flex-direction: column;
+  height: 120px;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(92, 52, 227, 0.3);
+  border-color: rgba(92, 52, 227, 0.6);
+}
+
+.stat-card-header {
+  background: rgba(92, 52, 227, 0.2);
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(92, 52, 227, 0.3);
+}
+
+.stat-icon {
+  font-size: 16px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(92, 52, 227, 0.3);
+}
+
+.kill-icon { background: rgba(76, 175, 80, 0.3); }
+.death-icon { background: rgba(244, 67, 54, 0.3); }
+.assist-icon { background: rgba(255, 193, 7, 0.3); }
+.cs-icon { background: rgba(3, 169, 244, 0.3); }
+.level-icon { background: rgba(156, 39, 176, 0.3); }
+.gold-icon { background: rgba(255, 152, 0, 0.3); }
+
+.stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ddd;
+}
+
+.stat-card-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  gap: 5px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 10px rgba(92, 52, 227, 0.5);
+}
+
+.stat-trend {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.stat-card-footer {
+  padding: 8px 10px;
+}
+
+.stat-progress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stat-progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, rgba(92, 52, 227, 0.7), rgba(109, 61, 255, 0.9));
+  border-radius: 2px;
+  transition: width 1s ease-out;
+}
+
+/* Tarjetas de información y consejos */
+.stats-info-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.match-info-card, .insight-card {
+  background: rgba(19, 11, 55, 0.7);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(92, 52, 227, 0.3);
+}
+
+.match-info-card:hover, .insight-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(92, 52, 227, 0.3);
+  border-color: rgba(92, 52, 227, 0.6);
+}
+
+.match-info-header, .insight-card-header {
+  background: rgba(92, 52, 227, 0.2);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(92, 52, 227, 0.3);
+}
+
+.match-info-header h3, .insight-card-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #ddd;
+}
+
+.live-badge {
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-left: 8px;
+  animation: pulse 2s infinite;
+  vertical-align: middle;
+  font-weight: normal;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.match-info-body, .insight-card-body {
+  padding: 12px;
+}
+
+.match-info-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.match-info-label {
+  color: #aaa;
+  font-size: 13px;
+}
+
+.match-info-value {
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.insight-card-body p {
+  margin: 0;
+  font-size: 13px;
+  color: #ddd;
+  line-height: 1.4;
+}
+
+/* Responsive para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .stats-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .stats-info-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Estilos para la pestaña de rendimiento */
+.performance-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 15px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.dashboard-title {
+  font-size: 1.5rem;
+  color: #e5e5e5;
+  margin-bottom: 15px;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(0, 150, 255, 0.5);
+}
+
+.performance-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.performance-card {
+  background: rgba(30, 35, 40, 0.85);
+  border: 1px solid rgba(100, 155, 255, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.performance-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 150, 255, 0.3);
+  border-color: rgba(100, 155, 255, 0.6);
+}
+
+.performance-card-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: rgba(20, 25, 30, 0.9);
+  border-bottom: 1px solid rgba(100, 155, 255, 0.2);
+}
+
+.performance-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  border-radius: 50%;
+  font-size: 14px;
+}
+
+.damage-icon {
+  background: linear-gradient(135deg, #ff4d4d, #990000);
+}
+
+.kda-icon {
+  background: linear-gradient(135deg, #ffcc00, #cc7700);
+}
+
+.cspm-icon {
+  background: linear-gradient(135deg, #33ccff, #0066cc);
+}
+
+.performance-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e5e5e5;
+}
+
+.performance-card-body {
+  padding: 15px 10px;
+}
+
+.performance-value-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.performance-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.performance-rank {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(100, 155, 255, 0.3), rgba(50, 100, 200, 0.3));
+  color: #e5e5e5;
+}
+
+.performance-chart {
+  margin-top: 10px;
+}
+
+.performance-bar {
+  height: 8px;
+  background: rgba(50, 50, 50, 0.5);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.performance-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #33ccff, #0066cc);
+  border-radius: 4px;
+  transition: width 1s ease-out;
+}
+
+.performance-markers {
+  position: relative;
+  height: 10px;
+  margin-top: 2px;
+}
+
+.marker {
+  position: absolute;
+  width: 2px;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.5);
+  top: 0;
+}
+
+.marker.bronze {
+  background-color: #cd7f32;
+}
+
+.marker.silver {
+  background-color: #c0c0c0;
+}
+
+.marker.gold {
+  background-color: #ffd700;
+}
+
+.marker.platinum {
+  background-color: #e5e4e2;
+}
+
+.performance-card-footer {
+  padding: 10px;
+  border-top: 1px solid rgba(100, 155, 255, 0.2);
+  background: rgba(20, 25, 30, 0.5);
+}
+
+.performance-comparison {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.comparison-label {
+  color: #a0a0a0;
+}
+
+.comparison-value {
+  font-weight: 600;
+}
+
+.comparison-value.positive {
+  color: #00cc66;
+}
+
+.comparison-value.negative {
+  color: #ff4d4d;
+}
+
+.performance-insight-card {
+  background: rgba(30, 35, 40, 0.85);
+  border: 1px solid rgba(100, 155, 255, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.insight-card-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background: linear-gradient(90deg, rgba(50, 100, 200, 0.3), rgba(20, 25, 30, 0.9));
+  border-bottom: 1px solid rgba(100, 155, 255, 0.2);
+}
+
+.insight-icon {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.insight-card-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e5e5e5;
+  margin: 0;
+}
+
+.insight-card-body {
+  padding: 15px;
+}
+
+.insight-card-body p {
+  margin: 0;
+  color: #cccccc;
+  line-height: 1.5;
+}
+
+.insight-card-body strong {
+  color: #33ccff;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .performance-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .performance-value {
+    font-size: 1.5rem;
+  }
+}
+
+/* Estilos para la pestaña de mejora */
+.improvement-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 15px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.improvement-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.improvement-card {
+  background: rgba(30, 35, 40, 0.85);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.improvement-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.strength-card {
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.strength-card:hover {
+  border-color: rgba(76, 175, 80, 0.6);
+  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.2);
+}
+
+.opportunity-card {
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.opportunity-card:hover {
+  border-color: rgba(255, 152, 0, 0.6);
+  box-shadow: 0 6px 12px rgba(255, 152, 0, 0.2);
+}
+
+.goal-card {
+  border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.goal-card:hover {
+  border-color: rgba(33, 150, 243, 0.6);
+  box-shadow: 0 6px 12px rgba(33, 150, 243, 0.2);
+}
+
+.improvement-card-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.strength-card .improvement-card-header {
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.opportunity-card .improvement-card-header {
+  background: rgba(255, 152, 0, 0.1);
+}
+
+.goal-card .improvement-card-header {
+  background: rgba(33, 150, 243, 0.1);
+}
+
+.improvement-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  border-radius: 50%;
+  font-size: 16px;
+}
+
+.strength-icon {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+}
+
+.opportunity-icon {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+.goal-icon {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.improvement-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e5e5e5;
+}
+
+.improvement-card-body {
+  flex: 1;
+  padding: 15px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.improvement-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 5px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.improvement-description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rank-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+.rank-badge.elite {
+  background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+}
+
+.rank-badge.good {
+  background: linear-gradient(135deg, #4CAF50, #388E3C);
+}
+
+.rank-badge.average {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+}
+
+.rank-badge.below {
+  background: linear-gradient(135deg, #F44336, #D32F2F);
+}
+
+.comparison {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.comparison.positive {
+  color: #4CAF50;
+}
+
+.comparison.negative {
+  color: #F44336;
+}
+
+.improvement-card-footer {
+  padding: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.improvement-tip {
+  font-size: 0.75rem;
+  color: #bbb;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Estilos para las tarjetas de objetivos */
+.goal-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.goal-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #ddd;
+}
+
+.current-value {
+  color: #FF9800;
+}
+
+.target-value {
+  color: #4CAF50;
+}
+
+.goal-progress-bar {
+  height: 8px;
+  background: rgba(50, 50, 50, 0.5);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 5px 0;
+}
+
+.goal-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2196F3, #1976D2);
+  border-radius: 4px;
+  transition: width 1s ease-out;
+}
+
+.goal-percentage {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2196F3;
+  text-align: center;
+}
+
+/* Estilos para la tarjeta de análisis personalizado */
+.improvement-insight-card {
+  background: rgba(30, 35, 40, 0.85);
+  border: 1px solid rgba(156, 39, 176, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.improvement-insight-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(156, 39, 176, 0.2);
+  border-color: rgba(156, 39, 176, 0.6);
+}
+
+.action-steps {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #9C27B0;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: rgba(156, 39, 176, 0.2);
+  border-radius: 50%;
+  font-weight: bold;
+  color: #9C27B0;
+  font-size: 0.8rem;
+}
+
+.step-text {
+  font-size: 0.85rem;
+  color: #ddd;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .improvement-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
 }

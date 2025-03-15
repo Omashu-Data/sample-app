@@ -53,47 +53,131 @@
       <div class="tab-content">
         <!-- Pestaña de Estadísticas (activa por defecto) -->
         <div id="stats-tab" class="tab-pane active">
-          <div id="metrics-container">
-            <div id="player-stats" class="metrics-panel stats-panel">
-              <h2>Estadísticas del Jugador</h2>
-              <div class="stats-grid">
-                <div class="stat-item metric-container">
-                  <span class="stat-label metric-label">Kills:</span>
-                  <span id="kills-value" class="stat-value metric-value">0</span>
+          <div class="stats-dashboard">
+            <!-- Tarjetas de estadísticas principales -->
+            <div class="stats-cards-container">
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <div class="stat-icon kill-icon">⚔️</div>
+                  <span class="stat-label">Kills</span>
                 </div>
-                <div class="stat-item metric-container">
-                  <span class="stat-label metric-label">Deaths:</span>
-                  <span id="deaths-value" class="stat-value metric-value">0</span>
+                <div class="stat-card-body">
+                  <span id="kills-value" class="stat-value">0</span>
+                  <div class="stat-trend positive">↑</div>
                 </div>
-                <div class="stat-item metric-container">
-                  <span class="stat-label metric-label">Assists:</span>
-                  <span id="assists-value" class="stat-value metric-value">0</span>
+                <div class="stat-card-footer">
+                  <div class="stat-progress">
+                    <div class="stat-progress-bar" style="width: 65%"></div>
+                  </div>
                 </div>
-                <div class="stat-item metric-container">
-                  <span class="stat-label metric-label">CS:</span>
-                  <span id="cs-value" class="stat-value metric-value">0</span>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <div class="stat-icon death-icon">💀</div>
+                  <span class="stat-label">Deaths</span>
                 </div>
-                <div class="stat-item metric-container">
-                  <span class="stat-label metric-label">Nivel:</span>
-                  <span id="level-value" class="stat-value metric-value">1</span>
+                <div class="stat-card-body">
+                  <span id="deaths-value" class="stat-value">0</span>
+                  <div class="stat-trend negative">↓</div>
                 </div>
-                <div class="stat-item metric-container">
-                  <span class="stat-label metric-label">Oro:</span>
-                  <span id="gold-value" class="stat-value metric-value">0</span>
+                <div class="stat-card-footer">
+                  <div class="stat-progress">
+                    <div class="stat-progress-bar" style="width: 25%"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <div class="stat-icon assist-icon">🤝</div>
+                  <span class="stat-label">Assists</span>
+                </div>
+                <div class="stat-card-body">
+                  <span id="assists-value" class="stat-value">0</span>
+                  <div class="stat-trend neutral">•</div>
+                </div>
+                <div class="stat-card-footer">
+                  <div class="stat-progress">
+                    <div class="stat-progress-bar" style="width: 40%"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <div class="stat-icon cs-icon">🧩</div>
+                  <span class="stat-label">CS</span>
+                </div>
+                <div class="stat-card-body">
+                  <span id="cs-value" class="stat-value">0</span>
+                  <div class="stat-trend positive">↑</div>
+                </div>
+                <div class="stat-card-footer">
+                  <div class="stat-progress">
+                    <div class="stat-progress-bar" style="width: 70%"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <div class="stat-icon level-icon">⭐</div>
+                  <span class="stat-label">Nivel</span>
+                </div>
+                <div class="stat-card-body">
+                  <span id="level-value" class="stat-value">1</span>
+                  <div class="stat-trend neutral">•</div>
+                </div>
+                <div class="stat-card-footer">
+                  <div class="stat-progress">
+                    <div class="stat-progress-bar" style="width: 10%"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-card-header">
+                  <div class="stat-icon gold-icon">💰</div>
+                  <span class="stat-label">Oro</span>
+                </div>
+                <div class="stat-card-body">
+                  <span id="gold-value" class="stat-value">0</span>
+                  <div class="stat-trend positive">↑</div>
+                </div>
+                <div class="stat-card-footer">
+                  <div class="stat-progress">
+                    <div class="stat-progress-bar" style="width: 55%"></div>
+                  </div>
                 </div>
               </div>
             </div>
             
-            <div id="match-info" class="metrics-panel stats-panel">
-              <h2>Información de Partida</h2>
-              <div class="match-info-content">
-                <div class="stat-item metric-container">
-                  <span class="stat-label metric-label">Tiempo de Partida:</span>
-                  <span id="game-time-value" class="stat-value metric-value">00:00</span>
+            <!-- Información de partida y consejos -->
+            <div class="stats-info-container">
+              <div class="match-info-card">
+                <div class="match-info-header">
+                  <h3>Partida <span class="live-badge">EN VIVO</span></h3>
                 </div>
-                <div class="stat-item metric-container">
-                  <span class="stat-label metric-label">Modo de Juego:</span>
-                  <span id="game-mode-value" class="stat-value metric-value">--</span>
+                <div class="match-info-body">
+                  <div class="match-info-item">
+                    <span class="match-info-label">Tiempo:</span>
+                    <span id="game-time-value" class="match-info-value">00:00</span>
+                  </div>
+                  <div class="match-info-item">
+                    <span class="match-info-label">Modo:</span>
+                    <span id="game-mode-value" class="match-info-value">--</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="insight-card">
+                <div class="insight-card-header">
+                  <div class="insight-icon">💡</div>
+                  <h3>Consejo Personalizado</h3>
+                </div>
+                <div class="insight-card-body">
+                  <p>Aumenta tu CS para mejorar tu economía y ventaja en el juego. Cada 15 minions equivalen aproximadamente a una kill.</p>
                 </div>
               </div>
             </div>
@@ -103,7 +187,7 @@
         <!-- Pestaña de Eventos -->
         <div id="events-tab" class="tab-pane">
           <div id="recent-events" class="metrics-panel stats-panel">
-            <h2>Eventos Recientes</h2>
+            <h2>Momentos Clave <span class="data-status">En Tiempo Real</span></h2>
             <div id="events-log" class="events-container">
               <!-- Los eventos se añadirán dinámicamente aquí -->
             </div>
@@ -112,20 +196,108 @@
         
         <!-- Pestaña de Rendimiento -->
         <div id="performance-tab" class="tab-pane">
-          <div id="performance-metrics" class="metrics-panel stats-panel">
-            <h2>Rendimiento</h2>
-            <div class="stats-grid">
-              <div class="stat-item metric-container">
-                <span class="stat-label metric-label">DPS:</span>
-                <span id="dps-value" class="stat-value metric-value">0</span>
+          <div class="performance-dashboard">
+            <h2 class="dashboard-title">Tu Impacto en el Juego</h2>
+            
+            <div class="performance-cards-container">
+              <div class="performance-card">
+                <div class="performance-card-header">
+                  <div class="performance-icon damage-icon">⚡</div>
+                  <span class="performance-label">Daño por Segundo</span>
+                </div>
+                <div class="performance-card-body">
+                  <div class="performance-value-container">
+                    <span id="dps-value" class="performance-value">0</span>
+                    <span class="performance-rank">Plata</span>
+                  </div>
+                  <div class="performance-chart">
+                    <div class="performance-bar">
+                      <div class="performance-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="performance-markers">
+                      <div class="marker bronze" style="left: 20%"></div>
+                      <div class="marker silver" style="left: 40%"></div>
+                      <div class="marker gold" style="left: 60%"></div>
+                      <div class="marker platinum" style="left: 80%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="performance-card-footer">
+                  <div class="performance-comparison">
+                    <span class="comparison-label">vs. Promedio:</span>
+                    <span class="comparison-value positive">+15%</span>
+                  </div>
+                </div>
               </div>
-              <div class="stat-item metric-container">
-                <span class="stat-label metric-label">KDA:</span>
-                <span id="kda-value" class="stat-value metric-value">0</span>
+              
+              <div class="performance-card">
+                <div class="performance-card-header">
+                  <div class="performance-icon kda-icon">🎯</div>
+                  <span class="performance-label">KDA</span>
+                </div>
+                <div class="performance-card-body">
+                  <div class="performance-value-container">
+                    <span id="kda-value" class="performance-value">0</span>
+                    <span class="performance-rank">Oro</span>
+                  </div>
+                  <div class="performance-chart">
+                    <div class="performance-bar">
+                      <div class="performance-fill" style="width: 60%"></div>
+                    </div>
+                    <div class="performance-markers">
+                      <div class="marker bronze" style="left: 20%"></div>
+                      <div class="marker silver" style="left: 40%"></div>
+                      <div class="marker gold" style="left: 60%"></div>
+                      <div class="marker platinum" style="left: 80%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="performance-card-footer">
+                  <div class="performance-comparison">
+                    <span class="comparison-label">vs. Promedio:</span>
+                    <span class="comparison-value positive">+25%</span>
+                  </div>
+                </div>
               </div>
-              <div class="stat-item metric-container">
-                <span class="stat-label metric-label">CS/min:</span>
-                <span id="cspm-value" class="stat-value metric-value">0</span>
+              
+              <div class="performance-card">
+                <div class="performance-card-header">
+                  <div class="performance-icon cspm-icon">🧩</div>
+                  <span class="performance-label">CS por Minuto</span>
+                </div>
+                <div class="performance-card-body">
+                  <div class="performance-value-container">
+                    <span id="cspm-value" class="performance-value">0</span>
+                    <span class="performance-rank">Diamante</span>
+                  </div>
+                  <div class="performance-chart">
+                    <div class="performance-bar">
+                      <div class="performance-fill" style="width: 85%"></div>
+                    </div>
+                    <div class="performance-markers">
+                      <div class="marker bronze" style="left: 20%"></div>
+                      <div class="marker silver" style="left: 40%"></div>
+                      <div class="marker gold" style="left: 60%"></div>
+                      <div class="marker platinum" style="left: 80%"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="performance-card-footer">
+                  <div class="performance-comparison">
+                    <span class="comparison-label">vs. Promedio:</span>
+                    <span class="comparison-value positive">+40%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="performance-insight-card">
+              <div class="insight-card-header">
+                <div class="insight-icon">🏆</div>
+                <h3>Análisis de Rendimiento</h3>
+              </div>
+              <div class="insight-card-body">
+                <p>Tu CS por minuto está en el <strong>top 10%</strong> de jugadores de tu rango. Mantén este ritmo para maximizar tu ventaja económica y potencial de carry.</p>
               </div>
             </div>
           </div>
@@ -133,66 +305,146 @@
         
         <!-- Pestaña de Mejora -->
         <div id="improve-tab" class="tab-pane">
-          <div id="improvement-container" class="metrics-panel stats-panel">
-            <h2>Objetivos de Mejora</h2>
-            <div class="improvement-content">
-              <!-- Sección de fortalezas -->
-              <div class="improvement-section">
-                <h3 class="section-title strength-title">Tus Fortalezas</h3>
-                <div id="strengths-list" class="improvement-list">
-                  <!-- Se llenará dinámicamente -->
-                  <div class="strength-item">
-                    <div class="strength-icon">💪</div>
-                    <div class="strength-text">Buen KDA: Mantienes un ratio de 5.0</div>
+          <div class="improvement-dashboard">
+            <h2 class="dashboard-title">Tu Camino al Éxito</h2>
+            
+            <div class="improvement-cards-container">
+              <!-- Tarjetas de fortalezas -->
+              <div class="improvement-card strength-card">
+                <div class="improvement-card-header">
+                  <div class="improvement-icon strength-icon">💪</div>
+                  <span class="improvement-label">KDA Excelente</span>
+                </div>
+                <div class="improvement-card-body">
+                  <div class="improvement-value">5.0</div>
+                  <div class="improvement-description">
+                    <span class="rank-badge elite">Top 15%</span>
+                    <span class="comparison positive">+2.1 vs promedio</span>
                   </div>
+                </div>
+                <div class="improvement-card-footer">
+                  <div class="improvement-tip">Mantén este ritmo para subir de división</div>
                 </div>
               </div>
               
-              <!-- Sección de debilidades -->
-              <div class="improvement-section">
-                <h3 class="section-title weakness-title">Áreas de Mejora</h3>
-                <div id="weaknesses-list" class="improvement-list">
-                  <!-- Se llenará dinámicamente -->
-                  <div class="weakness-item">
-                    <div class="weakness-icon">📈</div>
-                    <div class="weakness-text">Farming: Tu CS/min está por debajo del promedio</div>
+              <div class="improvement-card strength-card">
+                <div class="improvement-card-header">
+                  <div class="improvement-icon strength-icon">🎯</div>
+                  <span class="improvement-label">Precisión</span>
+                </div>
+                <div class="improvement-card-body">
+                  <div class="improvement-value">68%</div>
+                  <div class="improvement-description">
+                    <span class="rank-badge good">Top 30%</span>
+                    <span class="comparison positive">+8% vs promedio</span>
                   </div>
+                </div>
+                <div class="improvement-card-footer">
+                  <div class="improvement-tip">Tu precisión te da ventaja en teamfights</div>
                 </div>
               </div>
               
-              <!-- Sección de objetivos -->
-              <div class="improvement-section">
-                <h3 class="section-title goals-title">Objetivos Actuales</h3>
-                <div id="goals-list" class="improvement-list">
-                  <!-- Se llenará dinámicamente -->
-                  <div class="goal-item">
-                    <div class="goal-progress">
-                      <div class="progress-bar">
-                        <div class="progress-fill" style="width: 35%;"></div>
-                      </div>
-                      <div class="progress-text">35%</div>
-                    </div>
-                    <div class="goal-details">
-                      <div class="goal-title">Mejorar CS a 7.0 por minuto</div>
-                      <div class="goal-description">Actual: 4.5 CS/min | Objetivo: 7.0 CS/min</div>
-                      <div class="goal-tips">Tip: Concéntrate en últimos golpes a minions entre rotaciones</div>
-                    </div>
+              <!-- Tarjetas de oportunidades de mejora -->
+              <div class="improvement-card opportunity-card">
+                <div class="improvement-card-header">
+                  <div class="improvement-icon opportunity-icon">📈</div>
+                  <span class="improvement-label">Farming</span>
+                </div>
+                <div class="improvement-card-body">
+                  <div class="improvement-value">4.5</div>
+                  <div class="improvement-description">
+                    <span class="rank-badge average">Top 50%</span>
+                    <span class="comparison negative">-1.5 vs objetivo</span>
                   </div>
+                </div>
+                <div class="improvement-card-footer">
+                  <div class="improvement-tip">Enfócate en últimos golpes entre rotaciones</div>
                 </div>
               </div>
               
-              <!-- Sección de consejos personalizados -->
-              <div class="improvement-section">
-                <h3 class="section-title tips-title">Consejos Personalizados</h3>
-                <div id="tips-container" class="tips-container">
-                  <div class="tip-card">
-                    <div class="tip-header">
-                      <div class="tip-icon">💡</div>
-                      <div class="tip-title">Mejora tu Farm</div>
+              <div class="improvement-card opportunity-card">
+                <div class="improvement-card-header">
+                  <div class="improvement-icon opportunity-icon">🛡️</div>
+                  <span class="improvement-label">Visión</span>
+                </div>
+                <div class="improvement-card-body">
+                  <div class="improvement-value">12</div>
+                  <div class="improvement-description">
+                    <span class="rank-badge average">Top 45%</span>
+                    <span class="comparison negative">-8 vs objetivo</span>
+                  </div>
+                </div>
+                <div class="improvement-card-footer">
+                  <div class="improvement-tip">Compra más wards para controlar objetivos</div>
+                </div>
+              </div>
+              
+              <!-- Tarjetas de objetivos -->
+              <div class="improvement-card goal-card">
+                <div class="improvement-card-header">
+                  <div class="improvement-icon goal-icon">🎖️</div>
+                  <span class="improvement-label">CS por Minuto</span>
+                </div>
+                <div class="improvement-card-body">
+                  <div class="goal-progress-container">
+                    <div class="goal-values">
+                      <span class="current-value">4.5</span>
+                      <span class="target-value">7.0</span>
                     </div>
-                    <div class="tip-content">
-                      Practica conseguir al menos 70 CS a los 10 minutos. Esto te dará una ventaja económica significativa sobre tu oponente.
+                    <div class="goal-progress-bar">
+                      <div class="goal-progress-fill" style="width: 35%"></div>
                     </div>
+                    <div class="goal-percentage">35%</div>
+                  </div>
+                </div>
+                <div class="improvement-card-footer">
+                  <div class="improvement-tip">+15% de oro por cada punto de CS/min</div>
+                </div>
+              </div>
+              
+              <div class="improvement-card goal-card">
+                <div class="improvement-card-header">
+                  <div class="improvement-icon goal-icon">🏆</div>
+                  <span class="improvement-label">Visión por Minuto</span>
+                </div>
+                <div class="improvement-card-body">
+                  <div class="goal-progress-container">
+                    <div class="goal-values">
+                      <span class="current-value">0.6</span>
+                      <span class="target-value">1.0</span>
+                    </div>
+                    <div class="goal-progress-bar">
+                      <div class="goal-progress-fill" style="width: 60%"></div>
+                    </div>
+                    <div class="goal-percentage">60%</div>
+                  </div>
+                </div>
+                <div class="improvement-card-footer">
+                  <div class="improvement-tip">Mejor visión = mejores decisiones</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Tarjeta de análisis personalizado -->
+            <div class="improvement-insight-card">
+              <div class="insight-card-header">
+                <div class="insight-icon">🚀</div>
+                <h3>Plan de Mejora Personalizado</h3>
+              </div>
+              <div class="insight-card-body">
+                <p>Basado en tu estilo de juego, te recomendamos enfocarte en <strong>mejorar tu CS</strong> durante los próximos 5 partidas. Esto podría aumentar tu oro por minuto en un <strong>25%</strong>, lo que te daría una ventaja significativa sobre tus oponentes.</p>
+                <div class="action-steps">
+                  <div class="action-step">
+                    <span class="step-number">1</span>
+                    <span class="step-text">Practica conseguir al menos 70 CS a los 10 minutos en modo práctica</span>
+                  </div>
+                  <div class="action-step">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Prioriza farm sobre roaming en early game</span>
+                  </div>
+                  <div class="action-step">
+                    <span class="step-number">3</span>
+                    <span class="step-text">Aprende patrones de última hit con tu campeón principal</span>
                   </div>
                 </div>
               </div>
@@ -203,7 +455,7 @@
         <!-- Pestaña de Heatmap -->
         <div id="heatmap-tab" class="tab-pane">
           <div id="heatmap-container" class="metrics-panel stats-panel">
-            <h2>Mapa de Actividad</h2>
+            <h2>Tu Presencia en el Mapa</h2>
             <div class="heatmap-layout">
               <div class="heatmap-content">
                 <div class="map-container">
@@ -221,22 +473,22 @@
               <div class="controls-and-stats">
                 <div class="map-controls">
                   <div class="map-legend">
-                    <h3>Leyenda</h3>
+                    <h3>Intensidad de Actividad</h3>
                     <div class="legend-item">
                       <div class="legend-color" style="background-color: rgba(255, 0, 0, 0.7);"></div>
-                      <span>Alta actividad</span>
+                      <span>Alta presencia</span>
                     </div>
                     <div class="legend-item">
                       <div class="legend-color" style="background-color: rgba(255, 255, 0, 0.7);"></div>
-                      <span>Media actividad</span>
+                      <span>Media presencia</span>
                     </div>
                     <div class="legend-item">
                       <div class="legend-color" style="background-color: rgba(0, 255, 0, 0.7);"></div>
-                      <span>Baja actividad</span>
+                      <span>Baja presencia</span>
                     </div>
                   </div>
                   <div class="event-filters">
-                    <h3>Filtros de Eventos</h3>
+                    <h3>Filtrar Acciones</h3>
                     <div class="filter-item">
                       <input type="checkbox" id="filter-kill" checked>
                       <label for="filter-kill">Kills</label>
@@ -256,7 +508,7 @@
                   </div>
                 </div>
                 <div class="time-slider">
-                  <h3>Tiempo de Partida</h3>
+                  <h3>Línea de Tiempo</h3>
                   <input type="range" id="time-slider" min="0" max="100" value="100">
                   <div class="slider-labels">
                     <span>Inicio</span>
@@ -265,7 +517,7 @@
                   </div>
                 </div>
                 <div class="heatmap-stats">
-                  <h3>Estadísticas de Zonas</h3>
+                  <h3>Dominio de Zonas</h3>
                   <div class="zone-stats">
                     <div class="zone-stat-item">
                       <span class="zone-name">Top Lane:</span>
@@ -297,12 +549,12 @@
         <!-- Pestaña de Clips -->
         <div id="clips-tab" class="tab-pane">
           <div id="clips-container" class="metrics-panel stats-panel">
-            <h2>Mis Clips Guardados</h2>
+            <h2>Tus Mejores Momentos</h2>
             <div class="clips-grid">
               <!-- Los clips se añadirán dinámicamente aquí -->
               <div class="no-clips-message">
-                <p>No hay clips guardados todavía.</p>
-                <p>Cuando consigas una kill, se grabará automáticamente un clip.</p>
+                <p>Tus jugadas destacadas aparecerán aquí</p>
+                <p>Cada vez que consigas una kill, capturaremos automáticamente el momento</p>
               </div>
             </div>
           </div>
@@ -321,15 +573,15 @@
         <div class="premium-content">
           <div class="premium-content-text">
             <h3>OMASHU.GG PREMIUM</h3>
-            <p>Mejora tu experiencia de juego con herramientas premium</p>
+            <p>Domina el juego como los profesionales</p>
             <ul class="premium-benefits">
-              <li>✓ Análisis detallado</li>
-              <li>✓ Estadísticas avanzadas</li>
-              <li>✓ Sin anuncios</li>
+              <li>✓ <strong>Análisis exclusivo</strong> de tus partidas</li>
+              <li>✓ Estadísticas de <strong>nivel profesional</strong></li>
+              <li>✓ Experiencia <strong>sin interrupciones</strong></li>
             </ul>
           </div>
           <div class="premium-buttons">
-            <button class="premium-subscribe">Suscribirse</button>
+            <button class="premium-subscribe">Prueba 7 días GRATIS</button>
             <button class="premium-info">Más info</button>
           </div>
         </div>
