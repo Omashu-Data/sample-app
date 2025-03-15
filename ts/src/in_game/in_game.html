@@ -44,9 +44,17 @@
 
   <!-- Banner de anuncios - Parte superior -->
   <div id="standard-banner" class="ad-container top-banner">
-    <!-- GIF de Coca-Cola como banner publicitario -->
-    <div style="width: 728px; height: 90px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
-      <img src="../../img/ads/cocacola.gif" alt="Coca-Cola Banner" style="width: 728px; height: 90px; object-fit: cover;">
+    <!-- Contenedor para anuncios de Overwolf -->
+    <div id="overwolf-ads-container" style="width: 728px; height: 90px;">
+      <!-- Placeholder para anuncios -->
+      <div class="ad-placeholder">
+        <div class="ad-placeholder-logo">
+          <img src="../../img/header_icon.svg" alt="omashu.gg logo" class="ad-logo-icon">
+          <span>omashu.gg</span>
+        </div>
+        <div class="ad-placeholder-text">ESPACIO PUBLICITARIO</div>
+        <div class="ad-placeholder-size">728 × 90</div>
+      </div>
     </div>
   </div>
 
@@ -98,102 +106,118 @@
       <div class="tab-content">
         <!-- Pestaña de Estadísticas (activa por defecto) -->
         <div id="stats-tab" class="tab-pane active">
-          <div class="stats-dashboard">
-            <!-- Tarjetas de estadísticas principales -->
-            <div class="stats-cards-container">
-              <div class="stat-card">
-                <div class="stat-card-header">
-                  <div class="stat-icon kill-icon">⚔️</div>
-                  <span class="stat-label">Kills</span>
+          <div class="stats-dashboard optimized-layout">
+            <!-- Sección principal: Contenido estadístico y anuncio vertical -->
+            <div class="main-stats-section">
+              <!-- Tarjetas de estadísticas principales -->
+              <div class="stats-cards-container">
+                <div class="stat-card">
+                  <div class="stat-card-header">
+                    <div class="stat-icon kill-icon">⚔️</div>
+                    <span class="stat-label">Kills</span>
+                  </div>
+                  <div class="stat-card-body">
+                    <span id="kills-value" class="stat-value">0</span>
+                    <div class="stat-trend positive">↑</div>
+                  </div>
+                  <div class="stat-card-footer">
+                    <div class="stat-progress">
+                      <div class="stat-progress-bar" style="width: 65%"></div>
+                    </div>
+                  </div>
                 </div>
-                <div class="stat-card-body">
-                  <span id="kills-value" class="stat-value">0</span>
-                  <div class="stat-trend positive">↑</div>
+                
+                <div class="stat-card">
+                  <div class="stat-card-header">
+                    <div class="stat-icon death-icon">💀</div>
+                    <span class="stat-label">Deaths</span>
+                  </div>
+                  <div class="stat-card-body">
+                    <span id="deaths-value" class="stat-value">0</span>
+                    <div class="stat-trend negative">↓</div>
+                  </div>
+                  <div class="stat-card-footer">
+                    <div class="stat-progress">
+                      <div class="stat-progress-bar" style="width: 25%"></div>
+                    </div>
+                  </div>
                 </div>
-                <div class="stat-card-footer">
-                  <div class="stat-progress">
-                    <div class="stat-progress-bar" style="width: 65%"></div>
+                
+                <div class="stat-card">
+                  <div class="stat-card-header">
+                    <div class="stat-icon assist-icon">🤝</div>
+                    <span class="stat-label">Assists</span>
+                  </div>
+                  <div class="stat-card-body">
+                    <span id="assists-value" class="stat-value">0</span>
+                    <div class="stat-trend neutral">•</div>
+                  </div>
+                  <div class="stat-card-footer">
+                    <div class="stat-progress">
+                      <div class="stat-progress-bar" style="width: 40%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="stat-card">
+                  <div class="stat-card-header">
+                    <div class="stat-icon cs-icon">🧩</div>
+                    <span class="stat-label">CS</span>
+                  </div>
+                  <div class="stat-card-body">
+                    <span id="cs-value" class="stat-value">0</span>
+                    <div class="stat-trend positive">↑</div>
+                  </div>
+                  <div class="stat-card-footer">
+                    <div class="stat-progress">
+                      <div class="stat-progress-bar" style="width: 70%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="stat-card">
+                  <div class="stat-card-header">
+                    <div class="stat-icon level-icon">⭐</div>
+                    <span class="stat-label">Nivel</span>
+                  </div>
+                  <div class="stat-card-body">
+                    <span id="level-value" class="stat-value">1</span>
+                    <div class="stat-trend neutral">•</div>
+                  </div>
+                  <div class="stat-card-footer">
+                    <div class="stat-progress">
+                      <div class="stat-progress-bar" style="width: 10%"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="stat-card">
+                  <div class="stat-card-header">
+                    <div class="stat-icon gold-icon">💰</div>
+                    <span class="stat-label">Oro</span>
+                  </div>
+                  <div class="stat-card-body">
+                    <span id="gold-value" class="stat-value">0</span>
+                    <div class="stat-trend positive">↑</div>
+                  </div>
+                  <div class="stat-card-footer">
+                    <div class="stat-progress">
+                      <div class="stat-progress-bar" style="width: 55%"></div>
+                    </div>
                   </div>
                 </div>
               </div>
               
-              <div class="stat-card">
-                <div class="stat-card-header">
-                  <div class="stat-icon death-icon">💀</div>
-                  <span class="stat-label">Deaths</span>
-                </div>
-                <div class="stat-card-body">
-                  <span id="deaths-value" class="stat-value">0</span>
-                  <div class="stat-trend negative">↓</div>
-                </div>
-                <div class="stat-card-footer">
-                  <div class="stat-progress">
-                    <div class="stat-progress-bar" style="width: 25%"></div>
+              <!-- Anuncio vertical integrado en las estadísticas -->
+              <div class="integrated-ad">
+                <!-- Placeholder para anuncios (reemplazable por Overwolf ads) -->
+                <div class="ad-placeholder vertical">
+                  <div class="ad-placeholder-logo">
+                    <img src="../../img/header_icon.svg" alt="omashu.gg logo" class="ad-logo-icon">
+                    <span>omashu.gg</span>
                   </div>
-                </div>
-              </div>
-              
-              <div class="stat-card">
-                <div class="stat-card-header">
-                  <div class="stat-icon assist-icon">🤝</div>
-                  <span class="stat-label">Assists</span>
-                </div>
-                <div class="stat-card-body">
-                  <span id="assists-value" class="stat-value">0</span>
-                  <div class="stat-trend neutral">•</div>
-                </div>
-                <div class="stat-card-footer">
-                  <div class="stat-progress">
-                    <div class="stat-progress-bar" style="width: 40%"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="stat-card">
-                <div class="stat-card-header">
-                  <div class="stat-icon cs-icon">🧩</div>
-                  <span class="stat-label">CS</span>
-                </div>
-                <div class="stat-card-body">
-                  <span id="cs-value" class="stat-value">0</span>
-                  <div class="stat-trend positive">↑</div>
-                </div>
-                <div class="stat-card-footer">
-                  <div class="stat-progress">
-                    <div class="stat-progress-bar" style="width: 70%"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="stat-card">
-                <div class="stat-card-header">
-                  <div class="stat-icon level-icon">⭐</div>
-                  <span class="stat-label">Nivel</span>
-                </div>
-                <div class="stat-card-body">
-                  <span id="level-value" class="stat-value">1</span>
-                  <div class="stat-trend neutral">•</div>
-                </div>
-                <div class="stat-card-footer">
-                  <div class="stat-progress">
-                    <div class="stat-progress-bar" style="width: 10%"></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="stat-card">
-                <div class="stat-card-header">
-                  <div class="stat-icon gold-icon">💰</div>
-                  <span class="stat-label">Oro</span>
-                </div>
-                <div class="stat-card-body">
-                  <span id="gold-value" class="stat-value">0</span>
-                  <div class="stat-trend positive">↑</div>
-                </div>
-                <div class="stat-card-footer">
-                  <div class="stat-progress">
-                    <div class="stat-progress-bar" style="width: 55%"></div>
-                  </div>
+                  <div class="ad-placeholder-text">ESPACIO PUBLICITARIO</div>
+                  <div class="ad-placeholder-size">300 × 250</div>
                 </div>
               </div>
             </div>
@@ -223,6 +247,41 @@
                 </div>
                 <div class="insight-card-body">
                   <p>Aumenta tu CS para mejorar tu economía y ventaja en el juego. Cada 15 minions equivalen aproximadamente a una kill.</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- CTA Premium movido a la parte inferior -->
+            <div class="bottom-cta">
+              <!-- Mensaje promocional de omashu.gg -->
+              <div id="omashu-premium" class="omashu-premium-container">
+                <div class="discount-badge">-50% HOY</div>
+                <div class="premium-content">
+                  <div class="premium-content-text">
+                    <h3>OMASHU.GG PREMIUM</h3>
+                    <p>Domina el juego como los profesionales</p>
+                    <ul class="premium-benefits">
+                      <li>✓ <strong>Análisis exclusivo</strong> de tus partidas</li>
+                      <li>✓ Estadísticas de <strong>nivel profesional</strong></li>
+                      <li>✓ Experiencia <strong>sin interrupciones</strong></li>
+                    </ul>
+                    <div class="social-proof">
+                      <div class="users-count">2,341 jugadores ya mejoraron</div>
+                      <div class="ratings">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="rating-value">4.9</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="premium-buttons">
+                    <button class="premium-subscribe pulse-button">PRUEBA 7 DÍAS GRATIS</button>
+                    <button class="premium-info">Más información</button>
+                    <div class="limited-offer">Oferta termina en: <span id="countdown">23:59:42</span></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -759,41 +818,6 @@
           <div class="feedback-content">
             <div class="feedback-icon">✅</div>
             <div class="feedback-text">¡Acción completada!</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Anuncio rectangular con neurodiseño - Lateral derecho -->
-    <div id="medium-rectangle" class="ad-container right-rectangle">
-      <!-- Mensaje promocional de omashu.gg en formato banner horizontal con diseño persuasivo -->
-      <div id="omashu-premium" class="omashu-premium-container">
-        <div class="discount-badge">-50% HOY</div>
-        <div class="premium-content">
-          <div class="premium-content-text">
-            <h3>OMASHU.GG PREMIUM</h3>
-            <p>Domina el juego como los profesionales</p>
-            <ul class="premium-benefits">
-              <li>✓ <strong>Análisis exclusivo</strong> de tus partidas</li>
-              <li>✓ Estadísticas de <strong>nivel profesional</strong></li>
-              <li>✓ Experiencia <strong>sin interrupciones</strong></li>
-            </ul>
-            <div class="social-proof">
-              <div class="users-count">2,341 jugadores ya mejoraron</div>
-              <div class="ratings">
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="star">★</span>
-                <span class="rating-value">4.9</span>
-              </div>
-            </div>
-          </div>
-          <div class="premium-buttons">
-            <button class="premium-subscribe pulse-button">PRUEBA 7 DÍAS GRATIS</button>
-            <button class="premium-info">Más información</button>
-            <div class="limited-offer">Oferta termina en: <span id="countdown">23:59:42</span></div>
           </div>
         </div>
       </div>

@@ -3464,3 +3464,194 @@ main.with-ads {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Estilos para placeholder de anuncios */
+.ad-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(14, 10, 34, 0.9) 0%, rgba(92, 52, 227, 0.2) 100%);
+  border: 1px dashed rgba(138, 99, 255, 0.5);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+.ad-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.05), 
+    transparent);
+  animation: shimmer 2s infinite;
+}
+
+.ad-placeholder-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.ad-logo-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.ad-placeholder-logo span {
+  font-size: 12px;
+  font-weight: bold;
+  color: #8a63ff;
+}
+
+.ad-placeholder-text {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #5c34e3 0%, #8a63ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 2px;
+}
+
+.ad-placeholder-size {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Banner superior - dimensiones exactas 728x90 */
+#standard-banner {
+  width: 728px;
+  height: 90px;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+#overwolf-ads-container,
+#standard-banner .ad-placeholder {
+  width: 728px;
+  height: 90px;
+}
+
+/* Contenedor de anuncio rectangular - dimensiones exactas 300x250 */
+.integrated-ad {
+  width: 300px;
+  height: 250px;
+  flex-shrink: 0;
+}
+
+.integrated-ad .ad-placeholder.vertical {
+  width: 300px;
+  height: 250px;
+}
+
+/* Estilos para el layout optimizado */
+.optimized-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.main-stats-section {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stats-cards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  flex: 1;
+  min-width: 300px;
+}
+
+.bottom-cta {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.bottom-cta .omashu-premium-container {
+  width: 100%;
+  margin: 0;
+}
+
+/* Ajuste para el modelo horizontal en el contenedor premium */
+.bottom-cta .premium-content {
+  display: flex;
+  flex-direction: row;
+  padding: 12px;
+}
+
+.bottom-cta .premium-content-text {
+  flex: 2;
+}
+
+.bottom-cta .premium-buttons {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Media queries para adaptar el diseño */
+@media (max-width: 1024px) {
+  .main-stats-section {
+    justify-content: center;
+  }
+  
+  .stats-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .bottom-cta .premium-content {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-stats-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #standard-banner,
+  #overwolf-ads-container,
+  #standard-banner .ad-placeholder {
+    width: 100%;
+    max-width: 728px;
+  }
+  
+  .stats-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
