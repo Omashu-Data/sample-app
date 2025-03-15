@@ -58,6 +58,33 @@ interface PlayerTip {
   category: string;
 }
 
+// Interfaces para el sistema de gamificación
+interface PlayerAchievement {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  currentValue: number;
+  targetValue: number;
+  xpReward: number;
+  unlocked: boolean;
+}
+
+interface PlayerMilestone {
+  id: string;
+  name: string;
+  icon: string;
+  level: string;
+  completed: boolean;
+  current: boolean;
+}
+
+interface PlayerLevel {
+  level: number;
+  currentXP: number;
+  requiredXP: number;
+}
+
 // La ventana que se muestra en juego mientras League of Legends está en ejecución.
 // Implementa las siguientes funcionalidades:
 // 1. Mostrar métricas en tiempo real
@@ -156,6 +183,24 @@ class InGameLOL extends AppWindow {
   ];
   private heatmapManager: HeatmapManager;
 
+  // Elementos para el sistema de gamificación
+  private _userLevel: PlayerLevel = {
+    level: 7,
+    currentXP: 650,
+    requiredXP: 1000
+  };
+  
+  private _achievements: PlayerAchievement[] = [];
+  private _milestones: PlayerMilestone[] = [];
+  private _streakDays: number = 3;
+  private _totalAchievements: number = 20;
+  private _unlockedAchievements: number = 12;
+  
+  private _levelBadge: HTMLElement;
+  private _xpBar: HTMLElement;
+  private _xpText: HTMLElement;
+  private _rewardNotification: HTMLElement;
+
   private constructor() {
     super(kWindowNames.inGame);
 
@@ -236,13 +281,19 @@ class InGameLOL extends AppWindow {
       this._goalsList = document.getElementById('goals-list');
       this._tipsContainer = document.getElementById('tips-container');
       
+      // Elementos para el sistema de gamificación
+      this._levelBadge = document.getElementById('level-badge');
+      this._xpBar = document.getElementById('xp-bar');
+      this._xpText = document.getElementById('xp-text');
+      this._rewardNotification = document.getElementById('reward-notification');
+      
       // Verificar que todos los elementos existen
       if (!this._killsValue || !this._deathsValue || !this._assistsValue || 
           !this._csValue || !this._levelValue || !this._goldValue || 
           !this._gameTimeValue || !this._gameModeValue || !this._dpsValue || 
           !this._kdaValue || !this._cspmValue || !this._eventsLog || 
           !this._clipNotification || !this._strengthsList || !this._weaknessesList ||
-          !this._goalsList || !this._tipsContainer) {
+          !this._goalsList || !this._tipsContainer || !this._levelBadge || !this._xpBar || !this._xpText || !this._rewardNotification) {
         console.error('No se pudieron inicializar todos los elementos UI');
         this.logEvent("Error", "No se pudieron inicializar todos los elementos UI");
       } else {
@@ -251,6 +302,9 @@ class InGameLOL extends AppWindow {
         
         // Inicializar datos de ejemplo para la pestaña de mejora
         this.initializeImprovementData();
+        
+        // Inicializar datos de gamificación
+        this.initializeGamificationData();
       }
     } catch (e) {
       console.error('Error inicializando elementos UI:', e);
@@ -377,6 +431,11 @@ class InGameLOL extends AppWindow {
             this.logEvent("Kill", "¡Has conseguido una kill!");
             this.captureClip();
             this.sendEventToServer('kill');
+            
+            // Comprobar progreso de logros relacionados con kills
+            if (this._playerStats.kills === 5) {
+              this.checkAchievementProgress('pentakill', 1);
+            }
             break;
             
         case 'death':
@@ -437,6 +496,25 @@ class InGameLOL extends AppWindow {
         case 'match_end':
             this.logEvent("Partida", "La partida ha terminado");
             this.sendMatchSummaryToServer();
+            break;
+            
+        case 'gold_earned':
+            if (event.data && event.data.amount) {
+              const goldAmount = parseInt(event.data.amount);
+              this._playerStats.gold += goldAmount;
+              updateElementText('gold-value', this._playerStats.gold);
+              
+              // Comprobar progreso de logro de oro
+              this.checkAchievementProgress('gold_hoarder', this._playerStats.gold);
+            }
+            break;
+            
+        case 'objective':
+            if (event.data && event.data.type === 'dragon') {
+              // Incrementar contador de dragones para el logro
+              const currentDragons = this._achievements.find(a => a.id === 'jungle_master')?.currentValue || 0;
+              this.checkAchievementProgress('jungle_master', currentDragons + 1);
+            }
             break;
         }
         
@@ -802,8 +880,8 @@ class InGameLOL extends AppWindow {
         console.log(`Se presionó la tecla rápida ${hotkeyResult.name}`);
         const inGameState = await this._windows[kWindowNames.inGame].getWindowState();
 
-        if (inGameState.window_state === WindowState.NORMAL ||
-          inGameState.window_state === WindowState.MAXIMIZED) {
+      if (inGameState.window_state === WindowState.NORMAL ||
+        inGameState.window_state === WindowState.MAXIMIZED) {
           console.log('Minimizando ventana en juego');
           this._windows[kWindowNames.inGame].minimize();
         } else {
@@ -882,7 +960,7 @@ class InGameLOL extends AppWindow {
   private async getCurrentGameClassId(): Promise<number | null> {
     try {
     const info = await OWGames.getRunningGameInfo();
-      return (info && info.isRunning && info.classId) ? info.classId : null;
+    return (info && info.isRunning && info.classId) ? info.classId : null;
     } catch (e) {
       console.error('Error al obtener el ID de clase del juego:', e);
       return null;
@@ -922,6 +1000,12 @@ class InGameLOL extends AppWindow {
       // Inicializar los anuncios reales de Overwolf
       initializeAds();
       console.log('Interfaz inicializada correctamente');
+      
+      // Inicializar sistema de gamificación
+      this.initializeGamificationData();
+      
+      // Simular una racha de días para la demostración
+      this.simulateDailyStreak();
       
       return true;
     } catch (error) {
@@ -1557,6 +1641,366 @@ class InGameLOL extends AppWindow {
       }
     } catch (e) {
       console.error('Error actualizando UI de mejora:', e);
+    }
+  }
+
+  private initializeGamificationData() {
+    try {
+      // Inicializar logros
+      this._achievements = [
+        {
+          id: 'precision',
+          name: 'Precisión Letal',
+          description: 'Consigue un 70% de precisión en habilidades',
+          icon: '🎯',
+          currentValue: 70,
+          targetValue: 70,
+          xpReward: 100,
+          unlocked: true
+        },
+        {
+          id: 'gold_hoarder',
+          name: 'Cosechador de Oro',
+          description: 'Acumula 10,000 de oro en una partida',
+          icon: '💰',
+          currentValue: 7500,
+          targetValue: 10000,
+          xpReward: 150,
+          unlocked: false
+        },
+        {
+          id: 'jungle_master',
+          name: 'Maestro de la Jungla',
+          description: 'Elimina 5 dragones en una sola partida',
+          icon: '👑',
+          currentValue: 1,
+          targetValue: 5,
+          xpReward: 200,
+          unlocked: false
+        },
+        {
+          id: 'pentakill',
+          name: 'Pentakill',
+          description: 'Consigue tu primera pentakill',
+          icon: '⚔️',
+          currentValue: 0,
+          targetValue: 1,
+          xpReward: 500,
+          unlocked: false
+        }
+      ];
+      
+      // Inicializar hitos
+      this._milestones = [
+        {
+          id: 'bronze',
+          name: 'Bronce',
+          icon: '🥉',
+          level: 'Bronce',
+          completed: true,
+          current: false
+        },
+        {
+          id: 'silver',
+          name: 'Plata',
+          icon: '🥈',
+          level: 'Plata',
+          completed: true,
+          current: false
+        },
+        {
+          id: 'gold',
+          name: 'Oro',
+          icon: '🥇',
+          level: 'Oro',
+          completed: false,
+          current: true
+        },
+        {
+          id: 'platinum',
+          name: 'Platino',
+          icon: '💎',
+          level: 'Platino',
+          completed: false,
+          current: false
+        },
+        {
+          id: 'diamond',
+          name: 'Diamante',
+          icon: '👑',
+          level: 'Diamante',
+          completed: false,
+          current: false
+        }
+      ];
+      
+      // Actualizar UI con los datos de gamificación
+      this.updateGamificationUI();
+      
+      console.log('Datos de gamificación inicializados correctamente');
+    } catch (e) {
+      console.error('Error inicializando datos de gamificación:', e);
+    }
+  }
+  
+  private updateGamificationUI() {
+    try {
+      // Actualizar nivel y XP
+      if (this._levelBadge) {
+        this._levelBadge.textContent = `Nivel ${this._userLevel.level}`;
+      }
+      
+      if (this._xpBar) {
+        const xpPercentage = (this._userLevel.currentXP / this._userLevel.requiredXP) * 100;
+        this._xpBar.style.width = `${xpPercentage}%`;
+      }
+      
+      if (this._xpText) {
+        this._xpText.textContent = `${this._userLevel.currentXP}/${this._userLevel.requiredXP} XP`;
+      }
+      
+      // Actualizar estadísticas de logros
+      const achievementStatsValue = document.querySelector('.achievement-stats .stat-item:nth-child(1) .stat-value');
+      if (achievementStatsValue) {
+        achievementStatsValue.textContent = this._unlockedAchievements.toString();
+      }
+      
+      const achievementStatsPercentage = document.querySelector('.achievement-stats .stat-item:nth-child(2) .stat-value');
+      if (achievementStatsPercentage) {
+        const percentage = Math.round((this._unlockedAchievements / this._totalAchievements) * 100);
+        achievementStatsPercentage.textContent = `${percentage}%`;
+      }
+      
+      const achievementStatsStreak = document.querySelector('.achievement-stats .stat-item:nth-child(3) .stat-value');
+      if (achievementStatsStreak) {
+        achievementStatsStreak.textContent = this._streakDays.toString();
+      }
+      
+      // Actualizar progreso de racha
+      const streakProgressBar = document.querySelector('.streak-reward .progress');
+      if (streakProgressBar) {
+        const streakPercentage = (this._streakDays / 7) * 100;
+        streakProgressBar.setAttribute('style', `width: ${streakPercentage}%`);
+      }
+      
+      const streakProgressText = document.querySelector('.streak-reward .progress-text');
+      if (streakProgressText) {
+        streakProgressText.textContent = `${this._streakDays}/7`;
+      }
+      
+      console.log('UI de gamificación actualizada correctamente');
+    } catch (e) {
+      console.error('Error actualizando UI de gamificación:', e);
+    }
+  }
+  
+  private awardXP(amount: number) {
+    try {
+      this._userLevel.currentXP += amount;
+      
+      // Comprobar si se ha subido de nivel
+      if (this._userLevel.currentXP >= this._userLevel.requiredXP) {
+        this._userLevel.level += 1;
+        this._userLevel.currentXP -= this._userLevel.requiredXP;
+        this._userLevel.requiredXP = Math.round(this._userLevel.requiredXP * 1.5); // Aumentar XP requerida para el siguiente nivel
+        
+        // Mostrar notificación de subida de nivel
+        this.showLevelUpNotification();
+      }
+      
+      // Actualizar UI
+      this.updateGamificationUI();
+      
+      console.log(`Se han otorgado ${amount} puntos de XP. Nivel actual: ${this._userLevel.level}, XP: ${this._userLevel.currentXP}/${this._userLevel.requiredXP}`);
+    } catch (e) {
+      console.error('Error al otorgar XP:', e);
+    }
+  }
+  
+  private showLevelUpNotification() {
+    try {
+      // Crear notificación de subida de nivel
+      const notification = document.createElement('div');
+      notification.className = 'level-up-notification';
+      notification.innerHTML = `
+        <div class="level-up-content">
+          <div class="level-up-icon">🏆</div>
+          <div class="level-up-text">
+            <h3>¡Nivel Subido!</h3>
+            <p>Has alcanzado el nivel ${this._userLevel.level}</p>
+          </div>
+        </div>
+      `;
+      
+      // Añadir al DOM
+      document.body.appendChild(notification);
+      
+      // Mostrar y luego ocultar después de 5 segundos
+      setTimeout(() => {
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+          
+          // Eliminar del DOM después de la animación
+          setTimeout(() => {
+            document.body.removeChild(notification);
+          }, 500);
+        }, 5000);
+      }, 100);
+      
+      console.log(`Notificación de subida de nivel mostrada. Nuevo nivel: ${this._userLevel.level}`);
+    } catch (e) {
+      console.error('Error al mostrar notificación de subida de nivel:', e);
+    }
+  }
+  
+  private checkAchievementProgress(achievementId: string, currentValue: number) {
+    try {
+      // Buscar el logro
+      const achievement = this._achievements.find(a => a.id === achievementId);
+      
+      if (!achievement) {
+        console.error(`No se encontró el logro con ID: ${achievementId}`);
+        return;
+      }
+      
+      // Actualizar valor actual
+      achievement.currentValue = currentValue;
+      
+      // Comprobar si se ha desbloqueado
+      if (!achievement.unlocked && achievement.currentValue >= achievement.targetValue) {
+        achievement.unlocked = true;
+        this._unlockedAchievements += 1;
+        
+        // Otorgar XP
+        this.awardXP(achievement.xpReward);
+        
+        // Mostrar notificación
+        this.showAchievementNotification(achievement);
+        
+        console.log(`¡Logro desbloqueado! ${achievement.name}`);
+      }
+      
+      // Actualizar UI
+      this.updateAchievementUI(achievement);
+    } catch (e) {
+      console.error('Error al comprobar progreso de logro:', e);
+    }
+  }
+  
+  private updateAchievementUI(achievement: PlayerAchievement) {
+    try {
+      // Buscar el elemento del logro
+      const achievementCard = document.querySelector(`.achievement-card[data-id="${achievement.id}"]`);
+      
+      if (!achievementCard) {
+        console.error(`No se encontró el elemento UI para el logro: ${achievement.id}`);
+        return;
+      }
+      
+      // Actualizar clases
+      if (achievement.unlocked) {
+        achievementCard.classList.add('unlocked');
+        achievementCard.classList.remove('in-progress', 'locked');
+      } else if (achievement.currentValue > 0) {
+        achievementCard.classList.add('in-progress');
+        achievementCard.classList.remove('unlocked', 'locked');
+      } else {
+        achievementCard.classList.add('locked');
+        achievementCard.classList.remove('unlocked', 'in-progress');
+      }
+      
+      // Actualizar barra de progreso
+      const progressBar = achievementCard.querySelector('.progress');
+      if (progressBar) {
+        const percentage = Math.min(100, Math.round((achievement.currentValue / achievement.targetValue) * 100));
+        progressBar.setAttribute('style', `width: ${percentage}%`);
+      }
+      
+      // Actualizar texto de progreso
+      const progressText = achievementCard.querySelector('.progress-text');
+      if (progressText) {
+        if (achievement.unlocked) {
+          progressText.textContent = '¡Completado!';
+        } else {
+          progressText.textContent = `${achievement.currentValue}/${achievement.targetValue}`;
+        }
+      }
+      
+      console.log(`UI del logro ${achievement.id} actualizada correctamente`);
+    } catch (e) {
+      console.error('Error al actualizar UI del logro:', e);
+    }
+  }
+  
+  private showAchievementNotification(achievement: PlayerAchievement) {
+    try {
+      if (!this._rewardNotification) {
+        console.error('No se encontró el elemento de notificación de recompensa');
+        return;
+      }
+      
+      // Actualizar contenido
+      const iconElement = this._rewardNotification.querySelector('.reward-icon');
+      if (iconElement) {
+        iconElement.textContent = achievement.icon;
+      }
+      
+      const titleElement = this._rewardNotification.querySelector('.reward-text h3');
+      if (titleElement) {
+        titleElement.textContent = '¡Logro Desbloqueado!';
+      }
+      
+      const descriptionElement = this._rewardNotification.querySelector('.reward-text p');
+      if (descriptionElement) {
+        descriptionElement.textContent = achievement.name;
+      }
+      
+      const xpElement = this._rewardNotification.querySelector('.reward-xp');
+      if (xpElement) {
+        xpElement.textContent = `+${achievement.xpReward} XP`;
+      }
+      
+      // Mostrar notificación
+      this._rewardNotification.classList.remove('hidden');
+      this._rewardNotification.classList.add('show');
+      
+      // Ocultar después de 5 segundos
+      setTimeout(() => {
+        this._rewardNotification.classList.remove('show');
+        
+        // Añadir clase hidden después de la animación
+        setTimeout(() => {
+          this._rewardNotification.classList.add('hidden');
+        }, 500);
+      }, 5000);
+      
+      console.log(`Notificación de logro mostrada: ${achievement.name}`);
+    } catch (e) {
+      console.error('Error al mostrar notificación de logro:', e);
+    }
+  }
+  
+  private simulateDailyStreak() {
+    // Esta función es solo para demostración
+    // En un entorno real, se obtendría la racha de días del servidor
+    
+    try {
+      // Marcar los días completados en el calendario
+      const days = document.querySelectorAll('.streak-calendar .day');
+      
+      for (let i = 0; i < days.length; i++) {
+        if (i < this._streakDays) {
+          days[i].classList.add('completed');
+        } else if (i === this._streakDays) {
+          days[i].classList.add('today');
+        }
+      }
+      
+      console.log(`Racha de días simulada: ${this._streakDays} días`);
+    } catch (e) {
+      console.error('Error al simular racha de días:', e);
     }
   }
 }

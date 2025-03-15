@@ -17,6 +17,20 @@
       <img src="../../img/header_icon.svg" class="omashu-logo" alt="omashu.gg logo" />
       <h1>omashu.gg</h1>
     </div>
+    <div class="user-progression">
+      <div class="user-level">
+        <span class="level-badge pulse-effect">Nivel 7</span>
+        <div class="xp-progress">
+          <div class="xp-bar" style="width: 65%"></div>
+          <span class="xp-text">650/1000 XP</span>
+        </div>
+      </div>
+      <div class="user-rewards">
+        <div class="reward-icon unlocked" title="Análisis Avanzado Desbloqueado">🏆</div>
+        <div class="reward-icon unlocked" title="Grabación Automática Desbloqueada">📹</div>
+        <div class="reward-icon" title="Desbloquea en Nivel 10">🔒</div>
+      </div>
+    </div>
     <h1 class="hotkey-text">
       Mostrar/Ocultar:
       <kbd id="hotkey"></kbd>
@@ -35,22 +49,51 @@
     <div id="overwolf-ads-container" style="width: 728px; height: 90px;"></div>
   </div>
 
-  <!-- Sistema de pestañas -->
+  <!-- Sistema de pestañas con refuerzos visuales y micro-interacciones -->
   <div class="tabs-container">
     <div class="tabs-navigation">
-      <button class="tab-button active" data-tab="stats">Estadísticas</button>
-      <button class="tab-button" data-tab="events">Eventos</button>
-      <button class="tab-button" data-tab="performance">Rendimiento</button>
-      <button class="tab-button" data-tab="improve">Mejora</button>
-      <button class="tab-button" data-tab="heatmap">Mapa</button>
-      <button class="tab-button" data-tab="clips">Clips</button>
+      <button class="tab-button active" data-tab="stats" id="stats-tab-btn">
+        <div class="tab-icon">📊</div>
+        <span>Tu Rendimiento</span>
+        <div class="tab-notification"></div>
+      </button>
+      <button class="tab-button" data-tab="events" id="events-tab-btn">
+        <div class="tab-icon">⚡</div>
+        <span>Momentos Clave</span>
+        <div class="tab-notification pulse-subtle">2</div>
+      </button>
+      <button class="tab-button" data-tab="performance" id="performance-tab-btn">
+        <div class="tab-icon">📈</div>
+        <span>Análisis</span>
+        <div class="tab-notification"></div>
+      </button>
+      <button class="tab-button" data-tab="improve" id="improve-tab-btn">
+        <div class="tab-icon">🚀</div>
+        <span>Evolución</span>
+        <div class="tab-notification"></div>
+      </button>
+      <button class="tab-button" data-tab="heatmap" id="heatmap-tab-btn">
+        <div class="tab-icon">🗺️</div>
+        <span>Mapa</span>
+        <div class="tab-notification"></div>
+      </button>
+      <button class="tab-button" data-tab="clips" id="clips-tab-btn">
+        <div class="tab-icon">🎬</div>
+        <span>Tus Clips</span>
+        <div class="tab-notification pulse-subtle">1</div>
+      </button>
+      <button class="tab-button" data-tab="achievements" id="achievements-tab-btn">
+        <div class="tab-icon">🏆</div>
+        <span>Progreso</span>
+        <div class="tab-notification"></div>
+      </button>
     </div>
   </div>
 
   <!-- --------------------------------- Main -------------------------------- -->
   <main class="with-ads">
     <div class="content-wrapper">
-      <!-- Contenido de pestañas -->
+      <!-- Contenido de pestañas con animaciones de entrada suaves -->
       <div class="tab-content">
         <!-- Pestaña de Estadísticas (activa por defecto) -->
         <div id="stats-tab" class="tab-pane active">
@@ -560,17 +603,171 @@
             </div>
           </div>
         </div>
+        
+        <!-- Pestaña de Logros -->
+        <div id="achievements-tab" class="tab-pane">
+          <div class="achievements-dashboard">
+            <h2 class="dashboard-title">Tu Progreso de Jugador</h2>
+            
+            <div class="achievements-overview">
+              <div class="achievement-stats">
+                <div class="stat-item">
+                  <span class="stat-value">12</span>
+                  <span class="stat-label">Logros Desbloqueados</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value">65%</span>
+                  <span class="stat-label">Completado</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-value">3</span>
+                  <span class="stat-label">Racha Actual</span>
+                </div>
+              </div>
+              
+              <div class="daily-streak">
+                <h3>Racha de Días</h3>
+                <div class="streak-calendar">
+                  <div class="day completed">L</div>
+                  <div class="day completed">M</div>
+                  <div class="day completed">X</div>
+                  <div class="day today">J</div>
+                  <div class="day">V</div>
+                  <div class="day">S</div>
+                  <div class="day">D</div>
+                </div>
+                <div class="streak-reward">
+                  <span>¡Completa 7 días para obtener un análisis premium!</span>
+                  <div class="progress-bar">
+                    <div class="progress" style="width: 43%"></div>
+                  </div>
+                  <span class="progress-text">3/7</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="achievements-grid">
+              <div class="achievement-card unlocked">
+                <div class="achievement-icon">🎯</div>
+                <div class="achievement-info">
+                  <h3>Precisión Letal</h3>
+                  <p>Consigue un 70% de precisión en habilidades</p>
+                  <div class="achievement-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 100%"></div>
+                    </div>
+                    <span class="progress-text">¡Completado!</span>
+                  </div>
+                </div>
+                <div class="achievement-reward">+100 XP</div>
+              </div>
+              
+              <div class="achievement-card in-progress">
+                <div class="achievement-icon">💰</div>
+                <div class="achievement-info">
+                  <h3>Cosechador de Oro</h3>
+                  <p>Acumula 10,000 de oro en una partida</p>
+                  <div class="achievement-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 75%"></div>
+                    </div>
+                    <span class="progress-text">7,500/10,000</span>
+                  </div>
+                </div>
+                <div class="achievement-reward">+150 XP</div>
+              </div>
+              
+              <div class="achievement-card locked">
+                <div class="achievement-icon">👑</div>
+                <div class="achievement-info">
+                  <h3>Maestro de la Jungla</h3>
+                  <p>Elimina 5 dragones en una sola partida</p>
+                  <div class="achievement-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 20%"></div>
+                    </div>
+                    <span class="progress-text">1/5</span>
+                  </div>
+                </div>
+                <div class="achievement-reward">+200 XP</div>
+              </div>
+              
+              <div class="achievement-card locked">
+                <div class="achievement-icon">⚔️</div>
+                <div class="achievement-info">
+                  <h3>Pentakill</h3>
+                  <p>Consigue tu primera pentakill</p>
+                  <div class="achievement-progress">
+                    <div class="progress-bar">
+                      <div class="progress" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text">0/1</span>
+                  </div>
+                </div>
+                <div class="achievement-reward">+500 XP</div>
+              </div>
+            </div>
+            
+            <div class="milestone-tracker">
+              <h3>Tu Camino de Mejora</h3>
+              <div class="milestone-path">
+                <div class="milestone completed">
+                  <div class="milestone-icon">🥉</div>
+                  <div class="milestone-label">Bronce</div>
+                </div>
+                <div class="milestone-connector completed"></div>
+                <div class="milestone completed">
+                  <div class="milestone-icon">🥈</div>
+                  <div class="milestone-label">Plata</div>
+                </div>
+                <div class="milestone-connector in-progress"></div>
+                <div class="milestone current">
+                  <div class="milestone-icon">🥇</div>
+                  <div class="milestone-label">Oro</div>
+                </div>
+                <div class="milestone-connector"></div>
+                <div class="milestone">
+                  <div class="milestone-icon">💎</div>
+                  <div class="milestone-label">Platino</div>
+                </div>
+                <div class="milestone-connector"></div>
+                <div class="milestone">
+                  <div class="milestone-icon">👑</div>
+                  <div class="milestone-label">Diamante</div>
+                </div>
+              </div>
+              <div class="milestone-reward">
+                <p>Próxima recompensa: <span>Análisis de Partidas Premium</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       
-      <div id="clip-notification" class="clip-notification hidden">
-        <span>¡Clip guardado!</span>
+      <!-- Sistema de retroalimentación inmediata -->
+      <div id="feedback-system" class="feedback-system">
+        <div id="clip-notification" class="clip-notification hidden">
+          <div class="notification-content">
+            <div class="notification-icon">🎬</div>
+            <div class="notification-text">¡Clip guardado!</div>
+            <div class="notification-progress"></div>
+          </div>
+        </div>
+        
+        <div id="action-feedback" class="action-feedback hidden">
+          <div class="feedback-content">
+            <div class="feedback-icon">✅</div>
+            <div class="feedback-text">¡Acción completada!</div>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Anuncio rectangular - Lateral derecho -->
+    <!-- Anuncio rectangular con neurodiseño - Lateral derecho -->
     <div id="medium-rectangle" class="ad-container right-rectangle">
-      <!-- Mensaje promocional de omashu.gg en formato banner horizontal -->
+      <!-- Mensaje promocional de omashu.gg en formato banner horizontal con diseño persuasivo -->
       <div id="omashu-premium" class="omashu-premium-container">
+        <div class="discount-badge">-50% HOY</div>
         <div class="premium-content">
           <div class="premium-content-text">
             <h3>OMASHU.GG PREMIUM</h3>
@@ -580,10 +777,22 @@
               <li>✓ Estadísticas de <strong>nivel profesional</strong></li>
               <li>✓ Experiencia <strong>sin interrupciones</strong></li>
             </ul>
+            <div class="social-proof">
+              <div class="users-count">2,341 jugadores ya mejoraron</div>
+              <div class="ratings">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="rating-value">4.9</span>
+              </div>
+            </div>
           </div>
           <div class="premium-buttons">
-            <button class="premium-subscribe">Prueba 7 días GRATIS</button>
+            <button class="premium-subscribe pulse-button">Prueba 7 días GRATIS</button>
             <button class="premium-info">Más info</button>
+            <div class="limited-offer">Oferta termina en: <span id="countdown">23:59:42</span></div>
           </div>
         </div>
       </div>
@@ -686,6 +895,12 @@
           hotkeyElem.textContent = 'Shift+F';
           console.log('Texto de hotkey actualizado a Shift+F');
         }
+        
+        // Inicializar contador regresivo para efecto de escasez
+        startCountdown();
+        
+        // Inicializar sistema de microinteracciones
+        initMicroInteractions();
       });
     });
   </script>
@@ -721,6 +936,121 @@
         console.error('Botón de prueba no encontrado');
       }
     });
+    
+    // Funciones para efectos neuroconductuales
+    function startCountdown() {
+      let countdown = document.getElementById('countdown');
+      if (!countdown) return;
+      
+      let minutes = 59;
+      let seconds = 59;
+      let hours = 23;
+      
+      setInterval(function() {
+        seconds--;
+        if (seconds < 0) {
+          seconds = 59;
+          minutes--;
+          if (minutes < 0) {
+            minutes = 59;
+            hours--;
+            if (hours < 0) {
+              hours = 23; // Reset para demo
+            }
+          }
+        }
+        countdown.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
+    
+    function initMicroInteractions() {
+      // Añadir efectos de hover y click a todos los botones de pestañas
+      const tabButtons = document.querySelectorAll('.tab-button');
+      
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Añadir efecto de ondulación al hacer clic
+          let ripple = document.createElement('span');
+          ripple.classList.add('ripple-effect');
+          this.appendChild(ripple);
+          
+          // Añadir análisis de interacción (simulado)
+          console.log(`Análisis: Usuario hizo clic en pestaña ${this.dataset.tab}`);
+          
+          // Eliminar el efecto después de la animación
+          setTimeout(() => {
+            ripple.remove();
+          }, 1000);
+        });
+      });
+      
+      // Simular recompensas aleatorias para generar anticipación
+      setInterval(function() {
+        const random = Math.random();
+        if (random > 0.95) { // 5% de probabilidad
+          showRandomReward();
+        }
+      }, 120000); // Cada 2 minutos
+    }
+    
+    function showRandomReward() {
+      const rewards = [
+        {icon: "🎁", text: "¡Regalo sorpresa!"},
+        {icon: "⭐", text: "+5 XP Bonus"},
+        {icon: "🔍", text: "Tip exclusivo"}
+      ];
+      
+      const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+      
+      // Crear notificación
+      let notification = document.createElement('div');
+      notification.className = 'reward-popup';
+      notification.innerHTML = `
+        <div class="reward-popup-content">
+          <div class="reward-popup-icon">${randomReward.icon}</div>
+          <div class="reward-popup-text">${randomReward.text}</div>
+        </div>
+      `;
+      
+      // Añadir al DOM
+      document.body.appendChild(notification);
+      
+      // Mostrar y luego ocultar
+      setTimeout(() => {
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+          setTimeout(() => document.body.removeChild(notification), 500);
+        }, 4000);
+      }, 100);
+    }
   </script>
+
+  <!-- Sistema de recompensas y notificaciones -->
+  <div id="reward-notification" class="reward-notification hidden">
+    <div class="reward-notification-content">
+      <div class="reward-icon">🏆</div>
+      <div class="reward-text">
+        <h3>¡Logro Desbloqueado!</h3>
+        <p>Precisión Letal</p>
+      </div>
+      <div class="reward-xp">+100 XP</div>
+    </div>
+  </div>
+  
+  <!-- Sistema de ayuda contextual -->
+  <div id="context-help" class="context-help hidden">
+    <div class="help-content">
+      <div class="help-header">
+        <h3>Tip Pro</h3>
+        <button class="close-help">×</button>
+      </div>
+      <div class="help-body"></div>
+      <div class="help-footer">
+        <label><input type="checkbox"> No mostrar de nuevo</label>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
