@@ -861,7 +861,7 @@ main.with-ads {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(108, 70, 233, 0.8);
+    background-color: rgba(92, 52, 227, 0.7);
 }
 
 /* Estilos específicos para cada pestaña */
@@ -3094,4 +3094,374 @@ body, .tab-pane, .content-wrapper, main, .tab-content {
   gap: 20px;
   margin-left: 20px;
   transition: all 0.3s ease;
+}
+
+/* Estilos para la barra superior más compacta */
+.app-header {
+  height: 40px;
+  min-height: 40px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container img {
+  height: 25px;
+  width: auto;
+  margin-right: 8px;
+}
+
+.logo-container h1 {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Barra de progreso del usuario - Versión compacta */
+.user-progression.compact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 15px;
+  transition: all 0.3s ease;
+  height: 30px;
+}
+
+.user-level {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.level-badge {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #5c34e3 0%, #8a63ff 100%);
+  color: white;
+  font-weight: bold;
+}
+
+.xp-progress {
+  width: 80px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.xp-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ff8a00 0%, #ff4d94 100%);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.xp-text {
+  position: absolute;
+  right: 0;
+  top: -12px;
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.user-rewards {
+  display: flex;
+  gap: 5px;
+}
+
+.reward-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  cursor: help;
+}
+
+.reward-icon.unlocked {
+  background: rgba(92, 52, 227, 0.3);
+  color: white;
+}
+
+.hotkey-text {
+  margin-left: auto;
+  margin-right: 15px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#hotkey {
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 10px;
+  font-family: monospace;
+}
+
+/* Pestañas compactas y uniformes */
+.tabs-container.compact {
+  margin: 5px 0;
+}
+
+.tabs-navigation {
+  display: flex;
+  justify-content: space-between;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding: 3px 8px;
+  background: linear-gradient(180deg, rgba(47, 22, 99, 0.6) 0%, rgba(28, 12, 60, 0.8) 100%);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  margin-bottom: 8px;
+}
+
+.tab-button {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 2px;
+  margin: 0 2px;
+  border: none;
+  border-radius: 5px;
+  background: linear-gradient(135deg, rgba(61, 31, 123, 0.3) 0%, rgba(29, 14, 58, 0.5) 100%);
+  color: #c8c8ff;
+  font-family: "Matter", sans-serif;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  overflow: hidden;
+  max-width: 80px;
+}
+
+.tab-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #9b6dff 0%, #5c34e3 100%);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  border-radius: 2px 2px 0 0;
+  opacity: 0;
+}
+
+.tab-button:hover::after {
+  width: 80%;
+  opacity: 0.7;
+}
+
+.tab-button.active::after {
+  width: 100%;
+  opacity: 1;
+  background: linear-gradient(90deg, #ff8a00 0%, #ff4d94 100%);
+  height: 2px;
+}
+
+.tab-button:hover {
+  background: linear-gradient(135deg, rgba(81, 51, 143, 0.5) 0%, rgba(49, 34, 78, 0.7) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(92, 52, 227, 0.2);
+}
+
+.tab-button.active {
+  background: linear-gradient(135deg, rgba(92, 52, 227, 0.3) 0%, rgba(138, 99, 255, 0.5) 100%);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(92, 52, 227, 0.3);
+}
+
+.tab-icon {
+  font-size: 15px;
+  margin-bottom: 3px;
+  transition: transform 0.3s ease;
+}
+
+.tab-button span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  padding: 0 2px;
+}
+
+.tab-button:hover .tab-icon {
+  transform: scale(1.1);
+}
+
+.tab-notification {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background: #ff4d94;
+  border-radius: 50%;
+  color: white;
+  font-size: 9px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tab-notification:not(:empty) {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Ajustes generales de la interfaz */
+main.with-ads {
+  padding-top: 5px;
+  display: flex;
+  height: calc(100vh - 40px - 30px - 90px); /* Resta altura del header, tabs y banner ads */
+  max-height: unset;
+  min-height: unset;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 10px;
+  scrollbar-width: thin;
+}
+
+/* Ajustes para secciones específicas */
+.stats-dashboard, 
+.performance-dashboard, 
+.improvement-dashboard, 
+.achievements-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 15px;
+}
+
+.improvement-dashboard .dashboard-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.improvement-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Ajustes para CTA premium */
+.premium-subscribe {
+  padding: 8px 10px;
+  letter-spacing: -0.2px;
+  font-size: 12px;
+  white-space: nowrap;
+  border-radius: 5px;
+}
+
+.premium-info {
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+.premium-content-text h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.premium-content-text p {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.premium-benefits {
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.premium-benefits li {
+  margin-bottom: 3px;
+}
+
+.social-proof {
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+.limited-offer {
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+/* Ajustes generales para todos los contenedores de tarjetas */
+.stats-cards-container,
+.performance-cards-container,
+.improvement-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+/* Estilos para scrollbar delgada */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(92, 52, 227, 0.5);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(92, 52, 227, 0.7);
+}
+
+/* Ajustes adicionales para otras clases afectadas */
+// ... existing code ...
+
+/* Media queries adicionales para dispositivos más pequeños */
+@media (max-width: 768px) {
+  .stats-cards-container,
+  .performance-cards-container,
+  .improvement-cards-container {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  
+  .premium-subscribe,
+  .premium-info {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-cards-container,
+  .performance-cards-container,
+  .improvement-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

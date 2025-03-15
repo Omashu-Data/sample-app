@@ -17,7 +17,7 @@
       <img src="../../img/header_icon.svg" class="omashu-logo" alt="omashu.gg logo" />
       <h1>omashu.gg</h1>
     </div>
-    <div class="user-progression">
+    <div class="user-progression compact">
       <div class="user-level">
         <span class="level-badge pulse-effect">Nivel 7</span>
         <div class="xp-progress">
@@ -31,11 +31,10 @@
         <div class="reward-icon" title="Desbloquea en Nivel 10">🔒</div>
       </div>
     </div>
-    <h1 class="hotkey-text">
+    <span class="hotkey-text">
       Mostrar/Ocultar:
       <kbd id="hotkey"></kbd>
-      <button id="testToggleButton" style="margin-left: 10px; padding: 5px 10px; cursor: pointer;">Probar</button>
-    </h1>
+    </span>
     <div class="window-controls-group">
       <button id="minimizeButton" class="window-control window-control-minimize" />
       <button id="maximizeButton" class="window-control window-control-maximize" />
@@ -50,16 +49,16 @@
   </div>
 
   <!-- Sistema de pestañas con refuerzos visuales y micro-interacciones -->
-  <div class="tabs-container">
+  <div class="tabs-container compact">
     <div class="tabs-navigation">
       <button class="tab-button active" data-tab="stats" id="stats-tab-btn">
         <div class="tab-icon">📊</div>
-        <span>Tu Rendimiento</span>
+        <span>Rendimiento</span>
         <div class="tab-notification"></div>
       </button>
       <button class="tab-button" data-tab="events" id="events-tab-btn">
         <div class="tab-icon">⚡</div>
-        <span>Momentos Clave</span>
+        <span>Momentos</span>
         <div class="tab-notification pulse-subtle">2</div>
       </button>
       <button class="tab-button" data-tab="performance" id="performance-tab-btn">
@@ -79,7 +78,7 @@
       </button>
       <button class="tab-button" data-tab="clips" id="clips-tab-btn">
         <div class="tab-icon">🎬</div>
-        <span>Tus Clips</span>
+        <span>Clips</span>
         <div class="tab-notification pulse-subtle">1</div>
       </button>
       <button class="tab-button" data-tab="achievements" id="achievements-tab-btn">
@@ -790,8 +789,8 @@
             </div>
           </div>
           <div class="premium-buttons">
-            <button class="premium-subscribe pulse-button">Prueba 7 días GRATIS</button>
-            <button class="premium-info">Más info</button>
+            <button class="premium-subscribe pulse-button">PRUEBA 7 DÍAS GRATIS</button>
+            <button class="premium-info">Más información</button>
             <div class="limited-offer">Oferta termina en: <span id="countdown">23:59:42</span></div>
           </div>
         </div>
