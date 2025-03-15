@@ -11,7 +11,8 @@
     "icon": "icons/IconMouseOver.png",
     "icon_gray": "icons/IconMouseNormal.png",
     "launcher_icon": "icons/desktop-icon.ico",
-    "window_icon": "icons/IconMouseOver.png"
+    "window_icon": "icons/IconMouseOver.png",
+    "app_id": "tu-app-id-aquí"
   },
   "permissions": [
     "Hotkeys",
@@ -20,7 +21,8 @@
     "Extensions",
     "Streaming",
     "FileSystem",
-    "Clipboard"
+    "Clipboard",
+    "Ads"
   ],
   "data": {
     "start_window": "background",

@@ -1,0 +1,45 @@
+<svg width="600" height="600" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo del mapa -->
+  <rect width="600" height="600" fill="#062C2C"/>
+  
+  <!-- Río -->
+  <path d="M150 150L450 450M450 150L150 450" stroke="#4A90E2" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Jungla lado azul -->
+  <rect x="50" y="50" width="200" height="200" rx="10" fill="#0D4D4D" stroke="#062C2C" stroke-width="5"/>
+  <rect x="50" y="350" width="200" height="200" rx="10" fill="#0D4D4D" stroke="#062C2C" stroke-width="5"/>
+  
+  <!-- Jungla lado rojo -->
+  <rect x="350" y="50" width="200" height="200" rx="10" fill="#4D0D0D" stroke="#062C2C" stroke-width="5"/>
+  <rect x="350" y="350" width="200" height="200" rx="10" fill="#4D0D0D" stroke="#062C2C" stroke-width="5"/>
+  
+  <!-- Líneas -->
+  <path d="M50 150L550 150" stroke="#8B8B8B" stroke-width="20" stroke-linecap="round"/>
+  <path d="M50 450L550 450" stroke="#8B8B8B" stroke-width="20" stroke-linecap="round"/>
+  <path d="M150 50L150 550" stroke="#8B8B8B" stroke-width="20" stroke-linecap="round"/>
+  <path d="M450 50L450 550" stroke="#8B8B8B" stroke-width="20" stroke-linecap="round"/>
+  
+  <!-- Base azul -->
+  <circle cx="100" cy="500" r="40" fill="#0066CC" stroke="#FFFFFF" stroke-width="3"/>
+  
+  <!-- Base roja -->
+  <circle cx="500" cy="100" r="40" fill="#CC0000" stroke="#FFFFFF" stroke-width="3"/>
+  
+  <!-- Dragón -->
+  <circle cx="400" cy="400" r="20" fill="#FFD700" stroke="#FFFFFF" stroke-width="2"/>
+  
+  <!-- Barón -->
+  <circle cx="200" cy="200" r="20" fill="#800080" stroke="#FFFFFF" stroke-width="2"/>
+  
+  <!-- Texto -->
+  <text x="100" y="500" font-family="Arial" font-size="12" fill="white" text-anchor="middle" dominant-baseline="middle">Base Azul</text>
+  <text x="500" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" dominant-baseline="middle">Base Roja</text>
+  <text x="400" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" dominant-baseline="middle">Dragón</text>
+  <text x="200" y="200" font-family="Arial" font-size="12" fill="white" text-anchor="middle" dominant-baseline="middle">Barón</text>
+  
+  <!-- Coordenadas -->
+  <text x="10" y="20" font-family="Arial" font-size="10" fill="#666666">(0,0)</text>
+  <text x="570" y="20" font-family="Arial" font-size="10" fill="#666666">(15000,0)</text>
+  <text x="10" y="590" font-family="Arial" font-size="10" fill="#666666">(0,15000)</text>
+  <text x="550" y="590" font-family="Arial" font-size="10" fill="#666666">(15000,15000)</text>
+</svg> 

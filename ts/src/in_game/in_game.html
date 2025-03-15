@@ -30,9 +30,8 @@
 
   <!-- Banner de anuncios - Parte superior -->
   <div id="standard-banner" class="ad-container top-banner">
-    <div id="standard-banner-placeholder" class="ad-placeholder" style="width: 728px; height: 90px;">
-      <span>Anuncio 728x90</span>
-    </div>
+    <!-- Contenedor para anuncios de Overwolf -->
+    <div id="overwolf-ads-container" style="width: 728px; height: 90px;"></div>
   </div>
 
   <!-- Sistema de pestañas -->
@@ -41,6 +40,9 @@
       <button class="tab-button active" data-tab="stats">Estadísticas</button>
       <button class="tab-button" data-tab="events">Eventos</button>
       <button class="tab-button" data-tab="performance">Rendimiento</button>
+      <button class="tab-button" data-tab="improve">Mejora</button>
+      <button class="tab-button" data-tab="heatmap">Mapa</button>
+      <button class="tab-button" data-tab="clips">Clips</button>
     </div>
   </div>
 
@@ -128,6 +130,183 @@
             </div>
           </div>
         </div>
+        
+        <!-- Pestaña de Mejora -->
+        <div id="improve-tab" class="tab-pane">
+          <div id="improvement-container" class="metrics-panel stats-panel">
+            <h2>Objetivos de Mejora</h2>
+            <div class="improvement-content">
+              <!-- Sección de fortalezas -->
+              <div class="improvement-section">
+                <h3 class="section-title strength-title">Tus Fortalezas</h3>
+                <div id="strengths-list" class="improvement-list">
+                  <!-- Se llenará dinámicamente -->
+                  <div class="strength-item">
+                    <div class="strength-icon">💪</div>
+                    <div class="strength-text">Buen KDA: Mantienes un ratio de 5.0</div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Sección de debilidades -->
+              <div class="improvement-section">
+                <h3 class="section-title weakness-title">Áreas de Mejora</h3>
+                <div id="weaknesses-list" class="improvement-list">
+                  <!-- Se llenará dinámicamente -->
+                  <div class="weakness-item">
+                    <div class="weakness-icon">📈</div>
+                    <div class="weakness-text">Farming: Tu CS/min está por debajo del promedio</div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Sección de objetivos -->
+              <div class="improvement-section">
+                <h3 class="section-title goals-title">Objetivos Actuales</h3>
+                <div id="goals-list" class="improvement-list">
+                  <!-- Se llenará dinámicamente -->
+                  <div class="goal-item">
+                    <div class="goal-progress">
+                      <div class="progress-bar">
+                        <div class="progress-fill" style="width: 35%;"></div>
+                      </div>
+                      <div class="progress-text">35%</div>
+                    </div>
+                    <div class="goal-details">
+                      <div class="goal-title">Mejorar CS a 7.0 por minuto</div>
+                      <div class="goal-description">Actual: 4.5 CS/min | Objetivo: 7.0 CS/min</div>
+                      <div class="goal-tips">Tip: Concéntrate en últimos golpes a minions entre rotaciones</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Sección de consejos personalizados -->
+              <div class="improvement-section">
+                <h3 class="section-title tips-title">Consejos Personalizados</h3>
+                <div id="tips-container" class="tips-container">
+                  <div class="tip-card">
+                    <div class="tip-header">
+                      <div class="tip-icon">💡</div>
+                      <div class="tip-title">Mejora tu Farm</div>
+                    </div>
+                    <div class="tip-content">
+                      Practica conseguir al menos 70 CS a los 10 minutos. Esto te dará una ventaja económica significativa sobre tu oponente.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pestaña de Heatmap -->
+        <div id="heatmap-tab" class="tab-pane">
+          <div id="heatmap-container" class="metrics-panel stats-panel">
+            <h2>Mapa de Actividad</h2>
+            <div class="heatmap-layout">
+              <div class="heatmap-content">
+                <div class="map-container">
+                  <div class="map-overlay">
+                    <!-- Aquí se renderizará el heatmap -->
+                    <canvas id="heatmap-canvas" width="400" height="400"></canvas>
+                    <!-- Capa para mostrar eventos específicos -->
+                    <div id="event-markers"></div>
+                  </div>
+                  <img id="map-background" src="../../img/summoners-rift.svg" alt="Mapa de Summoner's Rift" />
+                  <!-- Tooltip para eventos -->
+                  <div id="event-tooltip" class="event-tooltip"></div>
+                </div>
+              </div>
+              <div class="controls-and-stats">
+                <div class="map-controls">
+                  <div class="map-legend">
+                    <h3>Leyenda</h3>
+                    <div class="legend-item">
+                      <div class="legend-color" style="background-color: rgba(255, 0, 0, 0.7);"></div>
+                      <span>Alta actividad</span>
+                    </div>
+                    <div class="legend-item">
+                      <div class="legend-color" style="background-color: rgba(255, 255, 0, 0.7);"></div>
+                      <span>Media actividad</span>
+                    </div>
+                    <div class="legend-item">
+                      <div class="legend-color" style="background-color: rgba(0, 255, 0, 0.7);"></div>
+                      <span>Baja actividad</span>
+                    </div>
+                  </div>
+                  <div class="event-filters">
+                    <h3>Filtros de Eventos</h3>
+                    <div class="filter-item">
+                      <input type="checkbox" id="filter-kill" checked>
+                      <label for="filter-kill">Kills</label>
+                    </div>
+                    <div class="filter-item">
+                      <input type="checkbox" id="filter-death" checked>
+                      <label for="filter-death">Muertes</label>
+                    </div>
+                    <div class="filter-item">
+                      <input type="checkbox" id="filter-assist" checked>
+                      <label for="filter-assist">Asistencias</label>
+                    </div>
+                    <div class="filter-item">
+                      <input type="checkbox" id="filter-objective" checked>
+                      <label for="filter-objective">Objetivos</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="time-slider">
+                  <h3>Tiempo de Partida</h3>
+                  <input type="range" id="time-slider" min="0" max="100" value="100">
+                  <div class="slider-labels">
+                    <span>Inicio</span>
+                    <span id="time-display">Todo</span>
+                    <span>Fin</span>
+                  </div>
+                </div>
+                <div class="heatmap-stats">
+                  <h3>Estadísticas de Zonas</h3>
+                  <div class="zone-stats">
+                    <div class="zone-stat-item">
+                      <span class="zone-name">Top Lane:</span>
+                      <span class="zone-value">25% del tiempo</span>
+                    </div>
+                    <div class="zone-stat-item">
+                      <span class="zone-name">Mid Lane:</span>
+                      <span class="zone-value">30% del tiempo</span>
+                    </div>
+                    <div class="zone-stat-item">
+                      <span class="zone-name">Bot Lane:</span>
+                      <span class="zone-value">15% del tiempo</span>
+                    </div>
+                    <div class="zone-stat-item">
+                      <span class="zone-name">Jungla:</span>
+                      <span class="zone-value">20% del tiempo</span>
+                    </div>
+                    <div class="zone-stat-item">
+                      <span class="zone-name">Río:</span>
+                      <span class="zone-value">10% del tiempo</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pestaña de Clips -->
+        <div id="clips-tab" class="tab-pane">
+          <div id="clips-container" class="metrics-panel stats-panel">
+            <h2>Mis Clips Guardados</h2>
+            <div class="clips-grid">
+              <!-- Los clips se añadirán dinámicamente aquí -->
+              <div class="no-clips-message">
+                <p>No hay clips guardados todavía.</p>
+                <p>Cuando consigas una kill, se grabará automáticamente un clip.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       
       <div id="clip-notification" class="clip-notification hidden">
@@ -137,20 +316,21 @@
     
     <!-- Anuncio rectangular - Lateral derecho -->
     <div id="medium-rectangle" class="ad-container right-rectangle">
-      <!-- Mensaje promocional de omashu.gg -->
-      <div id="omashu-premium" class="omashu-premium-container" style="width: 300px; height: 250px;">
+      <!-- Mensaje promocional de omashu.gg en formato banner horizontal -->
+      <div id="omashu-premium" class="omashu-premium-container">
         <div class="premium-content">
-          <h3>omashu.gg PREMIUM</h3>
-          <p>Mejora tu experiencia de juego con herramientas premium y obtén beneficios exclusivos:</p>
-          <ul class="premium-benefits">
-            <li>Análisis detallado de partidas</li>
-            <li>Estadísticas avanzadas en tiempo real</li>
-            <li>Grabación automática mejorada</li>
-            <li>Sin anuncios</li>
-          </ul>
+          <div class="premium-content-text">
+            <h3>OMASHU.GG PREMIUM</h3>
+            <p>Mejora tu experiencia de juego con herramientas premium</p>
+            <ul class="premium-benefits">
+              <li>✓ Análisis detallado</li>
+              <li>✓ Estadísticas avanzadas</li>
+              <li>✓ Sin anuncios</li>
+            </ul>
+          </div>
           <div class="premium-buttons">
             <button class="premium-subscribe">Suscribirse</button>
-            <button class="premium-info">Más información</button>
+            <button class="premium-info">Más info</button>
           </div>
         </div>
       </div>

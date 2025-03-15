@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --mode=development --env makeOpk",
     "dev": "webpack --watch --mode=development",
-    "watch": "webpack --watch --mode=development"
+    "watch": "webpack --watch --mode=development",
+    "package": "node scripts/package.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@overwolf/overwolf-api-ts": "^1.3.0",
     "@overwolf/types": "^2.33.0",
+    "archiver": "^7.0.1",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^7.0.0",
     "html-webpack-plugin": "^5.2.0",

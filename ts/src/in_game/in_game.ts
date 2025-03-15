@@ -9,6 +9,8 @@ import { AppWindow } from "../AppWindow";
 import { kHotkeys, kWindowNames, kGamesFeatures } from "../consts";
 
 import WindowState = overwolf.windows.WindowStateEx;
+import { HeatmapManager } from './heatmap';
+import { initializeAds } from './ads'; // Importar el módulo de anuncios
 
 // Interfaz para los datos del jugador
 interface PlayerStats {
@@ -22,6 +24,40 @@ interface PlayerStats {
   gameMode: string;
 }
 
+// Interfaces para el sistema de mejora
+interface PlayerStrength {
+  id: string;
+  icon: string;
+  text: string;
+  value: number;
+}
+
+interface PlayerWeakness {
+  id: string;
+  icon: string;
+  text: string;
+  value: number;
+  targetValue: number;
+}
+
+interface PlayerGoal {
+  id: string;
+  title: string;
+  description: string;
+  tip: string;
+  currentValue: number;
+  targetValue: number;
+  progress: number; // 0-100
+}
+
+interface PlayerTip {
+  id: string;
+  icon: string;
+  title: string;
+  content: string;
+  category: string;
+}
+
 // La ventana que se muestra en juego mientras League of Legends está en ejecución.
 // Implementa las siguientes funcionalidades:
 // 1. Mostrar métricas en tiempo real
@@ -30,7 +66,7 @@ interface PlayerStats {
 // 4. Conectarse al servidor web
 class InGameLOL extends AppWindow {
   private static _instance: InGameLOL;
-  private _gameEventsListener: OWGamesEvents;
+  private _windows: Record<string, OWWindow>;
   
   // Elementos HTML
   private _killsValue: HTMLElement;
@@ -48,6 +84,12 @@ class InGameLOL extends AppWindow {
   private _clipNotification: HTMLElement;
   private _adContainer: HTMLElement;
   
+  // Elementos para la pestaña de mejora
+  private _strengthsList: HTMLElement;
+  private _weaknessesList: HTMLElement;
+  private _goalsList: HTMLElement;
+  private _tipsContainer: HTMLElement;
+  
   // Datos del jugador
   private _playerStats: PlayerStats = {
     kills: 0,
@@ -60,19 +102,67 @@ class InGameLOL extends AppWindow {
     gameMode: "CLASSIC"
   };
   
+  // Datos para el sistema de mejora
+  private _playerStrengths: PlayerStrength[] = [];
+  private _playerWeaknesses: PlayerWeakness[] = [];
+  private _playerGoals: PlayerGoal[] = [];
+  private _playerTips: PlayerTip[] = [];
+  
   // Configuración para clips
   private _clipDuration: number = 15; // duración en segundos
+  private _clipsFolder: string = ''; // carpeta donde se guardan los clips
+  private _clipsList: any[] = []; // lista de clips guardados
   private _isRecording: boolean = false;
   private _lastDamageValues: number[] = [];
   private _gameClassId: number = null;
   
   // Intervalo para consultar la API de Live Client Data
   private _liveClientInterval: number = null;
+  
+  // Valores de referencia para análisis
+  private readonly _referenceValues = {
+    csPerMin: {
+      bronze: 5.0,
+      silver: 6.0,
+      gold: 7.0,
+      platinum: 8.0,
+      diamond: 9.0
+    },
+    kda: {
+      bronze: 2.0,
+      silver: 2.5,
+      gold: 3.0,
+      platinum: 3.5,
+      diamond: 4.0
+    },
+    goldPerMin: {
+      bronze: 300,
+      silver: 350,
+      gold: 400,
+      platinum: 450,
+      diamond: 500
+    }
+  };
+  
+  private interestingFeatures = [
+    'counters',
+    'match_info',
+    'game_info',
+    'location',  // Añadido para el mapa de calor
+    'kill',      // Añadido para el mapa de calor
+    'death',     // Añadido para el mapa de calor
+    'assist',    // Añadido para el mapa de calor
+    'objective'  // Añadido para el mapa de calor
+  ];
+  private heatmapManager: HeatmapManager;
 
   private constructor() {
     super(kWindowNames.inGame);
 
-    this._gameEventsListener = null;
+    this._windows = {};
+
+    // Inicializar el mapa de calor
+    this.heatmapManager = new HeatmapManager();
 
     // Configurar las teclas rápidas cuando se carga la ventana
     this.setupHotkeys();
@@ -97,9 +187,6 @@ class InGameLOL extends AppWindow {
     console.log(`Juego detectado: ${gameClassId}`);
     this.logEvent("Sistema", `Juego detectado: League of Legends`);
 
-    // Iniciar y registrar el listener de eventos del juego
-    this.registerToGEP();
-
     // Inicializar elementos UI
     this.initializeUIElements();
 
@@ -108,6 +195,12 @@ class InGameLOL extends AppWindow {
 
     // Iniciar intervalo para consultar datos de Live Client
     this.startLiveClientPolling();
+
+    // Inicializar la captura de clips
+    this.initializeClipCapture();
+    
+    // Cargar clips guardados
+    this.loadSavedClips();
   }
 
   private initializeUIElements() {
@@ -127,17 +220,27 @@ class InGameLOL extends AppWindow {
       this._eventsLog = document.getElementById('events-log');
       this._clipNotification = document.getElementById('clip-notification');
       
+      // Elementos para la pestaña de mejora
+      this._strengthsList = document.getElementById('strengths-list');
+      this._weaknessesList = document.getElementById('weaknesses-list');
+      this._goalsList = document.getElementById('goals-list');
+      this._tipsContainer = document.getElementById('tips-container');
+      
       // Verificar que todos los elementos existen
       if (!this._killsValue || !this._deathsValue || !this._assistsValue || 
           !this._csValue || !this._levelValue || !this._goldValue || 
           !this._gameTimeValue || !this._gameModeValue || !this._dpsValue || 
           !this._kdaValue || !this._cspmValue || !this._eventsLog || 
-          !this._clipNotification) {
+          !this._clipNotification || !this._strengthsList || !this._weaknessesList ||
+          !this._goalsList || !this._tipsContainer) {
         console.error('No se pudieron inicializar todos los elementos UI');
         this.logEvent("Error", "No se pudieron inicializar todos los elementos UI");
       } else {
         console.log('Elementos UI inicializados correctamente');
         this.logEvent("Sistema", "Interfaz de usuario inicializada");
+        
+        // Inicializar datos de ejemplo para la pestaña de mejora
+        this.initializeImprovementData();
       }
     } catch (e) {
       console.error('Error inicializando elementos UI:', e);
@@ -226,6 +329,11 @@ class InGameLOL extends AppWindow {
       
       // Actualizar métricas de rendimiento
       this.updatePerformanceMetrics();
+
+      // Si hay información de ubicación, actualizar el mapa de calor
+      if (info.location) {
+        console.log('Actualización de ubicación recibida:', info.location);
+      }
     } catch (e) {
       console.error('Error procesando actualización de información:', e);
     }
@@ -252,8 +360,8 @@ class InGameLOL extends AppWindow {
       e.events.forEach(event => {
         console.log(`Procesando evento: ${event.name}`, event);
         
-        switch (event.name) {
-          case 'kill':
+      switch (event.name) {
+        case 'kill':
             this._playerStats.kills++;
             updateElementText('kills-value', this._playerStats.kills);
             this.logEvent("Kill", "¡Has conseguido una kill!");
@@ -261,19 +369,19 @@ class InGameLOL extends AppWindow {
             this.sendEventToServer('kill');
             break;
             
-          case 'death':
+        case 'death':
             this._playerStats.deaths++;
             updateElementText('deaths-value', this._playerStats.deaths);
             this.logEvent("Muerte", "Has muerto");
             break;
             
-          case 'assist':
+        case 'assist':
             this._playerStats.assists++;
             updateElementText('assists-value', this._playerStats.assists);
             this.logEvent("Asistencia", "Has conseguido una asistencia");
             break;
             
-          case 'level':
+        case 'level':
             if (event.data) {
               let level = event.data.level;
               // Manejar correctamente los datos de nivel
@@ -309,14 +417,14 @@ class InGameLOL extends AppWindow {
             }
             break;
             
-          case 'matchStart':
-          case 'match_start':
+        case 'matchStart':
+        case 'match_start':
             this.resetStats();
             this.logEvent("Partida", "La partida ha comenzado");
             break;
             
-          case 'matchEnd':
-          case 'match_end':
+        case 'matchEnd':
+        case 'match_end':
             this.logEvent("Partida", "La partida ha terminado");
             this.sendMatchSummaryToServer();
             break;
@@ -330,6 +438,16 @@ class InGameLOL extends AppWindow {
           updateElementText('kda-value', kda);
         }
       });
+
+      // Registrar eventos relevantes para el mapa de calor
+      const relevantEvents = ['kill', 'death', 'assist', 'objective'];
+      if (e && e.events) {
+        e.events.forEach(event => {
+          if (relevantEvents.includes(event.name)) {
+            console.log(`Evento ${event.name} registrado para el mapa de calor:`, event);
+          }
+        });
+      }
     } catch (e) {
       console.error('Error procesando eventos:', e);
     }
@@ -443,6 +561,9 @@ class InGameLOL extends AppWindow {
       updateElementText('dps-value', dps);
       
       console.log('Métricas de rendimiento actualizadas: KDA=' + kda + ', CSPM=' + cspm + ', DPS=' + dps);
+      
+      // Actualizar análisis de mejora después de actualizar métricas
+      this.analyzePlayerPerformance();
     } catch (e) {
       console.error('Error actualizando métricas de rendimiento:', e);
     }
@@ -485,13 +606,15 @@ class InGameLOL extends AppWindow {
 
   private initializeClipCapture() {
     try {
+      // Registrar listeners para eventos de captura
       overwolf.media.replays.onCaptureError.addListener(error => {
         console.error('Error en la captura de clip:', error);
       });
       
       overwolf.media.replays.onCaptureStopped.addListener(info => {
         console.log('Captura de clip detenida:', info);
-        this._isRecording = false;
+        // Cuando se completa un clip, actualizar la lista
+        this.loadSavedClips();
       });
       
       overwolf.media.replays.onCaptureWarning.addListener(warning => {
@@ -506,6 +629,11 @@ class InGameLOL extends AppWindow {
       overwolf.media.replays.getState(result => {
         if (result.success) {
           console.log('Estado de los servicios de replay:', result);
+          
+          // Obtener la carpeta de clips
+          // La API getVideosFolder no existe, usamos una ruta predeterminada
+          this._clipsFolder = 'C:\\Users\\Public\\Videos\\Overwolf';
+          console.log('Carpeta de clips (predeterminada):', this._clipsFolder);
         } else {
           console.error('Error al obtener el estado de los servicios de replay:', result.error);
         }
@@ -517,26 +645,24 @@ class InGameLOL extends AppWindow {
 
   private captureClip() {
     try {
-      // Si ya está grabando, no intentar iniciar otra grabación
-      if (this._isRecording) {
-        console.log('Ya hay una grabación en curso');
-        return;
-      }
-
-      // Simplemente mostrar una notificación para esta versión
-      // La implementación real requeriría usar la API correcta según la versión de Overwolf
+      // En un entorno real, aquí se llamaría a la API de Overwolf para capturar un clip
+      // overwolf.media.replays.capture(this._clipDuration, this.handleClipCaptured.bind(this));
+      
+      // Para fines de demostración, simulamos la captura
       console.log('Se simula la captura de un clip por una kill');
       this.showClipNotification();
       
-      // Simular proceso de grabación
-      this._isRecording = true;
-      setTimeout(() => {
-        this._isRecording = false;
-        console.log('Simulación de grabación completada');
-      }, 3000);
+      // Simular un nuevo clip para la demostración
+      const newClip = {
+        id: Date.now().toString(),
+        title: `Kill - ${new Date().toLocaleTimeString()}`,
+        date: new Date(),
+        path: '',
+        thumbnail: '../../img/clip-placeholder.svg'
+      };
       
-      // Aquí iría el código real para grabar usando la API de Overwolf
-      // Esta es solo una simulación para el prototipo
+      this._clipsList.unshift(newClip);
+      this.updateClipsUI();
     } catch (e) {
       console.error('Error al capturar clip:', e);
     }
@@ -670,6 +796,20 @@ class InGameLOL extends AppWindow {
   }
   
   private async setToggleHotkeyBehavior() {
+    const toggleInGameWindow = async (hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent): Promise<void> => {
+      console.log(`Se presionó la tecla rápida ${hotkeyResult.name}`);
+      const inGameState = await this._windows[kWindowNames.inGame].getWindowState();
+
+      if (inGameState.window_state === WindowState.NORMAL ||
+        inGameState.window_state === WindowState.MAXIMIZED) {
+        console.log('Minimizando ventana en juego');
+        this._windows[kWindowNames.inGame].minimize();
+      } else {
+        console.log('Restaurando ventana en juego');
+        this._windows[kWindowNames.inGame].restore();
+      }
+    }
+
     try {
       console.log('Configurando comportamiento de hotkey...');
       
@@ -681,19 +821,7 @@ class InGameLOL extends AppWindow {
           return;
         }
         
-        console.log(`¡Hotkey presionada! ${result.name}`);
-        const inGameState = await this.getWindowState();
-        console.log(`Estado actual de la ventana: ${inGameState.window_state}`);
-
-        if (inGameState.window_state === overwolf.windows.WindowStateEx.NORMAL ||
-            inGameState.window_state === overwolf.windows.WindowStateEx.MAXIMIZED) {
-          console.log('Minimizando ventana...');
-          this.currWindow.minimize();
-        } else if (inGameState.window_state === overwolf.windows.WindowStateEx.MINIMIZED ||
-                  inGameState.window_state === overwolf.windows.WindowStateEx.CLOSED) {
-          console.log('Restaurando ventana...');
-          this.currWindow.restore();
-        }
+        await toggleInGameWindow(result);
       });
       
       console.log('Hotkey registrada con éxito');
@@ -746,7 +874,7 @@ class InGameLOL extends AppWindow {
 
   private async getCurrentGameClassId(): Promise<number | null> {
     try {
-      const info = await OWGames.getRunningGameInfo();
+    const info = await OWGames.getRunningGameInfo();
       return (info && info.isRunning && info.classId) ? info.classId : null;
     } catch (e) {
       console.error('Error al obtener el ID de clase del juego:', e);
@@ -784,52 +912,14 @@ class InGameLOL extends AppWindow {
       // Registrar el evento de inicialización
       this.logEvent("Sistema", "Aplicación inicializada");
   
-      // Cargar un anuncio simulado
-      this.loadSimulatedAd();
+      // Inicializar los anuncios reales de Overwolf
+      initializeAds();
       console.log('Interfaz inicializada correctamente');
       
       return true;
     } catch (error) {
       console.error('Error al inicializar la interfaz:', error);
       return false;
-    }
-  }
-
-  private loadSimulatedAd() {
-    try {
-      const adContainer = document.getElementById('ad-container');
-      if (adContainer) {
-        // Crear un anuncio simulado con estilo omashu.gg
-        const adContent = document.createElement('div');
-        adContent.className = 'simulated-ad';
-        adContent.innerHTML = `
-          <div style="background: linear-gradient(135deg, #130b37, #271664); color: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(109, 61, 255, 0.3); animation: pulse 2s infinite;">
-            <h3 style="margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; color: rgb(188, 166, 255);">omashu.gg</h3>
-            <p style="margin: 0 0 15px 0; font-size: 14px;">Mejora tu experiencia de juego con herramientas premium</p>
-            <div style="display: flex; justify-content: center; gap: 10px;">
-              <button style="background: rgba(92, 52, 227, 1); border: none; color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.3s;">Suscribirse</button>
-              <button style="background: rgba(19, 11, 55, 0.8); border: 1px solid rgba(109, 61, 255, 0.3); color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.3s;">Más información</button>
-            </div>
-          </div>
-          <style>
-            @keyframes pulse {
-              0% { transform: scale(1); }
-              50% { transform: scale(1.02); }
-              100% { transform: scale(1); }
-            }
-          </style>
-        `;
-        adContainer.innerHTML = '';
-        adContainer.appendChild(adContent);
-        
-        // Registrar evento
-        this.logEvent("Publicidad", "Anuncio de omashu.gg cargado");
-        console.log('Anuncio de omashu.gg cargado en el contenedor:', adContainer.id);
-      } else {
-        console.error('No se encontró el contenedor de anuncios');
-      }
-    } catch (e) {
-      console.error('Error al cargar el anuncio simulado:', e);
     }
   }
 
@@ -977,36 +1067,6 @@ class InGameLOL extends AppWindow {
     }
   }
 
-  // Registra el listener al Game Events Provider de Overwolf
-  private registerToGEP() {
-    try {
-      // Verificar si el juego es League of Legends (ID: 5426)
-      if (this._gameClassId !== 5426) {
-        console.log('El juego actual no es League of Legends');
-        return;
-      }
-
-      const gameFeatures = kGamesFeatures.get(this._gameClassId);
-  
-      if (gameFeatures && gameFeatures.length) {
-        this._gameEventsListener = new OWGamesEvents(
-          {
-            onInfoUpdates: this.onInfoUpdates.bind(this),
-            onNewEvents: this.onNewEvents.bind(this)
-          },
-          gameFeatures
-        );
-  
-        this._gameEventsListener.start();
-        
-        console.log('Inicializado el escuchador de eventos para League of Legends');
-        this.logEvent("Sistema", "Plugin inicializado y conectado correctamente");
-      }
-    } catch (error) {
-      console.error('Error al registrar al GEP:', error);
-    }
-  }
-
   // Función auxiliar para actualizar el texto de un elemento
   private updateElementText(id: string, value: any) {
     try {
@@ -1023,6 +1083,473 @@ class InGameLOL extends AppWindow {
       }
     } catch (e) {
       console.error(`Error al actualizar elemento ${id}:`, e);
+    }
+  }
+
+  /**
+   * Carga los clips guardados desde la carpeta de clips
+   */
+  private loadSavedClips() {
+    try {
+      // En un entorno real, aquí se cargarían los clips desde la carpeta
+      // overwolf.media.replays.getReplaysByFolder(this._clipsFolder, (result) => {
+      //   if (result.success) {
+      //     this._clipsList = result.replays;
+      //     this.updateClipsUI();
+      //   }
+      // });
+      
+      // Para fines de demostración, usamos datos de ejemplo
+      console.log('Cargando clips guardados (simulación)');
+      
+      // Si ya tenemos clips simulados, no añadimos más
+      if (this._clipsList.length === 0) {
+        // Crear algunos clips de ejemplo
+        const exampleClips = [
+          {
+            id: '1',
+            title: 'Triple Kill - Bot Lane',
+            date: new Date(Date.now() - 3600000), // 1 hora atrás
+            path: '',
+            thumbnail: '../../img/clip-placeholder.svg'
+          },
+          {
+            id: '2',
+            title: 'Dragon Steal',
+            date: new Date(Date.now() - 7200000), // 2 horas atrás
+            path: '',
+            thumbnail: '../../img/clip-placeholder.svg'
+          }
+        ];
+        
+        this._clipsList = exampleClips;
+      }
+      
+      this.updateClipsUI();
+    } catch (e) {
+      console.error('Error al cargar clips guardados:', e);
+    }
+  }
+
+  /**
+   * Actualiza la interfaz de usuario con los clips guardados
+   */
+  private updateClipsUI() {
+    try {
+      const clipsContainer = document.querySelector('.clips-grid');
+      if (!clipsContainer) return;
+      
+      // Limpiar el contenedor
+      clipsContainer.innerHTML = '';
+      
+      if (this._clipsList.length === 0) {
+        // Mostrar mensaje de que no hay clips
+        const noClipsMessage = document.createElement('div');
+        noClipsMessage.className = 'no-clips-message';
+        noClipsMessage.innerHTML = `
+          <p>No hay clips guardados todavía.</p>
+          <p>Cuando consigas una kill, se grabará automáticamente un clip.</p>
+        `;
+        clipsContainer.appendChild(noClipsMessage);
+        return;
+      }
+      
+      // Crear elementos para cada clip
+      this._clipsList.forEach(clip => {
+        const clipElement = document.createElement('div');
+        clipElement.className = 'clip-item';
+        clipElement.dataset.id = clip.id;
+        
+        const formattedDate = clip.date.toLocaleString();
+        
+        clipElement.innerHTML = `
+          <div class="clip-thumbnail">
+            <img src="${clip.thumbnail}" alt="${clip.title}">
+          </div>
+          <div class="clip-info">
+            <div class="clip-title">${clip.title}</div>
+            <div class="clip-date">${formattedDate}</div>
+          </div>
+          <div class="clip-actions">
+            <button class="clip-button play-clip">Reproducir</button>
+            <button class="clip-button open-folder">Abrir carpeta</button>
+          </div>
+        `;
+        
+        // Añadir evento para reproducir el clip
+        const playButton = clipElement.querySelector('.play-clip');
+        if (playButton) {
+          playButton.addEventListener('click', () => this.playClip(clip));
+        }
+        
+        // Añadir evento para abrir la carpeta
+        const folderButton = clipElement.querySelector('.open-folder');
+        if (folderButton) {
+          folderButton.addEventListener('click', () => this.openClipsFolder());
+        }
+        
+        clipsContainer.appendChild(clipElement);
+      });
+    } catch (e) {
+      console.error('Error al actualizar UI de clips:', e);
+    }
+  }
+
+  /**
+   * Reproduce un clip
+   */
+  private playClip(clip: any) {
+    try {
+      console.log('Reproduciendo clip:', clip.title);
+      
+      // En un entorno real, aquí se abriría el clip para reproducirlo
+      // overwolf.utils.openWindowsExplorer(clip.path, (result) => {
+      //   if (!result.success) {
+      //     console.error('Error al abrir el clip:', result.error);
+      //   }
+      // });
+      
+      // Para fines de demostración, mostramos un mensaje
+      alert(`Reproduciendo clip: ${clip.title}`);
+    } catch (e) {
+      console.error('Error al reproducir clip:', e);
+    }
+  }
+
+  /**
+   * Abre la carpeta donde se guardan los clips
+   */
+  private openClipsFolder() {
+    try {
+      console.log('Abriendo carpeta de clips');
+      
+      // En un entorno real, aquí se abriría la carpeta de clips
+      // overwolf.utils.openWindowsExplorer(this._clipsFolder, (result) => {
+      //   if (!result.success) {
+      //     console.error('Error al abrir la carpeta de clips:', result.error);
+      //   }
+      // });
+      
+      // Para fines de demostración, mostramos un mensaje
+      alert(`Abriendo carpeta de clips: ${this._clipsFolder || 'Carpeta no disponible'}`);
+    } catch (e) {
+      console.error('Error al abrir carpeta de clips:', e);
+    }
+  }
+
+  /**
+   * Inicializa datos de ejemplo para la pestaña de mejora
+   */
+  private initializeImprovementData() {
+    try {
+      // Inicializar con algunos datos de ejemplo
+      this._playerStrengths = [
+        {
+          id: 'kda',
+          icon: '💪',
+          text: 'Buen KDA: Mantienes un ratio de 5.0',
+          value: 5.0
+        }
+      ];
+      
+      this._playerWeaknesses = [
+        {
+          id: 'cspm',
+          icon: '📈',
+          text: 'Farming: Tu CS/min está por debajo del promedio',
+          value: 4.5,
+          targetValue: 7.0
+        }
+      ];
+      
+      this._playerGoals = [
+        {
+          id: 'improve_cspm',
+          title: 'Mejorar CS a 7.0 por minuto',
+          description: 'Actual: 4.5 CS/min | Objetivo: 7.0 CS/min',
+          tip: 'Concéntrate en últimos golpes a minions entre rotaciones',
+          currentValue: 4.5,
+          targetValue: 7.0,
+          progress: 35
+        }
+      ];
+      
+      this._playerTips = [
+        {
+          id: 'farm_tip',
+          icon: '💡',
+          title: 'Mejora tu Farm',
+          content: 'Practica conseguir al menos 70 CS a los 10 minutos. Esto te dará una ventaja económica significativa sobre tu oponente.',
+          category: 'farming'
+        }
+      ];
+      
+      // Actualizar la UI con estos datos
+      this.updateImprovementUI();
+    } catch (e) {
+      console.error('Error inicializando datos de mejora:', e);
+    }
+  }
+  
+  /**
+   * Analiza el rendimiento del jugador para identificar fortalezas y debilidades
+   */
+  private analyzePlayerPerformance() {
+    try {
+      // Solo analizar si tenemos suficientes datos
+      if (this._playerStats.gameTime < 60) { // Al menos 1 minuto de juego
+        return;
+      }
+      
+      // Calcular métricas clave
+      const gameTimeMinutes = this._playerStats.gameTime / 60;
+      const cspm = gameTimeMinutes > 0 ? this._playerStats.cs / gameTimeMinutes : 0;
+      const kda = this._playerStats.deaths > 0 
+        ? (this._playerStats.kills + this._playerStats.assists) / this._playerStats.deaths 
+        : this._playerStats.kills + this._playerStats.assists;
+      const goldPerMin = gameTimeMinutes > 0 ? this._playerStats.gold / gameTimeMinutes : 0;
+      
+      // Limpiar arrays existentes
+      this._playerStrengths = [];
+      this._playerWeaknesses = [];
+      this._playerGoals = [];
+      this._playerTips = [];
+      
+      // Analizar CS por minuto
+      if (cspm >= this._referenceValues.csPerMin.gold) {
+        // Es una fortaleza
+        this._playerStrengths.push({
+          id: 'cspm',
+          icon: '🌟',
+          text: `Excelente farming: ${cspm.toFixed(1)} CS/min`,
+          value: cspm
+        });
+      } else if (cspm < this._referenceValues.csPerMin.silver) {
+        // Es una debilidad
+        this._playerWeaknesses.push({
+          id: 'cspm',
+          icon: '📈',
+          text: `Farming: ${cspm.toFixed(1)} CS/min está por debajo del promedio`,
+          value: cspm,
+          targetValue: this._referenceValues.csPerMin.gold
+        });
+        
+        // Crear un objetivo
+        const targetCspm = this._referenceValues.csPerMin.silver;
+        const progress = Math.min(100, Math.round((cspm / targetCspm) * 100));
+        
+        this._playerGoals.push({
+          id: 'improve_cspm',
+          title: `Mejorar CS a ${targetCspm.toFixed(1)} por minuto`,
+          description: `Actual: ${cspm.toFixed(1)} CS/min | Objetivo: ${targetCspm.toFixed(1)} CS/min`,
+          tip: 'Concéntrate en últimos golpes a minions entre rotaciones',
+          currentValue: cspm,
+          targetValue: targetCspm,
+          progress: progress
+        });
+        
+        // Añadir un consejo
+        this._playerTips.push({
+          id: 'farm_tip',
+          icon: '💡',
+          title: 'Mejora tu Farm',
+          content: `Practica conseguir al menos ${Math.round(targetCspm * 10)} CS a los 10 minutos. Esto te dará una ventaja económica significativa sobre tu oponente.`,
+          category: 'farming'
+        });
+      }
+      
+      // Analizar KDA
+      if (kda >= this._referenceValues.kda.gold) {
+        // Es una fortaleza
+        this._playerStrengths.push({
+          id: 'kda',
+          icon: '💪',
+          text: `Buen KDA: ${kda.toFixed(1)}`,
+          value: kda
+        });
+      } else if (kda < this._referenceValues.kda.silver) {
+        // Es una debilidad
+        this._playerWeaknesses.push({
+          id: 'kda',
+          icon: '🛡️',
+          text: `KDA: ${kda.toFixed(1)} podría mejorar`,
+          value: kda,
+          targetValue: this._referenceValues.kda.gold
+        });
+        
+        // Crear un objetivo
+        const targetKda = this._referenceValues.kda.silver;
+        const progress = Math.min(100, Math.round((kda / targetKda) * 100));
+        
+        this._playerGoals.push({
+          id: 'improve_kda',
+          title: `Mejorar KDA a ${targetKda.toFixed(1)}`,
+          description: `Actual: ${kda.toFixed(1)} | Objetivo: ${targetKda.toFixed(1)}`,
+          tip: 'Juega más seguro y evita muertes innecesarias',
+          currentValue: kda,
+          targetValue: targetKda,
+          progress: progress
+        });
+        
+        // Añadir un consejo
+        this._playerTips.push({
+          id: 'kda_tip',
+          icon: '🛡️',
+          title: 'Reduce tus muertes',
+          content: 'Cada muerte da ventaja al enemigo. Juega más seguro, mantén buena visión y no te arriesgues sin necesidad.',
+          category: 'survival'
+        });
+      }
+      
+      // Analizar oro por minuto
+      if (goldPerMin >= this._referenceValues.goldPerMin.gold) {
+        // Es una fortaleza
+        this._playerStrengths.push({
+          id: 'goldpm',
+          icon: '💰',
+          text: `Buena economía: ${goldPerMin.toFixed(0)} oro/min`,
+          value: goldPerMin
+        });
+      } else if (goldPerMin < this._referenceValues.goldPerMin.silver) {
+        // Es una debilidad
+        this._playerWeaknesses.push({
+          id: 'goldpm',
+          icon: '💰',
+          text: `Economía: ${goldPerMin.toFixed(0)} oro/min podría mejorar`,
+          value: goldPerMin,
+          targetValue: this._referenceValues.goldPerMin.gold
+        });
+        
+        // Crear un objetivo
+        const targetGoldpm = this._referenceValues.goldPerMin.silver;
+        const progress = Math.min(100, Math.round((goldPerMin / targetGoldpm) * 100));
+        
+        this._playerGoals.push({
+          id: 'improve_goldpm',
+          title: `Mejorar economía a ${targetGoldpm} oro/min`,
+          description: `Actual: ${goldPerMin.toFixed(0)} oro/min | Objetivo: ${targetGoldpm} oro/min`,
+          tip: 'Mejora tu farm y participa en objetivos',
+          currentValue: goldPerMin,
+          targetValue: targetGoldpm,
+          progress: progress
+        });
+      }
+      
+      // Actualizar la UI con los nuevos datos
+      this.updateImprovementUI();
+    } catch (e) {
+      console.error('Error analizando rendimiento del jugador:', e);
+    }
+  }
+  
+  /**
+   * Actualiza la UI de la pestaña de mejora
+   */
+  private updateImprovementUI() {
+    try {
+      // Actualizar fortalezas
+      if (this._strengthsList) {
+        this._strengthsList.innerHTML = '';
+        
+        if (this._playerStrengths.length === 0) {
+          const emptyMessage = document.createElement('div');
+          emptyMessage.className = 'empty-message';
+          emptyMessage.textContent = 'Sigue jugando para identificar tus fortalezas';
+          this._strengthsList.appendChild(emptyMessage);
+        } else {
+          this._playerStrengths.forEach(strength => {
+            const strengthItem = document.createElement('div');
+            strengthItem.className = 'strength-item';
+            strengthItem.innerHTML = `
+              <div class="strength-icon">${strength.icon}</div>
+              <div class="strength-text">${strength.text}</div>
+            `;
+            this._strengthsList.appendChild(strengthItem);
+          });
+        }
+      }
+      
+      // Actualizar debilidades
+      if (this._weaknessesList) {
+        this._weaknessesList.innerHTML = '';
+        
+        if (this._playerWeaknesses.length === 0) {
+          const emptyMessage = document.createElement('div');
+          emptyMessage.className = 'empty-message';
+          emptyMessage.textContent = 'Sigue jugando para identificar áreas de mejora';
+          this._weaknessesList.appendChild(emptyMessage);
+        } else {
+          this._playerWeaknesses.forEach(weakness => {
+            const weaknessItem = document.createElement('div');
+            weaknessItem.className = 'weakness-item';
+            weaknessItem.innerHTML = `
+              <div class="weakness-icon">${weakness.icon}</div>
+              <div class="weakness-text">${weakness.text}</div>
+            `;
+            this._weaknessesList.appendChild(weaknessItem);
+          });
+        }
+      }
+      
+      // Actualizar objetivos
+      if (this._goalsList) {
+        this._goalsList.innerHTML = '';
+        
+        if (this._playerGoals.length === 0) {
+          const emptyMessage = document.createElement('div');
+          emptyMessage.className = 'empty-message';
+          emptyMessage.textContent = 'No hay objetivos activos actualmente';
+          this._goalsList.appendChild(emptyMessage);
+        } else {
+          this._playerGoals.forEach(goal => {
+            const goalItem = document.createElement('div');
+            goalItem.className = 'goal-item';
+            goalItem.innerHTML = `
+              <div class="goal-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: ${goal.progress}%;"></div>
+                </div>
+                <div class="progress-text">${goal.progress}%</div>
+              </div>
+              <div class="goal-details">
+                <div class="goal-title">${goal.title}</div>
+                <div class="goal-description">${goal.description}</div>
+                <div class="goal-tips">Tip: ${goal.tip}</div>
+              </div>
+            `;
+            this._goalsList.appendChild(goalItem);
+          });
+        }
+      }
+      
+      // Actualizar consejos
+      if (this._tipsContainer) {
+        this._tipsContainer.innerHTML = '';
+        
+        if (this._playerTips.length === 0) {
+          const emptyMessage = document.createElement('div');
+          emptyMessage.className = 'empty-message';
+          emptyMessage.textContent = 'No hay consejos personalizados disponibles';
+          this._tipsContainer.appendChild(emptyMessage);
+        } else {
+          this._playerTips.forEach(tip => {
+            const tipCard = document.createElement('div');
+            tipCard.className = 'tip-card';
+            tipCard.innerHTML = `
+              <div class="tip-header">
+                <div class="tip-icon">${tip.icon}</div>
+                <div class="tip-title">${tip.title}</div>
+              </div>
+              <div class="tip-content">
+                ${tip.content}
+              </div>
+            `;
+            this._tipsContainer.appendChild(tipCard);
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Error actualizando UI de mejora:', e);
     }
   }
 }
