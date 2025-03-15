@@ -102,10 +102,12 @@ main.with-ads {
     overflow-y: auto !important;
     padding: 10px;
     padding-right: 15px;
+    z-index: 1;
 }
 
 .tab-pane.active {
     display: block;
+    visibility: visible;
 }
 
 /* Restaurar el banner superior de anuncios */
@@ -1784,4 +1786,21 @@ main.with-ads {
   .improvement-cards-container {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
+}
+
+/* Corregir problemas con Control+F */
+body, .tab-pane, .content-wrapper, main, .tab-content {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* Asegurar que el contenido sea accesible para la búsqueda */
+.stats-dashboard, .performance-dashboard, .improvement-dashboard, 
+.stats-cards-container, .performance-cards-container, .improvement-cards-container,
+.stat-card, .performance-card, .improvement-card,
+.stat-card-body, .performance-card-body, .improvement-card-body,
+.stat-value, .performance-value, .improvement-value {
+    z-index: 1;
 }

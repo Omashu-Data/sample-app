@@ -20,6 +20,7 @@
     <h1 class="hotkey-text">
       Mostrar/Ocultar:
       <kbd id="hotkey"></kbd>
+      <button id="testToggleButton" style="margin-left: 10px; padding: 5px 10px; cursor: pointer;">Probar</button>
     </h1>
     <div class="window-controls-group">
       <button id="minimizeButton" class="window-control window-control-minimize" />
@@ -618,11 +619,22 @@
       function changeTab(tabId) {
         // Desactivar todas las pestañas
         tabButtons.forEach(button => button.classList.remove('active'));
-        tabPanes.forEach(pane => pane.classList.remove('active'));
+        tabPanes.forEach(pane => {
+          pane.classList.remove('active');
+          // Asegurar que las pestañas inactivas no interfieran con la búsqueda
+          pane.style.visibility = 'hidden';
+          pane.style.position = 'absolute';
+          pane.style.zIndex = '-1';
+        });
         
         // Activar la pestaña seleccionada
         document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
-        document.getElementById(`${tabId}-tab`).classList.add('active');
+        const activePane = document.getElementById(`${tabId}-tab`);
+        activePane.classList.add('active');
+        // Hacer visible y accesible la pestaña activa
+        activePane.style.visibility = 'visible';
+        activePane.style.position = 'relative';
+        activePane.style.zIndex = '1';
       }
       
       // Agregar eventos a los botones de pestañas
@@ -632,6 +644,82 @@
           changeTab(tabId);
         });
       });
+
+      // Inicializar la primera pestaña como visible y accesible
+      const initialTab = document.querySelector('.tab-pane.active');
+      if (initialTab) {
+        initialTab.style.visibility = 'visible';
+        initialTab.style.position = 'relative';
+        initialTab.style.zIndex = '1';
+      }
+
+      // Asegurar que Control+F funcione correctamente
+      document.addEventListener('keydown', function(e) {
+        // Si es Control+F (o Command+F en Mac)
+        if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+          // Asegurar que todas las pestañas sean accesibles para la búsqueda
+          tabPanes.forEach(pane => {
+            const wasActive = pane.classList.contains('active');
+            // Hacer temporalmente visibles todas las pestañas para la búsqueda
+            pane.style.visibility = 'visible';
+            pane.style.position = 'relative';
+            pane.style.zIndex = '1';
+            pane.style.height = wasActive ? 'auto' : '0';
+            pane.style.overflow = wasActive ? 'auto' : 'hidden';
+          });
+        }
+      });
+
+      // Inicializar el estado de visualización explícitamente
+      window.addEventListener('load', function() {
+        console.log('Inicializando estado de visualización');
+        const appContainer = document.getElementById('app-container');
+        console.log('Estado inicial del contenedor:', appContainer.style.display);
+        
+        // Establecer explícitamente el estilo display
+        appContainer.style.display = 'flex';
+        console.log('Estado después de inicializar:', appContainer.style.display);
+        
+        // Actualizar el texto de la tecla de acceso rápido
+        const hotkeyElem = document.getElementById('hotkey');
+        if (hotkeyElem) {
+          hotkeyElem.textContent = 'Shift+F';
+          console.log('Texto de hotkey actualizado a Shift+F');
+        }
+      });
+    });
+  </script>
+
+  <!-- Botón de prueba para mostrar/ocultar -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const testButton = document.getElementById('testToggleButton');
+      if (testButton) {
+        console.log('Botón de prueba encontrado, agregando evento');
+        testButton.addEventListener('click', function() {
+          console.log('Botón de prueba clickeado');
+          // Usar la API de Overwolf para minimizar/restaurar la ventana
+          if (window.overwolf) {
+            overwolf.windows.getCurrentWindow(result => {
+              if (result.success) {
+                const windowId = result.window.id;
+                overwolf.windows.getWindowState(windowId, stateResult => {
+                  if (stateResult.success) {
+                    if (stateResult.window_state === "normal" || 
+                        stateResult.window_state === "maximized") {
+                      overwolf.windows.minimize(windowId);
+                    } else {
+                      overwolf.windows.restore(windowId);
+                    }
+                  }
+                });
+              }
+            });
+          }
+        });
+      } else {
+        console.error('Botón de prueba no encontrado');
+      }
     });
   </script>
 </body>

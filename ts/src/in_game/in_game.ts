@@ -160,6 +160,7 @@ class InGameLOL extends AppWindow {
     super(kWindowNames.inGame);
 
     this._windows = {};
+    this._windows[kWindowNames.inGame] = new OWWindow(kWindowNames.inGame);
 
     // Inicializar el mapa de calor
     this.heatmapManager = new HeatmapManager();
@@ -201,6 +202,15 @@ class InGameLOL extends AppWindow {
     
     // Cargar clips guardados
     this.loadSavedClips();
+
+    // Registrar eventos del juego
+    this.registerEvents();
+
+    // Configurar botones de la interfaz
+    this.setupButtons();
+
+    // Inicializar la interfaz
+    await this.init();
   }
 
   private initializeUIElements() {
@@ -788,48 +798,45 @@ class InGameLOL extends AppWindow {
 
   private async setupHotkeys() {
     try {
+      const toggleInGameWindow = async (hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent): Promise<void> => {
+        console.log(`Se presionó la tecla rápida ${hotkeyResult.name}`);
+        const inGameState = await this._windows[kWindowNames.inGame].getWindowState();
+
+        if (inGameState.window_state === WindowState.NORMAL ||
+          inGameState.window_state === WindowState.MAXIMIZED) {
+          console.log('Minimizando ventana en juego');
+          this._windows[kWindowNames.inGame].minimize();
+        } else {
+          console.log('Restaurando ventana en juego');
+          this._windows[kWindowNames.inGame].restore();
+        }
+      }
+
+      try {
+        console.log('Configurando comportamiento de hotkey...');
+
+        const gameClassId = await this.getCurrentGameClassId();
+        console.log(`Registrando hotkey ${kHotkeys.toggle} para el juego ${gameClassId}`);
+
+        overwolf.settings.hotkeys.onPressed.addListener(async (result) => {
+          if (!result || result.name !== kHotkeys.toggle) {
+            return;
+          }
+          
+          await toggleInGameWindow(result);
+        });
+
+        console.log('Hotkey registrada con éxito');
+      } catch (e) {
+        console.error('Error al configurar comportamiento de hotkey:', e);
+      }
+
       await this.setToggleHotkeyText();
-      await this.setToggleHotkeyBehavior();
     } catch (e) {
       console.error('Error al configurar hotkeys:', e);
     }
   }
   
-  private async setToggleHotkeyBehavior() {
-    const toggleInGameWindow = async (hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent): Promise<void> => {
-      console.log(`Se presionó la tecla rápida ${hotkeyResult.name}`);
-      const inGameState = await this._windows[kWindowNames.inGame].getWindowState();
-
-      if (inGameState.window_state === WindowState.NORMAL ||
-        inGameState.window_state === WindowState.MAXIMIZED) {
-        console.log('Minimizando ventana en juego');
-        this._windows[kWindowNames.inGame].minimize();
-      } else {
-        console.log('Restaurando ventana en juego');
-        this._windows[kWindowNames.inGame].restore();
-      }
-    }
-
-    try {
-      console.log('Configurando comportamiento de hotkey...');
-      
-      const gameClassId = await this.getCurrentGameClassId();
-      console.log(`Registrando hotkey ${kHotkeys.toggle} para el juego ${gameClassId}`);
-      
-      overwolf.settings.hotkeys.onPressed.addListener(async (result) => {
-        if (!result || result.name !== kHotkeys.toggle) {
-          return;
-        }
-        
-        await toggleInGameWindow(result);
-      });
-      
-      console.log('Hotkey registrada con éxito');
-    } catch (e) {
-      console.error('Error al configurar comportamiento de hotkey:', e);
-    }
-  }
-
   private async setToggleHotkeyText() {
     try {
       console.log('Configurando texto de hotkey...');
