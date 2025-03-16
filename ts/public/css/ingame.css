@@ -3946,3 +3946,88 @@ main.with-ads {
     width: 100%;
   }
 }
+
+/* Adaptación responsiva para todas las pestañas con el nuevo ancho */
+.tab-pane {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ajustes específicos para la pestaña de Evolución */
+.improvement-dashboard {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.improvement-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.improvement-card {
+  width: 100%;
+  min-width: unset;
+  max-width: 100%;
+}
+
+/* Ajustes para otras pestañas problemáticas */
+.performance-dashboard,
+.achievements-dashboard,
+.heatmap-layout,
+.clips-grid {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.performance-cards-container,
+.achievements-grid,
+.achievements-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+/* Ajustes para los elementos internos */
+.improvement-insight-card,
+.performance-insight-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Asegurar que la tarjeta de consejo/insight se adapte correctamente */
+.insight-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Ajuste para contenedores flexibles */
+.main-stats-section,
+.stats-info-container,
+.daily-streak {
+  flex-wrap: wrap;
+}
+
+/* Media queries para adaptación específica */
+@media (max-width: 780px) {
+  .improvement-cards-container,
+  .performance-cards-container,
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .improvement-card,
+  .performance-card,
+  .achievement-card {
+    min-width: unset;
+  }
+  
+  .milestone-tracker {
+    overflow-x: auto;
+  }
+}
