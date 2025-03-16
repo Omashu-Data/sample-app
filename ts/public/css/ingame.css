@@ -230,11 +230,11 @@ body {
 
 /* Contenedor principal */
 main {
-    flex: 1;
+  flex: 1;
   display: flex;
     padding: 5px;
     overflow: hidden;
-    position: relative;
+  position: relative;
 }
 
 /* Cuando tenemos anuncios */

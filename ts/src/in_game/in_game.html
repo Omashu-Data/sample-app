@@ -8,6 +8,68 @@
   <link rel="stylesheet" href="../../css/modal.css" />
   <link rel="stylesheet" href="../../css/omashu-theme.css" />
   <title>omashu.gg - League of Legends</title>
+  <style>
+    /* Corrección directa para eliminar franjas laterales */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+      background-color: transparent;
+    }
+    
+    body.in-game {
+      background: rgb(3, 2, 8);
+      background: linear-gradient(
+        135deg,
+        rgba(3, 2, 8, 1) 0%,
+        rgba(25, 17, 53, 1) 100%
+      );
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 100%;
+      width: 100%;
+    }
+    
+    #app-container {
+      width: 100%;
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 0;
+      overflow: hidden;
+    }
+    
+    main.with-ads {
+      width: 100%;
+      max-width: 740px;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .content-wrapper {
+      width: 100%;
+      max-width: 740px;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .tabs-container {
+      width: 100%;
+      max-width: 740px;
+      margin: 0 auto;
+    }
+    
+    .tab-content {
+      width: 100%;
+      max-width: 740px;
+    }
+    
+    .main-stats-section {
+      width: 100%;
+      max-width: 740px;
+    }
+  </style>
 </head>
 <body class="in-game" id="app-container">
   <!-- -------------------------------- Header ------------------------------- -->
