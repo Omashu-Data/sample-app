@@ -1,10 +1,186 @@
 /* Estilos base para la vista del juego */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
+:root {
+  --app-width: 740px;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#app-container {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.in-game {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+body.in-game {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: rgb(3, 2, 8);
+  background: linear-gradient(
+    135deg,
+    rgba(3, 2, 8, 1) 0%,
+    rgba(25, 17, 53, 1) 100%
+  );
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+main.with-ads {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+}
+
+.tabs-container {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+}
+
+.tabs-navigation {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+}
+
+.tab-content {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.tab-pane {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+#standard-banner {
+  width: 728px;
+  height: 90px;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* Asegurar que todos los elementos principales respeten el ancho máximo */
+.stats-dashboard, 
+.performance-dashboard, 
+.improvement-dashboard,
+.achievements-dashboard,
+.clips-grid,
+.heatmap-layout {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Eliminar cualquier padding o margin que pueda causar desbordamiento */
+.main-stats-section,
+.stats-cards-container,
+.stats-info-container,
+.match-info-card,
+.insight-card,
+.integrated-ad,
+.bottom-cta {
+  box-sizing: border-box;
+}
+
+/* Asegurar que los elementos de navegación no se extiendan */
+.tab-button,
+.tab-icon,
+.tab-notification {
+  box-sizing: border-box;
+}
+
+@media (max-width: 650px) {
+  .main-stats-section {
+    flex-direction: column;
+  }
+  
+  .stats-cards-container {
     width: 100%;
-    overflow: hidden;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .integrated-ad {
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .stats-info-container {
+    width: 100%;
+  }
+}
+
+/* Contenedor principal */
+#app-container {
+  overflow: hidden !important;
+}
+
+/* Banner publicitario con ancho exacto */
+#standard-banner {
+  width: 728px !important;
+  max-width: 100% !important;
+  height: 90px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Contenedor principal con padding ajustado */
+.content-wrapper {
+  padding: 8px !important;
+}
+
+/* Override para medios móviles */
+@media (max-width: 740px) {
+  :root {
+    --app-max-width: 100%;
+  }
 }
 
 body {
@@ -3653,5 +3829,120 @@ main.with-ads {
 @media (max-width: 480px) {
   .stats-cards-container {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Ajuste general de proporciones y escala */
+.in-game {
+  max-width: 100%;
+  width: 740px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+body.in-game {
+  background: rgb(3, 2, 8);
+  background: linear-gradient(
+    135deg,
+    rgba(3, 2, 8, 1) 0%,
+    rgba(25, 17, 53, 1) 100%
+  );
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+#app-container {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+main.with-ads {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#standard-banner {
+  width: 728px;
+  height: 90px;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.main-stats-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  max-width: 740px;
+  margin: 0 auto;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.stats-cards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  width: calc(100% - 306px);
+  margin: 0;
+}
+
+.stat-card {
+  width: 100%;
+  margin: 0;
+}
+
+.integrated-ad {
+  width: 300px;
+  margin: 0;
+}
+
+.stats-info-container {
+  display: flex;
+  gap: 6px;
+  width: calc(100% - 306px);
+  margin: 0;
+}
+
+.match-info-card,
+.insight-card {
+  width: calc(50% - 3px);
+}
+
+.bottom-cta {
+  width: 100%;
+  max-width: 740px;
+  margin: 0 auto;
+}
+
+.content-wrapper {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 650px) {
+  .main-stats-section {
+    flex-direction: column;
+  }
+  
+  .stats-cards-container {
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .integrated-ad {
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .stats-info-container {
+    width: 100%;
   }
 }
