@@ -33,6 +33,7 @@
   display: flex;
   flex-direction: column;
   border-top: 2px solid transparent;
+  box-sizing: border-box; /* Asegurar que el padding no afecte el tamaño total */
 }
 
 .card:hover {
@@ -1266,8 +1267,8 @@
 
 .clips__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: var(--spacing-md);
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 16px;
 }
 
 .clips__empty-message {
@@ -1604,16 +1605,17 @@
 /* Ajustes para grids y contenedores */
 .dashboard__stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+  gap: 16px;
   margin-bottom: 10px;
+  padding: 0 4px;
 }
 
 /* Tarjetas de eventos más compactas */
 .events__container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+  gap: 16px;
   max-height: 500px;
   overflow-y: auto;
   padding-right: 5px;
@@ -1663,73 +1665,6 @@
 
 .event-card--objective {
   border-left-color: var(--warning-color);
-}
-
-/* Tarjetas de clips más pequeñas */
-.clips__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 10px;
-}
-
-.clip-card {
-  background-color: rgba(40, 48, 78, 0.6);
-  border-radius: 6px;
-  overflow: hidden;
-  transition: all 0.2s ease;
-  position: relative;
-  cursor: pointer;
-}
-
-.clip-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.clip-card__thumbnail {
-  width: 100%;
-  height: 84px; /* Aspecto 16:9 aproximado basado en ancho de 150px */
-  background-color: #1a1f35;
-  position: relative;
-}
-
-.clip-card__play {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30px;
-  height: 30px;
-  background-color: rgba(109, 61, 255, 0.7);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.clip-card:hover .clip-card__play {
-  opacity: 1;
-}
-
-.clip-card__info {
-  padding: 6px;
-}
-
-.clip-card__title {
-  font-size: 11px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.clip-card__time {
-  font-size: 10px;
-  color: #adb5bd;
 }
 
 /* Estilo para tarjetas de insight (consejos) */
