@@ -1025,30 +1025,7 @@ class InGameLOL extends AppWindow {
   }
 
   private setupButtons() {
-    // Botón para cerrar la ventana
-    const closeButton = document.getElementById('closeButton');
-    if (closeButton) {
-      closeButton.addEventListener('click', () => {
-        overwolf.windows.getCurrentWindow(result => {
-          if (result.success) {
-            overwolf.windows.close(result.window.id);
-          }
-        });
-      });
-    }
-
-    // Botón para minimizar la ventana
-    const minimizeButton = document.getElementById('minimizeButton');
-    if (minimizeButton) {
-      minimizeButton.addEventListener('click', () => {
-        overwolf.windows.getCurrentWindow(result => {
-          if (result.success) {
-            overwolf.windows.minimize(result.window.id);
-          }
-        });
-      });
-    }
-
+    // Los botones de control han sido eliminados
     this.logEvent("Sistema", "Botones configurados");
   }
 

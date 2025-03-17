@@ -320,6 +320,13 @@
 
 .socialIcons a {
   text-decoration: none;
+  margin-right: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 
@@ -358,3 +365,5 @@
 .header__control--close {
   background-color: #ff605c;
 }
+
+/* Los estilos para los controles de ventana han sido eliminados */
