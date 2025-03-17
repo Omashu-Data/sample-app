@@ -1,0 +1,166 @@
+/* 
+ * ==============================
+ * OMASHU.GG - SISTEMA DE PESTAÑAS
+ * ==============================
+ *
+ * Estilos para el sistema de navegación por pestañas.
+ * Implementado con metodología BEM (Block, Element, Modifier).
+ */
+
+/* Contenedor principal de pestañas */
+.tabs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Navegación - Contenedor de botones de pestañas */
+.tabs__navigation {
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  max-width: var(--app-width);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+  scrollbar-width: none; /* Para Firefox */
+  -ms-overflow-style: none; /* Para IE/Edge */
+}
+
+.tabs__navigation::-webkit-scrollbar {
+  display: none; /* Para Chrome/Safari/Opera */
+}
+
+/* Botón de pestaña */
+.tabs__button {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-fast);
+  font-size: 14px;
+  border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+  white-space: nowrap;
+  gap: var(--spacing-xs);
+}
+
+.tabs__button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 3px;
+  background-color: var(--omashu-active);
+  transition: width var(--transition-fast);
+  border-radius: 3px 3px 0 0;
+}
+
+.tabs__button:hover {
+  color: var(--text-primary);
+  background-color: rgba(109, 61, 255, 0.1);
+}
+
+.tabs__button:hover::after {
+  width: 30%;
+}
+
+/* Estado activo del botón */
+.tabs__button--active {
+  color: var(--omashu-purple-light);
+  background-color: rgba(109, 61, 255, 0.2);
+}
+
+.tabs__button--active::after {
+  width: 80%;
+}
+
+/* Icono del botón */
+.tabs__icon {
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+.tabs__button:hover .tabs__icon {
+  transform: scale(1.1);
+}
+
+.tabs__button--active .tabs__icon {
+  transform: scale(1.1);
+}
+
+/* Texto del botón */
+.tabs__text {
+  font-size: 14px;
+}
+
+/* Notificación en el botón */
+.tabs__notification {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 18px;
+  height: 18px;
+  background-color: var(--omashu-highlight);
+  color: white;
+  font-size: 11px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all var(--transition-normal);
+}
+
+.tabs__notification:not(:empty) {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Animación de pulso */
+.tabs__notification--pulse {
+  animation: pulse-subtle 2s infinite;
+}
+
+/* Contenedor del contenido de las pestañas */
+.tabs__content {
+  width: 100%;
+  max-width: var(--app-width);
+  position: relative;
+}
+
+/* Panel de pestañas (contenido) */
+.tabs__pane {
+  display: none;
+  width: 100%;
+  padding: var(--spacing-md) 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: opacity var(--transition-normal);
+}
+
+.tabs__pane--active {
+  display: block;
+  animation: fadeIn var(--transition-normal);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-subtle {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+} 

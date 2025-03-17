@@ -406,10 +406,10 @@ export class HeatmapManager {
         const zoneNameElements = document.querySelectorAll('.zone-name');
         zoneNameElements.forEach(el => {
           if (el.textContent.includes(zoneNamesMap[zone])) {
-            // Encontrar el elemento .zone-value hermano
+            // Encontrar el elemento .heatmap__zone-value hermano
             const parent = el.parentElement;
             if (parent) {
-              const valueElement = parent.querySelector('.zone-value');
+              const valueElement = parent.querySelector('.heatmap__zone-value');
               if (valueElement) {
                 valueElement.textContent = `${percentage}% del tiempo`;
               }

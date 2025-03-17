@@ -1,0 +1,171 @@
+/* 
+ * ==============================
+ * OMASHU.GG - LAYOUT Y ESTRUCTURA
+ * ==============================
+ *
+ * Estilos para la estructura general y contenedores principales.
+ */
+
+/* 
+ * ==============================
+ * CONTENEDORES PRINCIPALES
+ * ==============================
+ */
+.app-container {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  left: 0;
+}
+
+/* Modo in-game */
+.in-game {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0;
+  padding: 0;
+}
+
+body.in-game {
+  background: var(--background-primary);
+  background: var(--background-gradient);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  left: 0;
+}
+
+/* 
+ * ==============================
+ * ESTRUCTURA DE LA PÁGINA
+ * ==============================
+ */
+.main {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.main--with-ads {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
+  left: 0;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  left: 0;
+}
+
+/* 
+ * ==============================
+ * GRIDS Y LAYOUTS FLEXIBLES
+ * ==============================
+ */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+/* 
+ * ==============================
+ * CONTENEDORES DE SECCIONES
+ * ==============================
+ */
+.section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.section__title {
+  font-size: 18px;
+  margin: 0;
+  color: var(--text-primary);
+  font-weight: bold;
+}
+
+.section__subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.section__content {
+  position: relative;
+}
+
+/* 
+ * ==============================
+ * MEDIA QUERIES
+ * ==============================
+ */
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+} 

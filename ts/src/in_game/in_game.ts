@@ -480,9 +480,9 @@ class InGameLOL extends AppWindow {
               
               // Actualizar el valor de DPS
               const dps = this._lastDamageValues.length > 0 
-                ? (this._lastDamageValues.reduce((a, b) => a + b, 0) / this._lastDamageValues.length).toFixed(0)
-                : '0';
-              updateElementText('dps-value', dps);
+                ? (this._lastDamageValues.reduce((a, b) => a + b, 0) / this._lastDamageValues.length)
+                : 0;
+              updateElementText('dps-value', dps.toFixed(0));
             }
             break;
             
@@ -644,11 +644,11 @@ class InGameLOL extends AppWindow {
       
       // Calcular DPS promedio
       const dps = this._lastDamageValues.length > 0 
-        ? (this._lastDamageValues.reduce((a, b) => a + b, 0) / this._lastDamageValues.length).toFixed(0)
-        : '0';
-      updateElementText('dps-value', dps);
+        ? (this._lastDamageValues.reduce((a, b) => a + b, 0) / this._lastDamageValues.length)
+        : 0;
+      updateElementText('dps-value', dps.toFixed(0));
       
-      console.log('Métricas de rendimiento actualizadas: KDA=' + kda + ', CSPM=' + cspm + ', DPS=' + dps);
+      console.log('Métricas de rendimiento actualizadas: KDA=' + kda + ', CSPM=' + cspm + ', DPS=' + dps.toFixed(0));
       
       // Actualizar análisis de mejora después de actualizar métricas
       this.analyzePlayerPerformance();
@@ -757,15 +757,17 @@ class InGameLOL extends AppWindow {
   }
 
   private showClipNotification() {
-    try {
-      this._clipNotification.classList.remove('hidden');
-      
+    if (!this._clipNotification) return;
+    
+    this._clipNotification.classList.remove('app__clip-notification--hidden');
+    this._clipNotification.classList.add('show');
+    
+    setTimeout(() => {
+      this._clipNotification.classList.remove('show');
       setTimeout(() => {
-        this._clipNotification.classList.add('hidden');
-      }, 3000);
-    } catch (e) {
-      console.error('Error al mostrar notificación de clip:', e);
-    }
+        this._clipNotification.classList.add('app__clip-notification--hidden');
+      }, 300);
+    }, 3000);
   }
 
   private setupAds() {
@@ -1760,37 +1762,32 @@ class InGameLOL extends AppWindow {
       }
       
       // Actualizar estadísticas de logros
-      const achievementStatsValue = document.querySelector('.achievement-stats .stat-item:nth-child(1) .stat-value');
+      const achievementStatsValue = document.querySelector('.achievements__stat:nth-child(1) .achievements__stat-value');
       if (achievementStatsValue) {
         achievementStatsValue.textContent = this._unlockedAchievements.toString();
       }
       
-      const achievementStatsPercentage = document.querySelector('.achievement-stats .stat-item:nth-child(2) .stat-value');
+      const achievementStatsPercentage = document.querySelector('.achievements__stat:nth-child(2) .achievements__stat-value');
       if (achievementStatsPercentage) {
         const percentage = Math.round((this._unlockedAchievements / this._totalAchievements) * 100);
         achievementStatsPercentage.textContent = `${percentage}%`;
       }
       
-      const achievementStatsStreak = document.querySelector('.achievement-stats .stat-item:nth-child(3) .stat-value');
+      const achievementStatsStreak = document.querySelector('.achievements__stat:nth-child(3) .achievements__stat-value');
       if (achievementStatsStreak) {
         achievementStatsStreak.textContent = this._streakDays.toString();
       }
       
       // Actualizar progreso de racha
-      const streakProgressBar = document.querySelector('.streak-reward .progress');
+      const streakProgressBar = document.querySelector('.achievements__streak-reward .achievements__progress-fill');
       if (streakProgressBar) {
         const streakPercentage = (this._streakDays / 7) * 100;
         streakProgressBar.setAttribute('style', `width: ${streakPercentage}%`);
       }
       
-      const streakProgressText = document.querySelector('.streak-reward .progress-text');
-      if (streakProgressText) {
-        streakProgressText.textContent = `${this._streakDays}/7`;
-      }
-      
       console.log('UI de gamificación actualizada correctamente');
     } catch (e) {
-      console.error('Error actualizando UI de gamificación:', e);
+      console.error('Error al actualizar UI de gamificación:', e);
     }
   }
   
@@ -1821,13 +1818,13 @@ class InGameLOL extends AppWindow {
     try {
       // Crear notificación de subida de nivel
       const notification = document.createElement('div');
-      notification.className = 'level-up-notification';
+      notification.className = 'app__level-up-notification';
       notification.innerHTML = `
-        <div class="level-up-content">
-          <div class="level-up-icon">🏆</div>
-          <div class="level-up-text">
-            <h3>¡Nivel Subido!</h3>
-            <p>Has alcanzado el nivel ${this._userLevel.level}</p>
+        <div class="app__level-up-content">
+          <div class="app__level-up-icon">🏆</div>
+          <div class="app__level-up-text">
+            <h3 class="app__level-up-title">¡Nivel Subido!</h3>
+            <p class="app__level-up-description">Has alcanzado el nivel ${this._userLevel.level}</p>
           </div>
         </div>
       `;
@@ -1892,7 +1889,7 @@ class InGameLOL extends AppWindow {
   private updateAchievementUI(achievement: PlayerAchievement) {
     try {
       // Buscar el elemento del logro
-      const achievementCard = document.querySelector(`.achievement-card[data-id="${achievement.id}"]`);
+      const achievementCard = document.querySelector(`.achievements__card[data-id="${achievement.id}"]`);
       
       if (!achievementCard) {
         console.error(`No se encontró el elemento UI para el logro: ${achievement.id}`);
@@ -1901,25 +1898,25 @@ class InGameLOL extends AppWindow {
       
       // Actualizar clases
       if (achievement.unlocked) {
-        achievementCard.classList.add('unlocked');
-        achievementCard.classList.remove('in-progress', 'locked');
+        achievementCard.classList.add('achievements__card--unlocked');
+        achievementCard.classList.remove('achievements__card--in-progress', 'achievements__card--locked');
       } else if (achievement.currentValue > 0) {
-        achievementCard.classList.add('in-progress');
-        achievementCard.classList.remove('unlocked', 'locked');
+        achievementCard.classList.add('achievements__card--in-progress');
+        achievementCard.classList.remove('achievements__card--unlocked', 'achievements__card--locked');
       } else {
-        achievementCard.classList.add('locked');
-        achievementCard.classList.remove('unlocked', 'in-progress');
+        achievementCard.classList.add('achievements__card--locked');
+        achievementCard.classList.remove('achievements__card--unlocked', 'achievements__card--in-progress');
       }
       
       // Actualizar barra de progreso
-      const progressBar = achievementCard.querySelector('.progress');
+      const progressBar = achievementCard.querySelector('.achievements__progress-fill');
       if (progressBar) {
         const percentage = Math.min(100, Math.round((achievement.currentValue / achievement.targetValue) * 100));
         progressBar.setAttribute('style', `width: ${percentage}%`);
       }
       
       // Actualizar texto de progreso
-      const progressText = achievementCard.querySelector('.progress-text');
+      const progressText = achievementCard.querySelector('.achievements__progress-text');
       if (progressText) {
         if (achievement.unlocked) {
           progressText.textContent = '¡Completado!';
@@ -1937,71 +1934,71 @@ class InGameLOL extends AppWindow {
   private showAchievementNotification(achievement: PlayerAchievement) {
     try {
       if (!this._rewardNotification) {
-        console.error('No se encontró el elemento de notificación de recompensa');
+        console.error('Elemento de notificación de recompensa no encontrado');
         return;
       }
       
-      // Actualizar contenido
-      const iconElement = this._rewardNotification.querySelector('.reward-icon');
+      // Actualizar contenido de la notificación
+      const iconElement = this._rewardNotification.querySelector('.app__reward-icon');
       if (iconElement) {
         iconElement.textContent = achievement.icon;
       }
       
-      const titleElement = this._rewardNotification.querySelector('.reward-text h3');
+      const titleElement = this._rewardNotification.querySelector('.app__reward-title');
       if (titleElement) {
         titleElement.textContent = '¡Logro Desbloqueado!';
       }
       
-      const descriptionElement = this._rewardNotification.querySelector('.reward-text p');
+      const descriptionElement = this._rewardNotification.querySelector('.app__reward-description');
       if (descriptionElement) {
         descriptionElement.textContent = achievement.name;
       }
       
-      const xpElement = this._rewardNotification.querySelector('.reward-xp');
+      const xpElement = this._rewardNotification.querySelector('.app__reward-xp');
       if (xpElement) {
         xpElement.textContent = `+${achievement.xpReward} XP`;
       }
       
-      // Mostrar notificación
-      this._rewardNotification.classList.remove('hidden');
+      // Mostrar la notificación
+      this._rewardNotification.classList.remove('app__reward-notification--hidden');
       this._rewardNotification.classList.add('show');
       
       // Ocultar después de 5 segundos
       setTimeout(() => {
         this._rewardNotification.classList.remove('show');
         
-        // Añadir clase hidden después de la animación
         setTimeout(() => {
-          this._rewardNotification.classList.add('hidden');
-        }, 500);
+          this._rewardNotification.classList.add('app__reward-notification--hidden');
+        }, 300);
       }, 5000);
       
-      console.log(`Notificación de logro mostrada: ${achievement.name}`);
+      console.log(`Notificación mostrada para logro ${achievement.id}`);
     } catch (e) {
       console.error('Error al mostrar notificación de logro:', e);
     }
   }
   
   private simulateDailyStreak() {
-    // Esta función es solo para demostración
-    // En un entorno real, se obtendría la racha de días del servidor
+    // Actualizar elementos UI de días de racha
+    const dayElements = document.querySelectorAll('.achievements__day');
     
-    try {
-      // Marcar los días completados en el calendario
-      const days = document.querySelectorAll('.streak-calendar .day');
-      
-      for (let i = 0; i < days.length; i++) {
-        if (i < this._streakDays) {
-          days[i].classList.add('completed');
-        } else if (i === this._streakDays) {
-          days[i].classList.add('today');
-        }
+    if (dayElements.length === 0) {
+      console.error('No se encontraron elementos de días de racha');
+      return;
+    }
+    
+    // Actualizar para una racha de 3 días completados (día actual es el 4to)
+    for (let i = 0; i < dayElements.length; i++) {
+      if (i < this._streakDays) {
+        dayElements[i].classList.add('achievements__day--completed');
       }
       
-      console.log(`Racha de días simulada: ${this._streakDays} días`);
-    } catch (e) {
-      console.error('Error al simular racha de días:', e);
+      if (i === this._streakDays) {
+        dayElements[i].classList.add('achievements__day--today');
+      }
     }
+    
+    console.log('UI de racha diaria actualizada correctamente');
   }
 }
 
