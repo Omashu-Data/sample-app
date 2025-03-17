@@ -130,6 +130,28 @@
           "position": "right"
         }
       }
+    },
+    "window_settings": {
+      "desktop_window": {
+        "size": {
+          "width": 1200,
+          "height": 700
+        },
+        "min_size": {
+          "width": 1200,
+          "height": 700
+        }
+      },
+      "in_game_window": {
+        "size": {
+          "width": 760,
+          "height": 750
+        },
+        "min_size": {
+          "width": 760,
+          "height": 450
+        }
+      }
     }
   }
 }

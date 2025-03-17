@@ -1,13 +1,15 @@
 /* Estilos base para la vista del juego */
 :root {
-  --app-width: 740px;
+  --app-width: 760px;
 }
 
-html {
+html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   overflow-x: hidden;
+  background-color: transparent;
+  box-sizing: border-box;
 }
 
 body {
@@ -22,32 +24,37 @@ body {
 
 #app-container {
   width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
+  max-width: 760px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
 .in-game {
   width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
-  overflow: hidden;
+  max-width: 760px;
+  margin: 0;
+  padding: 0;
 }
 
 body.in-game {
-  width: 100%;
-  margin: 0;
-  padding: 0;
   background: rgb(3, 2, 8);
   background: linear-gradient(
     135deg,
     rgba(3, 2, 8, 1) 0%,
     rgba(25, 17, 53, 1) 100%
   );
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 main {
@@ -59,81 +66,181 @@ main {
 
 main.with-ads {
   width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
+  max-width: 760px;
+  margin: 0;
   padding: 0;
-  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+  left: 0;
 }
 
 .content-wrapper {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
   padding: 0;
-  overflow: hidden;
+  margin: 0;
+  box-sizing: border-box;
+  position: relative;
+  left: 0;
 }
 
 .tabs-container {
-  width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
+  display: flex;
+  width: 100%; 
+  padding: 0;
+  margin: 0;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  margin-left: 0;
+  padding-left: 0;
+  position: relative;
+  left: 0;
 }
 
-.tabs-navigation {
+.tabs-buttons-container {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
+  gap: 2px;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  margin-left: 0;
+  padding-left: 0;
+  position: relative;
+  left: 0;
 }
 
-.tab-content {
-  width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
+.tab-button {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+  text-align: center;
+  border-radius: 0;
+  font-size: 0.75rem;
+  cursor: pointer;
+  position: relative;
+  min-width: 0;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 0;
+  padding-left: 0;
+  position: relative;
+  left: 0;
 }
 
-.tab-pane {
+.tab-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tab-button.active {
+  background: rgba(98, 79, 255, 0.2);
+  color: #fff;
+}
+
+.tab-button.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
-  overflow: hidden;
+  height: 3px;
+  background: rgb(98, 79, 255);
+  background: linear-gradient(
+    90deg,
+    rgba(98, 79, 255, 1) 0%,
+    rgba(123, 97, 255, 1) 100%
+  );
 }
 
-#standard-banner {
-  width: 728px;
-  height: 90px;
-  margin: 0 auto;
-  max-width: 100%;
+.tab-button svg {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 5px;
+  opacity: 0.8;
 }
 
-/* Asegurar que todos los elementos principales respeten el ancho máximo */
-.stats-dashboard, 
-.performance-dashboard, 
-.improvement-dashboard,
-.achievements-dashboard,
-.clips-grid,
-.heatmap-layout {
+.tab-button.active svg {
+  opacity: 1;
+}
+
+.tab-notification {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background-color: #ff5252;
+  border-radius: 50%;
+}
+
+.tabs-content {
+  padding: 0;
+  margin-top: 10px;
   width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
-  overflow: hidden;
-}
-
-/* Eliminar cualquier padding o margin que pueda causar desbordamiento */
-.main-stats-section,
-.stats-cards-container,
-.stats-info-container,
-.match-info-card,
-.insight-card,
-.integrated-ad,
-.bottom-cta {
+  overflow-x: hidden;
   box-sizing: border-box;
 }
 
-/* Asegurar que los elementos de navegación no se extiendan */
-.tab-button,
-.tab-icon,
-.tab-notification {
+.tab-pane {
+  display: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+.ad-container {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ad-container.horizontal {
+  width: 100%;
+  max-width: 728px;
+  height: 90px;
+  margin: 0 0 10px 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.ad-container.rectangle {
+  width: 300px;
+  height: 250px;
+  margin: 0;
+  float: right;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -1250,28 +1357,29 @@ main.with-ads {
 
 /* Nuevo diseño de tarjetas para estadísticas */
 .stats-dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 10px 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .stats-cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .stat-card {
-  background: rgba(19, 11, 55, 0.7);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(92, 52, 227, 0.3);
-  display: flex;
-  flex-direction: column;
-  height: 120px;
+  padding: 12px;
+  box-sizing: border-box;
+  min-width: 0;
+  margin: 0;
 }
 
 .stat-card:hover {
@@ -3835,7 +3943,7 @@ main.with-ads {
 /* Ajuste general de proporciones y escala */
 .in-game {
   max-width: 100%;
-  width: 740px;
+  width: 760px;
   margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
@@ -3879,7 +3987,7 @@ main.with-ads {
   flex-wrap: wrap;
   gap: 8px;
   width: 100%;
-  max-width: 740px;
+  max-width: 760px;
   margin: 0 auto;
   justify-content: space-between;
   align-items: flex-start;
@@ -3917,7 +4025,7 @@ main.with-ads {
 
 .bottom-cta {
   width: 100%;
-  max-width: 740px;
+  max-width: 760px;
   margin: 0 auto;
 }
 
@@ -5272,4 +5380,120 @@ input:checked + .slider:before {
 /* Script para el gráfico de DNA y firma digital */
 #dnaChart, #signatureCanvas {
   max-width: 100%;
+}
+
+/* Estilos optimizados para maximizar el espacio disponible */
+.stats-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+  box-sizing: border-box;
+  min-width: 0;
+  margin: 0;
+}
+
+.perf-chart-container {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  margin: 0;
+}
+
+/* Optimización para el tab de rendimiento */
+.performance-dashboard {
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optimización para el tab de evolución */
+.evolution-dashboard {
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optimización para el tab de clips */
+.clips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* Optimización para el tab de perfil */
+.profile-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 0;
+  width: 100%;
+  overflow-y: auto;
+}
+
+@media (max-width: 740px) {
+  .stats-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .clips-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .ad-container.horizontal {
+    height: auto;
+    min-height: 50px;
+  }
+  
+  .ad-container.rectangle {
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+    float: none;
+    margin: 10px 0;
+  }
+}
+
+/* Asegurarse de que el contenido de las pestañas no se desborde */
+.tab-pane {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-width: 100%;
+}
+
+/* Ajuste final para los anuncios */
+.ad-space-right {
+  float: right;
+  margin-left: 8px;
+  margin-bottom: 8px;
+}
+
+.ad-space-top {
+  width: 100%;
+  max-width: 728px;
+  margin: 0 auto 10px;
+  text-align: center;
+}
+
+/* Asegurarse que los textos informativos no desborden */
+.ad-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  margin: 0;
+  width: 100%;
 }
