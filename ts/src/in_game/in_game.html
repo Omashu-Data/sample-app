@@ -8,92 +8,10 @@
   <link rel="stylesheet" href="../../css/modal.css" />
   <link rel="stylesheet" href="../../css/omashu-theme.css" />
   <title>omashu.gg - League of Legends</title>
-  <style>
-    /* Corrección directa para eliminar franjas laterales */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      overflow-x: hidden;
-      background-color: transparent;
-    }
-    
-    body.in-game {
-      background: rgb(3, 2, 8);
-      background: linear-gradient(
-        135deg,
-        rgba(3, 2, 8, 1) 0%,
-        rgba(25, 17, 53, 1) 100%
-      );
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      max-width: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      left: 0;
-    }
-    
-    #app-container {
-      width: 100%;
-      max-width: 760px;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      left: 0;
-    }
-    
-    main.with-ads {
-      width: 100%;
-      max-width: 760px;
-      margin: 0;
-      padding: 0;
-      left: 0;
-    }
-    
-    .content-wrapper {
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      left: 0;
-    }
-    
-    .tabs-container, 
-    .tabs-buttons-container,
-    .tab-pane,
-    .stats-dashboard,
-    .performance-dashboard {
-      margin-left: 0;
-      padding-left: 0;
-      left: 0;
-    }
-    
-    .tabs-navigation {
-      width: 100%;
-      max-width: 760px;
-      margin: 0;
-      left: 0;
-    }
-    
-    .tab-content {
-      width: 100%;
-      max-width: 760px;
-      margin: 0;
-      left: 0;
-    }
-    
-    .main-stats-section {
-      width: 100%;
-      max-width: 760px;
-      margin: 0;
-      left: 0;
-    }
-  </style>
 </head>
-<body class="in-game" style="margin:0; padding:0; left:0;">
-  <div id="app-container" style="margin:0; padding:0; left:0;">
-    <div class="content-wrapper" style="margin:0; padding:0; left:0;">
+<body class="in-game">
+  <div id="app-container">
+    <div class="content-wrapper">
       <!-- -------------------------------- Header ------------------------------- -->
 
       <header id="header" class="app-header">
@@ -143,7 +61,7 @@
       </div>
 
       <!-- Sistema de pestañas con refuerzos visuales y micro-interacciones -->
-      <div class="tabs-container" style="margin:0; padding:0; left:0;">
+      <div class="tabs-container">
         <div class="tabs-navigation">
           <button class="tab-button active" data-tab="stats" id="stats-tab-btn">
             <div class="tab-icon">📊</div>

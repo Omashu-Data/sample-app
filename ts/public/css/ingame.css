@@ -3,6 +3,13 @@
   --app-width: 760px;
 }
 
+/* 
+ * Nota importante: Estos estilos se unificaron desde el bloque <style> del HTML
+ * para facilitar el mantenimiento y evitar duplicación de código.
+ * Por favor, mantenga todos los estilos en este archivo CSS en lugar
+ * de agregarlos directamente al HTML.
+ */
+
 html, body {
   margin: 0;
   padding: 0;
@@ -29,6 +36,7 @@ body {
   padding: 0;
   box-sizing: border-box;
   overflow: hidden;
+  left: 0;
 }
 
 .in-game {
@@ -55,6 +63,7 @@ body.in-game {
   margin: 0;
   box-sizing: border-box;
   overflow-x: hidden;
+  left: 0;
 }
 
 main {
@@ -78,10 +87,8 @@ main.with-ads {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0;
   margin: 0;
-  box-sizing: border-box;
-  position: relative;
+  padding: 0;
   left: 0;
 }
 
