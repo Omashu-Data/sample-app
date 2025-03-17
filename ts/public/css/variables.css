@@ -17,9 +17,18 @@
   --omashu-active: rgba(109, 61, 255, 1);
   --omashu-highlight: rgba(92, 52, 227, 1);
   
+  /* Colores para gradientes y efectos visuales */
+  --primary-rgb: 109, 61, 255;
+  --accent-rgb: 188, 166, 255;
+  --positive-rgb: 76, 175, 80;
+  --negative-rgb: 244, 67, 54;
+  --warning-rgb: 255, 193, 7;
+  --info-rgb: 33, 150, 243;
+  
   /* Colores de texto */
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary: rgba(255, 255, 255, 0.5);
   
   /* Colores de fondo */
   --background-primary: rgb(3, 2, 8);
@@ -30,29 +39,39 @@
   --border-color: rgba(109, 61, 255, 0.3);
   --separator-color: rgba(255, 255, 255, 0.1);
   
-  /* Estados */
+  /* Colores de primarios y estados */
+  --primary-color: #6d3dff;
+  --accent-color: #bc76ff;
   --positive-color: #4caf50;
   --negative-color: #f44336;
   --warning-color: #ffc107;
   --info-color: #2196f3;
   
   /* Sombras */
-  --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  --elevated-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  --card-shadow-hover: 0 3px 6px rgba(109, 61, 255, 0.2);
+  --elevated-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   
-  /* Radios de borde */
-  --border-radius-sm: 4px;
-  --border-radius-md: 8px;
-  --border-radius-lg: 12px;
+  /* Radios de borde - reducidos para diseño más compacto */
+  --border-radius-sm: 3px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
   
-  /* Espaciado */
-  --spacing-xs: 5px;
-  --spacing-sm: 10px;
-  --spacing-md: 15px;
-  --spacing-lg: 20px;
+  /* Espaciado - reducido para diseño compacto */
+  --spacing-xs: 3px;
+  --spacing-sm: 6px;
+  --spacing-md: 10px;
+  --spacing-lg: 15px;
   
   /* Transiciones */
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
+  
+  /* Tamaños de fuente para jerarquía visual */
+  --font-size-xs: 9px;
+  --font-size-sm: 11px;
+  --font-size-md: 13px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
 } 
