@@ -15,11 +15,11 @@
 
 /* 
  * ==============================
- * SISTEMA DE TARJETAS SIMPLIFICADO
+ * SISTEMA DE TARJETAS UNIFICADO
  * ==============================
  */
 
-/* Tarjeta base */
+/* Tarjeta base - Estructura común para todas las tarjetas */
 .card {
   position: relative;
   width: 100%;
@@ -82,7 +82,7 @@
   justify-content: space-between;
 }
 
-/* Modificadores de color/estado */
+/* Modificadores de estado/color */
 .card--primary {
   border-left: 4px solid var(--primary-color);
 }
@@ -133,14 +133,8 @@
   font-size: 0.9em;
 }
 
-.card--small .card__header {
-  padding: var(--spacing-sm);
-}
-
-.card--small .card__body {
-  padding: var(--spacing-sm);
-}
-
+.card--small .card__header,
+.card--small .card__body,
 .card--small .card__footer {
   padding: var(--spacing-sm);
 }
@@ -151,14 +145,12 @@
   font-size: 14px;
 }
 
-.card--large .card__header {
-  padding: var(--spacing-lg);
+.card--large {
+  font-size: 1.1em;
 }
 
-.card--large .card__body {
-  padding: var(--spacing-lg);
-}
-
+.card--large .card__header,
+.card--large .card__body,
 .card--large .card__footer {
   padding: var(--spacing-lg);
 }
@@ -167,126 +159,6 @@
   width: 48px;
   height: 48px;
   font-size: 24px;
-}
-
-/* 
- * ==============================
- * COMPONENTES ESPECÍFICOS DE TARJETAS
- * ==============================
- */
-
-/* Valores y tendencias */
-.card__value {
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-right: var(--spacing-sm);
-}
-
-.card__value-container {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: var(--spacing-md);
-}
-
-.card__rank {
-  font-size: 14px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  background-color: rgba(var(--primary-rgb), 0.1);
-  color: var(--primary-color);
-}
-
-.card__trend {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.card__trend--positive {
-  color: var(--positive-color);
-}
-
-.card__trend--negative {
-  color: var(--negative-color);
-}
-
-.card__trend--neutral {
-  color: var(--warning-color);
-}
-
-/* Barras de progreso */
-.card__progress {
-  height: 4px;
-  background-color: rgba(var(--text-secondary-rgb), 0.1);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-top: var(--spacing-xs);
-}
-
-.card__progress-bar {
-  height: 100%;
-  background: var(--primary-color);
-  border-radius: 2px;
-}
-
-/* Gráficos */
-.card__chart {
-  margin-bottom: var(--spacing-md);
-}
-
-.card__bar {
-  height: 8px;
-  background-color: rgba(var(--text-secondary-rgb), 0.1);
-  border-radius: 4px;
-  position: relative;
-  overflow: hidden;
-}
-
-.card__fill {
-  height: 100%;
-  background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-  border-radius: 4px;
-}
-
-.card__markers {
-  display: flex;
-  position: relative;
-  margin-top: 4px;
-  height: 12px;
-}
-
-.card__marker {
-  position: absolute;
-  width: 2px;
-  height: 8px;
-  background-color: rgba(var(--text-secondary-rgb), 0.5);
-}
-
-/* Comparaciones */
-.card__comparison {
-  display: flex;
-  align-items: center;
-}
-
-.card__comparison-label {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-right: var(--spacing-xs);
-}
-
-.card__comparison-value {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.card__comparison-value--positive {
-  color: var(--positive-color);
-}
-
-.card__comparison-value--negative {
-  color: var(--negative-color);
 }
 
 /* 
@@ -300,6 +172,13 @@
   display: flex;
   align-items: baseline;
   margin-bottom: var(--spacing-md);
+}
+
+.card__value {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-right: var(--spacing-sm);
 }
 
 .card__rank {
@@ -367,6 +246,13 @@
 }
 
 /* Componentes para tarjetas de estadísticas */
+.card__trend {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .card__progress {
   height: 4px;
   background-color: rgba(var(--text-secondary-rgb), 0.1);

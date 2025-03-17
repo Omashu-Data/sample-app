@@ -128,87 +128,107 @@
                 <!-- Sección principal: Contenido estadístico y anuncio vertical -->
                 <div class="dashboard__stats-grid">
                   <!-- Tarjetas de estadísticas principales -->
-                  <div class="card card--success">
-                    <div class="card__header">
-                      <div class="card__icon">⚔️</div>
-                      <span class="card__label">Kills</span>
-                    </div>
-                    <div class="card__body">
-                      <span id="kills-value" class="card__value">0</span>
-                      <div class="card__trend card__trend--positive">↑</div>
-                    </div>
-                    <div class="card__footer">
-                      <div class="card__progress">
-                        <div class="card__progress-bar" style="width: 65%"></div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="card card--danger">
-                    <div class="card__header">
-                      <div class="card__icon">💀</div>
-                      <span class="card__label">Deaths</span>
-                    </div>
-                    <div class="card__body">
-                      <span id="deaths-value" class="card__value">0</span>
-                      <div class="card__trend card__trend--negative">↓</div>
-                    </div>
-                    <div class="card__footer">
-                      <div class="card__progress">
-                        <div class="card__progress-bar" style="width: 30%"></div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="card card--warning">
-                    <div class="card__header">
-                      <div class="card__icon">👍</div>
-                      <span class="card__label">Assists</span>
-                    </div>
-                    <div class="card__body">
-                      <span id="assists-value" class="card__value">0</span>
-                      <div class="card__trend card__trend--positive">↑</div>
-                    </div>
-                    <div class="card__footer">
-                      <div class="card__progress">
-                        <div class="card__progress-bar" style="width: 50%"></div>
-                      </div>
-                    </div>
-                  </div>
-                  
                   <div class="card card--primary">
                     <div class="card__header">
-                      <div class="card__icon">🧩</div>
-                      <span class="card__label">CS</span>
+                      <div class="card__icon">⚡</div>
+                      <span class="card__label">Daño por Segundo</span>
                     </div>
                     <div class="card__body">
-                      <span id="cs-value" class="card__value">0</span>
-                      <div class="card__trend card__trend--positive">↑</div>
+                      <div class="card__value-container">
+                        <span id="dps-value" class="card__value">0</span>
+                        <span class="card__rank">Plata</span>
+                      </div>
+                      <div class="card__chart">
+                        <div class="card__bar">
+                          <div class="card__fill" style="width: 45%"></div>
+                        </div>
+                        <div class="card__markers">
+                          <div class="card__marker" style="left: 20%"></div>
+                          <div class="card__marker" style="left: 40%"></div>
+                          <div class="card__marker" style="left: 60%"></div>
+                          <div class="card__marker" style="left: 80%"></div>
+                        </div>
+                      </div>
                     </div>
                     <div class="card__footer">
-                      <div class="card__progress">
-                        <div class="card__progress-bar" style="width: 70%"></div>
+                      <div class="card__comparison">
+                        <span class="card__comparison-label">vs. Promedio:</span>
+                        <span class="card__comparison-value card__comparison-value--positive">+15%</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="card card--success">
+                    <div class="card__header">
+                      <div class="card__icon">🎯</div>
+                      <span class="card__label">KDA</span>
+                    </div>
+                    <div class="card__body">
+                      <div class="card__value-container">
+                        <span id="kda-value" class="card__value">0</span>
+                        <span class="card__rank">Oro</span>
+                      </div>
+                      <div class="card__chart">
+                        <div class="card__bar">
+                          <div class="card__fill" style="width: 60%"></div>
+                        </div>
+                        <div class="card__markers">
+                          <div class="card__marker" style="left: 20%"></div>
+                          <div class="card__marker" style="left: 40%"></div>
+                          <div class="card__marker" style="left: 60%"></div>
+                          <div class="card__marker" style="left: 80%"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card__footer">
+                      <div class="card__comparison">
+                        <span class="card__comparison-label">vs. Promedio:</span>
+                        <span class="card__comparison-value card__comparison-value--positive">+25%</span>
                       </div>
                     </div>
                   </div>
                   
                   <div class="card card--accent">
                     <div class="card__header">
-                      <div class="card__icon">⭐</div>
-                      <span class="card__label">Nivel</span>
+                      <div class="card__icon">🧩</div>
+                      <span class="card__label">CS por Minuto</span>
                     </div>
                     <div class="card__body">
-                      <span id="level-value" class="card__value">1</span>
-                      <div class="card__trend card__trend--neutral">•</div>
+                      <div class="card__value-container">
+                        <span id="cspm-value" class="card__value">0</span>
+                        <span class="card__rank">Diamante</span>
+                      </div>
+                      <div class="card__chart">
+                        <div class="card__bar">
+                          <div class="card__fill" style="width: 85%"></div>
+                        </div>
+                        <div class="card__markers">
+                          <div class="card__marker" style="left: 20%"></div>
+                          <div class="card__marker" style="left: 40%"></div>
+                          <div class="card__marker" style="left: 60%"></div>
+                          <div class="card__marker" style="left: 80%"></div>
+                        </div>
+                      </div>
                     </div>
                     <div class="card__footer">
-                      <div class="card__progress">
-                        <div class="card__progress-bar" style="width: 10%"></div>
+                      <div class="card__comparison">
+                        <span class="card__comparison-label">vs. Promedio:</span>
+                        <span class="card__comparison-value card__comparison-value--positive">+40%</span>
                       </div>
                     </div>
                   </div>
                   
                   <div class="card card--warning">
+                    <div class="card__header">
+                      <div class="card__icon">💡</div>
+                      <h3 class="card__title">Consejo Personalizado</h3>
+                    </div>
+                    <div class="card__body">
+                      <p>Aumenta tu CS para mejorar tu economía y ventaja en el juego. Cada 15 minions equivalen aproximadamente a una kill.</p>
+                    </div>
+                  </div>
+                  
+                  <div class="card card--accent">
                     <div class="card__header">
                       <div class="card__icon">💰</div>
                       <span class="card__label">Oro</span>
@@ -257,9 +277,9 @@
                   </div>
                 </div>
                 
-                <div class="card card--warning">
+                <div class="card card--insight">
                   <div class="card__header">
-                    <div class="card__icon">💡</div>
+                    <div class="card__icon card__icon--insight">💡</div>
                     <h3 class="card__title">Consejo Personalizado</h3>
                   </div>
                   <div class="card__body">
@@ -318,7 +338,6 @@
             <div id="performance-tab" class="tabs__pane">
               <div class="performance-dashboard">
                 <h2 class="dashboard__title">Tu Impacto en el Juego</h2>
-                <!-- Métricas de rendimiento -->
                 <div class="performance-metrics">
                   <div class="card card--primary">
                     <div class="card__header">
@@ -350,7 +369,7 @@
                     </div>
                   </div>
                   
-                  <div class="card card--accent">
+                  <div class="card card--success">
                     <div class="card__header">
                       <div class="card__icon">🎯</div>
                       <span class="card__label">KDA</span>
@@ -380,7 +399,7 @@
                     </div>
                   </div>
                   
-                  <div class="card card--success">
+                  <div class="card card--accent">
                     <div class="card__header">
                       <div class="card__icon">🧩</div>
                       <span class="card__label">CS por Minuto</span>
@@ -411,9 +430,9 @@
                   </div>
                 </div>
                 
-                <div class="card card--accent">
+                <div class="card card--insight">
                   <div class="card__header">
-                    <div class="card__icon">🏆</div>
+                    <div class="card__icon card__icon--insight">🏆</div>
                     <h3 class="card__title">Análisis de Rendimiento</h3>
                   </div>
                   <div class="card__body">
