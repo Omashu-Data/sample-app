@@ -158,6 +158,11 @@
         <span>Progreso</span>
         <div class="tab-notification"></div>
       </button>
+      <button class="tab-button" data-tab="profile" id="profile-tab-btn">
+        <div class="tab-icon">👤</div>
+        <span>Perfil</span>
+        <div class="tab-notification"></div>
+      </button>
     </div>
   </div>
 
@@ -864,6 +869,448 @@
             </div>
           </div>
         </div>
+
+        <!-- Nueva Pestaña de Perfil del Jugador -->
+        <div id="profile-tab" class="tab-pane">
+          <div class="profile-dashboard">
+            <h2 class="dashboard-title">Mi Perfil Omashu</h2>
+            
+            <!-- Tarjeta de Miembro Premium -->
+            <div class="member-card-container">
+              <div class="member-card premium">
+                <div class="card-holographic-effect"></div>
+                <div class="card-content">
+                  <div class="card-header">
+                    <div class="card-logo">
+                      <img src="../../img/header_icon.svg" alt="Omashu Logo" class="holographic-logo">
+                      <span class="membership-type">PREMIUM</span>
+                    </div>
+                    <div class="card-level">
+                      <div class="level-badge gold">NIVEL 7</div>
+                    </div>
+                  </div>
+                  
+                  <div class="card-body">
+                    <div class="member-info">
+                      <h3 class="member-name">SummonerName123</h3>
+                      <div class="member-id">ID: OMASHU-85429</div>
+                      <div class="member-since">Miembro desde: 15/04/2023</div>
+                    </div>
+                    
+                    <div class="card-qr">
+                      <div class="qr-code">
+                        <img src="../../img/header_icon.svg" alt="QR Code" class="qr-placeholder">
+                      </div>
+                      <div class="qr-text">Escanea para ver tu perfil web</div>
+                    </div>
+                  </div>
+                  
+                  <div class="card-footer">
+                    <span class="membership-status">MIEMBRO VERIFICADO</span>
+                    <span class="card-serial">0072839465</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="card-evolution-info">
+                <h3>Evolución de Tarjeta</h3>
+                <div class="evolution-progress">
+                  <div class="evolution-step completed">
+                    <div class="step-icon">🔵</div>
+                    <span class="step-name">Básica</span>
+                  </div>
+                  <div class="evolution-connector completed"></div>
+                  <div class="evolution-step completed">
+                    <div class="step-icon">🥈</div>
+                    <span class="step-name">Veterano</span>
+                  </div>
+                  <div class="evolution-connector in-progress"></div>
+                  <div class="evolution-step current">
+                    <div class="step-icon">🥇</div>
+                    <span class="step-name">Élite</span>
+                  </div>
+                  <div class="evolution-connector"></div>
+                  <div class="evolution-step">
+                    <div class="step-icon">💎</div>
+                    <span class="step-name">Leyenda</span>
+                  </div>
+                </div>
+                <div class="next-evolution-task">
+                  <span class="task-label">Siguiente mejora:</span>
+                  <span class="task-description">Gana 10 partidas más como soporte</span>
+                  <div class="task-progress">
+                    <div class="task-progress-bar" style="width: 70%"></div>
+                    <span class="task-progress-text">7/10</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Panel de Métricas Vitales -->
+            <div class="vital-metrics-panel">
+              <h3 class="panel-title">Estadísticas Personalizadas</h3>
+              
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <div class="metric-icon">⏱️</div>
+                  <div class="metric-data">
+                    <span class="metric-value">347h</span>
+                    <span class="metric-label">Tiempo total jugado</span>
+                  </div>
+                </div>
+                
+                <div class="metric-card">
+                  <div class="metric-icon">📊</div>
+                  <div class="metric-data">
+                    <span class="metric-value">56%</span>
+                    <span class="metric-label">Ratio victorias</span>
+                  </div>
+                </div>
+                
+                <div class="metric-card">
+                  <div class="metric-icon">👑</div>
+                  <div class="metric-data">
+                    <span class="metric-value">5.2</span>
+                    <span class="metric-label">KDA Promedio</span>
+                  </div>
+                </div>
+                
+                <div class="metric-card">
+                  <div class="metric-icon">🏅</div>
+                  <div class="metric-data">
+                    <span class="metric-value">Top 23%</span>
+                    <span class="metric-label">Ranking regional</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="player-champions">
+                <h4>Campeones más jugados</h4>
+                <div class="champions-container">
+                  <div class="champion-icon" title="Yasuo - Maestría 7">
+                    <div class="champion-mastery m7">7</div>
+                  </div>
+                  <div class="champion-icon" title="Jax - Maestría 6">
+                    <div class="champion-mastery m6">6</div>
+                  </div>
+                  <div class="champion-icon" title="Lux - Maestría 5">
+                    <div class="champion-mastery m5">5</div>
+                  </div>
+                  <div class="champion-icon" title="Jinx - Maestría 5">
+                    <div class="champion-mastery m5">5</div>
+                  </div>
+                  <div class="champion-icon" title="Thresh - Maestría 6">
+                    <div class="champion-mastery m6">6</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="player-dna">
+                <h4>DNA de Juego</h4>
+                <div class="dna-chart-container">
+                  <canvas id="dnaChart" width="300" height="300"></canvas>
+                  <div class="dna-labels">
+                    <div class="dna-label" style="top: 10%; left: 50%;">Agresividad</div>
+                    <div class="dna-label" style="top: 30%; right: 10%;">Farm</div>
+                    <div class="dna-label" style="bottom: 30%; right: 10%;">Visión</div>
+                    <div class="dna-label" style="bottom: 10%; left: 50%;">Objetivos</div>
+                    <div class="dna-label" style="bottom: 30%; left: 10%;">Versatilidad</div>
+                    <div class="dna-label" style="top: 30%; left: 10%;">Teamfight</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Camino del Jugador -->
+            <div class="player-journey">
+              <h3 class="panel-title">Mi Camino Omashu</h3>
+              
+              <div class="journey-timeline">
+                <div class="timeline-milestone completed">
+                  <div class="milestone-date">15/04/2023</div>
+                  <div class="milestone-content">
+                    <div class="milestone-icon">🎮</div>
+                    <div class="milestone-info">
+                      <h4>Primeros pasos</h4>
+                      <p>Bienvenido a Omashu.gg</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="timeline-milestone completed">
+                  <div class="milestone-date">30/04/2023</div>
+                  <div class="milestone-content">
+                    <div class="milestone-icon">🥉</div>
+                    <div class="milestone-info">
+                      <h4>Primera racha</h4>
+                      <p>5 victorias consecutivas</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="timeline-milestone completed">
+                  <div class="milestone-date">15/05/2023</div>
+                  <div class="milestone-content">
+                    <div class="milestone-icon">🏆</div>
+                    <div class="milestone-info">
+                      <h4>Primera pentakill</h4>
+                      <p>¡Dominio absoluto!</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="timeline-milestone current">
+                  <div class="milestone-date">Actual</div>
+                  <div class="milestone-content">
+                    <div class="milestone-icon">🚀</div>
+                    <div class="milestone-info">
+                      <h4>Evolución constante</h4>
+                      <p>3 meses de mejora continua</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="timeline-milestone future">
+                  <div class="milestone-date">Próximamente</div>
+                  <div class="milestone-content">
+                    <div class="milestone-icon">✨</div>
+                    <div class="milestone-info">
+                      <h4>Desafío élite</h4>
+                      <p>Alcanza Oro en clasificatorias</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="player-percentile">
+                <h4>Tu posición respecto a otros jugadores</h4>
+                <div class="percentile-chart">
+                  <div class="percentile-bar">
+                    <div class="percentile-fill" style="width: 77%"></div>
+                    <div class="percentile-marker" style="left: 77%"></div>
+                  </div>
+                  <div class="percentile-labels">
+                    <span>0%</span>
+                    <span>50%</span>
+                    <span>100%</span>
+                  </div>
+                </div>
+                <div class="percentile-text">
+                  Estás en el <strong>top 23%</strong> de todos los jugadores
+                </div>
+              </div>
+            </div>
+            
+            <!-- Personalización -->
+            <div class="customization-panel">
+              <h3 class="panel-title">Mi Configuración</h3>
+              
+              <div class="customization-grid">
+                <div class="customization-section">
+                  <h4>Temas Visuales</h4>
+                  <div class="themes-grid">
+                    <div class="theme-option active">
+                      <div class="theme-preview default"></div>
+                      <span class="theme-name">Por defecto</span>
+                    </div>
+                    <div class="theme-option">
+                      <div class="theme-preview dark"></div>
+                      <span class="theme-name">Oscuro</span>
+                    </div>
+                    <div class="theme-option locked">
+                      <div class="theme-preview">
+                        <span class="lock-icon">🔒</span>
+                      </div>
+                      <span class="theme-name">Futurista</span>
+                    </div>
+                    <div class="theme-option locked">
+                      <div class="theme-preview">
+                        <span class="lock-icon">🔒</span>
+                      </div>
+                      <span class="theme-name">Retro</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="customization-section">
+                  <h4>Opciones de Interfaz</h4>
+                  <div class="options-list">
+                    <div class="option-item">
+                      <span class="option-label">Mostrar KDA en tiempo real</span>
+                      <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                    <div class="option-item">
+                      <span class="option-label">Notificaciones de eventos</span>
+                      <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                    <div class="option-item">
+                      <span class="option-label">Grabación automática</span>
+                      <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                    <div class="option-item">
+                      <span class="option-label">Consejos durante partida</span>
+                      <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="privacy-settings">
+                <h4>Configuración de Privacidad</h4>
+                <div class="privacy-options">
+                  <div class="privacy-option">
+                    <div class="privacy-header">
+                      <h5>Compartir estadísticas</h5>
+                      <select class="privacy-selector">
+                        <option value="public">Público</option>
+                        <option value="friends">Solo amigos</option>
+                        <option value="private">Privado</option>
+                      </select>
+                    </div>
+                    <p class="privacy-description">Controla quién puede ver tus estadísticas detalladas</p>
+                  </div>
+                  
+                  <div class="privacy-option">
+                    <div class="privacy-header">
+                      <h5>Perfil en directorio</h5>
+                      <select class="privacy-selector">
+                        <option value="listed">Visible</option>
+                        <option value="unlisted">No listado</option>
+                      </select>
+                    </div>
+                    <p class="privacy-description">Determina si otros pueden encontrarte en el directorio de Omashu</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Integración Social -->
+            <div class="social-panel">
+              <h3 class="panel-title">Mis Conexiones</h3>
+              
+              <div class="friends-section">
+                <div class="friends-header">
+                  <h4>Amigos en Omashu</h4>
+                  <button class="add-friend-button">+ Añadir</button>
+                </div>
+                
+                <div class="friends-grid">
+                  <div class="friend-card">
+                    <div class="friend-avatar"></div>
+                    <div class="friend-info">
+                      <span class="friend-name">ProGamer123</span>
+                      <span class="friend-status online">En línea</span>
+                    </div>
+                    <div class="friend-actions">
+                      <button class="friend-action" title="Ver perfil">👁️</button>
+                      <button class="friend-action" title="Comparar estadísticas">📊</button>
+                    </div>
+                  </div>
+                  
+                  <div class="friend-card">
+                    <div class="friend-avatar"></div>
+                    <div class="friend-info">
+                      <span class="friend-name">JungleMain42</span>
+                      <span class="friend-status offline">Desconectado</span>
+                    </div>
+                    <div class="friend-actions">
+                      <button class="friend-action" title="Ver perfil">👁️</button>
+                      <button class="friend-action" title="Comparar estadísticas">📊</button>
+                    </div>
+                  </div>
+                  
+                  <div class="friend-card">
+                    <div class="friend-avatar"></div>
+                    <div class="friend-info">
+                      <span class="friend-name">MidOrAFK</span>
+                      <span class="friend-status online">En partida</span>
+                    </div>
+                    <div class="friend-actions">
+                      <button class="friend-action" title="Ver perfil">👁️</button>
+                      <button class="friend-action" title="Comparar estadísticas">📊</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="social-sharing">
+                <h4>Compartir mi perfil</h4>
+                <div class="sharing-options">
+                  <button class="share-button whatsapp">
+                    <span class="share-icon">📱</span>
+                    <span class="share-text">WhatsApp</span>
+                  </button>
+                  <button class="share-button twitter">
+                    <span class="share-icon">🐦</span>
+                    <span class="share-text">Twitter</span>
+                  </button>
+                  <button class="share-button discord">
+                    <span class="share-icon">💬</span>
+                    <span class="share-text">Discord</span>
+                  </button>
+                  <button class="share-button copy">
+                    <span class="share-icon">📋</span>
+                    <span class="share-text">Copiar enlace</span>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="reputation-system">
+                <h4>Mi Reputación</h4>
+                <div class="reputation-stats">
+                  <div class="reputation-stat">
+                    <span class="rep-value">4.8</span>
+                    <span class="rep-label">Valoración media</span>
+                    <div class="rep-stars">★★★★★</div>
+                  </div>
+                  <div class="reputation-stat">
+                    <span class="rep-value">32</span>
+                    <span class="rep-label">Reseñas recibidas</span>
+                  </div>
+                  <div class="reputation-stat">
+                    <span class="rep-value">12</span>
+                    <span class="rep-label">Insignias ganadas</span>
+                  </div>
+                </div>
+                
+                <div class="reputation-badges">
+                  <div class="rep-badge" title="Jugador Cooperativo">
+                    <span class="badge-icon">🤝</span>
+                  </div>
+                  <div class="rep-badge" title="Estratega">
+                    <span class="badge-icon">🧠</span>
+                  </div>
+                  <div class="rep-badge" title="Comunicador">
+                    <span class="badge-icon">📢</span>
+                  </div>
+                  <div class="rep-badge" title="Carry">
+                    <span class="badge-icon">💪</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="unique-signature">
+                <h4>Tu Firma Digital Única</h4>
+                <div class="signature-visualizer">
+                  <canvas id="signatureCanvas" width="600" height="120"></canvas>
+                </div>
+                <p class="signature-info">Esta firma es única y se genera basándose en tu estilo de juego y estadísticas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       
       <!-- Sistema de retroalimentación inmediata -->
@@ -1139,5 +1586,184 @@
       </div>
     </div>
   </div>
+
+  <!-- Script para la pestaña de perfil -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Efecto holográfico para la tarjeta
+      const card = document.querySelector('.member-card');
+      const holoEffect = document.querySelector('.card-holographic-effect');
+      
+      if (card && holoEffect) {
+        card.addEventListener('mousemove', function(e) {
+          const rect = card.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          
+          holoEffect.style.setProperty('--mouse-x', x + '%');
+          holoEffect.style.setProperty('--mouse-y', y + '%');
+        });
+      }
+      
+      // Crear gráfico de radar para el DNA del jugador
+      const dnaCanvas = document.getElementById('dnaChart');
+      if (dnaCanvas) {
+        const ctx = dnaCanvas.getContext('2d');
+        if (ctx) {
+          // Configuración del gráfico
+          const centerX = dnaCanvas.width / 2;
+          const centerY = dnaCanvas.height / 2;
+          const radius = Math.min(centerX, centerY) - 30;
+          
+          // Datos de ejemplo (de 0 a 1)
+          const dnaData = [0.85, 0.7, 0.55, 0.9, 0.65, 0.8]; // [Agresividad, Farm, Visión, Objetivos, Versatilidad, Teamfight]
+          const categories = 6;
+          const angleStep = (Math.PI * 2) / categories;
+          
+          // Dibujar fondo y rejilla
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.fill();
+          
+          // Dibujar gráfico
+          ctx.lineWidth = 2;
+          
+          // Dibujar rejilla
+          for (let i = 1; i <= 4; i++) {
+            const currentRadius = (radius / 4) * i;
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.arc(centerX, centerY, currentRadius, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+          
+          // Dibujar líneas de las categorías
+          for (let i = 0; i < categories; i++) {
+            const angle = i * angleStep;
+            const x = centerX + radius * Math.cos(angle - Math.PI / 2);
+            const y = centerY + radius * Math.sin(angle - Math.PI / 2);
+            
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+          }
+          
+          // Dibujar datos
+          ctx.beginPath();
+          ctx.fillStyle = 'rgba(98, 79, 255, 0.2)';
+          ctx.strokeStyle = 'rgba(98, 79, 255, 0.8)';
+          
+          for (let i = 0; i < categories; i++) {
+            const angle = i * angleStep;
+            const value = dnaData[i];
+            const x = centerX + (radius * value) * Math.cos(angle - Math.PI / 2);
+            const y = centerY + (radius * value) * Math.sin(angle - Math.PI / 2);
+            
+            if (i === 0) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
+          }
+          
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          
+          // Dibujar puntos en los datos
+          for (let i = 0; i < categories; i++) {
+            const angle = i * angleStep;
+            const value = dnaData[i];
+            const x = centerX + (radius * value) * Math.cos(angle - Math.PI / 2);
+            const y = centerY + (radius * value) * Math.sin(angle - Math.PI / 2);
+            
+            ctx.beginPath();
+            ctx.fillStyle = '#fff';
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.fillStyle = 'rgba(98, 79, 255, 1)';
+            ctx.arc(x, y, 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      }
+      
+      // Crear firma digital única
+      const signatureCanvas = document.getElementById('signatureCanvas');
+      if (signatureCanvas) {
+        const ctx = signatureCanvas.getContext('2d');
+        if (ctx) {
+          // Generar una firma única basada en datos hash (simulado)
+          const gradient = ctx.createLinearGradient(0, 0, signatureCanvas.width, 0);
+          gradient.addColorStop(0, 'rgba(98, 79, 255, 0.8)');
+          gradient.addColorStop(0.5, 'rgba(255, 204, 0, 0.8)');
+          gradient.addColorStop(1, 'rgba(255, 107, 129, 0.8)');
+          
+          ctx.strokeStyle = gradient;
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+          
+          // Simulación de datos biométricos
+          const points = [];
+          const segments = 50;
+          const height = signatureCanvas.height;
+          const width = signatureCanvas.width;
+          
+          // Crear puntos aleatorios pero consistentes
+          for (let i = 0; i < segments; i++) {
+            const x = (width / segments) * i;
+            // Usar un algoritmo determinista para la posición Y
+            const y = height / 2 + Math.sin(i * 0.5) * (height / 4) * Math.sin(i * 0.2);
+            points.push({ x, y });
+          }
+          
+          // Dibujar línea principal
+          ctx.beginPath();
+          ctx.moveTo(points[0].x, points[0].y);
+          
+          for (let i = 1; i < points.length; i++) {
+            // Curva suave entre puntos
+            const prevPoint = points[i - 1];
+            const currentPoint = points[i];
+            
+            const cp1x = prevPoint.x + (currentPoint.x - prevPoint.x) / 2;
+            const cp1y = prevPoint.y;
+            const cp2x = prevPoint.x + (currentPoint.x - prevPoint.x) / 2;
+            const cp2y = currentPoint.y;
+            
+            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, currentPoint.x, currentPoint.y);
+          }
+          
+          ctx.stroke();
+          
+          // Añadir detalles adicionales
+          for (let i = 0; i < points.length; i += 4) {
+            const point = points[i];
+            
+            ctx.beginPath();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.arc(point.x, point.y, 1, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          
+          // Añadir líneas verticales sutiles
+          for (let i = 1; i < 8; i++) {
+            const x = width / 8 * i;
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 1;
+            ctx.moveTo(x, 10);
+            ctx.lineTo(x, height - 10);
+            ctx.stroke();
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
