@@ -4034,109 +4034,108 @@ main.with-ads {
 
 /* Estilos para la pestaña de Perfil */
 .profile-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
   width: 100%;
-  max-width: 100%;
-  padding: 15px 0;
-  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .profile-dashboard .dashboard-title {
-  text-align: center;
-  margin-bottom: 25px;
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
   color: #fff;
-  text-shadow: 0 0 10px rgba(98, 79, 255, 0.7);
+  text-align: center;
+  width: 100%;
+  text-shadow: 0 0 10px rgba(98, 79, 255, 0.5);
 }
 
-/* Tarjeta de Miembro */
 .member-card-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
+  perspective: 1000px;
+  /* No expandirse más allá del tamaño de la tarjeta */
+  width: 340px;
+  max-width: 340px;
 }
 
 .member-card {
+  width: 340px; /* Proporción estándar de tarjeta ID */
+  height: 212px; /* Mantiene proporción 1.6:1 como tarjetas reales */
+  background: linear-gradient(135deg, #45108a 0%, #3d065a 50%, #12054e 100%);
+  border-radius: 10px;
   position: relative;
-  width: 90%;
-  max-width: 500px;
-  height: 250px;
-  border-radius: 15px;
-  background: linear-gradient(135deg, #1a1145 0%, #3a1c71 50%, #4c2fbf 100%);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  color: #fff;
-  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  padding: 0;
+  margin-bottom: 1.5rem;
+  /* Asegurar que mantenga su tamaño */
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
-.member-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('../../img/card-pattern.svg');
-  opacity: 0.15;
-  z-index: 1;
-}
-
-.member-card.premium::after {
-  content: '';
-  position: absolute;
-  width: 150%;
-  height: 150%;
-  top: -100px;
-  left: -100px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transform: rotate(45deg);
-  animation: card-shine 3s infinite;
-  z-index: 2;
-}
-
-@keyframes card-shine {
-  0% {
-    left: -150%;
-  }
-  100% {
-    left: 150%;
-  }
+.member-card:hover {
+  transform: rotateY(5deg) rotateX(5deg);
+  box-shadow: -5px 10px 30px rgba(0, 0, 0, 0.6);
 }
 
 .card-holographic-effect {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-              rgba(255, 255, 255, 0.1) 0%, 
-              rgba(255, 255, 255, 0) 60%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  z-index: 3;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  opacity: 0.3;
+  mix-blend-mode: overlay;
+  transform: translateZ(10px);
+  pointer-events: none;
+  z-index: 5;
 }
 
-.member-card:hover .card-holographic-effect {
-  opacity: 1;
+.card-holographic-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0) 50%
+  );
+  opacity: 0.3;
+  mix-blend-mode: overlay;
+  pointer-events: none;
 }
 
 .card-content {
   position: relative;
-  z-index: 4;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 20px;
+  padding: 15px;
+  box-sizing: border-box;
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .card-logo {
@@ -4146,38 +4145,58 @@ main.with-ads {
 }
 
 .holographic-logo {
-  width: 50px;
-  height: 50px;
-  filter: drop-shadow(0 0 8px rgba(98, 79, 255, 0.8));
+  width: 40px;
+  height: 40px;
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.holographic-logo::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.1) 100%);
+  animation: shimmer 2.5s infinite;
 }
 
 .membership-type {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 2px;
+  font-size: 0.7rem;
+  font-weight: bold;
   color: #ffcc00;
-  margin-top: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(to right, #ffcc00, #ff9900);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 1px rgba(255, 204, 0, 0.5));
 }
 
 .level-badge {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 4px 8px;
   border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  background: rgba(0, 0, 0, 0.3);
+  font-size: 0.7rem;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .level-badge.gold {
-  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%);
+  background: linear-gradient(45deg, #ffd700, #ff9900);
   color: #000;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  border: none;
 }
 
 .card-body {
   display: flex;
   justify-content: space-between;
-  flex-grow: 1;
+  height: 100%;
+  position: relative;
 }
 
 .member-info {
@@ -4187,16 +4206,17 @@ main.with-ads {
 }
 
 .member-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0 0 5px;
+  color: #fff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 .member-id, .member-since {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  margin-bottom: 5px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 3px 0;
 }
 
 .card-qr {
@@ -4204,66 +4224,118 @@ main.with-ads {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 80px;
 }
 
 .qr-code {
-  width: 80px;
-  height: 80px;
-  background: white;
-  padding: 5px;
-  border-radius: 10px;
+  width: 70px;
+  height: 70px;
+  background-color: #fff;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
 }
 
 .qr-placeholder {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  width: 50px;
+  height: 50px;
+  opacity: 0.8;
 }
 
 .qr-text {
-  font-size: 0.7rem;
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.7);
   text-align: center;
-  opacity: 0.8;
-  max-width: 100px;
+  max-width: 80px;
 }
 
 .card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 15px;
-  font-size: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+  margin-top: auto;
 }
 
 .membership-status {
-  letter-spacing: 1px;
-  opacity: 0.7;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .card-serial {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.4);
   font-family: monospace;
-  opacity: 0.5;
 }
 
+/* Elementos de seguridad de la tarjeta */
+.member-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.member-card.premium::after {
+  content: "OMASHU PREMIUM";
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%) rotate(-45deg);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.07);
+  letter-spacing: 2px;
+  white-space: nowrap;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    opacity: 0.3;
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.3;
+    transform: translateX(100%) skewX(-15deg);
+  }
+}
+
+/* Elementos adicionales de la sección de perfil */
 .card-evolution-info {
-  width: 90%;
-  max-width: 500px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.card-evolution-info h3 {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  color: #e7e7e7;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 1rem;
 }
 
 .evolution-progress {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  margin: 1rem 0;
 }
 
 .evolution-step {
@@ -4271,90 +4343,83 @@ main.with-ads {
   flex-direction: column;
   align-items: center;
   position: relative;
+  z-index: 2;
 }
 
 .step-icon {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(30, 30, 60, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin-bottom: 5px;
-  font-size: 1.2rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  font-size: 1rem;
 }
 
 .evolution-step.completed .step-icon {
-  background: rgba(98, 79, 255, 0.2);
+  background: rgba(98, 79, 255, 0.8);
   box-shadow: 0 0 10px rgba(98, 79, 255, 0.5);
 }
 
 .evolution-step.current .step-icon {
-  animation: pulse-evolution 2s infinite;
-}
-
-@keyframes pulse-evolution {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(255, 204, 0, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 204, 0, 0);
-  }
+  background: linear-gradient(45deg, #ffd700, #ff9900);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
 }
 
 .step-name {
-  font-size: 0.8rem;
-  color: #c5c5c5;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .evolution-step.completed .step-name,
 .evolution-step.current .step-name {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
 }
 
 .evolution-connector {
   flex-grow: 1;
   height: 3px;
   background: rgba(255, 255, 255, 0.1);
-  margin: 0 5px;
+  margin: 0 10px;
   position: relative;
   top: -18px;
+  z-index: 1;
 }
 
 .evolution-connector.completed {
-  background: linear-gradient(90deg, rgba(98, 79, 255, 0.8), rgba(255, 204, 0, 0.8));
+  background: linear-gradient(to right, rgba(98, 79, 255, 0.8), rgba(98, 79, 255, 0.4));
 }
 
 .evolution-connector.in-progress {
-  background: linear-gradient(90deg, rgba(255, 204, 0, 0.8), rgba(255, 255, 255, 0.1));
+  background: linear-gradient(to right, rgba(255, 204, 0, 0.8) 0%, rgba(255, 204, 0, 0.4) 60%, rgba(255, 255, 255, 0.1) 100%);
 }
 
 .next-evolution-task {
-  background: rgba(255, 204, 0, 0.1);
+  background: rgba(30, 30, 60, 0.3);
   border-radius: 8px;
-  padding: 10px 15px;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-left: 3px solid #ffcc00;
 }
 
 .task-label {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #ffcc00;
-  margin-bottom: 5px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-right: 0.5rem;
 }
 
 .task-description {
-  display: block;
   font-size: 0.9rem;
-  margin-bottom: 10px;
-  color: #e7e7e7;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
 }
 
 .task-progress {
+  margin-top: 0.5rem;
   height: 6px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
@@ -4363,7 +4428,7 @@ main.with-ads {
 
 .task-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #ffcc00, #ff9900);
+  background: linear-gradient(to right, #ffcc00, #ff9900);
   border-radius: 3px;
 }
 
@@ -4371,8 +4436,8 @@ main.with-ads {
   position: absolute;
   right: 0;
   top: -20px;
-  font-size: 0.8rem;
-  color: #ffcc00;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Panel de Métricas Vitales */
@@ -5162,34 +5227,45 @@ input:checked + .slider:before {
 
 @media (max-width: 780px) {
   .member-card-container {
-    flex-direction: column;
+    width: 320px;
+    max-width: 320px;
   }
   
   .member-card {
-    width: 100%;
-    max-width: none;
+    width: 320px;
+    height: 200px;
   }
   
   .card-evolution-info {
     width: 100%;
-    max-width: none;
   }
   
   .evolution-progress {
-    overflow-x: auto;
-    padding-bottom: 10px;
+    gap: 5px;
   }
   
   .metrics-grid,
   .customization-grid,
   .friends-grid,
-  .reputation-stats {
+  .themes-grid {
     grid-template-columns: 1fr;
   }
   
   .dna-chart-container {
-    width: 100%;
+    width: 280px;
+    height: 280px;
+  }
+}
+
+@media (max-width: 400px) {
+  .member-card-container {
+    width: 280px;
     max-width: 280px;
+  }
+  
+  .member-card {
+    width: 280px;
+    height: 175px;
   }
 }
 
