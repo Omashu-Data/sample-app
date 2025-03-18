@@ -947,6 +947,168 @@ main {
   background-color: transparent !important; /* Asegurar fondo transparente */
 }
 
+/* Mejoras específicas para las tarjetas en la vista in-game */
+.dashboard__stats-grid .card {
+  width: 100%;
+  margin: 0 !important;
+  position: relative;
+  overflow: visible;
+  transform-origin: center center;
+}
+
+/* Efecto spotlight para las tarjetas - Neuromarketing visual */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
+              rgba(255, 255, 255, 0.15) 0%, 
+              rgba(255, 255, 255, 0) 60%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.card:hover::after {
+  opacity: 1;
+  --x: calc(var(--mouse-x, 0) * 100%);
+  --y: calc(var(--mouse-y, 0) * 100%);
+}
+
+/* Feedback táctil visual - amplifica sensación de interactividad */
+.card:active {
+  transform: scale(0.98) !important;
+  transition: transform 0.1s !important;
+}
+
+/* Estilos de jerarquía visual - el dato principal siempre resalta */
+.dashboard__stats-grid .card__value {
+  font-size: 24px;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+/* Mejora para legibilidad y contraste */
+.dashboard__stats-grid .card__label {
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+}
+
+.dashboard__stats-grid .card:hover .card__label {
+  opacity: 1;
+}
+
+/* Efecto de anticipación - feedback sutil */
+@keyframes pulse-subtle {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.card .card__value-container {
+  position: relative;
+}
+
+/* Mejoras para los ranks con efectos de brillo adaptados a cada nivel */
+.card__rank {
+  position: relative;
+  overflow: hidden;
+}
+
+.card__rank::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 250%;
+  height: 250%;
+  opacity: 0;
+  transform: rotate(30deg);
+  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  transition: opacity 0.3s;
+}
+
+.card:hover .card__rank::after {
+  animation: rank-shimmer 2s infinite;
+  opacity: 1;
+}
+
+@keyframes rank-shimmer {
+  0% { transform: translateX(-100%) rotate(30deg); }
+  100% { transform: translateX(100%) rotate(30deg); }
+}
+
+/* Mejoras específicas para el estado positivo/negativo */
+.card__comparison-value--positive,
+.card__comparison-value--negative,
+.card__comparison-value--neutral {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 5px;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.card__comparison-value--positive::before {
+  content: "↑";
+  margin-right: 2px;
+  font-size: 10px;
+}
+
+.card__comparison-value--negative::before {
+  content: "↓";
+  margin-right: 2px;
+  font-size: 10px;
+}
+
+/* Comportamiento más contenido en tarjetas pequeñas */
+@media (max-width: 1366px) {
+  .dashboard__stats-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+  }
+  
+  .dashboard__stats-grid .card {
+    padding: 8px;
+  }
+  
+  .dashboard__stats-grid .card__value {
+    font-size: 22px;
+  }
+  
+  .dashboard__stats-grid .card__icon {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+  }
+}
+
+/* Efecto de atención sutil para las tarjetas - principio de neuromarketing */
+.card.subtle-attention {
+  animation: subtle-attention-glow 2s ease-in-out;
+}
+
+@keyframes subtle-attention-glow {
+  0% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.07); }
+  50% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 15px rgba(109, 61, 255, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.07); }
+  100% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.07); }
+}
+
+.card.subtle-attention .card__value {
+  animation: subtle-text-glow 2s ease-in-out;
+}
+
+@keyframes subtle-text-glow {
+  0% { text-shadow: 0px 0px 15px rgba(160, 124, 255, 0.3); }
+  50% { text-shadow: 0px 0px 20px rgba(188, 118, 255, 0.6); }
+  100% { text-shadow: 0px 0px 15px rgba(160, 124, 255, 0.3); }
+}
+
 /* Eliminar cualquier texto adicional que pueda estar sobreescribiendo */
 .banner--top .ad-placeholder__text::after {
   content: none !important;

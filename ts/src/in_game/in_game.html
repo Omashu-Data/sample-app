@@ -1875,5 +1875,66 @@
       }
     });
   </script>
+  
+  <!-- Script para efectos de neuromarketing en las tarjetas -->
+  <script>
+    // Este script añade efectos visuales basados en la posición del ratón
+    // para mejorar la experiencia de usuario con principios de neuromarketing
+    document.addEventListener('DOMContentLoaded', function() {
+      // Efecto spotlight para tarjetas (seguimiento del cursor)
+      const cards = document.querySelectorAll('.card');
+      
+      cards.forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width;
+          const y = (e.clientY - rect.top) / rect.height;
+          
+          card.style.setProperty('--mouse-x', x);
+          card.style.setProperty('--mouse-y', y);
+        });
+        
+        // Efecto de micro-interacción al entrar
+        card.addEventListener('mouseenter', function() {
+          // Añadir pequeña animación al valor principal
+          const valueElement = this.querySelector('.card__value');
+          if (valueElement) {
+            valueElement.style.animation = 'pulse-subtle 0.5s ease-in-out';
+            setTimeout(() => {
+              valueElement.style.animation = '';
+            }, 500);
+          }
+        });
+      });
+      
+      // Efecto de "retención de atención" - las tarjetas mantienen un suave brillo
+      // incluso cuando no están en hover, creando un patrón visual rítmico
+      const allCards = Array.from(document.querySelectorAll('.card'));
+      let currentIndex = 0;
+      
+      function subtleAttentionEffect() {
+        // Remover cualquier efecto previo
+        allCards.forEach(c => c.classList.remove('subtle-attention'));
+        
+        // Aplicar efecto a la tarjeta actual
+        if (allCards.length > 0) {
+          const card = allCards[currentIndex];
+          // Solo aplicar si no tiene hover
+          if (!card.matches(':hover')) {
+            card.classList.add('subtle-attention');
+          }
+          
+          // Avanzar al siguiente
+          currentIndex = (currentIndex + 1) % allCards.length;
+        }
+        
+        // Continuar el efecto cada pocos segundos
+        setTimeout(subtleAttentionEffect, 3000);
+      }
+      
+      // Iniciar el efecto después de cargar la página
+      setTimeout(subtleAttentionEffect, 5000);
+    });
+  </script>
 </body>
 </html>
