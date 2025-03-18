@@ -9,27 +9,27 @@
 
 /* Contenedor principal de pestañas */
 .tabs {
-  width: 100%;
-  max-width: 740px; /* Ancho total exacto requerido para el plugin */
+  width: 740px !important; /* Ancho fijo exacto con !important */
+  max-width: 740px !important;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
   position: fixed;
   top: 130px; /* Ajustado para el header (44px) + altura del banner (82px) + gap (4px) */
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%); /* Centrar horizontalmente */
   z-index: 990; /* Aumentado para estar al mismo nivel que el banner superior */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   pointer-events: auto; /* Asegurar que se pueden hacer clic en las pestañas */
   background: linear-gradient(90deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
   backdrop-filter: blur(15px);
+  box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
 }
 
 /* Navegación - Contenedor de botones de pestañas */
 .tabs__navigation {
   display: flex;
   width: 100%;
-  max-width: 740px; /* Ancho total exacto requerido para el plugin */
   padding: var(--spacing-sm) var(--spacing-md); /* Aumentado para mejor espaciado */
   border-radius: 0;
   scrollbar-width: none;
@@ -37,7 +37,7 @@
   border-bottom: 1px solid rgba(109, 61, 255, 0.3);
   height: 42px; /* Aumentado para dar más espacio a los botones */
   align-items: center;
-  margin: 0 auto; /* Centrado horizontal */
+  box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
 }
 
 .tabs__navigation::-webkit-scrollbar {

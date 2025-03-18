@@ -8,8 +8,8 @@
 
 /* Contenedor del header */
 .header {
-  width: 100%;
-  max-width: 740px; /* Ancho total exacto requerido para el plugin */
+  width: 740px !important; /* Ancho fijo exacto con !important */
+  max-width: 740px !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,8 +17,8 @@
   color: var(--color-white);
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%); /* Centrar horizontalmente */
   background: linear-gradient(90deg, rgba(19, 11, 55, 0.95), rgba(39, 22, 100, 0.95));
   backdrop-filter: blur(15px);
   border-bottom: none;
@@ -28,6 +28,7 @@
   font-family: "Matter";
   height: 44px;
   overflow: hidden;
+  box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
 }
 
 /* Contenedor para el logotipo */

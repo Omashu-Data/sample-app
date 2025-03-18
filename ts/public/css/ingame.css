@@ -24,13 +24,13 @@
  * RESETEO Y ESTILOS BASE
  * ============================== */
 html, body {
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
   width: 100%;
   height: 100vh;
   overflow: hidden;
   background-color: transparent;
-  box-sizing: border-box;
+  box-sizing: border-box !important;
 }
 
 body {
@@ -42,6 +42,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: transparent !important;
 }
 
 /* Los estilos para la scrollbar están definidos en omashu-theme.css, 
@@ -51,23 +52,23 @@ body {
  * LAYOUT PRINCIPAL Y CONTENEDORES
  * ============================== */
 #app-container {
-  width: 100%;
-  max-width: 740px;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  width: 740px !important; /* Ancho fijo exacto con !important */
+  max-width: 740px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
   overflow: hidden;
-  left: 0;
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .in-game {
-  width: 100%;
-  max-width: 740px;
-  margin: 0;
-  padding: 0;
+  width: 740px !important; /* Ancho fijo exacto con !important */
+  max-width: 740px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
 body.in-game {
@@ -91,25 +92,24 @@ body.in-game {
 }
 
 main {
-  width: 100%;
-  max-width: var(--app-width);
-  margin: 0 auto;
+  width: 740px !important; /* Ancho fijo exacto con !important */
+  max-width: 740px !important;
+  margin: 0 auto !important;
   overflow-y: auto;
   padding-top: 180px; /* Aumentado para dar más espacio a las pestañas */
   position: relative;
   z-index: 970; /* Por debajo de las pestañas */
   height: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box !important;
 }
 
 main.with-ads {
-  width: 100%;
-  max-width: 740px;
-  margin: 0;
+  width: 740px !important; /* Ancho fijo exacto con !important */
+  max-width: 740px !important;
+  margin: 0 auto !important;
   padding-top: 170px; /* Ajustado para el nuevo diseño compacto */
-  box-sizing: border-box;
+  box-sizing: border-box !important;
   position: relative;
-  left: 0;
   overflow-y: auto;
   height: 100%;
 }
@@ -118,10 +118,11 @@ main.with-ads {
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
   left: 0;
   min-height: 100%;
+  box-sizing: border-box !important;
 }
 
 /* Sistema de pestañas antiguo - ELIMINADO Y REEMPLAZADO por tabs.css */
@@ -300,8 +301,7 @@ main.with-ads {
 }
 
 #standard-banner {
-  width: 100%;
-  max-width: 728px;
+  width: 728px; /* Exactamente el ancho del banner horizontal */
   height: 90px;
   margin: 0 auto;
   margin-bottom: 15px;
@@ -333,7 +333,8 @@ main.with-ads {
   margin-right: 160px;
   overflow-y: auto;
   height: 100%;
-  box-sizing: border-box;
+  box-sizing: border-box !important;
+  width: auto !important; /* Asegurar que no tiene un ancho fijo */
 }
 
 .main--with-ads .content-wrapper {
@@ -344,6 +345,7 @@ main.with-ads {
   position: relative;
   z-index: 970;
   min-height: 100%;
+  box-sizing: border-box !important;
 }
 
 .main--with-ads .tabs__content {
@@ -352,6 +354,7 @@ main.with-ads {
   margin-top: 10px;
   z-index: 50;
   height: auto;
+  box-sizing: border-box !important;
 }
 
 /* Contenedor para el área principal (sin anuncios) */
