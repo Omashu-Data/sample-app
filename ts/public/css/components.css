@@ -1163,25 +1163,9 @@
   box-sizing: border-box !important;
 }
 
+/* Banner vertical actualizado para formato hardcoded */
 .banner--vertical {
-  position: absolute;
-  top: 172px; /* Ajustado para que esté debajo del menú de pestañas */
-  right: 0; /* Asegurar que esté en el borde derecho */
-  width: 160px; /* Exactamente el ancho requerido para el banner vertical */
-  height: calc(100vh - 172px); /* Ajustado para la nueva posición */
-  padding: 0;
-  margin: 0; /* Asegurar que no hay márgenes */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end; /* Alineado a la derecha */
-  z-index: 980;
-  overflow: hidden;
-  pointer-events: auto;
-  box-sizing: border-box; /* Asegurar que el padding y border no afecten el ancho */
-  border-left: none; /* Eliminar cualquier borde que pueda causar desplazamiento */
-  left: auto !important; /* Restablecer cualquier valor left que pueda estar afectando la posición */
-  transform: none !important; /* Asegurarse que no hay transformaciones aplicadas */
+  display: none; /* Ya no usamos esta clase, usamos solo el ID para evitar conflictos */
 }
 
 .banner__container {

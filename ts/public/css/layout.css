@@ -235,10 +235,11 @@ body.in-game {
  * LAYOUTS ESPECÍFICOS PARA ANUNCIOS
  * ==============================
  */
-/* Layout para anuncios verticales */
-.vertical-ad-layout {
+/* Layout para anuncios verticales - Complementa el hardcoded en HTML */
+.vertical-ad-layout, 
+#banner-vertical-160x600 {
   width: 160px !important;
-  position: fixed !important;
+  position: absolute !important;
   top: 172px !important; /* Debajo del menú de pestañas */
   right: 0 !important;
   height: 600px !important;
@@ -246,4 +247,5 @@ body.in-game {
   padding: 0 !important;
   z-index: 9999 !important;
   box-sizing: border-box !important;
+  pointer-events: auto !important;
 } 

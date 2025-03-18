@@ -152,16 +152,12 @@ main.with-ads {
  * LAYOUT PRINCIPAL Y CONTENEDORES
  * ============================== */
 #app-container {
-  width: 740px !important; /* Ancho fijo exacto con !important */
+  position: relative !important;
+  width: 740px !important; /* 580px (contenido) + 160px (banner vertical) */
   max-width: 740px !important;
-  margin: 0 !important; /* Eliminar margin auto */
+  overflow: visible !important; /* Permite que elementos como el banner vertical puedan salir de sus límites */
+  margin: 0 auto !important;
   padding: 0 !important;
-  box-sizing: border-box !important;
-  overflow: hidden;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative; /* Para posicionamiento absoluto interno */
 }
 
 .in-game {
@@ -421,18 +417,13 @@ main {
 
 /* Contenedor para el área principal (sin anuncios) */
 .main-content-area {
-  flex: 1;
-  width: 580px !important; /* Ancho fijo exacto */
-  max-width: 580px !important;
-  padding: 0 !important; /* Eliminar padding */
-  margin: 0 !important; /* Eliminar margen */
+  width: 580px; /* Ancho reducido para dejar espacio al banner vertical */
+  padding-top: 20px;
+  box-sizing: border-box;
   position: relative;
   z-index: 970;
   overflow-y: auto;
-  height: 100%;
-  box-sizing: border-box !important;
-  left: 0 !important; /* Asegurar que se alinee a la izquierda */
-  background-color: transparent !important; /* Asegurar fondo transparente */
+  overflow-x: hidden;
 }
 
 .integrated-ad {
@@ -988,4 +979,16 @@ main {
   max-width: 580px !important;
   box-sizing: border-box !important;
   left: 0 !important;
+}
+
+/* Asegurar que el banner vertical sea visible y accesible */
+#banner-vertical-160x600 {
+  position: absolute !important;
+  top: 172px !important;
+  right: 0 !important;
+  width: 160px !important;
+  height: 600px !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+  overflow: visible !important;
 }

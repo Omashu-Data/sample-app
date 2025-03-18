@@ -20,36 +20,29 @@
   <link rel="stylesheet" href="../../css/ingame.css" />
   <title>omashu.gg - League of Legends</title>
   <style>
-    /* Estilos específicos para el banner vertical */
-    #vertical-banner {
-      position: fixed !important;
+    /* Estilos inline directos para el banner vertical */
+    #banner-vertical-160x600 {
+      position: absolute !important;
       top: 172px !important;
       right: 0 !important;
-      width: 160px !important;
-      height: calc(100vh - 172px) !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      box-sizing: border-box !important;
-      z-index: 9999 !important;
-      border-left: none !important;
-      overflow: visible !important;
-    }
-    
-    #vertical-ads-container {
       width: 160px !important;
       height: 600px !important;
       margin: 0 !important;
       padding: 0 !important;
-      position: absolute !important;
-      right: 0 !important;
-      top: 0 !important;
+      border: none !important;
       box-sizing: border-box !important;
-      left: auto !important;
+      z-index: 9999 !important;
+      float: right !important;
+      background: rgba(19, 11, 55, 0.8) !important;
+    }
+    .banner-container {
+      width: 740px !important;
+      position: relative !important;
     }
   </style>
 </head>
 <body class="in-game">
-  <div id="app-container" style="width: 740px !important; max-width: 740px !important; position: relative !important; margin: 0 !important; padding: 0 !important;">
+  <div id="app-container" class="banner-container" style="width: 740px !important; max-width: 740px !important; position: relative !important; margin: 0 !important; padding: 0 !important; overflow: visible !important;">
     <div class="content-wrapper">
       <!-- -------------------------------- Header ------------------------------- -->
 
@@ -1434,34 +1427,16 @@
         </div>
       </main>
 
-      <!-- OPCIÓN 1: Banner vertical de anuncios - Lado derecho -->
-      <div id="vertical-banner-right" class="banner banner--vertical banner--vertical-right vertical-ad-layout" style="position: fixed; top: 172px; right: 0; width: 160px; height: 600px; padding: 0; margin: 0; box-sizing: border-box; z-index: 9999; border: none; display: block;">
-        <!-- Contenedor para anuncios verticales de Overwolf -->
-        <div id="vertical-ads-container-right" class="banner__container" style="width: 160px; height: 600px; margin: 0; padding: 0; position: absolute; right: 0; top: 0; box-sizing: border-box; left: auto !important;">
-          <!-- Placeholder para anuncios -->
-          <div id="vertical-banner-placeholder-right" class="ad-placeholder ad-placeholder--vertical">
-            <div class="ad-placeholder__logo">
-              <img src="../../img/header_icon.svg" alt="omashu.gg logo" class="ad-placeholder__icon">
-              <span>omashu.gg</span>
+      <!-- Banner vertical simplificado y hardcoded -->
+      <div id="banner-vertical-160x600" style="position: absolute; top: 172px; right: 0; width: 160px; height: 600px; z-index: 9999; border: none; overflow: visible;">
+        <div style="width: 160px; height: 600px; margin: 0; padding: 0; position: relative;">
+          <div class="ad-placeholder" style="width: 160px; height: 600px; background: linear-gradient(135deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8)); margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+            <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">
+              <img src="../../img/header_icon.svg" alt="omashu.gg logo" style="width: 20px; height: 20px;">
+              <span style="color: #fff;">omashu.gg</span>
             </div>
-            <div class="ad-placeholder__text">ESPACIO PUBLICITARIO</div>
-            <div class="ad-placeholder__size">160 × 600</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- OPCIÓN 2: Banner vertical de anuncios - Lado izquierdo (oculto por defecto) -->
-      <div id="vertical-banner-left" class="banner banner--vertical banner--vertical-left vertical-ad-layout" style="position: fixed; top: 172px; left: 0; width: 160px; height: 600px; padding: 0; margin: 0; box-sizing: border-box; z-index: 9999; border: none; display: none;">
-        <!-- Contenedor para anuncios verticales de Overwolf -->
-        <div id="vertical-ads-container-left" class="banner__container" style="width: 160px; height: 600px; margin: 0; padding: 0; position: absolute; left: 0; top: 0; box-sizing: border-box; right: auto !important;">
-          <!-- Placeholder para anuncios -->
-          <div id="vertical-banner-placeholder-left" class="ad-placeholder ad-placeholder--vertical">
-            <div class="ad-placeholder__logo">
-              <img src="../../img/header_icon.svg" alt="omashu.gg logo" class="ad-placeholder__icon">
-              <span>omashu.gg</span>
-            </div>
-            <div class="ad-placeholder__text">ESPACIO PUBLICITARIO</div>
-            <div class="ad-placeholder__size">160 × 600</div>
+            <div style="font-size: 12px; color: rgba(255, 255, 255, 0.8); margin: 10px 0;">ESPACIO PUBLICITARIO</div>
+            <div style="font-size: 10px; color: rgba(255, 255, 255, 0.5); position: absolute; bottom: 10px;">160 × 600</div>
           </div>
         </div>
       </div>
@@ -1485,27 +1460,6 @@
     ga('set', 'checkProtocolTask', function () { });
     ga('require', 'displayfeatures');
     ga('send', 'pageview', '/in_game.html');
-  </script>
-  
-  <!-- Script para alternar la posición del banner vertical -->
-  <script>
-    // Esta función permite alternar entre el banner vertical derecho e izquierdo
-    function toggleVerticalBannerPosition(position) {
-      const rightBanner = document.getElementById('vertical-banner-right');
-      const leftBanner = document.getElementById('vertical-banner-left');
-      
-      if (position === 'left') {
-        rightBanner.style.display = 'none';
-        leftBanner.style.display = 'block';
-      } else {
-        rightBanner.style.display = 'block';
-        leftBanner.style.display = 'none';
-      }
-    }
-    
-    // Por defecto, mostrar el banner derecho
-    // Para cambiar a la posición izquierda, usar:
-    // toggleVerticalBannerPosition('left');
   </script>
   
   <!-- Script para el sistema de pestañas -->
