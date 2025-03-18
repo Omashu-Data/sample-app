@@ -1070,11 +1070,85 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.banner--vertical {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 160px;
+  height: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .banner__container {
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+/* Placeholder para banner vertical */
+.ad-placeholder--vertical {
+  width: 160px;
+  height: 600px;
+  background: linear-gradient(135deg, rgba(40, 48, 78, 0.6), rgba(55, 65, 100, 0.6));
+  border-radius: 6px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px solid rgba(109, 61, 255, 0.2);
+  text-align: center;
+}
+
+.ad-placeholder--vertical .ad-placeholder__logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.ad-placeholder--vertical .ad-placeholder__text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  margin: 20px 0;
+}
+
+.ad-placeholder--vertical .ad-placeholder__size {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Layout principal con área para anuncios */
+.main-layout-with-ads {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  margin-right: 170px; /* Espacio para el banner vertical */
+}
+
+.ads-sidebar {
+  width: 160px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
 }
 
 /* 

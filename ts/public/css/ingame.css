@@ -268,6 +268,13 @@ main.with-ads {
   margin-left: 20px;
 }
 
+.ad-container.vertical {
+  width: 160px;
+  height: 600px;
+  margin: 0;
+  padding: 0;
+}
+
 /* ==============================
  * PANELES Y TARJETAS DE ESTADÍSTICAS
  * ============================== */
@@ -284,6 +291,60 @@ main.with-ads {
   max-width: 728px;
   height: 90px;
   margin-bottom: 15px;
+}
+
+#vertical-banner {
+  width: 160px; /* Ancho fijo */
+  height: 600px; /* Alto fijo */
+  position: fixed; /* Mantenerlo fijo */
+  right: 10px; /* Espacio desde el borde derecho */
+  top: 160px; /* Para que quede por debajo del header y top banner */
+  z-index: 100; /* Asegurarse que esté por encima del contenido */
+}
+
+/* Ajustar el contenido principal para dejar espacio al banner vertical */
+.main--with-ads {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  max-width: calc(100% - 170px); /* Dejar espacio para el vertical banner */
+}
+
+.main--with-ads .content-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.main--with-ads .tabs__content {
+  width: 100%;
+  position: relative;
+}
+
+/* Contenedor para el área principal (sin anuncios) */
+.main-content-area {
+  flex: 1;
+  width: calc(100% - 170px);
+  padding-right: 10px;
+}
+
+/* Contenedor lateral para anuncios */
+.ads-sidebar {
+  width: 160px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 100;
+}
+
+/* Asegurar que el banner vertical tiene dimensiones fijas */
+.banner--vertical,
+.banner--vertical .banner__container,
+.banner--vertical .ad-placeholder {
+  width: 160px !important;
+  min-width: 160px !important;
+  max-width: 160px !important;
 }
 
 .integrated-ad {

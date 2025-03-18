@@ -25,6 +25,15 @@ const ADS_CONFIG = {
     },
     containerId: 'overwolf-ads-container',
     placeholderId: 'standard-banner-placeholder'
+  },
+  // Banner vertical 160x600
+  verticalBanner: {
+    size: {
+      width: 160,
+      height: 600
+    },
+    containerId: 'vertical-ads-container',
+    placeholderId: 'vertical-banner-placeholder'
   }
 };
 
@@ -42,6 +51,8 @@ export function initializeAds(): void {
     console.log('API de anuncios de Overwolf detectada, intentando inicializar anuncios reales...');
     // Inicializar el banner estándar
     initializeStandardBanner();
+    // Inicializar el banner vertical
+    initializeVerticalBanner();
   } else {
     console.error('La API de anuncios de Overwolf no está disponible');
     // Los placeholders ya se están mostrando
@@ -67,10 +78,37 @@ function initializeStandardBanner(): void {
     position: 'top-center'
   }, (result) => {
     if (result.success) {
-      console.log('Banner de anuncios creado correctamente');
+      console.log('Banner estándar creado correctamente');
       hidePlaceholder(placeholderId);
     } else {
-      console.error('Error al crear el banner de anuncios:', result.error);
+      console.error('Error al crear el banner estándar:', result.error);
+      showPlaceholder(placeholderId);
+    }
+  });
+}
+
+/**
+ * Inicializa el banner vertical
+ */
+function initializeVerticalBanner(): void {
+  const { containerId, size, placeholderId } = ADS_CONFIG.verticalBanner;
+  const container = document.getElementById(containerId);
+  
+  if (!container) {
+    console.error(`No se encontró el contenedor de anuncios con ID: ${containerId}`);
+    return;
+  }
+  
+  // Crear el anuncio
+  overwolf.extensions.ads.createBanner(containerId, {
+    size: size,
+    position: 'right'
+  }, (result) => {
+    if (result.success) {
+      console.log('Banner vertical creado correctamente');
+      hidePlaceholder(placeholderId);
+    } else {
+      console.error('Error al crear el banner vertical:', result.error);
       showPlaceholder(placeholderId);
     }
   });
@@ -81,6 +119,7 @@ function initializeStandardBanner(): void {
  */
 function showPlaceholders(): void {
   showPlaceholder(ADS_CONFIG.standardBanner.placeholderId);
+  showPlaceholder(ADS_CONFIG.verticalBanner.placeholderId);
 }
 
 /**
@@ -89,9 +128,7 @@ function showPlaceholders(): void {
 function showPlaceholder(id: string): void {
   const placeholder = document.getElementById(id);
   if (placeholder) {
-    // No mostrar el placeholder, mantenerlo oculto
-    placeholder.style.display = 'none';
-    placeholder.innerHTML = '';
+    placeholder.style.display = 'flex';
   }
 }
 
