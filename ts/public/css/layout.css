@@ -72,8 +72,8 @@ body.in-game {
 }
 
 .main--with-ads {
-  width: 100%;
-  max-width: var(--app-width);
+  width: 580px !important;
+  max-width: 580px !important;
   margin: 0;
   padding: 0;
   box-sizing: border-box;

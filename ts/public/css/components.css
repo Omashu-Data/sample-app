@@ -1167,10 +1167,10 @@
 
 .banner--vertical {
   position: fixed;
-  top: 130px;
-  right: 10px;
+  top: 172px; /* Ajustado para que esté debajo del menú de pestañas (130px + 42px de altura del menú) */
+  right: 0; /* Eliminado el margen derecho para que esté alineado con el borde de la app */
   width: 160px; /* Exactamente el ancho requerido para el banner vertical */
-  height: calc(100vh - 130px);
+  height: calc(100vh - 172px); /* Ajustado para la nueva posición */
   padding: 0;
   display: flex;
   flex-direction: column;
