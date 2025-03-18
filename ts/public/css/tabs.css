@@ -17,8 +17,9 @@
   top: 130px; /* Ajustado para el header (44px) + altura del banner (82px) + gap (4px) */
   left: 0;
   right: 0;
-  z-index: 980;
+  z-index: 990; /* Aumentado para estar al mismo nivel que el banner superior */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  pointer-events: auto; /* Asegurar que se pueden hacer clic en las pestañas */
 }
 
 /* Navegación - Contenedor de botones de pestañas */
@@ -27,15 +28,16 @@
   overflow-x: auto;
   width: 100%;
   max-width: var(--app-width);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md); /* Aumentado para mejor espaciado */
   background: linear-gradient(90deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
   border-radius: 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
   backdrop-filter: blur(15px);
   border-bottom: 1px solid rgba(109, 61, 255, 0.3);
-  height: 36px; /* Altura fija para mayor consistencia */
+  height: 42px; /* Aumentado para dar más espacio a los botones */
   align-items: center;
+  margin: 0 auto; /* Centrado horizontal */
 }
 
 .tabs__navigation::-webkit-scrollbar {
@@ -46,7 +48,7 @@
 .tabs__button {
   display: flex;
   align-items: center;
-  flex-direction: row; /* Cambiado de column a row */
+  flex-direction: row;
   justify-content: center;
   padding: var(--spacing-xs) var(--spacing-sm);
   background: transparent;
@@ -55,12 +57,12 @@
   cursor: pointer;
   position: relative;
   transition: all var(--transition-fast);
-  font-size: 12px; /* Reducido de 14px */
+  font-size: 12px;
   border-radius: var(--border-radius-sm);
   white-space: nowrap;
   gap: var(--spacing-xs);
-  height: 28px; /* Altura fija para mayor consistencia */
-  margin: 0 1px;
+  height: 32px; /* Aumentado para mayor consistencia */
+  margin: 0 2px; /* Más espacio entre pestañas */
 }
 
 .tabs__button::after {
@@ -90,12 +92,14 @@
   color: var(--omashu-purple-light);
   background-color: rgba(109, 61, 255, 0.15);
   font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .tabs__button--active::after {
   width: 100%;
   opacity: 1;
   height: 2px;
+  box-shadow: 0 0 4px rgba(109, 61, 255, 0.5);
 }
 
 /* Icono del botón */

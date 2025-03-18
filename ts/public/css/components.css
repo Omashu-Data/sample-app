@@ -1170,8 +1170,9 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  z-index: 970;
+  z-index: 980;
   overflow: visible;
+  pointer-events: auto;
 }
 
 .banner__container {
