@@ -1009,6 +1009,9 @@ class InGameLOL extends AppWindow {
       // Simular una racha de días para la demostración
       this.simulateDailyStreak();
       
+      // Inicializar botones de control de ventana
+      this.initWindowControlButtons();
+      
       return true;
     } catch (error) {
       console.error('Error al inicializar la interfaz:', error);
@@ -1999,6 +2002,62 @@ class InGameLOL extends AppWindow {
     }
     
     console.log('UI de racha diaria actualizada correctamente');
+  }
+
+  private initWindowControlButtons() {
+    try {
+      // Botones de control de ventana
+      const minimizeButton = document.getElementById('minimizeButton');
+      const maximizeButton = document.getElementById('maximizeButton');
+      const closeButton = document.getElementById('closeButton');
+
+      // Verificar si se encontraron todos los botones
+      if (!minimizeButton || !maximizeButton || !closeButton) {
+        console.error('No se pudieron encontrar todos los botones de control de ventana');
+        return;
+      }
+
+      // Asignar eventos a los botones
+      minimizeButton.addEventListener('click', () => {
+        console.log('Minimizando ventana...');
+        overwolf.windows.getCurrentWindow(result => {
+          if (result.success) {
+            overwolf.windows.minimize(result.window.id);
+          }
+        });
+      });
+
+      maximizeButton.addEventListener('click', () => {
+        console.log('Alternando tamaño de ventana...');
+        overwolf.windows.getCurrentWindow(result => {
+          if (result.success) {
+            const windowId = result.window.id;
+            overwolf.windows.getWindowState(windowId, stateResult => {
+              if (stateResult.success) {
+                if (stateResult.window_state === 'maximized') {
+                  overwolf.windows.restore(windowId);
+                } else {
+                  overwolf.windows.maximize(windowId);
+                }
+              }
+            });
+          }
+        });
+      });
+
+      closeButton.addEventListener('click', () => {
+        console.log('Cerrando ventana...');
+        overwolf.windows.getCurrentWindow(result => {
+          if (result.success) {
+            overwolf.windows.close(result.window.id);
+          }
+        });
+      });
+
+      console.log('Botones de control de ventana inicializados');
+    } catch (e) {
+      console.error('Error inicializando botones de control de ventana:', e);
+    }
   }
 }
 

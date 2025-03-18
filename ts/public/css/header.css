@@ -18,23 +18,59 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--text-primary);
+  color: var(--color-white);
   position: relative;
+  background: rgba(19, 11, 55, 0.85);
+  backdrop-filter: blur(5px);
+  border-bottom: var(--layout-border);
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all var(--transition-fast);
+  font-family: "Matter";
+}
+
+.header:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--active-menu), var(--policy-color));
+  transition: width var(--transition-normal);
+}
+
+.header:hover:after {
+  width: 100%;
 }
 
 .header h1 {
   font-size: 18px;
   margin: 0;
   font-weight: bold;
-  color: var(--omashu-purple-light);
+  font-family: "Matter Semi";
+  color: var(--policy-color);
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 10px rgba(188, 166, 255, 0.3);
+  transition: all var(--transition-fast);
+}
+
+.header__logo-container:hover h1 {
+  color: var(--color-white);
+  text-shadow: 0 0 15px rgba(188, 166, 255, 0.5);
 }
 
 .header__hotkey {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--white-50);
   padding: 4px 8px;
   border-radius: var(--border-radius-sm);
   background: rgba(0, 0, 0, 0.2);
+  transition: all var(--transition-fast);
+}
+
+.header__hotkey:hover {
+  background: rgba(109, 61, 255, 0.2);
 }
 
 .header__hotkey kbd {
@@ -47,6 +83,7 @@
 .header.header--draggable {
   cursor: move;
   user-select: none;
+  -webkit-app-region: drag;
 }
 
 .header.header--draggable:active {
@@ -57,11 +94,29 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  position: relative;
+  height: 30px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: var(--border-radius-sm);
+}
+
+.header__logo-container:hover {
+  background: var(--header-background);
 }
 
 .header__logo {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px rgba(188, 166, 255, 0.4));
+  transition: all var(--transition-fast);
+}
+
+.header__logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 8px rgba(188, 166, 255, 0.6));
 }
 
 /* 
@@ -92,12 +147,36 @@
 }
 
 .user-progress__badge {
-  background: var(--omashu-active);
-  color: white;
+  background: var(--active-menu);
+  color: var(--color-white);
   padding: 3px 8px;
   border-radius: var(--border-radius-sm);
   font-weight: bold;
+  font-family: "Matter Semi";
   font-size: 12px;
+  transition: all var(--transition-fast);
+}
+
+.user-progress__badge:hover {
+  background: var(--omashu-visible);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(92, 52, 227, 0.3);
+}
+
+.pulse-effect {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(109, 61, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(109, 61, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(109, 61, 255, 0);
+  }
 }
 
 .user-progress__xp {
@@ -115,9 +194,37 @@
 
 .user-progress__xp-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--omashu-active), var(--omashu-purple-light));
+  background: linear-gradient(90deg, var(--active-menu), var(--policy-color));
   border-radius: 4px;
   transition: width var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.user-progress__xp-bar:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .user-progress__xp-text {
@@ -126,7 +233,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 10px;
-  color: var(--text-primary);
+  color: var(--color-white);
   white-space: nowrap;
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
 }
@@ -145,13 +252,23 @@
   align-items: center;
   justify-content: center;
   font-size: 14px;
-  border: 1px solid var(--border-color);
+  border: var(--layout-border);
   transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.user-progress__reward:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .user-progress__reward--unlocked {
-  background: rgba(109, 61, 255, 0.2);
-  border-color: var(--omashu-active);
+  background: var(--header-background);
+  border-color: var(--active-menu);
+}
+
+.user-progress__reward--unlocked:hover {
+  background: rgba(109, 61, 255, 0.3);
 }
 
 .toggle-icons svg {
@@ -337,33 +454,107 @@
 .header__controls {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: 8px;
+  -webkit-app-region: no-drag;
 }
 
 .header__control {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   border: none;
   outline: none;
   cursor: pointer;
   transition: all var(--transition-fast);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.header__control::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  transition: all var(--transition-fast);
 }
 
 .header__control:hover {
+  transform: translateY(-1px) scale(1.1);
   filter: brightness(1.2);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.header__control:active {
+  transform: translateY(1px);
+  filter: brightness(0.9);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .header__control--minimize {
   background-color: #ffbd44;
 }
 
+.header__control--minimize::before {
+  width: 8px;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.header__control--minimize:hover::before {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
 .header__control--maximize {
   background-color: #00ca4e;
+}
+
+.header__control--maximize::before {
+  width: 8px;
+  height: 8px;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  border-radius: 1px;
+}
+
+.header__control--maximize:hover::before {
+  border-color: rgba(0, 0, 0, 0.7);
 }
 
 .header__control--close {
   background-color: #ff605c;
 }
 
-/* Los estilos para los controles de ventana han sido eliminados */
+.header__control--close::before,
+.header__control--close::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.4);
+  top: 50%;
+  left: 50%;
+}
+
+.header__control--close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.header__control--close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.header__control--close:hover::before,
+.header__control--close:hover::after {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.header__control--close:hover {
+  background-color: var(--error-color);
+}
+
+/* Mantener los estilos para el resto de la aplicación - Clases de la parte inferior */
