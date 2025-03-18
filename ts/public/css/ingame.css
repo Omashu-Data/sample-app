@@ -295,12 +295,9 @@ main.with-ads {
 }
 
 #vertical-banner {
-  width: 160px; /* Ancho fijo */
-  height: calc(100vh - 146px); /* 100% del alto de la ventana menos el espacio del header y banner superior */
-  position: fixed; /* Mantenerlo fijo */
-  right: 10px; /* Espacio desde el borde derecho */
-  top: 146px; /* Para que quede por debajo del header y top banner */
-  z-index: 100; /* Asegurarse que esté por encima del contenido */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 /* Contenedor para anuncios verticales */
@@ -319,18 +316,22 @@ main.with-ads {
   flex-direction: row;
   position: relative;
   max-width: calc(100% - 170px); /* Dejar espacio para el vertical banner */
-  padding-top: 190px;
+  padding-top: 210px; /* Aumentar el padding superior para evitar solapamiento */
+  margin-right: 160px; /* Dejar espacio para el banner vertical */
 }
 
 .main--with-ads .content-wrapper {
   width: 100%;
   max-width: 100%;
   overflow: visible;
+  margin-top: 44px; /* Añadir margen superior para evitar que el contenido se vea detrás de las pestañas */
 }
 
 .main--with-ads .tabs__content {
   width: 100%;
   position: relative;
+  margin-top: 10px; /* Espacio adicional */
+  z-index: 50; /* Nivel de z-index menor que los elementos fijos pero visible */
 }
 
 /* Contenedor para el área principal (sin anuncios) */
@@ -338,6 +339,7 @@ main.with-ads {
   flex: 1;
   width: calc(100% - 170px);
   padding-right: 10px;
+  padding-top: 44px; /* Altura aproximada de las pestañas para evitar que el contenido se solape */
 }
 
 /* Contenedor lateral para anuncios */
@@ -771,12 +773,18 @@ main.with-ads {
 
   .main--with-ads {
     max-width: 100%; /* Usar todo el ancho al ocultar el banner vertical */
-    padding-top: 180px; /* Ajustar el padding superior ligeramente */
+    padding-top: 210px; /* Mantener el padding superior ajustado */
+    margin-right: 0; /* Eliminar margen derecho ya que no hay banner vertical */
   }
 
   .main-content-area {
     width: 100%;
     padding-right: 0;
+    padding-top: 0; /* Eliminar padding superior adicional en responsive */
+  }
+  
+  .main--with-ads .content-wrapper {
+    margin-top: 0; /* Eliminar margen superior adicional en responsive */
   }
 }
 

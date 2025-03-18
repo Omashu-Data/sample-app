@@ -18,6 +18,7 @@
   left: 0;
   right: 0;
   z-index: 980; /* Por debajo del banner pero por encima del contenido */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Añadir sombra para separar visualmente */
 }
 
 /* Navegación - Contenedor de botones de pestañas */
@@ -27,11 +28,12 @@
   width: 100%;
   max-width: var(--app-width);
   padding: var(--spacing-xs) var(--spacing-sm);
-  background-color: rgba(0, 0, 0, 0.5); /* Aumentar opacidad para mejor legibilidad */
+  background-color: rgba(0, 0, 0, 0.7); /* Aumentar opacidad para mejor separación visual */
   border-radius: 0; /* Eliminar bordes redondeados cuando es fijo */
   scrollbar-width: none; /* Para Firefox */
   -ms-overflow-style: none; /* Para IE/Edge */
-  backdrop-filter: blur(5px); /* Efecto de desenfoque para mejor legibilidad */
+  backdrop-filter: blur(10px); /* Aumentar el desenfoque para mejor legibilidad */
+  border-bottom: 1px solid rgba(109, 61, 255, 0.3); /* Añadir borde inferior */
 }
 
 .tabs__navigation::-webkit-scrollbar {

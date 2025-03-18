@@ -1113,23 +1113,26 @@
   right: 0;
   z-index: 990; /* Por debajo del header pero por encima del contenido */
   margin-bottom: 0; /* Eliminar margen inferior ya que estará fijo */
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.5); /* Aumentar opacidad para mejor separación visual */
   border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid var(--border-color);
-  backdrop-filter: blur(5px); /* Efecto de desenfoque para mejorar legibilidad */
+  border-bottom: 1px solid rgba(109, 61, 255, 0.2); /* Borde más visible */
+  backdrop-filter: blur(10px); /* Aumentar el desenfoque para mejor legibilidad */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Añadir sombra para separar visualmente */
 }
 
 .banner--vertical {
-  position: absolute;
-  top: 0;
-  right: 0;
+  position: fixed; /* Cambiar a fixed para mantenerlo visible al hacer scroll */
+  top: 146px; /* Altura del header (56px) + altura del banner superior (90px) */
+  right: 10px;
   width: 160px;
-  height: 100%;
+  height: calc(100vh - 146px); /* Ajustar altura para ocupar el espacio disponible */
   padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  z-index: 970; /* Por encima del contenido, pero por debajo de las pestañas */
+  overflow: visible;
 }
 
 .banner__container {
