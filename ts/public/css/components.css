@@ -674,8 +674,8 @@
 .ad-placeholder--vertical {
   width: 160px;
   height: 600px;
-  background: linear-gradient(135deg, rgba(40, 48, 78, 0.8), rgba(55, 65, 100, 0.8));
-  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
+  border-radius: 8px;
   padding: 5px;
   display: flex;
   flex-direction: column;
@@ -684,7 +684,44 @@
   position: relative;
   border: 1px solid rgba(109, 61, 255, 0.3);
   text-align: center;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+/* Efecto de brillo sutil en el placeholder */
+.ad-placeholder--vertical:before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    rgba(109, 61, 255, 0) 0%,
+    rgba(109, 61, 255, 0.1) 50%,
+    rgba(109, 61, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shimmerVertical 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes shimmerVertical {
+  0% {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(30deg);
+  }
+}
+
+.ad-placeholder--vertical:hover {
+  border-color: rgba(109, 61, 255, 0.7);
+  box-shadow: 0 0 25px rgba(109, 61, 255, 0.2);
+  transform: translateY(-3px);
 }
 
 .ad-placeholder--vertical .ad-placeholder__logo {
@@ -1107,31 +1144,33 @@
 }
 
 .banner--top {
-  position: fixed; /* Posición fija en la pantalla */
-  top: 56px; /* Altura del header (ajustar según el tamaño real del header) */
+  position: fixed;
+  top: 44px;
   left: 0;
   right: 0;
-  z-index: 990; /* Por debajo del header pero por encima del contenido */
-  margin-bottom: 0; /* Eliminar margen inferior ya que estará fijo */
-  background: rgba(0, 0, 0, 0.5); /* Aumentar opacidad para mejor separación visual */
-  border-top: 1px solid var(--border-color);
-  border-bottom: 1px solid rgba(109, 61, 255, 0.2); /* Borde más visible */
-  backdrop-filter: blur(10px); /* Aumentar el desenfoque para mejor legibilidad */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Añadir sombra para separar visualmente */
+  z-index: 990;
+  margin-bottom: 0;
+  background: linear-gradient(90deg, rgba(19, 11, 55, 0.5), rgba(39, 22, 100, 0.5));
+  border-top: none;
+  border-bottom: 1px solid rgba(109, 61, 255, 0.2);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  height: 82px;
+  padding: 4px 0;
 }
 
 .banner--vertical {
-  position: fixed; /* Cambiar a fixed para mantenerlo visible al hacer scroll */
-  top: 146px; /* Altura del header (56px) + altura del banner superior (90px) */
+  position: fixed;
+  top: 126px;
   right: 10px;
   width: 160px;
-  height: calc(100vh - 146px); /* Ajustar altura para ocupar el espacio disponible */
+  height: calc(100vh - 126px);
   padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  z-index: 970; /* Por encima del contenido, pero por debajo de las pestañas */
+  z-index: 970;
   overflow: visible;
 }
 
@@ -1146,8 +1185,8 @@
 .ad-placeholder--vertical {
   width: 160px;
   height: 600px;
-  background: linear-gradient(135deg, rgba(40, 48, 78, 0.8), rgba(55, 65, 100, 0.8));
-  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
+  border-radius: 8px;
   padding: 5px;
   display: flex;
   flex-direction: column;
@@ -1156,7 +1195,44 @@
   position: relative;
   border: 1px solid rgba(109, 61, 255, 0.3);
   text-align: center;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+/* Efecto de brillo sutil en el placeholder */
+.ad-placeholder--vertical:before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    rgba(109, 61, 255, 0) 0%,
+    rgba(109, 61, 255, 0.1) 50%,
+    rgba(109, 61, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shimmerVertical 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes shimmerVertical {
+  0% {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(30deg);
+  }
+}
+
+.ad-placeholder--vertical:hover {
+  border-color: rgba(109, 61, 255, 0.7);
+  box-shadow: 0 0 25px rgba(109, 61, 255, 0.2);
+  transform: translateY(-3px);
 }
 
 .ad-placeholder--vertical .ad-placeholder__logo {
@@ -1199,7 +1275,7 @@
 
 .main-content {
   flex: 1;
-  margin-right: 170px; /* Espacio para el banner vertical */
+  margin-right: 170px;
 }
 
 .ads-sidebar {
@@ -1676,7 +1752,7 @@
   height: 100%;
   background-color: #4CAF50;
   border-radius: 3px;
-  width: 65%; /* este valor debería ser dinámico en la aplicación real */
+  width: 65%;
 }
 
 .profile__task-progress-text {
@@ -1805,7 +1881,7 @@
   background-color: rgba(30, 38, 65, 0.8);
   padding: 8px;
   border-left: 3px solid #6d3dff;
-  border-top: none; /* Quitar el borde superior para este tipo */
+  border-top: none;
 }
 
 .card--insight .card__icon--insight {

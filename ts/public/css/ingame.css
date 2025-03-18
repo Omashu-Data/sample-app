@@ -90,14 +90,14 @@ main {
   max-width: var(--app-width);
   margin: 0 auto;
   overflow: hidden;
-  padding-top: 190px;
+  padding-top: 170px; /* Ajustado para el header (44px) + banner (82px) + tabs (36px) + margen (8px) */
 }
 
 main.with-ads {
   width: 100%;
   max-width: 760px;
   margin: 0;
-  padding-top: 190px;
+  padding-top: 170px; /* Ajustado para el nuevo diseño compacto */
   box-sizing: border-box;
   position: relative;
   left: 0;
@@ -316,7 +316,7 @@ main.with-ads {
   flex-direction: row;
   position: relative;
   max-width: calc(100% - 170px); /* Dejar espacio para el vertical banner */
-  padding-top: 210px; /* Aumentar el padding superior para evitar solapamiento */
+  padding-top: 170px; /* Ajustado para el nuevo diseño compacto */
   margin-right: 160px; /* Dejar espacio para el banner vertical */
 }
 
@@ -324,7 +324,7 @@ main.with-ads {
   width: 100%;
   max-width: 100%;
   overflow: visible;
-  margin-top: 44px; /* Añadir margen superior para evitar que el contenido se vea detrás de las pestañas */
+  margin-top: 38px; /* Ajustado para la nueva altura de pestañas */
 }
 
 .main--with-ads .tabs__content {
@@ -339,7 +339,7 @@ main.with-ads {
   flex: 1;
   width: calc(100% - 170px);
   padding-right: 10px;
-  padding-top: 44px; /* Altura aproximada de las pestañas para evitar que el contenido se solape */
+  padding-top: 38px; /* Ajustado para la nueva altura de pestañas */
 }
 
 /* Contenedor lateral para anuncios */
