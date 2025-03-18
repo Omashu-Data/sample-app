@@ -90,13 +90,14 @@ main {
   max-width: var(--app-width);
   margin: 0 auto;
   overflow: hidden;
+  padding-top: 190px;
 }
 
 main.with-ads {
   width: 100%;
   max-width: 760px;
   margin: 0;
-  padding: 0;
+  padding-top: 190px;
   box-sizing: border-box;
   position: relative;
   left: 0;
@@ -295,11 +296,21 @@ main.with-ads {
 
 #vertical-banner {
   width: 160px; /* Ancho fijo */
-  height: 600px; /* Alto fijo */
+  height: calc(100vh - 146px); /* 100% del alto de la ventana menos el espacio del header y banner superior */
   position: fixed; /* Mantenerlo fijo */
   right: 10px; /* Espacio desde el borde derecho */
-  top: 160px; /* Para que quede por debajo del header y top banner */
+  top: 146px; /* Para que quede por debajo del header y top banner */
   z-index: 100; /* Asegurarse que esté por encima del contenido */
+}
+
+/* Contenedor para anuncios verticales */
+#vertical-ads-container {
+  position: sticky;
+  top: 10px; /* Un pequeño margen desde la parte superior */
+  height: 600px; /* Mantener altura estándar para anuncios */
+  width: 160px !important;
+  min-width: 160px !important;
+  max-width: 160px !important;
 }
 
 /* Ajustar el contenido principal para dejar espacio al banner vertical */
@@ -308,6 +319,7 @@ main.with-ads {
   flex-direction: row;
   position: relative;
   max-width: calc(100% - 170px); /* Dejar espacio para el vertical banner */
+  padding-top: 190px;
 }
 
 .main--with-ads .content-wrapper {
@@ -703,20 +715,25 @@ main.with-ads {
  * ==============================
  */
 @media (max-width: 1024px) {
-.optimized-layout {
+  .optimized-layout {
     grid-template-columns: 1fr;
-}
+  }
 
-.main-stats-section {
+  .main-stats-section {
     grid-template-columns: 1fr;
-}
+  }
 
-.stats-cards-container {
-  grid-template-columns: repeat(3, 1fr);
+  .stats-cards-container {
+    grid-template-columns: repeat(3, 1fr);
   }
   
-.bottom-cta .premium-content {
-  flex-direction: column;
+  .bottom-cta .premium-content {
+    flex-direction: column;
+  }
+
+  /* Ajustes para elementos fijos */
+  main, main.with-ads, .main--with-ads {
+    padding-top: 190px; /* Mantener el padding para los elementos fijos */
   }
 }
 
@@ -740,20 +757,41 @@ main.with-ads {
   .tabs__icon {
     font-size: 16px;
   }
+
+  /* Ajustes para elementos fijos */
+  .banner--top, .tabs {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  #vertical-banner {
+    display: none; /* Ocultar banner vertical en pantallas más pequeñas */
+  }
+
+  .main--with-ads {
+    max-width: 100%; /* Usar todo el ancho al ocultar el banner vertical */
+    padding-top: 180px; /* Ajustar el padding superior ligeramente */
+  }
+
+  .main-content-area {
+    width: 100%;
+    padding-right: 0;
+  }
 }
 
 @media (max-width: 480px) {
-.stats-cards-container {
+  .stats-cards-container {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-}
+  }
 
-.stats-info-container {
-  gap: 10px;
+  .stats-info-container {
+    gap: 10px;
   }
   
   .premium-content {
-  flex-direction: column;
+    flex-direction: column;
   }
   
   .stat-card {
@@ -761,10 +799,24 @@ main.with-ads {
   }
   
   .stat-card__progress-bar {
-  height: 3px;
+    height: 3px;
   }
   
   .stat-card__value {
     font-size: 20px;
+  }
+
+  /* Ajustes para elementos fijos */
+  .header, .banner--top, .tabs {
+    position: fixed;
+    width: 100%;
+  }
+
+  .header__hotkey {
+    display: none; /* Ocultar atajos en pantallas móviles */
+  }
+
+  main, main.with-ads, .main--with-ads {
+    padding-top: 170px; /* Reducir espacio en pantallas pequeñas */
   }
 }
