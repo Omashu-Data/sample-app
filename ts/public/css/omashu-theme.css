@@ -20,6 +20,11 @@
   background: var(--omashu-background);
   color: var(--omashu-color-white);
   font-family: 'Arial', sans-serif; /* Fallback a Matter cuando esté disponible */
+  position: relative;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* Header */

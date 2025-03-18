@@ -41,7 +41,7 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   background: transparent !important;
 }
 
@@ -54,7 +54,7 @@ body {
 main.with-ads {
   width: 740px !important; /* Ancho fijo exacto con !important */
   max-width: 740px !important;
-  margin: 0 auto !important;
+  margin: 0 !important; /* Eliminar margin auto */
   padding-top: 170px; /* Ajustado para el nuevo diseño compacto */
   box-sizing: border-box !important;
   position: relative;
@@ -113,6 +113,7 @@ main.with-ads {
   height: calc(100% - 180px) !important;
   box-sizing: border-box !important;
   left: 0 !important;
+  background-color: transparent !important; /* Asegurar fondo transparente */
 }
 
 .main--with-ads .content-wrapper {
@@ -126,6 +127,7 @@ main.with-ads {
   box-sizing: border-box !important;
   padding: 0 !important;
   left: 0 !important;
+  background-color: transparent !important; /* Asegurar fondo transparente */
 }
 
 .main--with-ads .tabs__content {
@@ -146,7 +148,7 @@ main.with-ads {
 #app-container {
   width: 740px !important; /* Ancho fijo exacto con !important */
   max-width: 740px !important;
-  margin: 0 auto !important;
+  margin: 0 !important; /* Eliminar margin auto */
   padding: 0 !important;
   box-sizing: border-box !important;
   overflow: hidden;
@@ -158,7 +160,7 @@ main.with-ads {
 .in-game {
   width: 740px !important; /* Ancho fijo exacto con !important */
   max-width: 740px !important;
-  margin: 0 auto !important;
+  margin: 0 !important; /* Eliminar margin auto */
   padding: 0 !important;
   box-sizing: border-box !important;
 }
@@ -186,7 +188,7 @@ body.in-game {
 main {
   width: 740px !important; /* Ancho fijo exacto con !important */
   max-width: 740px !important;
-  margin: 0 auto !important;
+  margin: 0 !important; /* Eliminar margin auto */
   overflow-y: auto;
   padding-top: 180px; /* Aumentado para dar más espacio a las pestañas */
   position: relative;
@@ -390,7 +392,7 @@ main {
 #standard-banner {
   width: 728px; /* Exactamente el ancho del banner horizontal */
   height: 90px;
-  margin: 0 auto;
+  margin: 0; /* Eliminar margin auto */
   margin-bottom: 15px;
 }
 
@@ -415,13 +417,15 @@ main {
   flex: 1;
   width: 580px !important; /* Ancho fijo exacto */
   max-width: 580px !important;
-  padding-right: 10px;
-  padding-top: 50px;
+  padding: 0 !important; /* Eliminar padding */
+  margin: 0 !important; /* Eliminar margen */
   position: relative;
   z-index: 970;
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box !important;
+  left: 0 !important; /* Asegurar que se alinee a la izquierda */
+  background-color: transparent !important; /* Asegurar fondo transparente */
 }
 
 .integrated-ad {
@@ -942,6 +946,7 @@ main {
   width: 100% !important;
   justify-items: start;
   align-items: start;
+  background-color: transparent !important; /* Asegurar fondo transparente */
 }
 
 /* Eliminar cualquier texto adicional que pueda estar sobreescribiendo */
@@ -965,4 +970,15 @@ main {
   font-size: 10px;
   color: var(--text-secondary);
   opacity: 0.7;
+}
+
+/* Ajustar el contenedor principal de la dashboard de estadísticas */
+.dashboard.dashboard--stats {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+  width: 580px !important;
+  max-width: 580px !important;
+  box-sizing: border-box !important;
+  left: 0 !important;
 }

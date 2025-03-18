@@ -21,6 +21,20 @@
   left: 0;
 }
 
+/* Asegurar que el contenedor principal se alinee correctamente */
+#app-container {
+  width: 740px !important;
+  max-width: 740px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  left: 0 !important;
+}
+
 /* Modo in-game */
 .in-game {
   width: 100%;

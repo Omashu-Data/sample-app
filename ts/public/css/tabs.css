@@ -16,8 +16,8 @@
   margin-bottom: 0;
   position: fixed;
   top: 130px; /* Ajustado para el header (44px) + altura del banner (82px) + gap (4px) */
-  left: 50%;
-  transform: translateX(-50%); /* Centrar horizontalmente */
+  left: 0; /* Posicionar a la izquierda en lugar de centrado */
+  transform: none; /* Eliminar la transformación de centrado */
   z-index: 990; /* Aumentado para estar al mismo nivel que el banner superior */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   pointer-events: auto; /* Asegurar que se pueden hacer clic en las pestañas */
@@ -177,6 +177,7 @@
   transition: opacity var(--transition-fast);
   overflow-y: auto;
   left: 0 !important;
+  background-color: transparent !important; /* Asegurar fondo transparente */
 }
 
 .tabs__pane--active {
