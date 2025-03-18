@@ -82,7 +82,7 @@ main.with-ads {
   max-width: 160px !important;
   position: absolute;
   top: 172px; /* Alineado exactamente debajo de las pestañas */
-  right: 0;
+  right: 0 !important; /* Forzar la alineación exacta con el borde derecho */
   height: calc(100% - 172px);
   z-index: 980;
   pointer-events: auto;
@@ -90,6 +90,7 @@ main.with-ads {
   box-sizing: border-box !important;
   margin: 0 !important; /* Eliminar cualquier margen */
   padding: 0 !important; /* Eliminar cualquier padding */
+  left: auto !important; /* Desactivar cualquier posicionamiento left */
 }
 
 /* Asegurar que el banner vertical tiene dimensiones fijas */

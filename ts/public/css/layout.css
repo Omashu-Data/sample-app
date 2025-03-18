@@ -12,13 +12,15 @@
  * ==============================
  */
 .app-container {
-  width: 100%;
-  max-width: var(--app-width);
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: hidden;
-  left: 0;
+  width: 740px !important;
+  max-width: 740px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+  height: 100vh;
+  left: 0 !important;
+  position: relative !important;
 }
 
 /* Asegurar que el contenedor principal se alinee correctamente */
@@ -28,11 +30,12 @@
   margin: 0 !important;
   padding: 0 !important;
   box-sizing: border-box !important;
-  overflow: hidden;
+  overflow: visible !important;
   height: 100vh;
   display: flex;
   flex-direction: column;
   left: 0 !important;
+  position: relative !important;
 }
 
 /* Modo in-game */
@@ -79,15 +82,18 @@ body.in-game {
   box-sizing: border-box;
   position: relative;
   left: 0;
+  float: left !important; /* Asegurar que flote a la izquierda */
 }
 
 .content-wrapper {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 740px !important; /* Ancho total de la app */
   margin: 0;
   padding: 0;
-  left: 0;
+  position: relative;
+  overflow: visible !important;
+  left: 0 !important;
 }
 
 /* 
@@ -182,4 +188,62 @@ body.in-game {
   .stats-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Layout principal con área para anuncios */
+.main-layout-with-ads {
+  display: flex;
+  width: 740px !important; /* Ancho fijo exacto */
+  max-width: 740px !important;
+  position: relative;
+  height: 100vh; /* Asegurar altura completa */
+  overflow: hidden; /* Evitar scroll global */
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  left: 0 !important;
+}
+
+.main-content {
+  flex: 1;
+  margin: 0 !important;
+  margin-right: 160px !important; /* Exactamente el ancho del banner vertical */
+  overflow-y: auto; /* Permitir scroll solo en el contenido principal */
+  height: 100%; /* Tomar toda la altura disponible */
+  box-sizing: border-box;
+  padding: 0 !important; /* Eliminado padding */
+  width: 580px !important; /* Ancho fijo exacto */
+  max-width: 580px !important;
+  left: 0 !important; /* Asegurar que se alinee a la izquierda */
+}
+
+.ads-sidebar {
+  width: 160px !important; /* Exactamente el ancho requerido para el banner vertical */
+  position: absolute;
+  top: 0;
+  right: 0 !important;
+  height: 100%;
+  overflow: hidden; /* Evitar scroll en la barra lateral */
+  margin: 0 !important;
+  padding: 0 !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+/* 
+ * ==============================
+ * LAYOUTS ESPECÍFICOS PARA ANUNCIOS
+ * ==============================
+ */
+/* Layout para anuncios verticales */
+.vertical-ad-layout {
+  width: 160px !important;
+  position: fixed !important;
+  top: 172px !important; /* Debajo del menú de pestañas */
+  right: 0 !important;
+  height: 600px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 9999 !important;
+  box-sizing: border-box !important;
 } 

@@ -95,12 +95,9 @@
 }
 
 .card__footer {
-  padding: 4px 10px 8px 10px;
-  border-top: none;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-top: auto;
+  margin-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--spacing-sm);
 }
 
 /* Modificadores de estado/color */
@@ -1167,9 +1164,9 @@
 }
 
 .banner--vertical {
-  position: fixed;
+  position: absolute;
   top: 172px; /* Ajustado para que esté debajo del menú de pestañas */
-  right: 0; /* Eliminado el margen derecho para que esté alineado con el borde de la app */
+  right: 0; /* Asegurar que esté en el borde derecho */
   width: 160px; /* Exactamente el ancho requerido para el banner vertical */
   height: calc(100vh - 172px); /* Ajustado para la nueva posición */
   padding: 0;
@@ -1182,6 +1179,9 @@
   overflow: hidden;
   pointer-events: auto;
   box-sizing: border-box; /* Asegurar que el padding y border no afecten el ancho */
+  border-left: none; /* Eliminar cualquier borde que pueda causar desplazamiento */
+  left: auto !important; /* Restablecer cualquier valor left que pueda estar afectando la posición */
+  transform: none !important; /* Asegurarse que no hay transformaciones aplicadas */
 }
 
 .banner__container {
@@ -2014,4 +2014,110 @@
 
 .banner--top .ad-placeholder::after {
   content: none !important;
+}
+
+/* Ajuste para #app-container para asegurar ancho exacto */
+#app-container {
+  width: 740px !important; /* Ancho fijo exacto */
+  max-width: 740px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: visible !important; /* Permitir que los elementos se muestren fuera del contenedor */
+  height: 100vh;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  overflow: visible !important; /* Permitir que los elementos se muestren fuera del contenedor */
+  left: 0 !important;
+}
+
+/* Banner vertical específico para la posición derecha */
+.banner--vertical-right {
+  position: fixed !important;
+  top: 172px !important;
+  right: 0 !important;
+  width: 160px !important;
+  height: 600px !important; /* Altura exacta del banner publicitario */
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  z-index: 9999 !important;
+  border: none !important;
+  outline: none !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.banner--vertical-right .banner__container {
+  width: 160px !important;
+  height: 600px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  box-sizing: border-box !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.banner--vertical-right .ad-placeholder--vertical {
+  width: 160px !important;
+  height: 600px !important;
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Banner vertical específico para la posición izquierda (alternativa) */
+.banner--vertical-left {
+  position: fixed !important;
+  top: 172px !important;
+  left: 0 !important;
+  width: 160px !important;
+  height: 600px !important; /* Altura exacta del banner publicitario */
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  z-index: 9999 !important;
+  border: none !important;
+  outline: none !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.banner--vertical-left .banner__container {
+  width: 160px !important;
+  height: 600px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  box-sizing: border-box !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  right: auto !important;
 } 
