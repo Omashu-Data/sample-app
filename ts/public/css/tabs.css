@@ -13,7 +13,7 @@
   max-width: 740px !important;
   display: flex;
   flex-direction: column;
-  margin-bottom: 0;
+  margin: 0 !important;
   position: fixed;
   top: 130px; /* Ajustado para el header (44px) + altura del banner (82px) + gap (4px) */
   left: 0; /* Posicionar a la izquierda en lugar de centrado */
@@ -25,6 +25,7 @@
   backdrop-filter: blur(15px);
   box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
   height: 42px; /* Altura exacta para el cálculo correcto */
+  padding: 0 !important;
 }
 
 /* Navegación - Contenedor de botones de pestañas */

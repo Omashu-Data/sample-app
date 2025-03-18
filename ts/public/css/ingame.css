@@ -70,7 +70,8 @@ main.with-ads {
   overflow-y: auto;
   padding-right: 0 !important;
   padding-top: 0 !important;
-  margin-right: 160px; /* Espacio para el banner vertical */
+  margin: 0 !important; /* Eliminar cualquier margen */
+  margin-right: 160px !important; /* Espacio para el banner vertical */
   box-sizing: border-box !important;
 }
 
@@ -87,6 +88,8 @@ main.with-ads {
   pointer-events: auto;
   overflow: hidden;
   box-sizing: border-box !important;
+  margin: 0 !important; /* Eliminar cualquier margen */
+  padding: 0 !important; /* Eliminar cualquier padding */
 }
 
 /* Asegurar que el banner vertical tiene dimensiones fijas */
@@ -97,6 +100,8 @@ main.with-ads {
   min-width: 160px !important;
   max-width: 160px !important;
   box-sizing: border-box !important;
+  margin: 0 !important; /* Eliminar cualquier margen */
+  padding: 0 !important; /* Eliminar cualquier padding */
 }
 
 /* Estructura de contenido principal */
@@ -155,6 +160,7 @@ main.with-ads {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative; /* Para posicionamiento absoluto interno */
 }
 
 .in-game {

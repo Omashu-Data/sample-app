@@ -675,21 +675,22 @@
 }
 
 .ad-placeholder--vertical {
-  width: 150px;
+  width: 160px; /* Ancho exacto del banner */
   height: 600px;
   background: linear-gradient(135deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
-  border-radius: 8px;
-  padding: 5px;
+  border-radius: 0; /* Eliminar bordes redondeados */
+  padding: 0; /* Eliminar el padding */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  border: 1px solid rgba(109, 61, 255, 0.3);
+  border: none; /* Eliminar el borde */
   text-align: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: none; /* Eliminar sombra */
   overflow: hidden;
   transition: all var(--transition-normal);
+  margin: 0; /* Asegurar que no haya márgenes */
 }
 
 /* Efecto de brillo sutil en el placeholder */
@@ -1167,18 +1168,20 @@
 
 .banner--vertical {
   position: fixed;
-  top: 172px; /* Ajustado para que esté debajo del menú de pestañas (130px + 42px de altura del menú) */
+  top: 172px; /* Ajustado para que esté debajo del menú de pestañas */
   right: 0; /* Eliminado el margen derecho para que esté alineado con el borde de la app */
   width: 160px; /* Exactamente el ancho requerido para el banner vertical */
   height: calc(100vh - 172px); /* Ajustado para la nueva posición */
   padding: 0;
+  margin: 0; /* Asegurar que no hay márgenes */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-end; /* Alineado a la derecha */
   z-index: 980;
   overflow: hidden;
   pointer-events: auto;
+  box-sizing: border-box; /* Asegurar que el padding y border no afecten el ancho */
 }
 
 .banner__container {
@@ -1186,6 +1189,10 @@
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
+  margin: 0; /* Asegurar que no haya márgenes */
+  padding: 0; /* Asegurar que no haya padding */
+  width: 100%; /* Usar todo el ancho disponible */
+  box-sizing: border-box; /* Asegurar que el padding y border no afecten el ancho */
 }
 
 /* Layout principal con área para anuncios */
@@ -1195,11 +1202,14 @@
   position: relative;
   height: 100vh; /* Asegurar altura completa */
   overflow: hidden; /* Evitar scroll global */
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .main-content {
   flex: 1;
-  margin-right: 160px; /* Exactamente el ancho del banner vertical */
+  margin: 0 !important;
+  margin-right: 160px !important; /* Exactamente el ancho del banner vertical */
   overflow-y: auto; /* Permitir scroll solo en el contenido principal */
   height: 100%; /* Tomar toda la altura disponible */
   box-sizing: border-box;
@@ -1210,12 +1220,14 @@
 }
 
 .ads-sidebar {
-  width: 160px; /* Exactamente el ancho requerido para el banner vertical */
+  width: 160px !important; /* Exactamente el ancho requerido para el banner vertical */
   position: absolute;
   top: 0;
   right: 0;
   height: 100%;
   overflow: hidden; /* Evitar scroll en la barra lateral */
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* 
