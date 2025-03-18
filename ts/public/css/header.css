@@ -9,7 +9,7 @@
 /* Contenedor del header */
 .header {
   width: 100%;
-  max-width: 740px; /* Reducido de 760px a 740px para que coincida con el contenedor principal */
+  max-width: 740px; /* Ancho total exacto requerido para el plugin */
   display: flex;
   align-items: center;
   justify-content: space-between;

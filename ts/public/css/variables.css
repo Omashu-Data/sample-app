@@ -74,7 +74,7 @@
    * ============================== */
   
   /* Tamaño de la aplicación */
-  --app-width: 740px; /* Reducido de 760px a 740px para la nueva especificación */
+  --app-width: 740px; /* Ancho total exacto requerido para el plugin */
   
   /* Espaciados */
   --spacing-xxs: 2px;

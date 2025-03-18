@@ -1148,6 +1148,8 @@
   top: 44px;
   left: 0;
   right: 0;
+  max-width: 740px; /* Ancho total exacto requerido para el plugin */
+  margin: 0 auto;
   z-index: 990;
   margin-bottom: 4px;
   background: linear-gradient(90deg, rgba(19, 11, 55, 0.5), rgba(39, 22, 100, 0.5));
@@ -1163,7 +1165,7 @@
   position: fixed;
   top: 130px;
   right: 10px;
-  width: 150px;
+  width: 160px; /* Exactamente el ancho requerido para el banner vertical */
   height: calc(100vh - 130px);
   padding: 0;
   display: flex;
@@ -1193,7 +1195,7 @@
 
 .main-content {
   flex: 1;
-  margin-right: 150px;
+  margin-right: 160px; /* Exactamente el ancho del banner vertical */
   overflow-y: auto; /* Permitir scroll solo en el contenido principal */
   height: 100%; /* Tomar toda la altura disponible */
   box-sizing: border-box;
@@ -1201,7 +1203,7 @@
 }
 
 .ads-sidebar {
-  width: 150px;
+  width: 160px; /* Exactamente el ancho requerido para el banner vertical */
   position: absolute;
   top: 0;
   right: 0;

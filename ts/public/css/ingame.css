@@ -303,6 +303,7 @@ main.with-ads {
   width: 100%;
   max-width: 728px;
   height: 90px;
+  margin: 0 auto;
   margin-bottom: 15px;
 }
 
@@ -329,7 +330,7 @@ main.with-ads {
   position: relative;
   max-width: calc(100% - 160px);
   padding-top: 180px;
-  margin-right: 150px;
+  margin-right: 160px;
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;
@@ -368,7 +369,7 @@ main.with-ads {
 
 /* Contenedor lateral para anuncios */
 .ads-sidebar {
-  width: 150px;
+  width: 160px;
   position: absolute;
   top: 0;
   right: 0;
@@ -382,9 +383,9 @@ main.with-ads {
 .banner--vertical,
 .banner--vertical .banner__container,
 .banner--vertical .ad-placeholder {
-  width: 150px !important;
-  min-width: 150px !important;
-  max-width: 150px !important;
+  width: 160px !important;
+  min-width: 160px !important;
+  max-width: 160px !important;
 }
 
 .integrated-ad {

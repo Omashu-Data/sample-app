@@ -10,6 +10,7 @@
 /* Contenedor principal de pestañas */
 .tabs {
   width: 100%;
+  max-width: 740px; /* Ancho total exacto requerido para el plugin */
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
@@ -27,9 +28,8 @@
 /* Navegación - Contenedor de botones de pestañas */
 .tabs__navigation {
   display: flex;
-  overflow-x: auto;
   width: 100%;
-  max-width: var(--app-width);
+  max-width: 740px; /* Ancho total exacto requerido para el plugin */
   padding: var(--spacing-sm) var(--spacing-md); /* Aumentado para mejor espaciado */
   border-radius: 0;
   scrollbar-width: none;
