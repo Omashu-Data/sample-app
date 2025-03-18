@@ -14,7 +14,7 @@
   flex-direction: column;
   margin-bottom: 0;
   position: fixed;
-  top: 126px; /* Ajustado para el header más pequeño (44px) + altura del banner (90px - 8px) */
+  top: 130px; /* Ajustado para el header (44px) + altura del banner (82px) + gap (4px) */
   left: 0;
   right: 0;
   z-index: 980;

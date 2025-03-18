@@ -262,11 +262,13 @@
 
 .user-progress__xp {
   width: 120px;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
+  height: 10px;
+  background: rgba(19, 11, 55, 0.6);
+  border: 1px solid rgba(109, 61, 255, 0.3);
+  border-radius: 5px;
   overflow: hidden;
   position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
 }
 
 .user-progress--compact .user-progress__xp {
@@ -276,7 +278,7 @@
 .user-progress__xp-bar {
   height: 100%;
   background: linear-gradient(90deg, var(--omashu-active), var(--omashu-purple-light));
-  border-radius: 3px;
+  border-radius: 4px;
   transition: width var(--transition-normal);
   position: relative;
   overflow: hidden;
@@ -313,10 +315,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 9px;
+  font-size: 8px;
+  font-weight: bold;
   color: var(--color-white);
   white-space: nowrap;
-  text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.9);
+  letter-spacing: -0.3px;
+  z-index: 2;
 }
 
 .user-progress__rewards {
@@ -541,9 +546,9 @@
 }
 
 .header__control {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
   border: none;
   outline: none;
   cursor: pointer;
@@ -552,67 +557,53 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  background: rgba(109, 61, 255, 0.15);
   opacity: 0.8;
 }
 
 .header__control:hover {
   transform: translateY(-1px);
-  filter: brightness(1.2);
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+  background: rgba(109, 61, 255, 0.3);
   opacity: 1;
 }
 
 .header__control:active {
   transform: scale(0.95);
-  filter: brightness(0.9);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-}
-
-.header__control--minimize {
-  background-color: #ffbd44;
+  background: rgba(109, 61, 255, 0.4);
 }
 
 .header__control--minimize::before {
   content: '';
   position: absolute;
-  width: 6px;
-  height: 1px;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.header__control--minimize:hover::before {
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.header__control--maximize {
-  background-color: #00ca4e;
+  width: 10px;
+  height: 2px;
+  background-color: var(--omashu-purple-light);
 }
 
 .header__control--maximize::before {
   content: '';
   position: absolute;
-  width: 6px;
-  height: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--omashu-purple-light);
   border-radius: 1px;
 }
 
-.header__control--maximize:hover::before {
-  border-color: rgba(0, 0, 0, 0.7);
+.header__control--close {
+  background: rgba(255, 50, 87, 0.15);
 }
 
-.header__control--close {
-  background-color: #ff605c;
+.header__control--close:hover {
+  background: rgba(255, 50, 87, 0.4);
 }
 
 .header__control--close::before,
 .header__control--close::after {
   content: '';
   position: absolute;
-  width: 8px;
-  height: 1px;
-  background-color: rgba(0, 0, 0, 0.4);
+  width: 12px;
+  height: 2px;
+  background-color: var(--omashu-purple-light);
   top: 50%;
   left: 50%;
 }
@@ -623,15 +614,6 @@
 
 .header__control--close::after {
   transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.header__control--close:hover::before,
-.header__control--close:hover::after {
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.header__control--close:hover {
-  background-color: #ff3257;
 }
 
 /* Mantener los estilos para el resto de la aplicación - Clases de la parte inferior */

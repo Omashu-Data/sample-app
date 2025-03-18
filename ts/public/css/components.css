@@ -1149,7 +1149,7 @@
   left: 0;
   right: 0;
   z-index: 990;
-  margin-bottom: 0;
+  margin-bottom: 4px;
   background: linear-gradient(90deg, rgba(19, 11, 55, 0.5), rgba(39, 22, 100, 0.5));
   border-top: none;
   border-bottom: 1px solid rgba(109, 61, 255, 0.2);
@@ -1161,10 +1161,10 @@
 
 .banner--vertical {
   position: fixed;
-  top: 126px;
+  top: 130px;
   right: 10px;
   width: 160px;
-  height: calc(100vh - 126px);
+  height: calc(100vh - 130px);
   padding: 0;
   display: flex;
   flex-direction: column;

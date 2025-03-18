@@ -90,7 +90,7 @@ main {
   max-width: var(--app-width);
   margin: 0 auto;
   overflow: hidden;
-  padding-top: 170px; /* Ajustado para el header (44px) + banner (82px) + tabs (36px) + margen (8px) */
+  padding-top: 174px; /* Ajustado para el header (44px) + banner (82px) + tabs (36px) + gap (12px) */
 }
 
 main.with-ads {
@@ -316,7 +316,7 @@ main.with-ads {
   flex-direction: row;
   position: relative;
   max-width: calc(100% - 170px); /* Dejar espacio para el vertical banner */
-  padding-top: 170px; /* Ajustado para el nuevo diseño compacto */
+  padding-top: 174px; /* Ajustado para mantener coherencia */
   margin-right: 160px; /* Dejar espacio para el banner vertical */
 }
 
@@ -324,7 +324,7 @@ main.with-ads {
   width: 100%;
   max-width: 100%;
   overflow: visible;
-  margin-top: 38px; /* Ajustado para la nueva altura de pestañas */
+  margin-top: 42px; /* Ajustado para la nueva altura de pestañas + gap */
 }
 
 .main--with-ads .tabs__content {
@@ -339,7 +339,7 @@ main.with-ads {
   flex: 1;
   width: calc(100% - 170px);
   padding-right: 10px;
-  padding-top: 38px; /* Ajustado para la nueva altura de pestañas */
+  padding-top: 42px; /* Ajustado para la nueva altura de pestañas + gap */
 }
 
 /* Contenedor lateral para anuncios */
