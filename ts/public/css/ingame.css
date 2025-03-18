@@ -27,7 +27,8 @@ html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden;
+  height: 100vh;
+  overflow: hidden;
   background-color: transparent;
   box-sizing: border-box;
 }
@@ -36,7 +37,8 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,6 +58,9 @@ body {
   box-sizing: border-box;
   overflow: hidden;
   left: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .in-game {
@@ -89,10 +94,12 @@ main {
   width: 100%;
   max-width: var(--app-width);
   margin: 0 auto;
-  overflow: hidden;
+  overflow-y: auto;
   padding-top: 180px; /* Aumentado para dar más espacio a las pestañas */
   position: relative;
   z-index: 970; /* Por debajo de las pestañas */
+  height: 100%;
+  box-sizing: border-box;
 }
 
 main.with-ads {
@@ -103,6 +110,8 @@ main.with-ads {
   box-sizing: border-box;
   position: relative;
   left: 0;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .content-wrapper {
@@ -112,6 +121,7 @@ main.with-ads {
   margin: 0;
   padding: 0;
   left: 0;
+  min-height: 100%;
 }
 
 /* Sistema de pestañas antiguo - ELIMINADO Y REEMPLAZADO por tabs.css */
@@ -320,6 +330,9 @@ main.with-ads {
   max-width: calc(100% - 170px); /* Dejar espacio para el vertical banner */
   padding-top: 180px; /* Aumentado para dar más espacio a las pestañas */
   margin-right: 160px; /* Dejar espacio para el banner vertical */
+  overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .main--with-ads .content-wrapper {
@@ -329,6 +342,7 @@ main.with-ads {
   margin-top: 50px; /* Aumentado para dar más espacio a las pestañas */
   position: relative;
   z-index: 970; /* Por debajo de las pestañas */
+  min-height: 100%;
 }
 
 .main--with-ads .tabs__content {
@@ -336,6 +350,7 @@ main.with-ads {
   position: relative;
   margin-top: 10px; /* Espacio adicional */
   z-index: 50; /* Nivel de z-index menor que los elementos fijos pero visible */
+  height: auto;
 }
 
 /* Contenedor para el área principal (sin anuncios) */
@@ -346,6 +361,9 @@ main.with-ads {
   padding-top: 50px; /* Aumentado para dar más espacio a las pestañas */
   position: relative;
   z-index: 970; /* Por debajo de los banners y las pestañas */
+  overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 /* Contenedor lateral para anuncios */
@@ -357,6 +375,7 @@ main.with-ads {
   height: 100%;
   z-index: 980; /* Al mismo nivel que el banner vertical */
   pointer-events: auto; /* Asegurar que se pueden hacer clic en los anuncios */
+  overflow: hidden;
 }
 
 /* Asegurar que el banner vertical tiene dimensiones fijas */

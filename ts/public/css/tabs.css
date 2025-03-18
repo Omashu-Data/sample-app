@@ -20,6 +20,8 @@
   z-index: 990; /* Aumentado para estar al mismo nivel que el banner superior */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   pointer-events: auto; /* Asegurar que se pueden hacer clic en las pestañas */
+  background: linear-gradient(90deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
+  backdrop-filter: blur(15px);
 }
 
 /* Navegación - Contenedor de botones de pestañas */
@@ -29,11 +31,9 @@
   width: 100%;
   max-width: var(--app-width);
   padding: var(--spacing-sm) var(--spacing-md); /* Aumentado para mejor espaciado */
-  background: linear-gradient(90deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
   border-radius: 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  backdrop-filter: blur(15px);
   border-bottom: 1px solid rgba(109, 61, 255, 0.3);
   height: 42px; /* Aumentado para dar más espacio a los botones */
   align-items: center;
@@ -158,6 +158,8 @@
   width: 100%;
   border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
   padding: var(--spacing-md);
+  height: auto;
+  overflow: visible; /* Asegurar que el contenido sea visible */
 }
 
 /* Panel individual de pestaña */
@@ -166,6 +168,8 @@
   opacity: 0;
   animation: fadeIn var(--transition-normal);
   min-height: 400px; /* Altura mínima para el contenido */
+  height: auto;
+  overflow: visible; /* Permitir que el contenido fluya normalmente */
 }
 
 /* Estado activo del panel */

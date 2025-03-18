@@ -1171,7 +1171,7 @@
   justify-content: flex-start;
   align-items: center;
   z-index: 980;
-  overflow: visible;
+  overflow: hidden; /* Evitar scroll en el banner vertical */
   pointer-events: auto;
 }
 
@@ -1182,101 +1182,22 @@
   overflow: hidden;
 }
 
-/* Placeholder para banner vertical */
-.ad-placeholder--vertical {
-  width: 160px;
-  height: 600px;
-  background: linear-gradient(135deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
-  border-radius: 8px;
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  border: 1px solid rgba(109, 61, 255, 0.3);
-  text-align: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  transition: all var(--transition-normal);
-}
-
-/* Efecto de brillo sutil en el placeholder */
-.ad-placeholder--vertical:before {
-  content: '';
-  position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 300%;
-  height: 300%;
-  background: linear-gradient(
-    45deg,
-    rgba(109, 61, 255, 0) 0%,
-    rgba(109, 61, 255, 0.1) 50%,
-    rgba(109, 61, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  animation: shimmerVertical 3s linear infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes shimmerVertical {
-  0% {
-    transform: translateX(-100%) rotate(30deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(30deg);
-  }
-}
-
-.ad-placeholder--vertical:hover {
-  border-color: rgba(109, 61, 255, 0.7);
-  box-shadow: 0 0 25px rgba(109, 61, 255, 0.2);
-  transform: translateY(-3px);
-}
-
-.ad-placeholder--vertical .ad-placeholder__logo {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 12px;
-}
-
-.ad-placeholder--vertical .ad-placeholder__icon {
-  width: 20px;
-  height: 20px;
-}
-
-.ad-placeholder--vertical .ad-placeholder__text {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.8);
-  letter-spacing: 1px;
-  writing-mode: vertical-lr;
-  transform: rotate(180deg);
-  margin: 20px 0;
-  font-weight: 500;
-}
-
-.ad-placeholder--vertical .ad-placeholder__size {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
 /* Layout principal con área para anuncios */
 .main-layout-with-ads {
   display: flex;
   width: 100%;
   position: relative;
+  height: 100vh; /* Asegurar altura completa */
+  overflow: hidden; /* Evitar scroll global */
 }
 
 .main-content {
   flex: 1;
   margin-right: 170px;
+  overflow-y: auto; /* Permitir scroll solo en el contenido principal */
+  height: 100%; /* Tomar toda la altura disponible */
+  box-sizing: border-box;
+  padding-bottom: 20px; /* Espacio adicional al final */
 }
 
 .ads-sidebar {
@@ -1285,6 +1206,7 @@
   top: 0;
   right: 0;
   height: 100%;
+  overflow: hidden; /* Evitar scroll en la barra lateral */
 }
 
 /* 
