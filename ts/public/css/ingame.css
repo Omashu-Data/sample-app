@@ -49,6 +49,98 @@ body {
    no deben duplicarse aquí para mantener la coherencia */
 
 /* ==============================
+ * LAYOUT PRINCIPAL CON ANUNCIOS
+ * ============================== */
+main.with-ads {
+  width: 740px !important; /* Ancho fijo exacto con !important */
+  max-width: 740px !important;
+  margin: 0 auto !important;
+  padding-top: 170px; /* Ajustado para el nuevo diseño compacto */
+  box-sizing: border-box !important;
+  position: relative;
+  overflow-y: auto;
+  height: 100%;
+  display: flex !important; /* Usar flexbox para estructurar el contenido */
+}
+
+/* Contenedor para el área principal (tarjetas) */
+.content-area {
+  width: 580px !important; /* Ancho fijo exacto */
+  max-width: 580px !important;
+  overflow-y: auto;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  margin-right: 160px; /* Espacio para el banner vertical */
+  box-sizing: border-box !important;
+}
+
+/* Contenedor lateral para anuncios */
+.ads-sidebar {
+  width: 160px !important; /* Ancho fijo exacto */
+  min-width: 160px !important;
+  max-width: 160px !important;
+  position: absolute;
+  top: 180px; /* Alineado debajo de las pestañas */
+  right: 0;
+  height: calc(100% - 180px);
+  z-index: 980;
+  pointer-events: auto;
+  overflow: hidden;
+  box-sizing: border-box !important;
+}
+
+/* Asegurar que el banner vertical tiene dimensiones fijas */
+.banner--vertical,
+.banner--vertical .banner__container,
+.banner--vertical .ad-placeholder {
+  width: 160px !important; /* Ancho fijo exacto */
+  min-width: 160px !important;
+  max-width: 160px !important;
+  box-sizing: border-box !important;
+}
+
+/* Estructura de contenido principal */
+.main--with-ads {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 580px !important;
+  max-width: 580px !important;
+  padding-top: 0 !important;
+  margin-top: 180px !important;
+  margin-right: 160px;
+  overflow-y: auto;
+  height: calc(100% - 180px) !important;
+  box-sizing: border-box !important;
+  left: 0 !important;
+}
+
+.main--with-ads .content-wrapper {
+  width: 580px !important;
+  max-width: 580px !important;
+  overflow: visible;
+  margin-top: 0 !important;
+  position: relative;
+  z-index: 970;
+  min-height: 100%;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  left: 0 !important;
+}
+
+.main--with-ads .tabs__content {
+  width: 580px !important;
+  max-width: 580px !important;
+  position: relative;
+  margin-top: 0 !important;
+  z-index: 50;
+  height: auto;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  left: 0 !important;
+}
+
+/* ==============================
  * LAYOUT PRINCIPAL Y CONTENEDORES
  * ============================== */
 #app-container {
@@ -103,17 +195,6 @@ main {
   box-sizing: border-box !important;
 }
 
-main.with-ads {
-  width: 740px !important; /* Ancho fijo exacto con !important */
-  max-width: 740px !important;
-  margin: 0 auto !important;
-  padding-top: 170px; /* Ajustado para el nuevo diseño compacto */
-  box-sizing: border-box !important;
-  position: relative;
-  overflow-y: auto;
-  height: 100%;
-}
-
 .content-wrapper {
   display: flex;
   flex-direction: column;
@@ -137,23 +218,29 @@ main.with-ads {
   flex-direction: column;
   gap: 15px;
   width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  left: 0 !important;
 }
 
 .optimized-layout {
   display: grid;
   grid-template-columns: 1fr 300px;
   gap: 15px;
+  margin: 0 !important; /* Eliminado margen */
+  padding: 0 !important; /* Eliminado padding */
 }
 
-  .main-stats-section {
-    display: grid;
+.main-stats-section {
+  display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto;
-    gap: 15px;
-    width: 100%;
+  gap: 15px;
+  width: 100%;
   max-width: var(--app-width);
-  margin: 0;
-    left: 0;
+  margin: 0 !important; /* Eliminado margen */
+  left: 0;
+  padding: 0 !important; /* Eliminado padding */
 }
 
 .stats-info-container {
@@ -323,72 +410,18 @@ main.with-ads {
   max-width: 160px !important;
 }
 
-/* Ajustar el contenido principal para dejar espacio al banner vertical */
-.main--with-ads {
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  max-width: calc(100% - 160px);
-  padding-top: 180px;
-  margin-right: 160px;
-  overflow-y: auto;
-  height: 100%;
-  box-sizing: border-box !important;
-  width: auto !important; /* Asegurar que no tiene un ancho fijo */
-}
-
-.main--with-ads .content-wrapper {
-  width: 100%;
-  max-width: 100%;
-  overflow: visible;
-  margin-top: 50px;
-  position: relative;
-  z-index: 970;
-  min-height: 100%;
-  box-sizing: border-box !important;
-}
-
-.main--with-ads .tabs__content {
-  width: 100%;
-  position: relative;
-  margin-top: 10px;
-  z-index: 50;
-  height: auto;
-  box-sizing: border-box !important;
-}
-
 /* Contenedor para el área principal (sin anuncios) */
 .main-content-area {
   flex: 1;
-  width: calc(100% - 160px);
+  width: 580px !important; /* Ancho fijo exacto */
+  max-width: 580px !important;
   padding-right: 10px;
   padding-top: 50px;
   position: relative;
   z-index: 970;
   overflow-y: auto;
   height: 100%;
-  box-sizing: border-box;
-}
-
-/* Contenedor lateral para anuncios */
-.ads-sidebar {
-  width: 160px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  z-index: 980;
-  pointer-events: auto;
-  overflow: hidden;
-}
-
-/* Asegurar que el banner vertical tiene dimensiones fijas */
-.banner--vertical,
-.banner--vertical .banner__container,
-.banner--vertical .ad-placeholder {
-  width: 160px !important;
-  min-width: 160px !important;
-  max-width: 160px !important;
+  box-sizing: border-box !important;
 }
 
 .integrated-ad {
@@ -452,12 +485,21 @@ main.with-ads {
   color: var(--text-secondary);
   letter-spacing: 1px;
   margin-bottom: 5px;
-  text-transform: uppercase;
 }
 
 .ad-placeholder-size {
   font-size: 10px;
   color: var(--text-secondary);
+}
+
+/* Asegurarse de que el texto de tamaño en el placeholder sea correcto */
+.banner--top .ad-placeholder::after {
+  content: '728 x 90'; /* Corregir el tamaño */
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Contenedor Premium */
@@ -857,4 +899,70 @@ main.with-ads {
   main, main.with-ads, .main--with-ads {
     padding-top: 170px; /* Reducir espacio en pantallas pequeñas */
   }
+}
+
+/* ==============================
+ * 6. TARJETAS Y COMPONENTES DE DATOS
+ * ==============================
+ */
+.card {
+  position: relative;
+  width: 100%;
+  background: var(--card-background);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 0 8px 0 !important; /* Solo margen inferior */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid transparent;
+  box-sizing: border-box;
+}
+
+.stats-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+  gap: 10px;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  left: 0 !important;
+  justify-items: start;
+  align-items: start;
+}
+
+.dashboard__stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+  gap: 16px;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  justify-items: start;
+  align-items: start;
+}
+
+/* Eliminar cualquier texto adicional que pueda estar sobreescribiendo */
+.banner--top .ad-placeholder__text::after {
+  content: none !important;
+}
+
+.banner--top .ad-placeholder::after {
+  content: none !important;
+}
+
+/* Asegurar que el texto del espacio publicitario sea visible y correcto */
+.ad-placeholder__text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.ad-placeholder__size {
+  font-size: 10px;
+  color: var(--text-secondary);
+  opacity: 0.7;
 }

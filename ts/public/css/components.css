@@ -26,14 +26,14 @@
   background: var(--card-background);
   border-radius: 6px;
   overflow: hidden;
-  margin-bottom: 8px;
+  margin: 0 0 8px 0 !important; /* Solo margen inferior */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s, box-shadow 0.2s;
   min-height: 80px;
   display: flex;
   flex-direction: column;
   border-top: 2px solid transparent;
-  box-sizing: border-box; /* Asegurar que el padding no afecte el tamaño total */
+  box-sizing: border-box;
 }
 
 .card:hover {
@@ -662,7 +662,8 @@
 .ad-placeholder__text {
   font-size: 12px;
   color: var(--text-secondary);
-  margin-bottom: var(--spacing-xs);
+  letter-spacing: 1px;
+  margin-bottom: 5px;
 }
 
 .ad-placeholder__size {
@@ -1157,7 +1158,7 @@
   border-bottom: 1px solid rgba(109, 61, 255, 0.2);
   backdrop-filter: blur(15px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  height: 82px;
+  height: 90px;
   padding: 4px 0;
   box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
 }
@@ -1200,7 +1201,10 @@
   overflow-y: auto; /* Permitir scroll solo en el contenido principal */
   height: 100%; /* Tomar toda la altura disponible */
   box-sizing: border-box;
-  padding-bottom: 20px; /* Espacio adicional al final */
+  padding: 0 !important; /* Eliminado padding */
+  width: 580px !important; /* Ancho fijo exacto */
+  max-width: 580px !important;
+  left: 0 !important; /* Asegurar que se alinee a la izquierda */
 }
 
 .ads-sidebar {
@@ -1742,8 +1746,41 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
   gap: 16px;
-  margin-bottom: 10px;
-  padding: 0 4px;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  justify-items: start;
+  align-items: start;
+}
+
+/* Corregir el área de contenido principal */
+.main-content {
+  flex: 1;
+  margin-right: 160px; /* Exactamente el ancho del banner vertical */
+  overflow-y: auto; /* Permitir scroll solo en el contenido principal */
+  height: 100%; /* Tomar toda la altura disponible */
+  box-sizing: border-box;
+  padding: 0 !important; /* Eliminado padding */
+  width: 580px !important; /* Ancho fijo exacto */
+  max-width: 580px !important;
+  left: 0 !important; /* Asegurar que se alinee a la izquierda */
+}
+
+/* Corregir los contenedores de tarjetas */
+.card {
+  position: relative;
+  width: 100%;
+  background: var(--card-background);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 0 0 8px 0 !important; /* Solo margen inferior */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  border-top: 2px solid transparent;
+  box-sizing: border-box;
 }
 
 /* Tarjetas de eventos más compactas */
@@ -1753,7 +1790,9 @@
   gap: 16px;
   max-height: 500px;
   overflow-y: auto;
-  padding-right: 5px;
+  padding-right: 0 !important;
+  justify-items: start;
+  align-items: start;
 }
 
 .event-card {
@@ -1935,4 +1974,29 @@
   position: absolute;
   bottom: 3px;
   right: 5px;
+}
+
+/* Corregir el texto del tamaño en el placeholder del banner */
+.banner--top .ad-placeholder__size {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Modificar directamente el texto del espacio publicitario */
+.banner--top .ad-placeholder__text::after {
+  content: none !important;
+}
+
+/* Establecer el texto correcto para el espacio publicitario */
+.banner--top .ad-placeholder__size::after {
+  content: none;
+}
+
+/* Eliminar cualquier texto adicional que pueda estar sobreescribiendo */
+.banner--top .ad-placeholder__text::after {
+  content: none !important;
+}
+
+.banner--top .ad-placeholder::after {
+  content: none !important;
 } 
