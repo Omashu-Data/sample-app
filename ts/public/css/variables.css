@@ -1,77 +1,145 @@
 /* 
  * ==============================
- * OMASHU.GG - VARIABLES GLOBALES
+ * OMASHU.GG - VARIABLES CSS GLOBALES
  * ==============================
  *
- * Este archivo contiene todas las variables CSS utilizadas en la aplicación.
- * Cualquier modificación a los colores o dimensiones debería hacerse aquí.
+ * Variables CSS para mantener la consistencia en toda la aplicación.
+ * Se utilizan con --nombre-variable
  */
 
 :root {
-  /* Dimensiones principales */
-  --app-width: 760px;
+  /* 
+   * ==============================
+   * PALETA DE COLORES PRINCIPAL
+   * ==============================
+   */
   
-  /* Colores de marca */
-  --omashu-purple-light: rgba(188, 166, 255, 1);
-  --omashu-purple-dark: #271664;
-  --omashu-active: rgba(109, 61, 255, 1);
-  --omashu-highlight: rgba(92, 52, 227, 1);
-  
-  /* Colores para gradientes y efectos visuales */
-  --primary-rgb: 109, 61, 255;
-  --accent-rgb: 188, 166, 255;
-  --positive-rgb: 76, 175, 80;
-  --negative-rgb: 244, 67, 54;
-  --warning-rgb: 255, 193, 7;
-  --info-rgb: 33, 150, 243;
+  /* Colores corporativos de Omashu */
+  --omashu-purple-darkest: #130b37;   /* Fondo muy oscuro */
+  --omashu-purple-dark: #271664;      /* Fondo oscuro */
+  --omashu-purple: #6d3dff;           /* Color primario */
+  --omashu-purple-light: #bc76ff;     /* Acentos y brillos */
+  --omashu-highlight: #9f5afd;        /* Elementos destacados */
+  --omashu-active: #7747ea;           /* Elementos activos */
   
   /* Colores de texto */
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-tertiary: rgba(255, 255, 255, 0.5);
+  --text-primary: rgba(255, 255, 255, 0.95);    /* Texto principal */
+  --text-secondary: rgba(255, 255, 255, 0.65);  /* Texto secundario */
+  --text-tertiary: rgba(255, 255, 255, 0.45);   /* Texto terciario */
+  --text-disabled: rgba(255, 255, 255, 0.35);   /* Texto deshabilitado */
   
-  /* Colores de fondo */
-  --background-primary: rgb(3, 2, 8);
-  --background-gradient: linear-gradient(135deg, rgba(3, 2, 8, 1) 0%, rgba(25, 17, 53, 1) 100%);
-  --card-background: rgba(19, 11, 55, 0.8);
+  /* Colores semánticos */
+  --positive-color: #4caf50;    /* Verde - Positivo */
+  --positive-rgb: 76, 175, 80;
+  --warning-color: #ffb74d;     /* Naranja - Advertencia */
+  --warning-rgb: 255, 183, 77;
+  --negative-color: #f44336;    /* Rojo - Negativo */
+  --negative-rgb: 244, 67, 54;
+  --info-color: #29b6f6;        /* Azul - Información */
+  --info-rgb: 41, 182, 246;
+  --accent-color: #ff4081;      /* Rosa - Acento */
+  --accent-rgb: 255, 64, 129;
   
-  /* Bordes y separadores */
-  --border-color: rgba(109, 61, 255, 0.3);
-  --separator-color: rgba(255, 255, 255, 0.1);
+  /* Colores de rango/tier */
+  --tier-iron: #8e9094;
+  --tier-bronze: #cd7f32;
+  --tier-silver: #c0c0c0;
+  --tier-gold: #f4d03f;
+  --tier-platinum: #e5e4e2;
+  --tier-diamond: #b9f2ff;
+  --tier-master: #9e54ff;
+  --tier-grandmaster: #ff4754;
+  --tier-challenger: #00ccff;
   
-  /* Colores de primarios y estados */
-  --primary-color: #6d3dff;
-  --accent-color: #bc76ff;
-  --positive-color: #4caf50;
-  --negative-color: #f44336;
-  --warning-color: #ffc107;
-  --info-color: #2196f3;
+  /* ==============================
+   * FONDOS Y SUPERFICIES
+   * ============================== */
+  
+  /* Fondos y superficies */
+  --background-primary: rgba(19, 11, 55, 1);
+  --background-secondary: rgba(39, 22, 100, 1);
+  --surface-overlay: rgba(255, 255, 255, 0.05);
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, var(--omashu-purple-dark), var(--omashu-purple-darkest));
+  --gradient-accent: linear-gradient(135deg, var(--omashu-purple), var(--omashu-purple-light));
+  --gradient-interactive: linear-gradient(135deg, #6d3dff, #bc76ff);
+  
+  /* Bordes */
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-active: rgba(109, 61, 255, 0.7);
+  
+  /* ==============================
+   * DIMENSIONES Y ESPACIADO
+   * ============================== */
+  
+  /* Tamaño de la aplicación */
+  --app-width: 740px; /* Reducido de 760px a 740px para la nueva especificación */
+  
+  /* Espaciados */
+  --spacing-xxs: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  
+  /* Bordes redondeados */
+  --border-radius-xs: 2px;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-round: 100px;
+  
+  /* ==============================
+   * EFECTOS Y ANIMACIONES
+   * ============================== */
   
   /* Sombras */
-  --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-  --card-shadow-hover: 0 3px 6px rgba(109, 61, 255, 0.2);
-  --elevated-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  
-  /* Radios de borde - reducidos para diseño más compacto */
-  --border-radius-sm: 3px;
-  --border-radius-md: 6px;
-  --border-radius-lg: 8px;
-  
-  /* Espaciado - reducido para diseño compacto */
-  --spacing-xs: 3px;
-  --spacing-sm: 6px;
-  --spacing-md: 10px;
-  --spacing-lg: 15px;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --elevated-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  --floating-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
   
   /* Transiciones */
-  --transition-fast: 0.2s ease;
+  --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
-  --transition-slow: 0.5s ease;
+  --transition-slow: 0.6s ease;
   
-  /* Tamaños de fuente para jerarquía visual */
-  --font-size-xs: 9px;
-  --font-size-sm: 11px;
-  --font-size-md: 13px;
+  /* Sombras para efectos de texto */
+  --text-shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --text-shadow-glow: 0 0 10px rgba(188, 118, 255, 0.6);
+  
+  /* Card layouts */
+  --card-background: rgba(29, 16, 75, 0.5);
+  
+  /* Backgrounds alternativos para strips */
+  --strip-background-dark: rgba(19, 11, 55, 0.8);
+  --strip-background-light: rgba(35, 20, 85, 0.8);
+  
+  /* Filtros */
+  --glow-filter: drop-shadow(0 0 5px rgba(126, 87, 194, 0.5));
+  
+  /* ==============================
+   * TIPOGRAFÍA
+   * ============================== */
+  
+  /* Tamaños de fuente */
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
   --font-size-lg: 16px;
   --font-size-xl: 18px;
+  --font-size-xxl: 24px;
+  
+  /* Pesos de fuente */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  
+  /* Altura de línea */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-loose: 1.8;
 } 

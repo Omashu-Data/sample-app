@@ -672,7 +672,7 @@
 }
 
 .ad-placeholder--vertical {
-  width: 160px;
+  width: 150px;
   height: 600px;
   background: linear-gradient(135deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
   border-radius: 8px;
@@ -1163,7 +1163,7 @@
   position: fixed;
   top: 130px;
   right: 10px;
-  width: 160px;
+  width: 150px;
   height: calc(100vh - 130px);
   padding: 0;
   display: flex;
@@ -1171,7 +1171,7 @@
   justify-content: flex-start;
   align-items: center;
   z-index: 980;
-  overflow: hidden; /* Evitar scroll en el banner vertical */
+  overflow: hidden;
   pointer-events: auto;
 }
 
@@ -1193,7 +1193,7 @@
 
 .main-content {
   flex: 1;
-  margin-right: 170px;
+  margin-right: 150px;
   overflow-y: auto; /* Permitir scroll solo en el contenido principal */
   height: 100%; /* Tomar toda la altura disponible */
   box-sizing: border-box;
@@ -1201,7 +1201,7 @@
 }
 
 .ads-sidebar {
-  width: 160px;
+  width: 150px;
   position: absolute;
   top: 0;
   right: 0;

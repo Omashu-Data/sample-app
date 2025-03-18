@@ -1,19 +1,15 @@
 /* 
  * ==============================
- * OMASHU.GG - HEADER
+ * OMASHU.GG - CABECERA / HEADER
  * ==============================
  *
- * Estilos para el encabezado de la aplicación.
- * Implementado con metodología BEM (Block, Element, Modifier).
+ * Estilos para la cabecera de la aplicación.
  */
 
-/* 
- * ==============================
- * HEADER PRINCIPAL
- * ==============================
- */
+/* Contenedor del header */
 .header {
   width: 100%;
+  max-width: 740px; /* Reducido de 760px a 740px para que coincida con el contenedor principal */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,6 +28,61 @@
   font-family: "Matter";
   height: 44px;
   overflow: hidden;
+}
+
+/* Contenedor para el logotipo */
+.header__logo-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  position: relative;
+  height: 26px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: var(--border-radius-sm);
+  background: rgba(109, 61, 255, 0.1);
+  box-shadow: 0 0 10px rgba(109, 61, 255, 0.1);
+  overflow: hidden;
+}
+
+/* Logotipo */
+.header__logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px rgba(188, 166, 255, 0.4));
+}
+
+/* Hotkey */
+.header__hotkey {
+  font-size: 11px;
+  color: var(--white-50);
+  padding: 3px 6px;
+  border-radius: var(--border-radius-sm);
+  background: rgba(0, 0, 0, 0.2);
+  transition: all var(--transition-fast);
+}
+
+/* Contenedor de controles de ventana */
+.header__window-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding-right: 10px; /* Ajustado, reducido para que los botones queden dentro de la ventana */
+}
+
+/* Botones de control de ventana */
+.header__control-button {
+  width: 14px; /* Reducido de 16px a 14px para que ocupen menos espacio */
+  height: 14px; /* Reducido de 16px a 14px para que ocupen menos espacio */
+  border-radius: 50%;
+  margin-left: 8px; /* Reducido de 10px a 8px */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 /* Efecto de brillo sutil en el header */
@@ -93,15 +144,6 @@
   text-shadow: 0 0 15px rgba(188, 166, 255, 0.5);
 }
 
-.header__hotkey {
-  font-size: 11px;
-  color: var(--white-50);
-  padding: 3px 6px;
-  border-radius: var(--border-radius-sm);
-  background: rgba(0, 0, 0, 0.2);
-  transition: all var(--transition-fast);
-}
-
 .header__hotkey:hover {
   background: rgba(109, 61, 255, 0.2);
 }
@@ -121,21 +163,6 @@
 
 .header.header--draggable:active {
   cursor: grabbing;
-}
-
-.header__logo-container {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  position: relative;
-  height: 26px;
-  transition: all var(--transition-fast);
-  cursor: pointer;
-  padding: 3px 5px;
-  border-radius: var(--border-radius-sm);
-  background: rgba(109, 61, 255, 0.1);
-  box-shadow: 0 0 10px rgba(109, 61, 255, 0.1);
-  overflow: hidden;
 }
 
 /* Efecto de onda al hacer hover */
@@ -167,24 +194,6 @@
   background: rgba(109, 61, 255, 0.2);
   transform: translateY(-1px);
   box-shadow: 0 0 15px rgba(109, 61, 255, 0.2);
-}
-
-.header__logo {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 5px rgba(188, 166, 255, 0.4));
-  transition: all var(--transition-fast);
-  animation: pulseLogo 4s ease-in-out infinite;
-}
-
-@keyframes pulseLogo {
-  0%, 100% {
-    filter: drop-shadow(0 0 5px rgba(188, 166, 255, 0.4));
-  }
-  50% {
-    filter: drop-shadow(0 0 10px rgba(188, 166, 255, 0.7));
-  }
 }
 
 .header__logo:hover {

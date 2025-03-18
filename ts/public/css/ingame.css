@@ -52,7 +52,7 @@ body {
  * ============================== */
 #app-container {
   width: 100%;
-  max-width: 760px;
+  max-width: 740px;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -65,7 +65,7 @@ body {
 
 .in-game {
   width: 100%;
-  max-width: 760px;
+  max-width: 740px;
   margin: 0;
   padding: 0;
 }
@@ -104,7 +104,7 @@ main {
 
 main.with-ads {
   width: 100%;
-  max-width: 760px;
+  max-width: 740px;
   margin: 0;
   padding-top: 170px; /* Ajustado para el nuevo diseño compacto */
   box-sizing: border-box;
@@ -327,9 +327,9 @@ main.with-ads {
   display: flex;
   flex-direction: row;
   position: relative;
-  max-width: calc(100% - 170px); /* Dejar espacio para el vertical banner */
-  padding-top: 180px; /* Aumentado para dar más espacio a las pestañas */
-  margin-right: 160px; /* Dejar espacio para el banner vertical */
+  max-width: calc(100% - 160px);
+  padding-top: 180px;
+  margin-right: 150px;
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;
@@ -339,28 +339,28 @@ main.with-ads {
   width: 100%;
   max-width: 100%;
   overflow: visible;
-  margin-top: 50px; /* Aumentado para dar más espacio a las pestañas */
+  margin-top: 50px;
   position: relative;
-  z-index: 970; /* Por debajo de las pestañas */
+  z-index: 970;
   min-height: 100%;
 }
 
 .main--with-ads .tabs__content {
   width: 100%;
   position: relative;
-  margin-top: 10px; /* Espacio adicional */
-  z-index: 50; /* Nivel de z-index menor que los elementos fijos pero visible */
+  margin-top: 10px;
+  z-index: 50;
   height: auto;
 }
 
 /* Contenedor para el área principal (sin anuncios) */
 .main-content-area {
   flex: 1;
-  width: calc(100% - 170px);
+  width: calc(100% - 160px);
   padding-right: 10px;
-  padding-top: 50px; /* Aumentado para dar más espacio a las pestañas */
+  padding-top: 50px;
   position: relative;
-  z-index: 970; /* Por debajo de los banners y las pestañas */
+  z-index: 970;
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;
@@ -368,13 +368,13 @@ main.with-ads {
 
 /* Contenedor lateral para anuncios */
 .ads-sidebar {
-  width: 160px;
+  width: 150px;
   position: absolute;
   top: 0;
   right: 0;
   height: 100%;
-  z-index: 980; /* Al mismo nivel que el banner vertical */
-  pointer-events: auto; /* Asegurar que se pueden hacer clic en los anuncios */
+  z-index: 980;
+  pointer-events: auto;
   overflow: hidden;
 }
 
@@ -382,9 +382,9 @@ main.with-ads {
 .banner--vertical,
 .banner--vertical .banner__container,
 .banner--vertical .ad-placeholder {
-  width: 160px !important;
-  min-width: 160px !important;
-  max-width: 160px !important;
+  width: 150px !important;
+  min-width: 150px !important;
+  max-width: 150px !important;
 }
 
 .integrated-ad {
