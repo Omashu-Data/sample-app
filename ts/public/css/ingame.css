@@ -173,7 +173,7 @@ body.in-game {
   background: linear-gradient(
     135deg,
     rgba(3, 2, 8, 1) 0%,
-    rgba(25, 17, 53, 1) 100%
+    rgba(13, 8, 35, 1) 100%
   );
   display: flex;
   flex-direction: column;
@@ -911,205 +911,241 @@ main {
   position: relative;
   width: 100%;
   background: var(--card-background);
-  border-radius: 6px;
+  border-radius: 10px;
   overflow: hidden;
-  margin: 0 0 8px 0 !important; /* Solo margen inferior */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s, box-shadow 0.2s;
-  min-height: 80px;
+  margin: 0 0 12px 0 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(109, 61, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  min-height: 110px;
   display: flex;
   flex-direction: column;
   border-top: 2px solid transparent;
   box-sizing: border-box;
+  backdrop-filter: blur(5px);
+  transform: translateZ(0);
 }
 
 .stats-cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
   margin: 0 !important;
   padding: 0 !important;
   width: 100% !important;
   left: 0 !important;
-  justify-items: start;
-  align-items: start;
+  justify-items: stretch;
+  align-items: stretch;
 }
 
 .dashboard__stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
   margin: 0 !important;
   padding: 0 !important;
   width: 100% !important;
-  justify-items: start;
-  align-items: start;
-  background-color: transparent !important; /* Asegurar fondo transparente */
+  justify-items: stretch;
+  align-items: stretch;
+  background-color: transparent !important;
 }
 
-/* Mejoras específicas para las tarjetas en la vista in-game */
 .dashboard__stats-grid .card {
-  width: 100%;
-  margin: 0 !important;
-  position: relative;
-  overflow: visible;
-  transform-origin: center center;
+  background: rgba(25, 15, 65, 0.75) !important;
+  border-radius: 8px !important;
+  min-height: 100px !important;
+  border: 1px solid rgba(42, 33, 75, 1) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  overflow: visible !important;
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
 }
 
-/* Efecto spotlight para las tarjetas - Neuromarketing visual */
-.card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), 
-              rgba(255, 255, 255, 0.15) 0%, 
-              rgba(255, 255, 255, 0) 60%);
-  opacity: 0;
-  transition: opacity 0.5s;
-  pointer-events: none;
-  z-index: 2;
+.dashboard__stats-grid .card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+  border-color: rgba(99, 81, 159, 0.8) !important;
 }
 
-.card:hover::after {
-  opacity: 1;
-  --x: calc(var(--mouse-x, 0) * 100%);
-  --y: calc(var(--mouse-y, 0) * 100%);
+.dashboard__stats-grid .card__header {
+  padding: 8px 10px 0 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  position: relative !important;
 }
 
-/* Feedback táctil visual - amplifica sensación de interactividad */
-.card:active {
-  transform: scale(0.98) !important;
-  transition: transform 0.1s !important;
+.dashboard__stats-grid .card__icon {
+  margin-right: 6px !important;
+  width: 18px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+  font-size: 14px !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-/* Estilos de jerarquía visual - el dato principal siempre resalta */
-.dashboard__stats-grid .card__value {
-  font-size: 24px;
-  letter-spacing: -0.5px;
-  line-height: 1.2;
-}
-
-/* Mejora para legibilidad y contraste */
 .dashboard__stats-grid .card__label {
-  opacity: 0.85;
-  transition: opacity 0.3s ease;
+  font-size: 10px !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
-.dashboard__stats-grid .card:hover .card__label {
-  opacity: 1;
+.dashboard__stats-grid .card__body {
+  padding: 6px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-grow: 1 !important;
 }
 
-/* Efecto de anticipación - feedback sutil */
-@keyframes pulse-subtle {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
+.dashboard__stats-grid .card__value {
+  font-size: 32px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  width: 100% !important;
+  color: #fff !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2) !important;
 }
 
-.card .card__value-container {
-  position: relative;
+.dashboard__stats-grid .card__footer {
+  padding: 0 10px 8px 10px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  position: relative !important;
 }
 
-/* Mejoras para los ranks con efectos de brillo adaptados a cada nivel */
-.card__rank {
-  position: relative;
-  overflow: hidden;
+.dashboard__stats-grid .card__rank {
+  font-size: 10px !important;
+  color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 4px !important;
+  padding: 2px 8px !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+  position: static !important;
 }
 
-.card__rank::after {
-  content: '';
-  position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 250%;
-  height: 250%;
-  opacity: 0;
-  transform: rotate(30deg);
-  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-  transition: opacity 0.3s;
+.dashboard__stats-grid .card__comparison {
+  font-size: 9px !important;
+  display: flex !important;
+  align-items: center !important;
+  position: static !important;
+  margin: 0 !important;
 }
 
-.card:hover .card__rank::after {
-  animation: rank-shimmer 2s infinite;
-  opacity: 1;
+.dashboard__stats-grid .card__comparison-label {
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-right: 3px !important;
+  white-space: nowrap !important;
 }
 
-@keyframes rank-shimmer {
-  0% { transform: translateX(-100%) rotate(30deg); }
-  100% { transform: translateX(100%) rotate(30deg); }
+.dashboard__stats-grid .card__comparison-value--positive {
+  color: #4caf50 !important;
+  background: none !important;
+  font-weight: 600 !important;
 }
 
-/* Mejoras específicas para el estado positivo/negativo */
-.card__comparison-value--positive,
-.card__comparison-value--negative,
-.card__comparison-value--neutral {
-  display: inline-flex;
-  align-items: center;
-  padding: 1px 5px;
-  font-weight: 600;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+.dashboard__stats-grid .card__comparison-value--negative {
+  color: #f44336 !important;
+  background: none !important;
+  font-weight: 600 !important;
 }
 
-.card__comparison-value--positive::before {
-  content: "↑";
-  margin-right: 2px;
-  font-size: 10px;
+.dashboard__stats-grid .card__comparison-value--neutral {
+  color: #ffb74d !important;
+  background: none !important;
+  font-weight: 600 !important;
 }
 
-.card__comparison-value--negative::before {
-  content: "↓";
-  margin-right: 2px;
-  font-size: 10px;
+/* Estilos específicos para cada tipo de métrica */
+.dashboard__stats-grid .card[data-metric="dps"] .card__value,
+.dashboard__stats-grid .card[data-metric="damage"] .card__value {
+  color: #ff5252 !important;
 }
 
-/* Comportamiento más contenido en tarjetas pequeñas */
-@media (max-width: 1366px) {
-  .dashboard__stats-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-  }
-  
-  .dashboard__stats-grid .card {
-    padding: 8px;
-  }
-  
-  .dashboard__stats-grid .card__value {
-    font-size: 22px;
-  }
-  
-  .dashboard__stats-grid .card__icon {
-    width: 22px;
-    height: 22px;
-    font-size: 12px;
-  }
+.dashboard__stats-grid .card[data-metric="kda"] .card__value,
+.dashboard__stats-grid .card[data-metric="rotations"] .card__value {
+  color: #5ce1e6 !important;
 }
 
-/* Efecto de atención sutil para las tarjetas - principio de neuromarketing */
-.card.subtle-attention {
-  animation: subtle-attention-glow 2s ease-in-out;
+.dashboard__stats-grid .card[data-metric="cs"] .card__value {
+  color: #b48def !important;
 }
 
-@keyframes subtle-attention-glow {
-  0% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.07); }
-  50% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 15px rgba(109, 61, 255, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.07); }
-  100% { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.07); }
+.dashboard__stats-grid .card[data-metric="gold"] .card__value {
+  color: #ffc107 !important;
 }
 
-.card.subtle-attention .card__value {
-  animation: subtle-text-glow 2s ease-in-out;
+.dashboard__stats-grid .card[data-metric="time"] .card__value {
+  color: #b388ff !important;
 }
 
-@keyframes subtle-text-glow {
-  0% { text-shadow: 0px 0px 15px rgba(160, 124, 255, 0.3); }
-  50% { text-shadow: 0px 0px 20px rgba(188, 118, 255, 0.6); }
-  100% { text-shadow: 0px 0px 15px rgba(160, 124, 255, 0.3); }
+.dashboard__stats-grid .card[data-metric="accuracy"] .card__value {
+  color: #ff4081 !important;
 }
 
-/* Eliminar cualquier texto adicional que pueda estar sobreescribiendo */
+.dashboard__stats-grid .card[data-metric="map-control"] .card__value {
+  color: #64b5f6 !important;
+}
+
+.dashboard__stats-grid .card[data-metric="objectives"] .card__value {
+  color: #ffc107 !important;
+}
+
+.dashboard__stats-grid .card[data-metric="healing"] .card__value {
+  color: #f48fb1 !important;
+}
+
+.dashboard__stats-grid .card[data-metric="vision"] .card__value {
+  color: #80d8ff !important;
+}
+
+/* Colores para los rangos */
+.dashboard__stats-grid .card__rank:contains("BRONZE") {
+  background-color: #8d5524 !important;
+}
+
+.dashboard__stats-grid .card__rank:contains("SILVER") {
+  background-color: #757575 !important;
+}
+
+.dashboard__stats-grid .card__rank:contains("GOLD") {
+  background-color: #b7950b !important;
+}
+
+.dashboard__stats-grid .card__rank:contains("DIAMOND") {
+  background-color: #48c9b0 !important;
+}
+
+.dashboard__stats-grid .card__rank:contains("PLATINUM") {
+  background-color: #4db6ac !important;
+}
+
+.dashboard__stats-grid .card__rank:contains("NORMAL") {
+  background-color: #5e6366 !important;
+}
+
+/* Tiempo de juego con estilo especial */
+.dashboard__stats-grid .card[data-metric="time"] .card__phase {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 9px !important;
+  text-transform: uppercase !important;
+  position: static !important;
+  font-weight: 500 !important;
+}
+
 .banner--top .ad-placeholder__text::after {
   content: none !important;
 }
@@ -1118,7 +1154,6 @@ main {
   content: none !important;
 }
 
-/* Asegurar que el texto del espacio publicitario sea visible y correcto */
 .ad-placeholder__text {
   font-size: 12px;
   color: var(--text-secondary);
@@ -1132,10 +1167,9 @@ main {
   opacity: 0.7;
 }
 
-/* Ajustar el contenedor principal de la dashboard de estadísticas */
 .dashboard.dashboard--stats {
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 15px !important;
   background-color: transparent !important;
   width: 580px !important;
   max-width: 580px !important;
@@ -1143,7 +1177,20 @@ main {
   left: 0 !important;
 }
 
-/* Asegurar que el banner vertical sea visible y accesible */
+.dashboard.dashboard--stats::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, 
+              rgba(109, 61, 255, 0.05) 0%, 
+              rgba(109, 61, 255, 0) 70%);
+  z-index: -1;
+  pointer-events: none;
+}
+
 #banner-vertical-160x600 {
   position: absolute !important;
   top: 172px !important;
@@ -1153,4 +1200,149 @@ main {
   z-index: 9999 !important;
   pointer-events: auto !important;
   overflow: visible !important;
+}
+
+@media (max-width: 1024px) {
+  .dashboard__stats-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .card {
+    min-height: 80px;
+  }
+  
+  .card__value {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard__stats-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 6px;
+  }
+  
+  .card {
+    min-height: 70px;
+  }
+  
+  .card__header {
+    padding: 8px 10px 4px;
+  }
+  
+  .card__body {
+    padding: 4px 10px 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard__stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  
+  .dashboard__stats-grid .card__value {
+    font-size: 20px;
+  }
+  
+  .card__icon {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+}
+
+/* Estilos específicos para las métricas como en la imagen */
+.dashboard__stats-grid .card[data-metric="dps"] .card__value,
+.dashboard__stats-grid .card[data-metric="damage"] .card__value {
+  color: #e53935; /* Rojo como en la imagen */
+}
+
+.dashboard__stats-grid .card[data-metric="kda"] .card__value,
+.dashboard__stats-grid .card[data-metric="vision"] .card__value,
+.dashboard__stats-grid .card[data-metric="rotations"] .card__value {
+  color: #43a047; /* Verde como en la imagen */
+}
+
+.dashboard__stats-grid .card[data-metric="cs"] .card__value {
+  color: #b48def; /* Violeta más claro como en la imagen */
+}
+
+.dashboard__stats-grid .card[data-metric="gold"] .card__value {
+  color: #ff9800; /* Naranja/dorado como en la imagen */
+}
+
+.dashboard__stats-grid .card[data-metric="accuracy"] .card__value {
+  color: #ff4081; /* Rosa como en la imagen */
+}
+
+.dashboard__stats-grid .card[data-metric="map-control"] .card__value {
+  color: #64b5f6; /* Azul como en la imagen */
+}
+
+.dashboard__stats-grid .card[data-metric="objectives"] .card__value {
+  color: #ff9800; /* Naranja/dorado como en la imagen */
+}
+
+.dashboard__stats-grid .card[data-metric="healing"] .card__value {
+  color: #b48def; /* Violeta más claro como en la imagen */
+}
+
+/* Estilos para comparaciones con el promedio */
+.dashboard__stats-grid .card__comparison {
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  font-size: 9px;
+  opacity: 0.9;
+}
+
+.dashboard__stats-grid .card__comparison-label {
+  color: rgba(255, 255, 255, 0.7);
+  margin-right: 2px;
+}
+
+.dashboard__stats-grid .card__comparison-value--positive {
+  color: #4caf50;
+  background: none;
+}
+
+.dashboard__stats-grid .card__comparison-value--negative {
+  color: #f44336;
+  background: none;
+}
+
+/* Ajuste del Header para mostrar pestañas como en la imagen */
+.tabs__button {
+  padding: 8px 15px;
+  background: rgba(19, 11, 55, 0.8);
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+}
+
+.tabs__button--active {
+  background: rgba(109, 61, 255, 0.2);
+  border-bottom: 2px solid var(--omashu-purple);
+  color: white;
+}
+
+.tabs__navigation {
+  border-bottom: 1px solid rgba(109, 61, 255, 0.2);
+  background: rgba(19, 11, 55, 0.8);
+}
+
+/* Tiempo de juego con estilo especial */
+.dashboard__stats-grid .card[data-metric="time"] .card__phase {
+  position: absolute;
+  bottom: 6px;
+  left: 10px;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+}
+
+.dashboard__stats-grid .card[data-metric="time"] .card__phase::before {
+  content: 'Fase: ';
 }

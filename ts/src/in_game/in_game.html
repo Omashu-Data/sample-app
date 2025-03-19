@@ -18,6 +18,9 @@
   <!-- Theme y estilos específicos de la vista ingame -->
   <link rel="stylesheet" href="../../css/omashu-theme.css" />
   <link rel="stylesheet" href="../../css/ingame.css" />
+  <!-- Animaciones y métricas -->
+  <link rel="stylesheet" href="../../css/animations.css" />
+  <link rel="stylesheet" href="../../css/metrics.css" />
   <title>omashu.gg - League of Legends</title>
   <style>
     /* Estilos inline directos para el banner vertical */
@@ -150,218 +153,166 @@
               <div class="dashboard dashboard--stats">
                 <!-- Sección principal: Contenido estadístico con tarjetas pequeñas y compactas -->
                 <div class="dashboard__stats-grid">
-                  <!-- Tarjetas de estadísticas rediseñadas - Ahora más pequeñas y numerosas -->
-                  <div class="card card--primary">
+                  <!-- Tarjeta de Daño por Segundo -->
+                  <div class="card card--primary" data-metric="dps">
                     <div class="card__header">
                       <div class="card__icon">⚡</div>
-                      <span class="card__label">Daño por Segundo</span>
+                      <span class="card__label">DAMAGE PER SECOND</span>
                     </div>
                     <div class="card__body">
                       <div class="card__value-container">
                         <span id="dps-value" class="card__value">0</span>
-                        <span class="card__rank">Plata</span>
-                      </div>
-                      <div class="card__chart">
-                        <div class="card__bar">
-                          <div class="card__fill" style="width: 45%"></div>
-                        </div>
                       </div>
                     </div>
                     <div class="card__footer">
+                      <span class="card__rank">SILVER</span>
                       <div class="card__comparison">
-                        <span class="card__comparison-label">vs. Prom:</span>
+                        <span class="card__comparison-label">vs. Avg:</span>
                         <span class="card__comparison-value card__comparison-value--positive">+15%</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div class="card card--success">
+                  <!-- Tarjeta de KDA -->
+                  <div class="card card--success" data-metric="kda">
                     <div class="card__header">
                       <div class="card__icon">🎯</div>
                       <span class="card__label">KDA</span>
                     </div>
                     <div class="card__body">
                       <div class="card__value-container">
-                        <span id="kda-value" class="card__value">0</span>
-                        <span class="card__rank">Oro</span>
-                      </div>
-                      <div class="card__chart">
-                        <div class="card__bar">
-                          <div class="card__fill" style="width: 60%"></div>
-                        </div>
+                        <span id="kda-value" class="card__value">7</span>
                       </div>
                     </div>
                     <div class="card__footer">
+                      <span class="card__rank">GOLD</span>
                       <div class="card__comparison">
-                        <span class="card__comparison-label">vs. Prom:</span>
+                        <span class="card__comparison-label">vs. Avg:</span>
                         <span class="card__comparison-value card__comparison-value--positive">+25%</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div class="card card--accent">
+                  <!-- Tarjeta de CS por Min -->
+                  <div class="card card--accent" data-metric="cs">
                     <div class="card__header">
                       <div class="card__icon">🧩</div>
-                      <span class="card__label">CS por Min</span>
+                      <span class="card__label">CS PER MIN</span>
                     </div>
                     <div class="card__body">
                       <div class="card__value-container">
-                        <span id="cspm-value" class="card__value">0</span>
-                        <span class="card__rank">Diamante</span>
-                      </div>
-                      <div class="card__chart">
-                        <div class="card__bar">
-                          <div class="card__fill" style="width: 85%"></div>
-                        </div>
+                        <span id="cspm-value" class="card__value">0.8</span>
                       </div>
                     </div>
                     <div class="card__footer">
+                      <span class="card__rank">DIAMOND</span>
                       <div class="card__comparison">
-                        <span class="card__comparison-label">vs. Prom:</span>
+                        <span class="card__comparison-label">vs. Avg:</span>
                         <span class="card__comparison-value card__comparison-value--positive">+40%</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div class="card card--accent">
+                  <!-- Tarjeta de Oro -->
+                  <div class="card card--accent" data-metric="gold">
                     <div class="card__header">
                       <div class="card__icon">💰</div>
-                      <span class="card__label">Oro</span>
+                      <span class="card__label">GOLD</span>
                     </div>
                     <div class="card__body">
-                      <div class="card__value-container">
-                        <span id="gold-value" class="card__value">0</span>
-                        <span class="card__rank">Plata</span>
-                      </div>
-                      <div class="card__chart">
-                        <div class="card__bar">
-                          <div class="card__fill" style="width: 55%"></div>
-                        </div>
-                      </div>
+                      <span id="gold-value" class="card__value">8879.97</span>
                     </div>
                     <div class="card__footer">
+                      <span class="card__rank">SILVER</span>
                       <div class="card__comparison">
-                        <span class="card__comparison-label">vs. Prom:</span>
+                        <span class="card__comparison-label">vs. Avg:</span>
                         <span class="card__comparison-value card__comparison-value--positive">+20%</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div class="card card--warning">
+                  <!-- Tarjeta de Visión -->
+                  <div class="card card--warning" data-metric="vision">
                     <div class="card__header">
                       <div class="card__icon">🛡️</div>
-                      <span class="card__label">Visión</span>
+                      <span class="card__label">VISION</span>
                     </div>
                     <div class="card__body">
-                      <div class="card__value-container">
-                        <span id="vision-value" class="card__value">0.8</span>
-                        <span class="card__rank">Bronce</span>
-                      </div>
-                      <div class="card__chart">
-                        <div class="card__bar">
-                          <div class="card__fill" style="width: 30%"></div>
-                        </div>
-                      </div>
+                      <span id="vision-value" class="card__value">0.8</span>
                     </div>
                     <div class="card__footer">
+                      <span class="card__rank">BRONZE</span>
                       <div class="card__comparison">
-                        <span class="card__comparison-label">vs. Prom:</span>
+                        <span class="card__comparison-label">vs. Avg:</span>
                         <span class="card__comparison-value card__comparison-value--negative">-15%</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div class="card card--primary">
+                  <!-- Tarjeta de Tiempo de Juego -->
+                  <div class="card card--primary" data-metric="time">
                     <div class="card__header">
                       <div class="card__icon">⏱️</div>
-                      <span class="card__label">Tiempo Juego</span>
+                      <span class="card__label">GAME TIME</span>
                     </div>
                     <div class="card__body">
-                      <div class="card__value-container">
-                        <span id="game-time" class="card__value">12:45</span>
-                        <span class="card__rank">Normal</span>
-                      </div>
-                      <div class="card__chart">
-                        <div class="card__bar">
-                          <div class="card__fill" style="width: 40%"></div>
-                        </div>
-                      </div>
+                      <span id="game-time" class="card__value">12:45</span>
                     </div>
                     <div class="card__footer">
-                      <div class="card__comparison">
-                        <span class="card__comparison-label">Fase:</span>
-                        <span class="card__comparison-value">Media</span>
-                      </div>
+                      <span class="card__rank">NORMAL</span>
+                      <span class="card__phase">Mid</span>
                     </div>
                   </div>
                   
-                  <div class="card card--success">
+                  <!-- Tarjeta de Rotaciones -->
+                  <div class="card card--success" data-metric="rotations">
                     <div class="card__header">
                       <div class="card__icon">🔄</div>
-                      <span class="card__label">Rotaciones</span>
+                      <span class="card__label">ROTATIONS</span>
                     </div>
                     <div class="card__body">
-                      <div class="card__value-container">
-                        <span id="rotations-value" class="card__value">8</span>
-                        <span class="card__rank">Oro</span>
-                      </div>
-                      <div class="card__chart">
-                        <div class="card__bar">
-                          <div class="card__fill" style="width: 65%"></div>
-                        </div>
-                      </div>
+                      <span id="rotations-value" class="card__value">8</span>
                     </div>
                     <div class="card__footer">
+                      <span class="card__rank">GOLD</span>
                       <div class="card__comparison">
-                        <span class="card__comparison-label">vs. Prom:</span>
+                        <span class="card__comparison-label">vs. Avg:</span>
                         <span class="card__comparison-value card__comparison-value--positive">+10%</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div class="card card--warning">
+                  <!-- Tarjeta de Objetivos -->
+                  <div class="card card--accent" data-metric="objectives">
                     <div class="card__header">
-                      <div class="card__icon">🏆</div>
-                      <span class="card__label">Objetivos</span>
+                      <div class="card__icon">🎯</div>
+                      <span class="card__label">OBJECTIVES</span>
                     </div>
                     <div class="card__body">
-                      <div class="card__value-container">
-                        <span id="objectives-value" class="card__value">3</span>
-                        <span class="card__rank">Plata</span>
-                      </div>
-                      <div class="card__chart">
-                        <div class="card__bar">
-                          <div class="card__fill" style="width: 50%"></div>
-                        </div>
-                      </div>
+                      <span id="objectives-value" class="card__value">3</span>
                     </div>
                     <div class="card__footer">
+                      <span class="card__rank">SILVER</span>
                       <div class="card__comparison">
-                        <span class="card__comparison-label">vs. Prom:</span>
+                        <span class="card__comparison-label">vs. Avg:</span>
                         <span class="card__comparison-value card__comparison-value--neutral">0%</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div class="card card--accent">
+                  <!-- Tarjeta de Daño Total -->
+                  <div class="card card--danger" data-metric="damage">
                     <div class="card__header">
-                      <div class="card__icon">🗡️</div>
-                      <span class="card__label">Daño Total</span>
+                      <div class="card__icon">💥</div>
+                      <span class="card__label">TOTAL DAMAGE</span>
                     </div>
                     <div class="card__body">
-                      <div class="card__value-container">
-                        <span id="total-damage-value" class="card__value">12.5K</span>
-                        <span class="card__rank">Oro</span>
-                      </div>
-                      <div class="card__chart">
-                        <div class="card__bar">
-                          <div class="card__fill" style="width: 70%"></div>
-                        </div>
-                      </div>
+                      <span id="total-damage-value" class="card__value">12.5K</span>
                     </div>
                     <div class="card__footer">
+                      <span class="card__rank">GOLD</span>
                       <div class="card__comparison">
-                        <span class="card__comparison-label">vs. Prom:</span>
+                        <span class="card__comparison-label">vs. Avg:</span>
                         <span class="card__comparison-value card__comparison-value--positive">+22%</span>
                       </div>
                     </div>
@@ -450,7 +401,20 @@
                     <p>Aumenta tu visión colocando wards en puntos clave del mapa y compra más wards de control. Mejorará tu supervivencia un 35%.</p>
                   </div>
                 </div>
-             
+                
+                <!-- Espacio para anuncio integrado más pequeño -->
+                <div class="dashboard__ad-container">
+                  <div class="ad-placeholder ad-placeholder--compact">
+                    <div class="ad-placeholder__logo">
+                      <img src="../../img/header_icon.svg" alt="omashu.gg logo" class="ad-placeholder__icon">
+                      <span>omashu.gg</span>
+                    </div>
+                    <div class="ad-placeholder__text">ESPACIO PUBLICITARIO</div>
+                    <div class="ad-placeholder__size">300 × 100</div>
+                  </div>
+                </div>
+              </div>
+              
               <!-- CTA Premium más compacto -->
               <div class="premium-cta-compact">
                 <div class="premium-cta-compact__badge">PREMIUM</div>
@@ -1860,67 +1824,6 @@
           }
         }
       }
-    });
-  </script>
-  
-  <!-- Script para efectos de neuromarketing en las tarjetas -->
-  <script>
-    // Este script añade efectos visuales basados en la posición del ratón
-    // para mejorar la experiencia de usuario con principios de neuromarketing
-    document.addEventListener('DOMContentLoaded', function() {
-      // Efecto spotlight para tarjetas (seguimiento del cursor)
-      const cards = document.querySelectorAll('.card');
-      
-      cards.forEach(card => {
-        card.addEventListener('mousemove', function(e) {
-          const rect = card.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width;
-          const y = (e.clientY - rect.top) / rect.height;
-          
-          card.style.setProperty('--mouse-x', x);
-          card.style.setProperty('--mouse-y', y);
-        });
-        
-        // Efecto de micro-interacción al entrar
-        card.addEventListener('mouseenter', function() {
-          // Añadir pequeña animación al valor principal
-          const valueElement = this.querySelector('.card__value');
-          if (valueElement) {
-            valueElement.style.animation = 'pulse-subtle 0.5s ease-in-out';
-            setTimeout(() => {
-              valueElement.style.animation = '';
-            }, 500);
-          }
-        });
-      });
-      
-      // Efecto de "retención de atención" - las tarjetas mantienen un suave brillo
-      // incluso cuando no están en hover, creando un patrón visual rítmico
-      const allCards = Array.from(document.querySelectorAll('.card'));
-      let currentIndex = 0;
-      
-      function subtleAttentionEffect() {
-        // Remover cualquier efecto previo
-        allCards.forEach(c => c.classList.remove('subtle-attention'));
-        
-        // Aplicar efecto a la tarjeta actual
-        if (allCards.length > 0) {
-          const card = allCards[currentIndex];
-          // Solo aplicar si no tiene hover
-          if (!card.matches(':hover')) {
-            card.classList.add('subtle-attention');
-          }
-          
-          // Avanzar al siguiente
-          currentIndex = (currentIndex + 1) % allCards.length;
-        }
-        
-        // Continuar el efecto cada pocos segundos
-        setTimeout(subtleAttentionEffect, 3000);
-      }
-      
-      // Iniciar el efecto después de cargar la página
-      setTimeout(subtleAttentionEffect, 5000);
     });
   </script>
 </body>

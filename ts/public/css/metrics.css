@@ -1,0 +1,132 @@
+/* 
+ * ==============================
+ * OMASHU.GG - ESTILOS DE MÉTRICAS
+ * ==============================
+ *
+ * Estilos específicos para las tarjetas de métricas.
+ */
+
+/* Estilos específicos basados en tipos de métricas */
+[data-metric="dps"] .card__icon {
+  color: #ff6b6b;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+}
+
+[data-metric="kda"] .card__icon {
+  color: #5ce1e6;
+  text-shadow: 0 0 10px rgba(92, 225, 230, 0.5);
+}
+
+[data-metric="cs"] .card__icon {
+  color: #ffbe0b;
+  text-shadow: 0 0 10px rgba(255, 190, 11, 0.5);
+}
+
+[data-metric="gold"] .card__icon {
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+[data-metric="vision"] .card__icon {
+  color: #7fc8f8;
+  text-shadow: 0 0 10px rgba(127, 200, 248, 0.5);
+}
+
+[data-metric="time"] .card__icon {
+  color: #f8a978;
+  text-shadow: 0 0 10px rgba(248, 169, 120, 0.5);
+}
+
+[data-metric="rotations"] .card__icon {
+  color: #a5d6a7;
+  text-shadow: 0 0 10px rgba(165, 214, 167, 0.5);
+}
+
+[data-metric="objectives"] .card__icon {
+  color: #ba68c8;
+  text-shadow: 0 0 10px rgba(186, 104, 200, 0.5);
+}
+
+[data-metric="damage"] .card__icon {
+  color: #ff7043;
+  text-shadow: 0 0 10px rgba(255, 112, 67, 0.5);
+}
+
+[data-metric="healing"] .card__icon {
+  color: #f48fb1;
+  text-shadow: 0 0 10px rgba(244, 143, 177, 0.5);
+}
+
+[data-metric="map-control"] .card__icon {
+  color: #64b5f6;
+  text-shadow: 0 0 10px rgba(100, 181, 246, 0.5);
+}
+
+[data-metric="accuracy"] .card__icon {
+  color: #ffd54f;
+  text-shadow: 0 0 10px rgba(255, 213, 79, 0.5);
+}
+
+/* Animaciones específicas por métrica */
+[data-metric="dps"] .card__value.card__value--updated,
+[data-metric="damage"] .card__value.card__value--updated {
+  animation: pulse-red 1s ease;
+}
+
+[data-metric="kda"] .card__value.card__value--updated,
+[data-metric="accuracy"] .card__value.card__value--updated {
+  animation: pulse-blue 1s ease;
+}
+
+[data-metric="gold"] .card__value.card__value--updated {
+  animation: pulse-gold 1s ease;
+}
+
+[data-metric="healing"] .card__value.card__value--updated {
+  animation: pulse-green 1s ease;
+}
+
+/* Estilos específicos para valores destacados */
+[data-metric="dps"] .card__value {
+  color: #ff6b6b;
+}
+
+[data-metric="kda"] .card__value {
+  color: #5ce1e6;
+}
+
+[data-metric="gold"] .card__value {
+  color: #ffd700;
+}
+
+/* Ajustes para diferentes tamaños */
+.dashboard__stats-grid [data-metric] {
+  transition: all 0.3s ease;
+}
+
+.dashboard__stats-grid [data-metric]:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Destacar métricas importantes */
+[data-metric="kda"],
+[data-metric="damage"],
+[data-metric="gold"] {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-metric="kda"]::after,
+[data-metric="damage"]::after,
+[data-metric="gold"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 0 100%;
+  z-index: 1;
+} 
