@@ -714,18 +714,698 @@
 }
 
 .card__comparison-label {
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
+  font-size: 10px;
 }
 
 .card__comparison-value {
-  font-weight: bold;
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 3px;
+  transition: all 0.3s ease;
 }
 
 .card__comparison-value--positive {
   color: var(--positive-color);
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.card:hover .card__comparison-value--positive {
+  background: rgba(76, 175, 80, 0.2);
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
 }
 
 .card__comparison-value--negative {
+  color: var(--negative-color);
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.card:hover .card__comparison-value--negative {
+  background: rgba(244, 67, 54, 0.2);
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.2);
+}
+
+.card__comparison-value--neutral {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.card:hover .card__comparison-value--neutral {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Componentes para tarjetas de estadísticas */
+.card__progress {
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.card__progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6d3dff, #bc76ff);
+  border-radius: 4px;
+  transition: width 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+  position: relative;
+}
+
+.card__progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+}
+
+.card:hover .card__progress-bar::after {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* Ajuste para la disposición de tarjetas en la cuadrícula */
+.stats-cards-container .card,
+.dashboard__stats-grid .card {
+  min-height: 120px;
+  max-width: 135px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 
+ * ==============================
+ * TARJETAS DE ESTADÍSTICAS
+ * ==============================
+ */
+.stat-card {
+  background: var(--card-background);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--elevated-shadow);
+  border-color: var(--omashu-active);
+}
+
+.stat-card__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.stat-card__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--spacing-sm);
+  font-size: 16px;
+}
+
+.stat-card__icon--kill { background: rgba(76, 175, 80, 0.3); }
+.stat-card__icon--death { background: rgba(244, 67, 54, 0.3); }
+.stat-card__icon--assist { background: rgba(255, 193, 7, 0.3); }
+.stat-card__icon--cs { background: rgba(3, 169, 244, 0.3); }
+.stat-card__icon--level { background: rgba(156, 39, 176, 0.3); }
+.stat-card__icon--gold { background: rgba(255, 152, 0, 0.3); }
+
+.stat-card__label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.stat-card__body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.stat-card__value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.stat-card__trend {
+  font-size: 16px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-card__trend--positive { color: var(--positive-color); }
+.stat-card__trend--negative { color: var(--negative-color); }
+.stat-card__trend--neutral { color: var(--warning-color); }
+
+.stat-card__footer {
+  margin-top: var(--spacing-xs);
+}
+
+.stat-card__progress {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stat-card__progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--omashu-purple-dark), var(--omashu-active));
+  border-radius: 2px;
+  transition: width var(--transition-slow);
+}
+
+/* 
+ * ==============================
+ * BOTONES
+ * ==============================
+ */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+}
+
+.button--primary {
+  background-color: var(--omashu-active);
+  color: white;
+}
+
+.button--primary:hover {
+  background-color: var(--omashu-highlight);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button--secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.button--secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.button--premium {
+  background: linear-gradient(135deg, #ffcc00, #ff7a00);
+  color: #000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.button--premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* 
+ * ==============================
+ * INSIGNIAS
+ * ==============================
+ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badge--live {
+  background-color: var(--negative-color);
+  color: white;
+  animation: pulse 1.5s infinite;
+}
+
+.badge--level {
+  background-color: var(--omashu-active);
+  color: white;
+  padding: 5px 10px;
+  border-radius: var(--border-radius-sm);
+  font-weight: bold;
+}
+
+.badge--gold {
+  background: linear-gradient(135deg, #ffcc00, #ff7a00);
+  color: #000;
+}
+
+/* 
+ * ==============================
+ * ICONOS Y VISUALIZACIONES
+ * ==============================
+ */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.progress-bar {
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width var(--transition-slow);
+}
+
+.progress-bar__fill--primary {
+  background: linear-gradient(90deg, var(--omashu-purple-dark), var(--omashu-active));
+}
+
+.progress-bar__fill--premium {
+  background: linear-gradient(90deg, #ffcc00, #ff7a00);
+}
+
+/* 
+ * ==============================
+ * ANIMACIONES
+ * ==============================
+ */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+@keyframes pulse-button {
+  0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 204, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); }
+}
+
+.pulse-effect {
+  animation: pulse-button 2s infinite;
+}
+
+/* 
+ * ==============================
+ * ESTADÍSTICAS DE LOGROS
+ * ==============================
+ */
+.achievement-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.achievement-stat:hover {
+  background: rgba(109, 61, 255, 0.1);
+}
+
+.achievement-stat__value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.achievement-stat__label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* 
+ * ==============================
+ * PLACEHOLDERS DE ANUNCIOS
+ * ==============================
+ */
+.ad-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(19, 11, 55, 0.6), rgba(39, 22, 100, 0.6));
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  position: relative;
+}
+
+.ad-placeholder::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s infinite;
+  transform: rotate(30deg);
+}
+
+.ad-placeholder__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.ad-placeholder__icon {
+  width: 24px;
+  height: 24px;
+}
+
+.ad-placeholder__text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.ad-placeholder__size {
+  font-size: 10px;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.ad-placeholder--vertical {
+  width: 160px; /* Ancho exacto del banner */
+  height: 600px;
+  background: linear-gradient(135deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
+  border-radius: 0; /* Eliminar bordes redondeados */
+  padding: 0; /* Eliminar el padding */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: none; /* Eliminar el borde */
+  text-align: center;
+  box-shadow: none; /* Eliminar sombra */
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  margin: 0; /* Asegurar que no haya márgenes */
+}
+
+/* Efecto de brillo sutil en el placeholder */
+.ad-placeholder--vertical:before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    rgba(109, 61, 255, 0) 0%,
+    rgba(109, 61, 255, 0.1) 50%,
+    rgba(109, 61, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shimmerVertical 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes shimmerVertical {
+  0% {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(30deg);
+  }
+}
+
+.ad-placeholder--vertical:hover {
+  border-color: rgba(109, 61, 255, 0.7);
+  box-shadow: 0 0 25px rgba(109, 61, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.ad-placeholder--vertical .ad-placeholder__logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.ad-placeholder--vertical .ad-placeholder__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.ad-placeholder--vertical .ad-placeholder__text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 1px;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  margin: 20px 0;
+  font-weight: 500;
+}
+
+.ad-placeholder--vertical .ad-placeholder__size {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(30deg); }
+  100% { transform: translateX(100%) rotate(30deg); }
+}
+
+/* 
+ * ==============================
+ * DASHBOARDS Y VISUALIZACIONES
+ * ==============================
+ */
+.dashboard {
+  width: 100%;
+  margin-bottom: var(--spacing-lg);
+}
+
+.dashboard__title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  padding-left: var(--spacing-sm);
+}
+
+.dashboard__title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  background: var(--omashu-active);
+  border-radius: 2px;
+}
+
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+}
+
+.dashboard__content {
+  margin-top: var(--spacing-md);
+}
+
+/* Variante de dashboard para estadísticas */
+.dashboard--stats .dashboard__grid {
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-md);
+}
+
+/* Variante de dashboard para rendimiento */
+.dashboard--performance .dashboard__grid {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+}
+
+/* Variante de dashboard para mejoras */
+.dashboard--improvement .dashboard__grid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+}
+
+/* 
+ * ==============================
+ * TARJETAS DE PERFORMANCE
+ * ==============================
+ */
+.performance-card {
+  background: var(--card-background);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.performance-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--elevated-shadow);
+  border-color: var(--omashu-active);
+}
+
+.performance-card__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.performance-card__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--spacing-sm);
+  font-size: 18px;
+  background: rgba(109, 61, 255, 0.2);
+}
+
+.performance-card__label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.performance-card__body {
+  margin-bottom: var(--spacing-sm);
+}
+
+.performance-card__value-container {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: var(--spacing-sm);
+}
+
+.performance-card__value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-right: var(--spacing-sm);
+}
+
+.performance-card__rank {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: var(--border-radius-sm);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+
+.performance-card__chart {
+  margin-bottom: var(--spacing-sm);
+}
+
+.performance-card__bar {
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.performance-card__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--omashu-purple-dark), var(--omashu-active));
+  border-radius: 3px;
+  transition: width 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.performance-card__markers {
+  position: relative;
+  height: 8px;
+  width: 100%;
+}
+
+.performance-card__marker {
+  position: absolute;
+  width: 2px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(-50%);
+}
+
+.performance-card__footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--spacing-sm);
+}
+
+.performance-card__comparison {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.performance-card__comparison-label {
+  color: var(--text-secondary);
+}
+
+.performance-card__comparison-value {
+  font-weight: bold;
+}
+
+.performance-card__comparison-value--positive {
+  color: var(--positive-color);
+}
+
+.performance-card__comparison-value--negative {
   color: var(--negative-color);
 }
 
@@ -1689,136 +2369,199 @@
 
 .premium-cta-compact__button {
   background: linear-gradient(90deg, #6d3dff, #bc76ff);
+  color: white;
   border: none;
   border-radius: 4px;
-  color: #fff;
-  font-weight: 700;
-  font-size: 14px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 15px rgba(109, 61, 255, 0.5);
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   white-space: nowrap;
-}
-
-.premium-cta-compact__button::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  animation: shimmer-button 4s infinite;
-  z-index: 1;
-}
-
-@keyframes shimmer-button {
-  0% { transform: rotate(30deg) translateX(-100%); }
-  100% { transform: rotate(30deg) translateX(100%); }
-}
-
-.premium-cta-compact__button-text {
-  position: relative;
-  z-index: 2;
-}
-
-.premium-cta-compact__button-arrow {
-  display: inline-block;
-  margin-left: 8px;
-  font-size: 18px;
-  position: relative;
-  z-index: 2;
-  transition: transform 0.3s ease;
 }
 
 .premium-cta-compact__button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(109, 61, 255, 0.7);
-  background: linear-gradient(90deg, #7d4dff, #cc86ff);
+  box-shadow: 0 2px 8px rgba(188, 118, 255, 0.5);
 }
 
-.premium-cta-compact__button:hover .premium-cta-compact__button-arrow {
-  transform: translateX(5px);
+/* Estilos para placeholder de anuncios compactos */
+.dashboard__ad-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
 }
 
-.premium-cta-compact__scarcity {
-  text-align: center;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 8px;
-  padding: 4px;
-  animation: fade-in-out 3s infinite;
-}
-
-@keyframes fade-in-out {
-  0% { opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { opacity: 0.6; }
-}
-
-#visitantes-restantes {
-  color: #ff4d4d;
-  font-weight: 700;
+.ad-placeholder--compact {
+  background: linear-gradient(135deg, rgba(40, 48, 78, 0.6), rgba(55, 65, 100, 0.6));
+  border-radius: 6px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 100px;
   position: relative;
-  display: inline-block;
-  transition: all 0.3s ease;
+  border: 1px solid rgba(109, 61, 255, 0.2);
+  text-align: center;
 }
 
-#visitantes-restantes.pulsate {
-  transform: scale(1.3);
-  color: #ff2222;
-  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+.ad-placeholder--compact .ad-placeholder__logo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
 }
 
-.pulse-attention {
-  animation: pulse-cta 1.5s ease-in-out;
+.ad-placeholder--compact .ad-placeholder__icon {
+  width: 16px;
+  height: 16px;
 }
 
-@keyframes pulse-cta {
-  0% { transform: scale(1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
-  50% { transform: scale(1.03); box-shadow: 0 8px 32px rgba(109, 61, 255, 0.5), 0 0 20px rgba(109, 61, 255, 0.5); }
-  100% { transform: scale(1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+.ad-placeholder--compact .ad-placeholder__text {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
 }
 
-/* Animación para simular un "click" en el botón (atención dirigida) */
-.premium-cta-compact__button.button-pulse {
-  animation: button-press 0.5s ease-in-out;
+.ad-placeholder--compact .ad-placeholder__size {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.3);
+  position: absolute;
+  bottom: 3px;
+  right: 5px;
 }
 
-@keyframes button-press {
-  0% { transform: scale(1); }
-  50% { transform: scale(0.95); }
-  100% { transform: scale(1); }
+/* Corregir el texto del tamaño en el placeholder del banner */
+.banner--top .ad-placeholder__size {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-/* Para pantallas más pequeñas */
-@media (max-width: 576px) {
-  .premium-cta-compact__content {
-    flex-direction: column;
-    text-align: center;
-    padding: 15px;
-  }
-  
-  .premium-cta-compact__icon-container {
-    margin: 0 0 10px 0;
-  }
-  
-  .premium-cta-compact__text-container {
-    margin-bottom: 15px;
-    padding: 0;
-  }
-  
-  .premium-cta-compact__button {
-    width: 100%;
-    justify-content: center;
-  }
+/* Modificar directamente el texto del espacio publicitario */
+.banner--top .ad-placeholder__text::after {
+  content: none !important;
+}
+
+/* Establecer el texto correcto para el espacio publicitario */
+.banner--top .ad-placeholder__size::after {
+  content: none;
+}
+
+/* Eliminar cualquier texto adicional que pueda estar sobreescribiendo */
+.banner--top .ad-placeholder__text::after {
+  content: none !important;
+}
+
+.banner--top .ad-placeholder::after {
+  content: none !important;
+}
+
+/* Ajuste para #app-container para asegurar ancho exacto */
+#app-container {
+  width: 740px !important; /* Ancho fijo exacto */
+  max-width: 740px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  overflow: visible !important; /* Permitir que los elementos se muestren fuera del contenedor */
+  height: 100vh;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  overflow: visible !important; /* Permitir que los elementos se muestren fuera del contenedor */
+  left: 0 !important;
+}
+
+/* Banner vertical específico para la posición derecha */
+.banner--vertical-right {
+  position: fixed !important;
+  top: 172px !important;
+  right: 0 !important;
+  width: 160px !important;
+  height: 600px !important; /* Altura exacta del banner publicitario */
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  z-index: 9999 !important;
+  border: none !important;
+  outline: none !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.banner--vertical-right .banner__container {
+  width: 160px !important;
+  height: 600px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  box-sizing: border-box !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.banner--vertical-right .ad-placeholder--vertical {
+  width: 160px !important;
+  height: 600px !important;
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Banner vertical específico para la posición izquierda (alternativa) */
+.banner--vertical-left {
+  position: fixed !important;
+  top: 172px !important;
+  left: 0 !important;
+  width: 160px !important;
+  height: 600px !important; /* Altura exacta del banner publicitario */
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  z-index: 9999 !important;
+  border: none !important;
+  outline: none !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.banner--vertical-left .banner__container {
+  width: 160px !important;
+  height: 600px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  box-sizing: border-box !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  right: auto !important;
 } 
