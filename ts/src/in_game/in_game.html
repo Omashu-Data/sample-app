@@ -451,16 +451,24 @@
                   </div>
                 </div>
                 
-                <!-- Espacio para anuncio integrado más pequeño -->
-                <div class="dashboard__ad-container">
-                  <div class="ad-placeholder ad-placeholder--compact">
-                    <div class="ad-placeholder__logo">
-                      <img src="../../img/header_icon.svg" alt="omashu.gg logo" class="ad-placeholder__icon">
-                      <span>omashu.gg</span>
+                <!-- Nuevo CTA con principios de neuromarketing -->
+                <div class="omashu-cta-neuromindhack">
+                  <div class="omashu-cta-neuromindhack__glowing-border"></div>
+                  <div class="omashu-cta-neuromindhack__content">
+                    <div class="omashu-cta-neuromindhack__icon-container">
+                      <img src="../../img/header_icon.svg" alt="omashu.gg logo" class="omashu-cta-neuromindhack__icon">
+                      <div class="omashu-cta-neuromindhack__icon-pulse"></div>
                     </div>
-                    <div class="ad-placeholder__text">ESPACIO PUBLICITARIO</div>
-                    <div class="ad-placeholder__size">300 × 100</div>
+                    <div class="omashu-cta-neuromindhack__text-container">
+                      <h3 class="omashu-cta-neuromindhack__headline">DESBLOQUEA TU VERDADERO POTENCIAL</h3>
+                      <p class="omashu-cta-neuromindhack__subtext">El <span class="highlight-text">93% de jugadores mejoran</span> su rendimiento en <span class="countdown-text">24 horas</span></p>
+                    </div>
+                    <a href="https://omashu.gg" target="_blank" class="omashu-cta-neuromindhack__button">
+                      <span class="omashu-cta-neuromindhack__button-text">DESCUBRIR AHORA</span>
+                      <span class="omashu-cta-neuromindhack__button-arrow">→</span>
+                    </a>
                   </div>
+                  <div class="omashu-cta-neuromindhack__scarcity">Solo disponible para los próximos <strong id="visitantes-restantes">37</strong> visitantes</div>
                 </div>
               </div>
               
@@ -1934,6 +1942,65 @@
       
       // Iniciar el efecto después de cargar la página
       setTimeout(subtleAttentionEffect, 5000);
+      
+      // Animación para el contador de visitantes (principios neuromarketing: escasez y FOMO)
+      const visitantesElement = document.getElementById('visitantes-restantes');
+      if (visitantesElement) {
+        // Número inicial
+        let currentNumber = parseInt(visitantesElement.textContent);
+        
+        // Efecto de disminución gradual (crea sensación de urgencia)
+        const decreaseVisitorsCount = () => {
+          // Probabilidad que disminuya (70% de probabilidad)
+          if (Math.random() < 0.7 && currentNumber > 1) {
+            // Decrementar por 1 o 2 (aleatoriamente)
+            const decrease = Math.random() < 0.7 ? 1 : 2;
+            currentNumber = Math.max(1, currentNumber - decrease);
+            
+            // Actualizar el texto con animación
+            visitantesElement.classList.add('pulsate');
+            setTimeout(() => {
+              visitantesElement.textContent = currentNumber;
+              
+              // Quitar clase de animación después de un momento
+              setTimeout(() => {
+                visitantesElement.classList.remove('pulsate');
+              }, 300);
+              
+            }, 300);
+          }
+          
+          // Tiempo aleatorio entre decrementos (entre 20 y 60 segundos)
+          const nextInterval = 20000 + Math.random() * 40000;
+          setTimeout(decreaseVisitorsCount, nextInterval);
+        };
+        
+        // Iniciar la cuenta atrás después de unos segundos
+        setTimeout(decreaseVisitorsCount, 8000);
+      }
+      
+      // Animación para el CTA de neuromarketing
+      const ctaElement = document.querySelector('.omashu-cta-neuromindhack');
+      if (ctaElement) {
+        // Añade efecto de parpadeo ocasional para captar atención
+        const pulseAttention = () => {
+          // Solo pulsar si no está en hover
+          if (!ctaElement.matches(':hover')) {
+            ctaElement.classList.add('pulse-attention');
+            
+            setTimeout(() => {
+              ctaElement.classList.remove('pulse-attention');
+            }, 1500);
+          }
+          
+          // Intervalo aleatorio entre 30 y 90 segundos
+          const nextPulse = 30000 + Math.random() * 60000;
+          setTimeout(pulseAttention, nextPulse);
+        };
+        
+        // Iniciar después de unos segundos
+        setTimeout(pulseAttention, 15000);
+      }
     });
   </script>
 </body>
