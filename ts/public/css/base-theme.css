@@ -1,19 +1,11 @@
-/* Tema Omashu.gg para Overwolf League of Legends Plugin */
-
-/* Variables globales */
-:root {
-  --omashu-background: #090521;
-  --omashu-header: rgb(109, 61, 255, 0.1);
-  --omashu-border: 1px solid rgb(109, 61, 255, 0.3);
-  --omashu-button-border: 1px solid rgba(92, 52, 227, 0.3);
-  --omashu-color-white: #ffffff;
-  --omashu-white-50: rgba(255, 255, 255, 0.5);
-  --omashu-purple-light: rgb(188, 166, 255, 1);
-  --omashu-purple-dark: #271664;
-  --omashu-highlight: rgba(92, 52, 227, 1);
-  --omashu-active: rgba(109, 61, 255, 1);
-  --omashu-error: #ff3257;
-}
+/* 
+ * ==============================
+ * OMASHU.GG - TEMA BASE
+ * ==============================
+ *
+ * Estilos base del tema para toda la aplicación
+ * Migrado desde omashu-theme.css
+ */
 
 /* Estilos generales */
 #app-container {
@@ -88,7 +80,7 @@
 }
 
 .event-item.kill {
-  border-left-color: #2ecc71;
+  border-left-color: var(--positive-color);
 }
 
 .event-item.death {
@@ -97,21 +89,6 @@
 
 .event-item.assist {
   border-left-color: var(--omashu-active);
-}
-
-/* Anuncios */
-.simulated-ad {
-  background: linear-gradient(135deg, #130b37, #271664);
-  border: var(--omashu-border);
-  border-radius: 6px;
-  padding: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.ad-space {
-  background: rgba(19, 11, 55, 0.4);
-  border: 1px dashed var(--omashu-purple-dark);
-  border-radius: 4px;
 }
 
 /* Clip notification */
@@ -188,4 +165,4 @@ button:hover {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--omashu-highlight);
-} 
+}

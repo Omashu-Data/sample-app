@@ -1,0 +1,136 @@
+/* 
+ * ==============================
+ * OMASHU.GG - BANNERS PUBLICITARIOS
+ * ==============================
+ *
+ * Estilos para todos los tipos de banners publicitarios de la aplicación
+ */
+
+/* ==============================
+ * BANNER SUPERIOR (HORIZONTAL)
+ * ============================== */
+.banner--horizontal {
+  width: 740px !important;
+  max-width: 100%;
+  height: 90px;
+  left: 0;
+  position: fixed;
+  top: 44px; /* Debajo del header */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 985; /* Por encima del contenido principal pero por debajo de los tabs */
+  background: transparent;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.banner--horizontal .banner__container,
+.banner--horizontal .ad-placeholder {
+  width: 740px !important;
+  height: 90px !important;
+  min-height: 90px !important;
+  max-height: 90px !important;
+  overflow: hidden;
+  border-radius: 4px;
+  box-sizing: border-box !important;
+  pointer-events: auto;
+}
+
+/* ==============================
+ * BANNER VERTICAL (LATERAL)
+ * ============================== */
+.banner--vertical {
+  position: absolute;
+  right: 0;
+  top: 176px; /* Alineado correctamente: Header (44px) + Banner (90px) + Tabs (42px) */
+  width: 160px !important;
+  height: calc(100% - 176px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 980; /* Por encima del contenido principal */
+  background: transparent;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.banner--vertical .banner__container,
+.banner--vertical .ad-placeholder {
+  width: 160px !important;
+  height: 600px !important;
+  min-height: 600px !important;
+  max-height: 600px !important;
+  overflow: hidden;
+  border-radius: 4px;
+  margin-top: 0;
+  box-sizing: border-box !important;
+  pointer-events: auto;
+}
+
+/* Banner vertical fijo hardcodeado */
+#banner-vertical-160x600 {
+  position: absolute;
+  top: 176px;
+  right: 0;
+  width: 160px;
+  height: 600px;
+  z-index: 980;
+  background-color: rgba(13, 6, 31, 0.9);
+  border-left: 1px solid var(--omashu-border);
+  border-bottom: 1px solid var(--omashu-border);
+  border-top: 1px solid var(--omashu-border);
+  border-radius: 5px 0 0 5px;
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  pointer-events: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==============================
+ * CONTENEDOR DE PUBLICIDAD GENÉRICO
+ * ============================== */
+.ad-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--strip-background-dark);
+  border: 1px dashed var(--omashu-purple-dark);
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.ad-label {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  font-size: 9px;
+  opacity: 0.5;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+/* Animación sutil para destacar espacios publicitarios */
+.ad-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+  background-size: 200% 200%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 200%; }
+} 

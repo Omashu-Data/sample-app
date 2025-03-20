@@ -1,0 +1,197 @@
+/* 
+ * ==============================
+ * OMASHU.GG - SISTEMA DE TOOLTIPS
+ * ==============================
+ *
+ * Estilos para tooltips y elementos de ayuda visual.
+ * Implementado con metodología BEM (Block, Element, Modifier).
+ */
+
+/* Tooltip base */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip__trigger {
+  cursor: help;
+  display: inline-block;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
+}
+
+.tooltip__trigger--icon {
+  border: none;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.tooltip__trigger--icon:hover {
+  opacity: 1;
+}
+
+.tooltip__content {
+  position: absolute;
+  visibility: hidden;
+  background-color: rgba(25, 25, 30, 0.95);
+  color: var(--text-primary);
+  text-align: left;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  min-width: 200px;
+  max-width: 300px;
+  z-index: 1000;
+  opacity: 0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: normal;
+  pointer-events: none;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+/* Tooltip visibilidad */
+.tooltip:hover .tooltip__content {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Posiciones del tooltip */
+.tooltip__content--top {
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip__content--bottom {
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip__content--left {
+  top: 50%;
+  right: 125%;
+  transform: translateY(-50%);
+}
+
+.tooltip__content--right {
+  top: 50%;
+  left: 125%;
+  transform: translateY(-50%);
+}
+
+/* Flechas para cada posición */
+.tooltip__content--top:after,
+.tooltip__content--bottom:after,
+.tooltip__content--left:after,
+.tooltip__content--right:after {
+  content: "";
+  position: absolute;
+  border-width: 5px;
+  border-style: solid;
+}
+
+.tooltip__content--top:after {
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-color: rgba(25, 25, 30, 0.95) transparent transparent transparent;
+}
+
+.tooltip__content--bottom:after {
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-color: transparent transparent rgba(25, 25, 30, 0.95) transparent;
+}
+
+.tooltip__content--left:after {
+  top: 50%;
+  left: 100%;
+  margin-top: -5px;
+  border-color: transparent transparent transparent rgba(25, 25, 30, 0.95);
+}
+
+.tooltip__content--right:after {
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-color: transparent rgba(25, 25, 30, 0.95) transparent transparent;
+}
+
+/* Tooltip con título */
+.tooltip__title {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--omashu-active);
+  font-size: 13px;
+}
+
+/* Tooltip por estado */
+.tooltip__content--primary {
+  border-color: var(--omashu-active);
+}
+
+.tooltip__content--success {
+  border-color: var(--positive-color);
+}
+
+.tooltip__content--warning {
+  border-color: var(--warning-color);
+}
+
+.tooltip__content--danger {
+  border-color: var(--negative-color);
+}
+
+.tooltip__content--accent {
+  border-color: var(--accent-color);
+}
+
+/* Tooltip para valores estadísticos */
+.tooltip__stat {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.tooltip__stat-label {
+  color: var(--text-secondary);
+  margin-right: 15px;
+}
+
+.tooltip__stat-value {
+  font-weight: 600;
+}
+
+.tooltip__stat-value--positive {
+  color: var(--positive-color);
+}
+
+.tooltip__stat-value--negative {
+  color: var(--negative-color);
+}
+
+/* Tooltip para comparaciones */
+.tooltip__compare {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltip__compare-title {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+/* Tooltip interactivo (con clic) */
+.tooltip--interactive .tooltip__content {
+  pointer-events: auto;
+}
+
+.tooltip--interactive .tooltip__trigger {
+  cursor: pointer;
+} 

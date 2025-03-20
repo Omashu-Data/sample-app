@@ -1,0 +1,213 @@
+/* 
+ * ==============================
+ * OMASHU.GG - PANELES Y TARJETAS DE ESTADÍSTICAS
+ * ==============================
+ *
+ * Estilos para tarjetas y paneles de estadísticas de juego
+ */
+
+/* ==============================
+ * PANELES DE ESTADÍSTICAS Y MÉTRICAS
+ * ============================== */
+.stats-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  left: 0 !important;
+}
+
+.optimized-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 15px;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.main-stats-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  gap: 15px;
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 !important;
+  left: 0;
+  padding: 0 !important;
+}
+
+.stats-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Tarjetas básicas */
+.match-info-card, .insight-card {
+  background: var(--card-background);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  transition: var(--transition-fast);
+}
+
+.match-info-card:hover, .insight-card:hover {
+  border-color: var(--omashu-active);
+  box-shadow: var(--elevated-shadow);
+}
+
+.match-info-header, .insight-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.match-info-header h3, .insight-card-header h3 {
+  font-size: 16px;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.live-badge {
+  background-color: var(--negative-color);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  margin-left: 10px;
+  animation: pulse 1.5s infinite;
+}
+
+.match-info-body, .insight-card-body {
+  margin-top: 10px;
+}
+
+.match-info-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.match-info-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.match-info-value {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: 14px;
+}
+
+/* Tarjetas métricas principales (Cards en grid) */
+.stat-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 600px) {
+  .stat-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.stat-card {
+  background: var(--card-background);
+  border-radius: var(--border-radius-md);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--elevated-shadow);
+  border-color: var(--omashu-active);
+}
+
+.stat-card__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-card__icon {
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+.stat-card__value {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 5px 0;
+}
+
+.stat-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  font-size: var(--font-size-sm);
+}
+
+.stat-card__rank {
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+}
+
+.stat-card__comparison {
+  display: flex;
+  align-items: center;
+}
+
+.comparison-positive {
+  color: var(--positive-color);
+}
+
+.comparison-negative {
+  color: var(--negative-color);
+}
+
+.comparison-neutral {
+  color: var(--text-secondary);
+}
+
+/* Indicadores de nivel por colores */
+.bronze {
+  color: var(--tier-bronze);
+}
+
+.silver {
+  color: var(--tier-silver);
+}
+
+.gold {
+  color: var(--tier-gold);
+}
+
+.platinum {
+  color: var(--tier-platinum);
+}
+
+.diamond {
+  color: var(--tier-diamond);
+}
+
+.master {
+  color: var(--tier-master);
+} 

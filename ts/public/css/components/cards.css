@@ -1,0 +1,362 @@
+/* 
+ * ==============================
+ * OMASHU.GG - SISTEMA DE TARJETAS
+ * ==============================
+ *
+ * Estilos para el sistema de tarjetas utilizado en toda la aplicación.
+ * Implementado con metodología BEM (Block, Element, Modifier).
+ */
+
+/* Tarjeta base - Estructura común para todas las tarjetas */
+.card {
+  position: relative;
+  width: 100%;
+  background: rgba(19, 11, 55, 0.8); /* Fondo más oscuro como en la imagen */
+  border-radius: 6px; /* Bordes menos redondeados */
+  overflow: hidden;
+  margin: 0 0 8px 0 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  min-height: 90px; /* Más compacto */
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(109, 61, 255, 0.15); /* Borde sutil */
+  box-sizing: border-box;
+}
+
+/* Efecto de hover más sutil */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(109, 61, 255, 0.25);
+  border-color: rgba(109, 61, 255, 0.3);
+}
+
+/* Estructura base de tarjeta */
+.card__header {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px 4px 10px;
+  border-bottom: none;
+  position: relative;
+}
+
+.card__icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  margin-right: 6px;
+  background-color: rgba(109, 61, 255, 0.15);
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.card__label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 30px);
+  letter-spacing: 0.5px;
+}
+
+.card__title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card__body {
+  padding: 4px 10px 8px 10px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card__footer {
+  padding: 4px 10px 8px 10px;
+  position: relative;
+}
+
+/* Modificadores de estado/color */
+.card--primary {
+  border-color: rgba(109, 61, 255, 0.15);
+  border-left: 3px solid var(--omashu-purple);
+}
+
+.card--primary .card__icon {
+  background-color: rgba(109, 61, 255, 0.15);
+  color: var(--omashu-purple-light);
+}
+
+.card--success {
+  border-color: rgba(76, 175, 80, 0.15);
+  border-left: 3px solid var(--positive-color);
+}
+
+.card--success .card__icon {
+  background-color: rgba(76, 175, 80, 0.15);
+  color: var(--positive-color);
+}
+
+.card--warning {
+  border-color: rgba(255, 193, 7, 0.15);
+  border-left: 3px solid var(--warning-color);
+}
+
+.card--warning .card__icon {
+  background-color: rgba(255, 193, 7, 0.15);
+  color: var(--warning-color);
+}
+
+.card--danger {
+  border-color: rgba(244, 67, 54, 0.15);
+  border-left: 3px solid var(--negative-color);
+}
+
+.card--danger .card__icon {
+  background-color: rgba(244, 67, 54, 0.15);
+  color: var(--negative-color);
+}
+
+.card--accent {
+  border-color: rgba(255, 64, 129, 0.15);
+  border-left: 3px solid var(--accent-color);
+}
+
+.card--accent .card__icon {
+  background-color: rgba(255, 64, 129, 0.15);
+  color: var(--accent-color);
+}
+
+/* Modificadores de tamaño */
+.card--small {
+  /* Ya no necesita estilos específicos, pues las tarjetas base son ahora pequeñas */
+}
+
+.card--small .card__header,
+.card--small .card__body,
+.card--small .card__footer {
+  /* Ya no necesita estilos específicos, pues las tarjetas base son ahora pequeñas */
+}
+
+.card--small .card__icon {
+  /* Ya no necesita estilos específicos, pues las tarjetas base son ahora pequeñas */
+}
+
+.card--large {
+  min-height: 120px;
+}
+
+.card--large .card__header,
+.card--large .card__body,
+.card--large .card__footer {
+  padding: var(--spacing-md);
+}
+
+.card--large .card__icon {
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  margin-right: var(--spacing-sm);
+}
+
+/* Componentes para tarjetas de rendimiento */
+.card__value-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.card__value {
+  font-size: 28px; /* Tamaño más grande para los números */
+  font-weight: 700;
+  color: white; /* Color plano como en la imagen */
+  text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
+  line-height: 1;
+}
+
+/* Estilos específicos para colores de valor según el tipo */
+.card--primary .card__value {
+  color: var(--omashu-purple-light);
+}
+
+.card--success .card__value {
+  color: #4caf50;
+}
+
+.card--warning .card__value {
+  color: #ffb74d;
+}
+
+.card--danger .card__value {
+  color: #f44336;
+}
+
+.card--accent .card__value {
+  color: #ff4081;
+}
+
+.card__rank {
+  font-size: 10px;
+  color: white;
+  padding: 1px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Colores dinámicos por rango como en la imagen */
+.card__rank[data-rank="Hierro"],
+.card__rank:contains("Hierro"),
+.card__rank:contains("IRON") {
+  background-color: #62676c;
+}
+
+.card__rank[data-rank="Bronce"], 
+.card__rank:contains("Bronce"),
+.card__rank:contains("BRONZE") {
+  background-color: #8d5524;
+}
+
+.card__rank[data-rank="Plata"],
+.card__rank:contains("Plata"),
+.card__rank:contains("SILVER") {
+  background-color: #757575;
+}
+
+.card__rank[data-rank="Oro"],
+.card__rank:contains("Oro"),
+.card__rank:contains("GOLD") {
+  background-color: #b7950b;
+}
+
+.card__rank[data-rank="Platino"],
+.card__rank:contains("Platino"),
+.card__rank:contains("PLATINUM") {
+  background-color: #4db6ac;
+}
+
+.card__rank[data-rank="Diamante"],
+.card__rank:contains("Diamante"),
+.card__rank:contains("DIAMOND") {
+  background-color: #48c9b0;
+}
+
+.card__rank[data-rank="Master"],
+.card__rank:contains("Master") {
+  background-color: #6c3483;
+}
+
+.card__chart {
+  margin-top: 5px;
+}
+
+.card__bar {
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.card__fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6d3dff, #bc76ff); /* Gradiente por defecto */
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* Personalización del color de relleno según el tipo de tarjeta */
+.card--primary .card__fill {
+  background: linear-gradient(90deg, #6d3dff, #bc76ff);
+}
+
+.card--success .card__fill {
+  background: linear-gradient(90deg, #43a047, #81c784);
+}
+
+.card--warning .card__fill {
+  background: linear-gradient(90deg, #fb8c00, #ffcc80);
+}
+
+.card--danger .card__fill {
+  background: linear-gradient(90deg, #e53935, #ef9a9a);
+}
+
+.card--accent .card__fill {
+  background: linear-gradient(90deg, #d81b60, #f8bbd0);
+}
+
+.card__comparison {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+}
+
+.card__comparison-label {
+  color: var(--text-tertiary);
+  font-size: 10px;
+}
+
+.card__comparison-value {
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.card__comparison-value--positive {
+  color: white;
+  background-color: rgba(76, 175, 80, 0.6);
+}
+
+.card__comparison-value--positive::before {
+  content: '+';
+}
+
+.card__comparison-value--negative {
+  color: white;
+  background-color: rgba(244, 67, 54, 0.6);
+}
+
+.card__comparison-value--neutral {
+  color: white;
+  background-color: rgba(255, 193, 7, 0.6);
+}
+
+.card__trend {
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+/* Componentes para tarjetas de estadísticas */
+.card__progress {
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.card__progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6d3dff, #bc76ff);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+} 

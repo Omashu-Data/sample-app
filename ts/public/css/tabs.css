@@ -15,7 +15,7 @@
   flex-direction: column;
   margin: 0 !important;
   position: fixed;
-  top: 130px; /* Ajustado para el header (44px) + altura del banner (82px) + gap (4px) */
+  top: 134px !important; /* Header (44px) + Banner (90px) */
   left: 0; /* Posicionar a la izquierda en lugar de centrado */
   transform: none; /* Eliminar la transformación de centrado */
   z-index: 990; /* Aumentado para estar al mismo nivel que el banner superior */
@@ -32,13 +32,14 @@
 .tabs__navigation {
   display: flex;
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md); /* Aumentado para mejor espaciado */
+  padding: 5px 15px; /* Espaciado más preciso */
   border-radius: 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
   border-bottom: 1px solid rgba(109, 61, 255, 0.3);
   height: 42px; /* Aumentado para dar más espacio a los botones */
   align-items: center;
+  justify-content: flex-start;
   box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
 }
 
@@ -52,7 +53,7 @@
   align-items: center;
   flex-direction: row;
   justify-content: center;
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: 6px 12px; /* Espaciado más preciso */
   background: transparent;
   border: none;
   color: var(--text-secondary);
@@ -62,9 +63,9 @@
   font-size: 12px;
   border-radius: var(--border-radius-sm);
   white-space: nowrap;
-  gap: var(--spacing-xs);
+  gap: 6px; /* Espaciado entre icono y texto */
   height: 32px; /* Aumentado para mayor consistencia */
-  margin: 0 2px; /* Más espacio entre pestañas */
+  margin: 0 3px; /* Más espacio entre pestañas */
 }
 
 .tabs__button::after {

@@ -1,0 +1,294 @@
+/* 
+ * ==============================
+ * OMASHU.GG - SISTEMA DE TABLAS
+ * ==============================
+ *
+ * Estilos para tablas y datos tabulares.
+ * Implementado con metodología BEM (Block, Element, Modifier).
+ */
+
+/* Contenedor de tabla con scroll */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  background-color: rgba(25, 25, 30, 0.3);
+}
+
+/* Tabla base */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 0;
+}
+
+/* Cabecera de tabla */
+.table th {
+  background-color: rgba(25, 25, 30, 0.5);
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: left;
+  padding: 12px 15px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Celda de tabla */
+.table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: background-color var(--transition-fast);
+}
+
+/* Eliminar borde inferior de la última fila */
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Efecto hover en filas */
+.table tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+.table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Tabla con bordes */
+.table--bordered th,
+.table--bordered td {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Tabla con filas alternadas */
+.table--striped tbody tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Tabla compacta */
+.table--compact th,
+.table--compact td {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+/* Tabla con texto centrado */
+.table--centered th,
+.table--centered td {
+  text-align: center;
+}
+
+/* Alineación del texto */
+.table .text-left {
+  text-align: left;
+}
+
+.table .text-center {
+  text-align: center;
+}
+
+.table .text-right {
+  text-align: right;
+}
+
+/* Estilos para filas y celdas especiales */
+.table__row--active {
+  background-color: rgba(118, 81, 255, 0.1) !important;
+}
+
+.table__row--success {
+  background-color: rgba(67, 160, 71, 0.1) !important;
+}
+
+.table__row--warning {
+  background-color: rgba(251, 140, 0, 0.1) !important;
+}
+
+.table__row--danger {
+  background-color: rgba(229, 57, 53, 0.1) !important;
+}
+
+.table__cell--highlight {
+  position: relative;
+}
+
+.table__cell--highlight:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background-color: var(--omashu-active);
+}
+
+/* Celda con contenedor de acciones */
+.table__actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+/* Indicador de estado en tabla */
+.table__status {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.table__status--online {
+  background-color: var(--positive-color);
+}
+
+.table__status--offline {
+  background-color: var(--text-secondary);
+}
+
+.table__status--warning {
+  background-color: var(--warning-color);
+}
+
+.table__status--danger {
+  background-color: var(--negative-color);
+}
+
+/* Cabecera ordenable */
+.table__th--sortable {
+  cursor: pointer;
+  position: relative;
+  padding-right: 20px;
+}
+
+.table__th--sortable:after {
+  content: '↕';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.table__th--sorted-asc:after {
+  content: '↑';
+  color: var(--omashu-active);
+}
+
+.table__th--sorted-desc:after {
+  content: '↓';
+  color: var(--omashu-active);
+}
+
+/* Tabla con filas seleccionables */
+.table--selectable tbody tr {
+  cursor: pointer;
+}
+
+.table--selectable .table__checkbox {
+  width: 40px;
+  text-align: center;
+  padding-right: 0;
+}
+
+/* Tabla con cabecera fija */
+.table--fixed-header {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table--fixed-header thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Pie de tabla */
+.table tfoot {
+  background-color: rgba(25, 25, 30, 0.3);
+  font-weight: 500;
+}
+
+.table tfoot td {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: none;
+}
+
+/* Celda expandible */
+.table__cell--expandable {
+  cursor: pointer;
+  position: relative;
+  padding-left: 25px;
+}
+
+.table__cell--expandable:before {
+  content: '+';
+  position: absolute;
+  left: 10px;
+  color: var(--text-secondary);
+}
+
+.table__cell--expanded:before {
+  content: '-';
+}
+
+.table__expanded-content {
+  padding: 15px;
+  background-color: rgba(20, 20, 25, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Tabla responsiva */
+@media (max-width: 768px) {
+  .table--responsive {
+    display: block;
+    width: 100%;
+  }
+  
+  .table--responsive thead {
+    display: none;
+  }
+  
+  .table--responsive tbody,
+  .table--responsive tr,
+  .table--responsive td {
+    display: block;
+    width: 100%;
+  }
+  
+  .table--responsive tr {
+    margin-bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .table--responsive td {
+    text-align: right;
+    position: relative;
+    padding-left: 50%;
+  }
+  
+  .table--responsive td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+} 

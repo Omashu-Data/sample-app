@@ -22,6 +22,14 @@
   --omashu-highlight: #9f5afd;        /* Elementos destacados */
   --omashu-active: #7747ea;           /* Elementos activos */
   
+  /* Variables del tema Omashu (migradas desde omashu-theme.css) */
+  --omashu-background: #090521;
+  --omashu-header: rgb(109, 61, 255, 0.1);
+  --omashu-border: 1px solid rgb(109, 61, 255, 0.3);
+  --omashu-button-border: 1px solid rgba(92, 52, 227, 0.3);
+  --omashu-color-white: #ffffff;
+  --omashu-white-50: rgba(255, 255, 255, 0.5);
+  
   /* Colores de texto */
   --text-primary: rgba(255, 255, 255, 0.95);    /* Texto principal */
   --text-secondary: rgba(255, 255, 255, 0.65);  /* Texto secundario */
@@ -39,6 +47,7 @@
   --info-rgb: 41, 182, 246;
   --accent-color: #ff4081;      /* Rosa - Acento */
   --accent-rgb: 255, 64, 129;
+  --omashu-error: #ff3257;      /* Error (migrado de omashu-theme) */
   
   /* Colores de rango/tier */
   --tier-iron: #8e9094;

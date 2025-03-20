@@ -43,8 +43,8 @@
 }
 
 [data-metric="objectives"] .card__icon {
-  color: #ba68c8;
-  text-shadow: 0 0 10px rgba(186, 104, 200, 0.5);
+  color: #9575cd;
+  text-shadow: 0 0 10px rgba(149, 117, 205, 0.5);
 }
 
 [data-metric="damage"] .card__icon {
@@ -53,8 +53,8 @@
 }
 
 [data-metric="healing"] .card__icon {
-  color: #f48fb1;
-  text-shadow: 0 0 10px rgba(244, 143, 177, 0.5);
+  color: #66bb6a;
+  text-shadow: 0 0 10px rgba(102, 187, 106, 0.5);
 }
 
 [data-metric="map-control"] .card__icon {
@@ -63,53 +63,54 @@
 }
 
 [data-metric="accuracy"] .card__icon {
-  color: #ffd54f;
-  text-shadow: 0 0 10px rgba(255, 213, 79, 0.5);
+  color: #ba68c8;
+  text-shadow: 0 0 10px rgba(186, 104, 200, 0.5);
 }
 
-/* Animaciones específicas por métrica */
+/* Efectos de actualización para valores de métricas específicas */
 [data-metric="dps"] .card__value.card__value--updated,
 [data-metric="damage"] .card__value.card__value--updated {
-  animation: pulse-red 1s ease;
+  color: #ff6b6b;
 }
 
 [data-metric="kda"] .card__value.card__value--updated,
 [data-metric="accuracy"] .card__value.card__value--updated {
-  animation: pulse-blue 1s ease;
-}
-
-[data-metric="gold"] .card__value.card__value--updated {
-  animation: pulse-gold 1s ease;
-}
-
-[data-metric="healing"] .card__value.card__value--updated {
-  animation: pulse-green 1s ease;
-}
-
-/* Estilos específicos para valores destacados */
-[data-metric="dps"] .card__value {
-  color: #ff6b6b;
-}
-
-[data-metric="kda"] .card__value {
   color: #5ce1e6;
 }
 
-[data-metric="gold"] .card__value {
+[data-metric="gold"] .card__value.card__value--updated {
   color: #ffd700;
 }
 
-/* Ajustes para diferentes tamaños */
+[data-metric="healing"] .card__value.card__value--updated {
+  color: #66bb6a;
+}
+
+/* Estilos de valor para métricas específicas */
+[data-metric="dps"] .card__value {
+  font-weight: 700;
+}
+
+[data-metric="kda"] .card__value {
+  font-size: 2.5rem;
+}
+
+[data-metric="gold"] .card__value {
+  font-family: var(--font-numeric);
+  letter-spacing: -0.5px;
+}
+
+/* Animaciones y transiciones para tarjetas de métricas */
 .dashboard__stats-grid [data-metric] {
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .dashboard__stats-grid [data-metric]:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Destacar métricas importantes */
+/* Efectos especiales para métricas de alto impacto */
 [data-metric="kda"],
 [data-metric="damage"],
 [data-metric="gold"] {
@@ -120,13 +121,53 @@
 [data-metric="kda"]::after,
 [data-metric="damage"]::after,
 [data-metric="gold"]::after {
-  content: '';
+  content: "";
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 20px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 0 0 0 100%;
-  z-index: 1;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+
+/* Añadimos los estilos para cualquier otra métrica que pueda aparecer en el HTML */
+[data-metric="farm"] .card__icon {
+  color: #aed581;
+  text-shadow: 0 0 10px rgba(174, 213, 129, 0.5);
+}
+
+[data-metric="kills"] .card__icon {
+  color: #e57373;
+  text-shadow: 0 0 10px rgba(229, 115, 115, 0.5);
+}
+
+[data-metric="deaths"] .card__icon {
+  color: #b0bec5;
+  text-shadow: 0 0 10px rgba(176, 190, 197, 0.5);
+}
+
+[data-metric="assists"] .card__icon {
+  color: #4fc3f7;
+  text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+}
+
+[data-metric="team-fights"] .card__icon {
+  color: #ce93d8;
+  text-shadow: 0 0 10px rgba(206, 147, 216, 0.5);
+}
+
+/* Efectos genéricos para todas las métricas data-metric */
+[data-metric] .card__value {
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+[data-metric] .card__value.card__value--updated {
+  transform: scale(1.05);
+}
+
+[data-metric]:hover .card__icon {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
 } 

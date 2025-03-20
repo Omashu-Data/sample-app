@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../../css/variables.css" />
+  <title>Omashu.gg - In-Game</title>
+  <link rel="stylesheet" href="../../css/in-game.css" />
+</head>
+<body class="in-game">
+  <div id="app-container" class="banner-container" style="width: 740px !important; max-width: 740px !important; position: relative !important; margin: 0 !important; padding: 0 !important; overflow: visible !important;">
+    <div class="content-wrapper">
+      <!-- Incluir componentes modularizados mediante JavaScript -->
+      <div id="header-container"></div>
+      <div id="banner-top-container"></div>
+      <div id="tabs-menu-container"></div>
+      
+      <!-- --------------------------------- Main -------------------------------- -->
+      <main class="main--with-ads">
+        <div class="main-content-area">
+          <!-- Contenido de pestañas con animaciones de entrada suaves -->
+          <div class="tabs__content">
+            <div id="tab-content-container"></div>
+          </div>
+        </div>
+      </main>
+
+      <div id="banner-vertical-container"></div>
+    </div>
+  </div>
+
+  <script>
+    // Función para cargar componentes HTML
+    async function loadComponent(containerId, componentPath) {
+      try {
+        const response = await fetch(componentPath);
+        if (!response.ok) {
+          throw new Error(`Error al cargar ${componentPath}: ${response.status}`);
+        }
+        const html = await response.text();
+        document.getElementById(containerId).innerHTML = html;
+      } catch (error) {
+        console.error(`Error cargando componente: ${error}`);
+      }
+    }
+
+    // Cargar todos los componentes al iniciar
+    document.addEventListener('DOMContentLoaded', async function() {
+      // Cargar los componentes principales
+      await loadComponent('header-container', 'components/header.html');
+      await loadComponent('banner-top-container', 'components/banner-top.html');
+      await loadComponent('tabs-menu-container', 'components/tabs-menu.html');
+      await loadComponent('tab-content-container', 'components/tab-stats.html'); // Por defecto cargamos el tab de stats
+      await loadComponent('banner-vertical-container', 'components/banner-vertical.html');
+      
+      // Inicializar sistema de pestañas
+      initTabs();
+    });
+
+    // Sistema de pestañas
+    function initTabs() {
+      const tabButtons = document.querySelectorAll('.tabs__button');
+      
+      // Añadir evento click a cada botón de pestaña
+      tabButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+          // Remover clase activa de todos los botones
+          tabButtons.forEach(btn => btn.classList.remove('tabs__button--active'));
+          
+          // Añadir clase activa al botón clickeado
+          this.classList.add('tabs__button--active');
+          
+          // Obtener el id de la pestaña
+          const tabId = this.getAttribute('data-tab');
+          
+          // Cargar el contenido de la pestaña correspondiente
+          await loadComponent('tab-content-container', `components/tab-${tabId}.html`);
+        });
+      });
+    }
+
+    // Analytics (mantener el código existente)
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      },
+        i[r].l = 1 * new Date(); a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-144253676-3', 'auto');
+    ga('set', 'checkProtocolTask', function () { });
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview', '/in_game.html');
+  </script>
+</body>
+</html> 

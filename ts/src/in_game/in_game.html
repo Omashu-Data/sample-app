@@ -1,48 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <!-- Archivo de variables CSS primero para que estén disponibles en todos los demás -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../../css/variables.css" />
-  <!-- Estilos base -->
-  <link rel="stylesheet" href="../../css/general.css" />
-  <!-- Estilos de estructura y layout -->
-  <link rel="stylesheet" href="../../css/layout.css" />
-  <!-- Componentes de UI -->
-  <link rel="stylesheet" href="../../css/components.css" />
-  <!-- Sistema de pestañas -->
-  <link rel="stylesheet" href="../../css/tabs.css" />
-  <!-- Estilos específicos de secciones -->
-  <link rel="stylesheet" href="../../css/header.css" />
-  <link rel="stylesheet" href="../../css/modal.css" />
-  <!-- Theme y estilos específicos de la vista ingame -->
-  <link rel="stylesheet" href="../../css/omashu-theme.css" />
-  <link rel="stylesheet" href="../../css/ingame.css" />
-  <!-- Animaciones y métricas -->
-  <link rel="stylesheet" href="../../css/animations.css" />
-  <link rel="stylesheet" href="../../css/metrics.css" />
-  <title>omashu.gg - League of Legends</title>
-  <style>
-    /* Estilos inline directos para el banner vertical */
-    #banner-vertical-160x600 {
-      position: absolute !important;
-      top: 172px !important;
-      right: 0 !important;
-      width: 160px !important;
-      height: 600px !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      border: none !important;
-      box-sizing: border-box !important;
-      z-index: 9999 !important;
-      float: right !important;
-      background: rgba(19, 11, 55, 0.8) !important;
-    }
-    .banner-container {
-      width: 740px !important;
-      position: relative !important;
-    }
-  </style>
+  <title>Omashu.gg - In-Game</title>
+  <link rel="stylesheet" href="../../css/in-game.css" />
 </head>
 <body class="in-game">
   <div id="app-container" class="banner-container" style="width: 740px !important; max-width: 740px !important; position: relative !important; margin: 0 !important; padding: 0 !important; overflow: visible !important;">
@@ -1379,7 +1342,7 @@
       </main>
 
       <!-- Banner vertical simplificado y hardcoded -->
-      <div id="banner-vertical-160x600" style="position: absolute; top: 172px; right: 0; width: 160px; height: 600px; z-index: 9999; border: none; overflow: visible;">
+      <div id="banner-vertical-160x600" style="position: absolute; top: 176px; right: 0; width: 160px; height: 600px; z-index: 980; border: none; overflow: visible;">
         <div style="width: 160px; height: 600px; margin: 0; padding: 0; position: relative;">
           <div class="ad-placeholder" style="width: 160px; height: 600px; background: linear-gradient(135deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8)); margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
             <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">
