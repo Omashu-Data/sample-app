@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode=development --env makeOpk",
-    "dev": "webpack --watch --mode=development",
+    "dev": "concurrently \"webpack --watch --mode=development\" \"node scripts/sync-modules.js --watch\"",
     "watch": "webpack --watch --mode=development",
+    "sync": "node scripts/sync-modules.js --watch",
+    "sync-once": "node scripts/sync-modules.js",
     "package": "node scripts/package.js"
   },
   "keywords": [],
@@ -17,6 +19,7 @@
     "@overwolf/types": "^2.33.0",
     "archiver": "^7.0.1",
     "clean-webpack-plugin": "^3.0.0",
+    "concurrently": "^9.1.2",
     "copy-webpack-plugin": "^7.0.0",
     "html-webpack-plugin": "^5.2.0",
     "semver": "^7.3.4",

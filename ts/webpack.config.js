@@ -31,7 +31,20 @@ module.exports = env => ({
     plugins: [
         new CleanWebpackPlugin,
         new CopyPlugin({
-            patterns: [ { from: "public", to: "./" } ],
+            patterns: [
+                { from: "public", to: "./" },
+                { 
+                    from: "src/in_game/header*.html", 
+                    to: "./[name].[ext]" 
+                },
+                { 
+                    from: "src/in_game/*.js", 
+                    to: "./[name].[ext]", 
+                    globOptions: { 
+                        ignore: ["**/*.ts"] 
+                    } 
+                }
+            ],
         }),
         new HtmlWebpackPlugin({
             template: './src/background/background.html',
