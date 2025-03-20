@@ -14,6 +14,9 @@ const targetDir = path.resolve(__dirname, '../public');
 // Extensiones a sincronizar
 const validExtensions = ['.html', '.js'];
 
+// Archivos a excluir de la sincronización
+const excludedFiles = ['in_game.html'];
+
 // Función para copiar un archivo
 function copyFile(sourcePath, targetPath) {
   console.log(`Copiando ${path.basename(sourcePath)} a public/`);
@@ -31,12 +34,14 @@ function copyFile(sourcePath, targetPath) {
 function syncModularFiles() {
   // Leer todos los archivos en el directorio fuente
   fs.readdirSync(sourceDir).forEach(file => {
-    // Ignorar archivos TypeScript y directorios
+    // Ignorar archivos TypeScript, directorios y archivos excluidos
     const sourcePath = path.join(sourceDir, file);
     const targetPath = path.join(targetDir, file);
     const ext = path.extname(file);
     
-    if (fs.statSync(sourcePath).isFile() && validExtensions.includes(ext)) {
+    if (fs.statSync(sourcePath).isFile() && 
+        validExtensions.includes(ext) && 
+        !excludedFiles.includes(file)) {
       // Copiar el archivo
       copyFile(sourcePath, targetPath);
     }
@@ -54,8 +59,10 @@ function watchModularFiles() {
     
     const ext = path.extname(filename);
     
-    // Solo procesar archivos HTML y JS (no TypeScript)
-    if (validExtensions.includes(ext) && ext !== '.ts') {
+    // Solo procesar archivos HTML y JS (no TypeScript) que no estén excluidos
+    if (validExtensions.includes(ext) && 
+        ext !== '.ts' && 
+        !excludedFiles.includes(filename)) {
       const sourcePath = path.join(sourceDir, filename);
       const targetPath = path.join(targetDir, filename);
       
