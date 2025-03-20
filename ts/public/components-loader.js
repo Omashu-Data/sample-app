@@ -28,7 +28,7 @@ function loadBannerHorizontal() {
 function loadTabsMenu() {
   const container = document.getElementById('tabs-menu-container');
   if (container) {
-    loadComponent(container, 'tabs-menu.html', 'menú de tabs', initTabsListeners);
+    loadComponent(container, 'tabs-menu.html', 'menú de tabs');
   }
 }
 
@@ -97,53 +97,48 @@ function initTabsListeners() {
       button.classList.add('tabs__button--active');
       
       // Obtener el tab a mostrar
-      const tabName = button.getAttribute('data-tab');
+      const tabName = button.getAttribute('data-tab-target');
       
       // Ocultar todos los paneles
       tabPanes.forEach(pane => pane.classList.remove('tabs__pane--active'));
       
       // Mostrar el panel correspondiente
-      const activePane = document.getElementById(`${tabName}-tab`);
+      const activePane = document.getElementById(tabName);
       if (activePane) {
         activePane.classList.add('tabs__pane--active');
+        
+        // Si el contenido aún no se ha cargado, cargarlo
+        if (!activePane.dataset.loaded) {
+          loadTabContent(tabName);
+          activePane.dataset.loaded = 'true';
+        }
       }
     });
   });
   
   console.log('Listeners de tabs inicializados');
+  
+  // Activar el primer tab por defecto
+  const firstTabButton = tabButtons[0];
+  if (firstTabButton) {
+    const tabName = firstTabButton.getAttribute('data-tab-target');
+    const firstTab = document.getElementById(tabName);
+    if (firstTab && !firstTab.dataset.loaded) {
+      loadTabContent(tabName);
+      firstTab.dataset.loaded = 'true';
+    }
+  }
 }
 
 /**
- * Cargador de componentes de pestañas
- * Este script se encarga de cargar dinámicamente los contenidos de las distintas pestañas
+ * Carga el contenido de una pestaña específica
+ * @param {string} tabId - El ID del contenedor de la pestaña
  */
-
-// Función principal para inicializar la carga de componentes
-function initComponentsLoader() {
-  console.log('Inicializando cargador de componentes de pestañas...');
+function loadTabContent(tabId) {
+  const tabName = tabId.replace('-tab', '');
+  const htmlFile = `tab-${tabName}.html`;
   
-  // Mapeo de pestañas a sus archivos HTML correspondientes
-  const tabComponents = {
-    'statistics-tab': 'tab-statistics.html',
-    'events-tab': 'tab-events.html', 
-    'clips-tab': 'tab-clips.html',
-    'performance-tab': 'tab-performance.html',
-    'improve-tab': 'tab-improve.html',
-    'heatmap-tab': 'tab-heatmap.html'
-  };
-  
-  // Cargar todos los componentes de pestañas
-  Object.entries(tabComponents).forEach(([tabId, htmlFile]) => {
-    loadTabContent(tabId, htmlFile);
-  });
-  
-  // Asegurarse de que las pestañas funcionan correctamente después de cargar el contenido
-  setupTabNavigation();
-}
-
-// Cargar el contenido de una pestaña desde un archivo HTML
-function loadTabContent(tabId, htmlFile) {
-  console.log(`Cargando contenido para la pestaña ${tabId} desde ${htmlFile}`);
+  console.log(`Cargando contenido para ${tabId} desde ${htmlFile}`);
   
   const tabPane = document.getElementById(tabId);
   if (!tabPane) {
@@ -160,9 +155,9 @@ function loadTabContent(tabId, htmlFile) {
     })
     .then(html => {
       tabPane.innerHTML = html;
-      console.log(`Contenido cargado exitosamente para ${tabId}`);
+      console.log(`Contenido para ${tabId} cargado correctamente`);
       
-      // Disparar un evento custom para notificar que el contenido se ha cargado
+      // Disparar evento para notificar que el contenido se ha cargado
       const event = new CustomEvent('tabContentLoaded', { detail: { tabId } });
       document.dispatchEvent(event);
     })
@@ -172,35 +167,8 @@ function loadTabContent(tabId, htmlFile) {
     });
 }
 
-// Configurar la navegación entre pestañas
-function setupTabNavigation() {
-  const tabButtons = document.querySelectorAll('.tabs__button');
-  const tabPanes = document.querySelectorAll('.tabs__pane');
-  
-  tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      // Desactivar todas las pestañas
-      tabButtons.forEach(btn => btn.classList.remove('tabs__button--active'));
-      tabPanes.forEach(pane => pane.classList.remove('tabs__pane--active'));
-      
-      // Activar la pestaña seleccionada
-      button.classList.add('tabs__button--active');
-      const targetId = button.getAttribute('data-tab-target');
-      const targetPane = document.getElementById(targetId);
-      if (targetPane) {
-        targetPane.classList.add('tabs__pane--active');
-      }
-    });
-  });
-}
-
-// Ejecutar cuando el DOM esté completamente cargado
-document.addEventListener('DOMContentLoaded', () => {
-  initComponentsLoader();
-});
-
 // Exportar funciones para uso externo si es necesario
 window.tabLoader = {
   loadTabContent,
-  setupTabNavigation
-}; 
+  initTabsListeners
+};

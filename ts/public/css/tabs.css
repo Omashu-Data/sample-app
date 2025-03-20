@@ -9,22 +9,22 @@
 
 /* Contenedor principal de pestañas */
 .tabs {
-  width: 740px !important; /* Ancho fijo exacto con !important */
-  max-width: 740px !important;
+  width: var(--app-width) !important; /* Usar variable global */
+  max-width: var(--app-width) !important;
   display: flex;
   flex-direction: column;
   margin: 0 !important;
   position: fixed;
-  top: 134px !important; /* Header (44px) + Banner (90px) */
-  left: 0; /* Posicionar a la izquierda en lugar de centrado */
-  transform: none; /* Eliminar la transformación de centrado */
-  z-index: 990; /* Aumentado para estar al mismo nivel que el banner superior */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  pointer-events: auto; /* Asegurar que se pueden hacer clic en las pestañas */
-  background: linear-gradient(90deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
-  backdrop-filter: blur(15px);
-  box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
-  height: 42px; /* Altura exacta para el cálculo correcto */
+  top: calc(var(--app-header-height) + var(--app-banner-height)) !important; /* Justo debajo del banner */
+  left: 0; /* Posicionar a la izquierda */
+  transform: none;
+  z-index: var(--z-index-sticky);
+  box-shadow: none; /* Quitamos sombra para un aspecto más limpio */
+  pointer-events: auto;
+  background: transparent; /* Fondo transparente */
+  backdrop-filter: none; /* Sin efecto de desenfoque */
+  box-sizing: border-box !important;
+  height: var(--app-tabs-height);
   padding: 0 !important;
 }
 
@@ -32,19 +32,22 @@
 .tabs__navigation {
   display: flex;
   width: 100%;
-  padding: 5px 15px; /* Espaciado más preciso */
+  padding: 5px 15px;
   border-radius: 0;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  border-bottom: 1px solid rgba(109, 61, 255, 0.3);
-  height: 42px; /* Aumentado para dar más espacio a los botones */
+  overflow-x: auto; /* Permitir scroll horizontal si hay muchas pestañas */
+  scrollbar-width: none; /* Ocultar scrollbar en Firefox */
+  -ms-overflow-style: none; /* Ocultar scrollbar en IE/Edge */
+  border-bottom: none; /* Quitamos el borde inferior */
+  height: var(--app-tabs-height);
   align-items: center;
-  justify-content: flex-start;
-  box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
+  justify-content: space-between; /* Espaciado uniforme */
+  box-sizing: border-box !important;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 .tabs__navigation::-webkit-scrollbar {
-  display: none;
+  display: none; /* Ocultar scrollbar en Chrome/Safari */
 }
 
 /* Botón de pestaña */
@@ -53,76 +56,51 @@
   align-items: center;
   flex-direction: row;
   justify-content: center;
-  padding: 6px 12px; /* Espaciado más preciso */
+  padding: 6px 12px;
   background: transparent;
   border: none;
   color: var(--text-secondary);
   cursor: pointer;
   position: relative;
   transition: all var(--transition-fast);
-  font-size: 12px;
-  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  border-radius: var(--border-radius-round); /* Bordes más redondeados */
   white-space: nowrap;
-  gap: 6px; /* Espaciado entre icono y texto */
-  height: 32px; /* Aumentado para mayor consistencia */
-  margin: 0 3px; /* Más espacio entre pestañas */
+  gap: 8px; /* Espaciado entre icono y texto */
+  height: 36px; /* Altura incrementada */
+  margin: 0;
+  min-width: auto;
+  flex-shrink: 0;
+  opacity: 0.8; /* Opacidad base */
 }
 
-.tabs__button::after {
-  content: '';
-  position: absolute;
-  bottom: -1px; /* Alinear con el borde inferior */
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: var(--omashu-active);
-  transition: width var(--transition-fast);
-  border-radius: 2px 2px 0 0;
-}
-
-.tabs__button:hover {
-  color: var(--text-primary);
-  background-color: rgba(109, 61, 255, 0.1);
-}
-
-.tabs__button:hover::after {
-  width: 100%;
-  opacity: 0.5;
-}
-
-/* Estado activo del botón */
+/* Botón activo */
 .tabs__button--active {
-  color: var(--omashu-purple-light);
-  background-color: rgba(109, 61, 255, 0.15);
-  font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.tabs__button--active::after {
-  width: 100%;
-  opacity: 1;
-  height: 2px;
-  box-shadow: 0 0 4px rgba(109, 61, 255, 0.5);
+  color: var(--text-primary);
+  background: rgba(109, 61, 255, 0.2); /* Fondo semitransparente para el botón activo */
+  box-shadow: 0 0 15px rgba(109, 61, 255, 0.25); /* Resplandor */
+  opacity: 1; /* Opacidad completa cuando está activo */
 }
 
 /* Icono del botón */
 .tabs__icon {
-  font-size: 14px; /* Reducido de 18px */
-  margin-right: var(--spacing-xs); /* Añadido margen derecho */
-  margin-bottom: 0; /* Eliminado margen inferior */
-}
-
-.tabs__button:hover .tabs__icon {
-  transform: translateY(-1px);
-}
-
-.tabs__button--active .tabs__icon {
-  transform: translateY(-1px);
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Texto del botón */
 .tabs__text {
-  font-size: 12px; /* Reducido de 14px */
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium); /* Un poco más grueso */
+}
+
+/* Hover del botón */
+.tabs__button:hover:not(.tabs__button--active) {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  opacity: 0.9;
 }
 
 /* Notificación en el botón */
@@ -156,31 +134,23 @@
 
 /* Contenedor del contenido de todas las pestañas */
 .tabs__content {
+  width: var(--app-content-width) !important;
+  max-width: var(--app-content-width) !important;
+  padding: 15px !important;
+  z-index: var(--z-index-above);
+  margin-top: var(--app-content-offset) !important; /* Posicionar debajo de header + banner + tabs */
   position: relative;
-  width: 580px !important;
-  max-width: 580px !important;
-  padding: 0 !important;
-  z-index: 990;
-  height: auto;
-  margin: 0 !important;
-  left: 0 !important;
+  box-sizing: border-box !important;
 }
 
 /* Cada panel de pestaña individual */
 .tabs__pane {
   display: none;
-  position: relative;
-  width: 580px !important;
-  max-width: 580px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  height: auto;
-  min-height: 400px;
+  width: 100% !important;
   opacity: 0;
   transition: opacity var(--transition-fast);
   overflow-y: auto;
-  left: 0 !important;
-  background-color: transparent !important; /* Asegurar fondo transparente */
+  background-color: transparent !important;
 }
 
 .tabs__pane--active {

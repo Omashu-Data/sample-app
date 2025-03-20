@@ -83,7 +83,7 @@
    * ============================== */
   
   /* Tamaño de la aplicación */
-  --app-width: 740px; /* Ancho total exacto forzado para el plugin */
+  --app-width: 740px;            /* Ancho total de la aplicación */
   
   /* Espaciados */
   --spacing-xxs: 4px;
@@ -161,6 +161,7 @@
   /* Dimensiones de la aplicación */
   --app-header-height: 44px;     /* Altura del encabezado */
   --app-banner-height: 90px;     /* Altura del banner horizontal */
+  --app-banner-width: 728px;     /* Ancho del banner horizontal (requisito de Overwolf) */
   --app-tabs-height: 42px;       /* Altura de la barra de pestañas */
   --app-vertical-banner-width: 160px; /* Ancho del banner vertical */
   --app-content-offset: 176px;   /* Desplazamiento vertical del contenido principal (header + banner + tabs) */
