@@ -14,7 +14,6 @@
 /* Importar base del tema y layouts */
 @import url('base-theme.css');
 @import url('layouts/ingame-layout.css');
-@import url('components-layout.css'); /* Nuevo sistema de layout para componentes modulares */
 
 /* Componentes de UI */
 @import url('components.css');
