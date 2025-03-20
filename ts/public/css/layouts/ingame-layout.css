@@ -39,7 +39,7 @@ main.with-ads {
   width: var(--app-width) !important; /* Usando la variable global */
   max-width: var(--app-width) !important;
   margin: 0 !important; /* Eliminar margin auto */
-  padding-top: 170px !important; /* Ajustado para mantener un espaciado correcto */
+  padding-top: var(--app-content-offset) !important; /* Usar variable global */
   box-sizing: border-box !important;
   position: relative;
   overflow-y: auto;

@@ -8,8 +8,8 @@
 
 /* Contenedor del header */
 .header {
-  width: 740px !important; /* Ancho fijo exacto con !important */
-  max-width: 740px !important;
+  width: var(--app-width) !important; /* Usar variable global */
+  max-width: var(--app-width) !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -22,11 +22,11 @@
   background: linear-gradient(90deg, rgba(19, 11, 55, 0.95), rgba(39, 22, 100, 0.95));
   backdrop-filter: blur(15px);
   border-bottom: none;
-  z-index: 1000;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.25);
+  z-index: var(--z-index-fixed);
+  box-shadow: var(--shadow-md);
   transition: all var(--transition-fast);
-  font-family: "Matter";
-  height: 44px;
+  font-family: var(--font-family-base);
+  height: var(--app-header-height);
   overflow: hidden;
   box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
 }

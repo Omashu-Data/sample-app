@@ -10,12 +10,12 @@
  * BANNER SUPERIOR (HORIZONTAL)
  * ============================== */
 .banner--horizontal {
-  width: 740px !important;
+  width: var(--app-width) !important;
   max-width: 100%;
-  height: 90px;
+  height: var(--app-banner-height);
   left: 0;
   position: fixed;
-  top: 44px; /* Debajo del header */
+  top: var(--app-header-height); /* Debajo del header */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,12 +27,12 @@
 
 .banner--horizontal .banner__container,
 .banner--horizontal .ad-placeholder {
-  width: 740px !important;
-  height: 90px !important;
-  min-height: 90px !important;
-  max-height: 90px !important;
+  width: var(--app-width) !important;
+  height: var(--app-banner-height) !important;
+  min-height: var(--app-banner-height) !important;
+  max-height: var(--app-banner-height) !important;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--border-radius-sm);
   box-sizing: border-box !important;
   pointer-events: auto;
 }
@@ -43,9 +43,9 @@
 .banner--vertical {
   position: absolute;
   right: 0;
-  top: 176px; /* Alineado correctamente: Header (44px) + Banner (90px) + Tabs (42px) */
-  width: 160px !important;
-  height: calc(100% - 176px);
+  top: var(--app-content-offset); /* Alineado correctamente usando la variable global */
+  width: var(--app-vertical-banner-width) !important;
+  height: calc(100% - var(--app-content-offset));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,12 +57,12 @@
 
 .banner--vertical .banner__container,
 .banner--vertical .ad-placeholder {
-  width: 160px !important;
+  width: var(--app-vertical-banner-width) !important;
   height: 600px !important;
   min-height: 600px !important;
   max-height: 600px !important;
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--border-radius-sm);
   margin-top: 0;
   box-sizing: border-box !important;
   pointer-events: auto;
@@ -71,17 +71,17 @@
 /* Banner vertical fijo hardcodeado */
 #banner-vertical-160x600 {
   position: absolute;
-  top: 176px;
+  top: var(--app-content-offset);
   right: 0;
-  width: 160px;
+  width: var(--app-vertical-banner-width);
   height: 600px;
   z-index: 980;
   background-color: rgba(13, 6, 31, 0.9);
   border-left: 1px solid var(--omashu-border);
   border-bottom: 1px solid var(--omashu-border);
   border-top: 1px solid var(--omashu-border);
-  border-radius: 5px 0 0 5px;
-  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius-md) 0 0 var(--border-radius-md);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
   pointer-events: auto;
   text-align: center;
