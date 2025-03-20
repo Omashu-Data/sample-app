@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Cargador de componentes modulares
  * Este script carga los diferentes componentes de la interfaz desde archivos separados
  */
@@ -28,7 +28,7 @@ function loadBannerHorizontal() {
 function loadTabsMenu() {
   const container = document.getElementById('tabs-menu-container');
   if (container) {
-    loadComponent(container, 'tabs-menu.html', 'menú de tabs');
+    loadComponent(container, 'tabs-menu.html', 'menú de tabs', initTabsListeners);
   }
 }
 
@@ -155,7 +155,7 @@ function loadTabContent(tabId) {
     })
     .then(html => {
       tabPane.innerHTML = html;
-      console.log(`Contenido para ${tabId} cargado correctamente`);
+      console.log(`Contenido cargado exitosamente para ${tabId}`);
       
       // Disparar evento para notificar que el contenido se ha cargado
       const event = new CustomEvent('tabContentLoaded', { detail: { tabId } });
@@ -171,4 +171,4 @@ function loadTabContent(tabId) {
 window.tabLoader = {
   loadTabContent,
   initTabsListeners
-};
+}; 

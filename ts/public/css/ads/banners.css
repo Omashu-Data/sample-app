@@ -7,9 +7,9 @@
  */
 
 /* ==============================
- * BANNER DECORATIVO (CURVA)
+ * BANNER SUPERIOR (HORIZONTAL)
  * ============================== */
-.banner--decorative {
+.banner--horizontal {
   width: var(--app-width) !important;
   max-width: 100%;
   height: var(--app-banner-height);
@@ -18,109 +18,25 @@
   top: var(--app-header-height); /* Debajo del header */
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   z-index: 985; /* Por encima del contenido principal pero por debajo de los tabs */
   background: transparent;
-  pointer-events: none; /* Para que no interfiera con los clics */
+  pointer-events: auto;
   overflow: hidden;
 }
 
-.banner__curve {
-  width: 100%;
-  height: 30px;
-  position: absolute;
-  bottom: -20px;
-  left: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.banner__curve svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/* ==============================
- * BANNER SUPERIOR (HORIZONTAL)
- * ============================== */
-.banner--horizontal {
-  width: var(--app-width) !important;
-  height: var(--app-banner-height);
-  position: fixed;
-  top: var(--app-header-height);
-  left: 0;
-  z-index: 980;
-  background: transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Contenedor del anuncio */
-.ad-container {
-  width: var(--app-banner-width);
-  height: var(--app-banner-height);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Mockup del anuncio */
-.ad-mockup {
-  width: 100%;
-  height: 100%;
-  background: rgba(19, 11, 55, 0.7);
-  border: 1px solid rgba(109, 61, 255, 0.3);
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(109, 61, 255, 0.1),
-    rgba(109, 61, 255, 0.1) 10px,
-    rgba(109, 61, 255, 0.2) 10px,
-    rgba(109, 61, 255, 0.2) 20px
-  );
-}
-
-/* Contenido del anuncio */
-.ad-mockup__content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  background: linear-gradient(to right, 
-    rgba(19, 11, 55, 0.7), 
-    rgba(39, 22, 100, 0.7), 
-    rgba(19, 11, 55, 0.7)
-  );
-}
-
-/* Información del anuncio */
-.ad-mockup__info {
-  text-align: center;
-}
-
-/* Título del anuncio */
-.ad-mockup__title {
-  font-size: 16px;
-  font-weight: 500;
-  color: white;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
-}
-
-/* Dimensiones del anuncio */
-.ad-mockup__dimensions {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+.banner--horizontal .banner__container,
+.banner--horizontal .ad-placeholder {
+  width: var(--app-banner-width) !important; /* Usar el ancho específico del banner (728px) */
+  height: var(--app-banner-height) !important;
+  min-height: var(--app-banner-height) !important;
+  max-height: var(--app-banner-height) !important;
+  overflow: hidden;
+  border-radius: var(--border-radius-sm);
+  box-sizing: border-box !important;
+  pointer-events: auto;
+  box-shadow: var(--shadow-md);
+  margin: 0 auto; /* Centrar horizontalmente */
 }
 
 /* ==============================
@@ -129,13 +45,13 @@
 .banner--vertical {
   position: absolute;
   right: 0;
-  top: var(--app-content-offset);
+  top: var(--app-content-offset); /* Alineado correctamente usando la variable global */
   width: var(--app-vertical-banner-width) !important;
   height: calc(100% - var(--app-content-offset));
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 950;
+  z-index: 980; /* Por encima del contenido principal */
   background: transparent;
   pointer-events: auto;
   overflow: hidden;

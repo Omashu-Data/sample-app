@@ -15,16 +15,16 @@
   flex-direction: column;
   margin: 0 !important;
   position: fixed;
-  top: calc(var(--app-header-height) + var(--app-banner-height)) !important; /* Justo debajo del banner */
-  left: 0; /* Posicionar a la izquierda */
-  transform: none;
-  z-index: var(--z-index-sticky);
-  box-shadow: none; /* Quitamos sombra para un aspecto más limpio */
-  pointer-events: auto;
-  background: transparent; /* Fondo transparente */
-  backdrop-filter: none; /* Sin efecto de desenfoque */
-  box-sizing: border-box !important;
-  height: var(--app-tabs-height);
+  top: calc(var(--app-header-height) + var(--app-banner-height)) !important; /* Usar variables globales */
+  left: 0; /* Posicionar a la izquierda en lugar de centrado */
+  transform: none; /* Eliminar la transformación de centrado */
+  z-index: var(--z-index-sticky); /* Usar variable global para z-index */
+  box-shadow: var(--shadow-md);
+  pointer-events: auto; /* Asegurar que se pueden hacer clic en las pestañas */
+  background: linear-gradient(90deg, rgba(19, 11, 55, 0.8), rgba(39, 22, 100, 0.8));
+  backdrop-filter: blur(15px);
+  box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
+  height: var(--app-tabs-height); /* Usar variable global */
   padding: 0 !important;
 }
 
@@ -32,18 +32,18 @@
 .tabs__navigation {
   display: flex;
   width: 100%;
-  padding: 5px 15px;
+  padding: 5px 15px; /* Espaciado más preciso */
   border-radius: 0;
   overflow-x: auto; /* Permitir scroll horizontal si hay muchas pestañas */
   scrollbar-width: none; /* Ocultar scrollbar en Firefox */
   -ms-overflow-style: none; /* Ocultar scrollbar en IE/Edge */
-  border-bottom: none; /* Quitamos el borde inferior */
-  height: var(--app-tabs-height);
+  border-bottom: 1px solid rgba(109, 61, 255, 0.3);
+  height: var(--app-tabs-height); /* Usar variable global */
   align-items: center;
-  justify-content: space-between; /* Espaciado uniforme */
-  box-sizing: border-box !important;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  justify-content: flex-start;
+  box-sizing: border-box !important; /* Asegurar que padding no afecte el ancho total */
+  flex-direction: row; /* Asegurar que los elementos están en fila */
+  flex-wrap: nowrap; /* Evitar que se envuelvan */
 }
 
 .tabs__navigation::-webkit-scrollbar {
@@ -56,7 +56,7 @@
   align-items: center;
   flex-direction: row;
   justify-content: center;
-  padding: 6px 12px;
+  padding: 6px 12px; /* Espaciado más preciso */
   background: transparent;
   border: none;
   color: var(--text-secondary);
@@ -64,43 +64,71 @@
   position: relative;
   transition: all var(--transition-fast);
   font-size: var(--font-size-sm);
-  border-radius: var(--border-radius-round); /* Bordes más redondeados */
+  border-radius: var(--border-radius-sm);
   white-space: nowrap;
-  gap: 8px; /* Espaciado entre icono y texto */
-  height: 36px; /* Altura incrementada */
-  margin: 0;
-  min-width: auto;
-  flex-shrink: 0;
-  opacity: 0.8; /* Opacidad base */
+  gap: 6px; /* Espaciado entre icono y texto */
+  height: 32px; /* Altura del botón */
+  margin: 0 6px 0 0; /* Espacio entre pestañas (solo derecha para mantenerlas juntas) */
+  min-width: auto; /* Permitir que el ancho se ajuste al contenido */
+  flex-shrink: 0; /* Evitar que se compriman */
 }
 
-/* Botón activo */
-.tabs__button--active {
+.tabs__button::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; /* Alinear con el borde inferior */
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--omashu-active);
+  transition: width var(--transition-fast);
+  border-radius: 2px 2px 0 0;
+}
+
+.tabs__button:hover {
   color: var(--text-primary);
-  background: rgba(109, 61, 255, 0.2); /* Fondo semitransparente para el botón activo */
-  box-shadow: 0 0 15px rgba(109, 61, 255, 0.25); /* Resplandor */
-  opacity: 1; /* Opacidad completa cuando está activo */
+  background-color: rgba(109, 61, 255, 0.1);
+}
+
+.tabs__button:hover::after {
+  width: 100%;
+  opacity: 0.5;
+}
+
+/* Estado activo del botón */
+.tabs__button--active {
+  color: var(--omashu-purple-light);
+  background-color: rgba(109, 61, 255, 0.15);
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.tabs__button--active::after {
+  width: 100%;
+  opacity: 1;
+  height: 2px;
+  box-shadow: 0 0 4px rgba(109, 61, 255, 0.5);
 }
 
 /* Icono del botón */
 .tabs__icon {
-  font-size: 16px;
+  font-size: 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
+.tabs__button:hover .tabs__icon {
+  transform: translateY(-1px);
+}
+
+.tabs__button--active .tabs__icon {
+  transform: translateY(-1px);
+}
+
 /* Texto del botón */
 .tabs__text {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium); /* Un poco más grueso */
-}
-
-/* Hover del botón */
-.tabs__button:hover:not(.tabs__button--active) {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary);
-  opacity: 0.9;
 }
 
 /* Notificación en el botón */
