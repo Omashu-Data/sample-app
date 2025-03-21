@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../../css/variables.css" />
   <link rel="stylesheet" href="../../css/metrics.css" />
+  <link rel="stylesheet" href="../../css/overview.css" />
   <title>Omashu.gg - In-Game</title>
   <link rel="stylesheet" href="../../css/in-game.css" />
 </head>
@@ -25,7 +26,12 @@
       <!-- Contenido de las pestañas -->
           <div class="tabs__content">
         <!-- Contenedores vacíos para las pestañas, el contenido se cargará dinámicamente -->
-        <div id="stats-tab" class="tabs__pane tabs__pane--active">
+            <div id="overview-tab" class="tabs__pane tabs__pane--active">
+          <!-- El contenido se cargará desde tab-overview.html -->
+          <div class="loading-indicator">Cargando resumen de jugador...</div>
+                  </div>
+                  
+            <div id="stats-tab" class="tabs__pane">
           <!-- El contenido se cargará desde tab-stats.html -->
           <div class="loading-indicator">Cargando estadísticas...</div>
                   </div>

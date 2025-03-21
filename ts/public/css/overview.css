@@ -1,0 +1,355 @@
+/* Estilos para la pestaña de resumen principal */
+.dashboard--overview {
+  padding: 15px;
+}
+
+.player-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: var(--text-primary);
+}
+
+/* Cabecera con información del jugador */
+.player-summary__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.player-info__avatar {
+  width: 50px;
+  height: 50px;
+}
+
+.player-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.player-info__details {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-info__name {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 5px 0;
+}
+
+.player-info__role {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.match-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.match-info__time {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.match-info__score {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.match-info__team {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.team-blue {
+  background-color: var(--team-blue);
+}
+
+.team-red {
+  background-color: var(--team-red);
+}
+
+/* Secciones de análisis */
+.player-analysis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.analysis-section {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analysis-section__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.analysis-section__icon {
+  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.analysis-section__title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Estilos específicos para cada tipo de sección */
+.analysis-section--strengths .analysis-section__icon {
+  background-color: rgba(102, 187, 106, 0.2);
+  color: var(--success);
+}
+
+.analysis-section--weaknesses .analysis-section__icon {
+  background-color: rgba(255, 112, 67, 0.2);
+  color: var(--danger);
+}
+
+.analysis-section--challenges .analysis-section__icon {
+  background-color: rgba(100, 181, 246, 0.2);
+  color: var(--primary);
+}
+
+/* Lista de items de análisis */
+.analysis-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.analysis-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.analysis-item__icon {
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.analysis-item__content {
+  flex-grow: 1;
+}
+
+.analysis-item__title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+}
+
+.analysis-item__description {
+  font-size: 12px;
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Estilos para los tipos de items */
+.analysis-item--strength .analysis-item__title {
+  color: var(--success);
+}
+
+.analysis-item--weakness .analysis-item__title {
+  color: var(--danger);
+}
+
+.analysis-item--challenge .analysis-item__title {
+  color: var(--primary);
+}
+
+/* Barra de progreso para retos */
+.challenge-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.challenge-progress__bar {
+  flex-grow: 1;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.challenge-progress__fill {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 2px;
+  transition: width 0.5s ease-out;
+}
+
+.challenge-progress__text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Gráfico de rendimiento */
+.performance-summary {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.performance-chart__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.performance-chart__title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.performance-chart__score {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* Gráfico radar placeholder */
+.radar-chart-container {
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radar-chart-placeholder {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.03) 70%
+  );
+  border-radius: 50%;
+}
+
+.radar-chart-placeholder::before {
+  content: "";
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.radar-chart-placeholder::after {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.radar-stat {
+  --angle: calc(var(--stat-position) * 72deg);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-70px) rotate(calc(-1 * var(--angle)));
+}
+
+.radar-stat__label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.radar-stat__dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(-70px * var(--stat-value))) rotate(calc(-1 * var(--angle)));
+  box-shadow: 0 0 10px var(--primary);
+}
+
+/* Tema de color para el gráfico radar */
+:root {
+  --team-blue: #1e88e5;
+  --team-red: #e53935;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .player-analysis {
+    grid-template-columns: 1fr;
+  }
+} 
