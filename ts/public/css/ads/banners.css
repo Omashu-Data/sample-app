@@ -94,6 +94,247 @@
 }
 
 /* ==============================
+ * MOCKUPS DE BANNERS
+ * ============================== */
+
+/* Mockup base para banners */
+.banner__mockup {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(13, 6, 31, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* Fondo decorativo con degradado */
+.banner__mockup-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(109, 61, 255, 0.1), rgba(0, 0, 0, 0.2));
+  z-index: 1;
+  overflow: hidden;
+}
+
+.banner__mockup-bg:before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(circle at center, rgba(109, 61, 255, 0.05) 0%, rgba(109, 61, 255, 0) 70%);
+}
+
+.banner__mockup-bg--vertical {
+  background: linear-gradient(180deg, rgba(109, 61, 255, 0.1), rgba(0, 0, 0, 0.2));
+}
+
+/* Contenido del mockup */
+.banner__mockup-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+  justify-content: space-between;
+}
+
+.banner__mockup-content--vertical {
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: var(--spacing-lg);
+  gap: var(--spacing-lg);
+  height: 100%;
+  text-align: center;
+}
+
+/* Logo de Overwolf en el mockup */
+.banner__mockup-overwolf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xxs);
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.banner__mockup-overwolf span {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+}
+
+.banner__mockup-overwolf-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  opacity: 0.7;
+}
+
+/* Mensaje principal del banner */
+.banner__mockup-message {
+  text-align: center;
+  flex-grow: 1;
+}
+
+.banner__mockup-message h3 {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-xxs) 0;
+  font-weight: var(--font-weight-normal);
+}
+
+.banner__mockup-message p {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  margin: 0;
+  font-weight: var(--font-weight-normal);
+}
+
+/* Información del anuncio */
+.banner__mockup-ad-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: auto;
+}
+
+.banner__mockup-ad-info p {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+/* Badge de AD */
+.banner__mockup-ad-badge {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-tertiary);
+  padding: 2px 5px;
+  border-radius: var(--border-radius-xs);
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+}
+
+.banner__mockup-ad-badge--vertical {
+  align-self: flex-end;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Placeholder para anuncios */
+.banner__mockup-ad-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
+  width: 80%;
+  height: 200px;
+}
+
+.banner__mockup-ad-placeholder h3 {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: var(--font-weight-normal);
+}
+
+.banner__mockup-ad-placeholder p {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin: var(--spacing-xs) 0 var(--spacing-lg) 0;
+}
+
+.banner__mockup-dimensions {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  opacity: 0.6;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 2px 6px;
+  border-radius: var(--border-radius-xs);
+}
+
+/* Etiqueta de publicidad */
+.banner__mockup-tag {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-size: 8px;
+  color: var(--text-tertiary);
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 2px 4px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.banner__mockup-tag--vertical {
+  bottom: 10px;
+}
+
+/* Features (para banner vertical) */
+.banner__mockup-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.banner__mockup-feature {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.banner__mockup-feature-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(109, 61, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+}
+
+.banner__mockup-feature-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+/* Animaciones */
+@keyframes pulse {
+  0% {
+    opacity: 0.2;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* ==============================
  * CONTENEDOR DE PUBLICIDAD GENÉRICO
  * ============================== */
 .ad-placeholder {
@@ -101,11 +342,35 @@
   justify-content: center;
   align-items: center;
   background: var(--strip-background-dark);
-  border: 1px dashed var(--omashu-purple-dark);
-  color: var(--text-secondary);
-  font-size: 12px;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  color: var(--text-tertiary);
   text-align: center;
-  overflow: hidden;
+}
+
+.ad-placeholder__logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.ad-placeholder__icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.ad-placeholder__text {
+  font-size: var(--font-size-sm);
+  letter-spacing: 1px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.ad-placeholder__size {
+  font-size: var(--font-size-xs);
+  opacity: 0.7;
 }
 
 .ad-label {
