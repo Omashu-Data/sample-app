@@ -1,0 +1,44 @@
+<!-- Pestaña vacía / Contenido no implementado -->
+<div class="empty-tab">
+  <div class="empty-tab__icon">🚧</div>
+  <h2 class="empty-tab__title">Contenido en desarrollo</h2>
+  <p class="empty-tab__message">Esta funcionalidad estará disponible próximamente.</p>
+</div>
+
+<style>
+  .empty-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    padding: 20px;
+    color: var(--text-secondary);
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .empty-tab__icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    animation: pulse 2s infinite;
+  }
+  
+  .empty-tab__title {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+  
+  .empty-tab__message {
+    font-size: 16px;
+    max-width: 80%;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+</style> 

@@ -170,4 +170,293 @@
 [data-metric]:hover .card__icon {
   transform: scale(1.1);
   transition: transform 0.2s ease;
+}
+
+/* Dashboard de estadísticas */
+.dashboard--stats {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 15px;
+}
+
+.dashboard__stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+  width: 100%;
+}
+
+/* Tarjetas de métricas */
+.card {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  color: var(--text-primary);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  width: 24px;
+  height: 24px;
+}
+
+.card__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.card__value-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.card__value {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card__rank {
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+}
+
+.card__comparison {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.card__comparison-label {
+  color: var(--text-tertiary);
+  font-size: 10px;
+}
+
+.card__comparison-value {
+  font-weight: 600;
+}
+
+.card__comparison-value--positive {
+  color: var(--success);
+}
+
+.card__comparison-value--negative {
+  color: var(--danger);
+}
+
+.card__comparison-value--neutral {
+  color: var(--text-tertiary);
+}
+
+/* Variantes de tarjetas */
+.card--primary {
+  border-left: 3px solid var(--primary);
+}
+
+.card--success {
+  border-left: 3px solid var(--success);
+}
+
+.card--warning {
+  border-left: 3px solid var(--warning);
+}
+
+.card--danger {
+  border-left: 3px solid var(--danger);
+}
+
+.card--accent {
+  border-left: 3px solid var(--accent);
+}
+
+/* Gráficos en tarjetas */
+.card__chart {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.card__bar {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.card__fill {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 2px;
+  transition: width 0.5s ease-out;
+}
+
+/* Tarjeta de consejos */
+.card--insight {
+  background: linear-gradient(135deg, var(--primary-dark), var(--accent-dark));
+  padding: 15px;
+  border-left: none;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.card__icon--insight {
+  font-size: 18px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+}
+
+.card__title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card--insight .card__body {
+  padding: 10px 0 5px;
+  align-items: flex-start;
+}
+
+.card--insight p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Anuncio compacto */
+.dashboard__ad-container {
+  margin-top: 15px;
+}
+
+.ad-placeholder--compact {
+  height: 100px;
+  width: 300px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-tertiary);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+/* CTA Premium compacto */
+.premium-cta-compact {
+  display: flex;
+  margin-top: 20px;
+  background: linear-gradient(135deg, var(--premium-dark), var(--premium));
+  border-radius: 8px;
+  padding: 12px;
+  align-items: center;
+  gap: 15px;
+}
+
+.premium-cta-compact__badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.premium-cta-compact__content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.premium-cta-compact__text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.premium-cta-compact__button {
+  background-color: white;
+  color: var(--premium-dark);
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+.premium-cta-compact__button:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+/* Animación de pulso para el botón CTA */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.pulse-button {
+  animation: pulse 2s infinite;
 } 
