@@ -169,16 +169,20 @@
   margin-top: var(--app-content-offset) !important; /* Posicionar debajo de header + banner + tabs */
   position: relative;
   box-sizing: border-box !important;
+  height: calc(100vh - var(--app-content-offset)); /* Altura exacta desde el offset hasta el final de la ventana */
+  overflow-y: auto; /* Permitir scroll si el contenido es más grande */
 }
 
 /* Cada panel de pestaña individual */
 .tabs__pane {
   display: none;
   width: 100% !important;
+  height: 100%; /* Ocupar todo el alto disponible del contenedor padre */
   opacity: 0;
   transition: opacity var(--transition-fast);
   overflow-y: auto;
   background-color: transparent !important;
+  box-sizing: border-box;
 }
 
 .tabs__pane--active {
