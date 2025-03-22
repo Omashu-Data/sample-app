@@ -1,97 +1,118 @@
-**IMPORTANT: In order to use install this app, you need to be Whitelisted as a developer!
-(https://overwolf.github.io/docs/start/sdk-introduction#get-whitelisted-as-a-developer)**
+# omashu.gg - Plugin para League of Legends
 
-# Sample - TS
-Example-ts is an example app, meant to be used as a reference for developers who are new to Overwolf.
-The app is meant to demonstrate some basic points and flows that are relevant when developing Overwolf apps:
+## Descripción General
 
-- Auto-launch when a game starts.
-- Register to the overwolf.games.events API and receive real time events from the game.
-- Define a custom hotkey to be used in-game.
-- Communicate between the app windows according to our best practices.
+Este proyecto es un plugin para Overwolf diseñado específicamente para League of Legends. Proporciona a los jugadores una interfaz interactiva con estadísticas en tiempo real, análisis de rendimiento, grabación automática de clips y más. El plugin ha sido desarrollado siguiendo el modelo del ejemplo oficial TypeScript de Overwolf, pero con una implementación personalizada y ampliada.
 
+## Características Principales
 
-## Setting up
-In order to run the app, you must first complete several steps:
-1. Download and install [NodeJS](https://nodejs.org/).
-After installing, run the following commands in a terminal of your choice:
+- **Estadísticas en tiempo real**: Métricas detalladas del juego como DPS, KDA, economía, etc.
+- **Grabación automática de clips**: Captura automática de clips cuando ocurren eventos importantes.
+- **Análisis de rendimiento**: Visualización y seguimiento del rendimiento durante la partida.
+- **Panel de resumen del jugador**: Muestra fortalezas, debilidades y retos basados en el rendimiento actual.
+- **Heatmap**: Visualización del posicionamiento y actividad durante la partida.
+- **Integración de anuncios**: Espacios publicitarios para monetización del plugin.
+- **Diseño modular**: Componentes cargados dinámicamente para una mejor organización y mantenimiento.
+
+## Estructura del Proyecto
+
+### Directorios Principales
+
+- **public/**: Recursos estáticos y archivos que serán servidos directamente.
+  - **css/**: Hojas de estilo organizadas por funcionalidad.
+  - **icons/**: Iconos y activos visuales.
+  - **img/**: Imágenes usadas por la aplicación.
+  - **js/**: Scripts JavaScript compilados.
+  - **scripts/**: Scripts adicionales para la aplicación.
+  - **manifest.json**: Configuración principal del plugin para Overwolf.
+
+- **src/**: Código fuente TypeScript organizado por componentes y funcionalidades.
+  - **background/**: Ventana de fondo que gestiona el ciclo de vida de la aplicación.
+  - **desktop/**: Implementación de la interfaz para escritorio.
+  - **in_game/**: Implementación de la interfaz durante el juego.
+    - **tab-overview.html**: Vista principal con fortalezas, debilidades y retos.
+    - **tab-stats.html**: Panel detallado de estadísticas.
+    - **tab-events.html**: Registro de eventos importantes.
+    - **tab-clips.html**: Gestor de clips grabados.
+    - **tab-performance.html**: Análisis detallado de rendimiento.
+    - **tab-improve.html**: Recomendaciones de mejora.
+    - **tab-heatmap.html**: Visualización de posicionamiento.
+  - **components/**: Componentes reutilizables.
+  - **services/**: Servicios para gestionar datos y lógica de negocio.
+  - **css/**: Archivos fuente CSS.
+  - **js/**: Scripts TypeScript adicionales.
+
+### Archivos Clave
+
+- **components-loader.js**: Sistema de carga dinámica de componentes.
+- **header-loader.js**: Cargador para el encabezado de la aplicación.
+- **tabs-menu.html**: Menú de navegación entre pestañas.
+- **banner-horizontal.html** y **banner-vertical.html**: Espacios publicitarios.
+- **in_game.html**: Contenedor principal para la interfaz durante el juego.
+- **in_game.ts**: Lógica principal para la ventana durante el juego.
+
+## Sistema de Pestañas
+
+El plugin implementa un sistema de pestañas modular que carga el contenido dinámicamente:
+
+1. **Resumen**: Visión general del jugador con fortalezas, debilidades y retos personalizados.
+2. **Estadísticas**: Métricas detalladas del juego presentadas en tarjetas informativas.
+3. **Eventos**: Registro de acontecimientos importantes durante la partida.
+4. **Clips**: Gestión de vídeos capturados automáticamente.
+5. **Rendimiento**: Análisis detallado de métricas de rendimiento.
+6. **Mejora**: Consejos y estrategias para mejorar el juego.
+7. **Heatmap**: Visualización de actividad y posicionamiento.
+
+## Sistema de Publicidad
+
+El plugin incluye integración para anuncios Overwolf en formato de banner horizontal (728×90) y banner vertical (160×600), ambos implementados con diseños de marcador de posición profesionales.
+
+## Requisitos
+
+- Overwolf Client
+- Node.js y npm
+- League of Legends
+
+## Instalación para Desarrollo
+
+1. Clona este repositorio.
+2. Ejecuta `npm install` para instalar las dependencias.
+3. Ejecuta `npm run dev` para iniciar el servidor de desarrollo.
+4. Sigue las [instrucciones de Overwolf](https://overwolf.github.io/docs/start/sdk-introduction#load-the-app-as-unpacked-extension) para cargar la aplicación como extensión no empaquetada.
+
+## Compilación
+
+Para crear un paquete .opk para distribución:
+
 ```
-node -v
-npm -v
-```
-If they run successfully, proceed to the next steps.
-
-2. Download and install the [Overwolf desktop client](https://download.overwolf.com/install/Download).
-
-3. Download the repository as a zip file and extract it.
-
-4. In your terminal, run the following commands:
-```
-cd <insert path to your extracted 'ts' folder here>
-npm install
 npm run build
 ```
 
-5. Open the Overwolf desktop client settings (by right-clicking the client and selecting
-"Support" or by clicking on the wrench icon in the dock and going to the "Support" tab).
+Esto generará un archivo .opk en el directorio `releases/`.
 
-6. Click on "Development options".
+## Notas para Desarrolladores
 
-7. In the opened window, click on "Load unpacked extension" and select the `ts/dist/` folder.
-This will add the app to your dock.
+- La aplicación utiliza una arquitectura modular donde los componentes se cargan dinámicamente.
+- Los estilos CSS siguen una metodología BEM para mayor claridad y mantenibilidad.
+- La interfaz principal está diseñada para ser no intrusiva durante el juego.
+- Las métricas y eventos se obtienen a través de la API de eventos de juego de Overwolf.
+- La grabación automática de clips se activa en momentos clave (kills, asistencias, etc.).
 
-8. Click on the app's icon in your dock.
+## Características Técnicas
 
-## Building an .opk for distribution
-When you run run ```npm run build``` in your terminal, an .opk is created in releases/ directory
+- Implementación en TypeScript para tipado estático.
+- Sistema de componentes modular para facilitar el mantenimiento.
+- Uso intensivo de CSS moderno con variables y cálculos dinámicos.
+- Interfaz responsive adaptable a diferentes tamaños.
+- Carga de contenido asíncrona para mejor rendimiento.
 
-## Changing the version number quickly
-We have included a webpack plugin that can change the .opk version quickly with just a command line argument. Simply add ```--env setVersion=1.0.1``` to your build command.
-Example:
-```
-npm run build --env setVersion=1.0.1
-```
+## Próximas Características
 
-This will change the app version both in package.json and app's manifest.json
+- Integración con API externa para estadísticas históricas.
+- Mejoras en el sistema de recomendaciones.
+- Soporte para más idiomas.
+- Personalización de interfaz por parte del usuario.
 
-## What will you find inside?
+## Licencia
 
-### public/
-All of the static resources used by the app, like icons, images and CSS
-
-##### public/manifest.json
-This file defines all of the aspects of the app.
-Read all about Overwolf's manifest.json mechanism [here](https://overwolf.github.io/docs/api/manifest-json#welcome-to-the-manifestjson-file).
-In our manifest.json file, we have [```{ "start_window": "background" }```](https://overwolf.github.io/docs/api/manifest-json#start_window) defined.
-This sets our [background](###windows/background) window as the app's starting point.
-All of this app's windows' properties can be found under the [```windows```](https://overwolf.github.io/docs/api/manifest-json#window-data) object.
-Please refer to the [dev site](https://overwolf.github.io/docs/api/manifest-json#welcome-to-the-manifestjson-file) to learn more about each property.
-
-#### src/
-Source .html & .ts files for the app
-
-##### src/background/
-This directory contains files of the background window, which serves as the application's starting point and window orchestrator.
-The window's ```run()``` method detects whether a a supported game is currently running, decides which window to launch accordingly, and listens for changes.
-
-The background window has no visual representation, which can be gleaned from the empty background.html file or from the
-[```{ is_background_page: true }```](https://overwolf.github.io/docs/api/manifest-json#is_background_page)
-property the background window has in our manifest.json.
-
-##### src/in_game/
-The in_game window listens to [Info Events](https://overwolf.github.io/docs/api/overwolf-games-events#oninfoupdates2) and
-[Game Events](https://overwolf.github.io/docs/api/overwolf-games-events#onnewevents) emitted by the game and
-displays an ad. Furthermore, it defines the behavior for the show/hide hotkey.
-Read all about hotkeys [here](https://overwolf.github.io/docs/topics/hotkeys-best-practices).
-
-##### src/desktop/
-This window serves a purely visual purpose and has no special logic.
-
-##### src/AppWindow.js
-This is a base class that holds the logic shared by the in_game and desktop windows, such as minimize/close, drag, etc.
-
-
-## Notes
-Editing the author or app name in the manifest will prevent loading the app as an unpacked app.
-
-For any further information or questions, contact developers@overwolf.com
+Este proyecto está licenciado bajo términos privados. Todos los derechos reservados.
