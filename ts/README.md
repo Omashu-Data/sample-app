@@ -1,6 +1,4 @@
-# omashu.gg - Plugin para League of Legends
-
-## Descripción General
+# Plugin Overwolf para League of Legends
 
 Este proyecto es un plugin para Overwolf diseñado específicamente para League of Legends. Proporciona a los jugadores una interfaz interactiva con estadísticas en tiempo real, análisis de rendimiento, grabación automática de clips y más. El plugin ha sido desarrollado siguiendo el modelo del ejemplo oficial TypeScript de Overwolf, pero con una implementación personalizada y ampliada.
 
@@ -37,10 +35,6 @@ Este proyecto es un plugin para Overwolf diseñado específicamente para League 
     - **tab-performance.html**: Análisis detallado de rendimiento.
     - **tab-improve.html**: Recomendaciones de mejora.
     - **tab-heatmap.html**: Visualización de posicionamiento.
-  - **components/**: Componentes reutilizables.
-  - **services/**: Servicios para gestionar datos y lógica de negocio.
-  - **css/**: Archivos fuente CSS.
-  - **js/**: Scripts TypeScript adicionales.
 
 ### Archivos Clave
 
@@ -59,11 +53,11 @@ El plugin implementa un sistema de pestañas modular que carga el contenido din�
 2. **Estadísticas**: Métricas detalladas del juego presentadas en tarjetas informativas.
 3. **Eventos**: Registro de acontecimientos importantes durante la partida.
 4. **Clips**: Gestión de vídeos capturados automáticamente.
-5. **Rendimiento**: Análisis detallado de métricas de rendimiento.
+5. **Rendimiento**: Análisis detallado del desempeño con gráficos y métricas.
 6. **Mejora**: Consejos y estrategias para mejorar el juego.
 7. **Heatmap**: Visualización de actividad y posicionamiento.
 
-## Sistema de Publicidad
+## Integración de Publicidad
 
 El plugin incluye integración para anuncios Overwolf en formato de banner horizontal (728×90) y banner vertical (160×600), ambos implementados con diseños de marcador de posición profesionales.
 
@@ -101,10 +95,10 @@ Esto generará un archivo .opk en el directorio `releases/`.
 ## Características Técnicas
 
 - Implementación en TypeScript para tipado estático.
-- Sistema de componentes modular para facilitar el mantenimiento.
-- Uso intensivo de CSS moderno con variables y cálculos dinámicos.
-- Interfaz responsive adaptable a diferentes tamaños.
-- Carga de contenido asíncrona para mejor rendimiento.
+- Carga dinámica de componentes para mejor rendimiento.
+- Sistema responsive adaptado a diferentes resoluciones de pantalla.
+- Almacenamiento local para mantener configuraciones de usuario.
+- Optimización para rendimiento durante el juego.
 
 ## Próximas Características
 
