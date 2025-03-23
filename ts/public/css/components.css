@@ -1,25 +1,28 @@
 /* 
  * ==============================
- * OMASHU.GG - COMPONENTES UI
+ * COMPONENTES UI
  * ==============================
  *
- * Este archivo funciona como centralizador de todos los componentes de UI
- * Cada componente tiene su propio archivo CSS para facilitar mantenimiento
+ * Este archivo contiene los componentes de UI necesarios para la aplicación.
+ * Se han mantenido solo los componentes que realmente se utilizan en las vistas.
  */
 
-/* Importaciones de componentes */
-@import url('components/avatars.css');
-@import url('components/badges.css');
-@import url('components/buttons.css');
-@import url('components/cards.css');
-@import url('components/dividers.css');
-@import url('components/forms.css');
-@import url('components/modals.css');
-@import url('components/progress.css');
-@import url('components/tooltips.css');
-@import url('components/alerts.css');
-@import url('components/table.css');
-@import url('components/lists.css');
-@import url('components/breadcrumbs.css');
-@import url('components/pagination.css');
-@import url('components/panels.css');
+/* Componentes activos */
+@import url('components/cards.css');      /* Para tarjetas de información y eventos */
+@import url('components/tooltips.css');   /* Para tooltips en heatmap */
+@import url('components/buttons.css');    /* Posiblemente usado en integraciones futuras */
+@import url('components/progress.css');   /* Para barras de progreso */
+
+/* Estilos genéricos para componentes */
+.component {
+  margin-bottom: 1rem;
+}
+
+.component-header {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.component-content {
+  line-height: 1.4;
+}
