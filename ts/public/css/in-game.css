@@ -13,6 +13,7 @@
 
 /* Importar base del tema y layouts */
 @import url('base-theme.css');
+@import url('layout.css');
 
 /* Componentes de UI */
 @import url('components.css');

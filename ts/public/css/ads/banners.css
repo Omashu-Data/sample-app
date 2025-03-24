@@ -10,16 +10,12 @@
  * BANNER SUPERIOR (HORIZONTAL)
  * ============================== */
 .banner--horizontal {
-  width: var(--app-width) !important;
+  width: var(--app-banner-width) !important; /* 728px para cumplir requisitos de Overwolf */
   max-width: 100%;
   height: var(--app-banner-height);
-  left: 0;
-  position: fixed;
-  top: var(--app-header-height); /* Debajo del header */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 985; /* Por encima del contenido principal pero por debajo de los tabs */
   background: transparent;
   pointer-events: auto;
   overflow: hidden;
@@ -43,15 +39,11 @@
  * BANNER VERTICAL (LATERAL)
  * ============================== */
 .banner--vertical {
-  position: absolute;
-  right: 0;
-  top: var(--app-content-offset); /* Alineado correctamente usando la variable global */
   width: var(--app-vertical-banner-width) !important;
-  height: calc(100% - var(--app-content-offset));
+  height: var(--app-vertical-banner-height) !important;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 980; /* Por encima del contenido principal */
   background: transparent;
   pointer-events: auto;
   overflow: hidden;
@@ -60,9 +52,9 @@
 .banner--vertical .banner__container,
 .banner--vertical .ad-placeholder {
   width: var(--app-vertical-banner-width) !important;
-  height: 600px !important;
-  min-height: 600px !important;
-  max-height: 600px !important;
+  height: var(--app-vertical-banner-height) !important;
+  min-height: var(--app-vertical-banner-height) !important;
+  max-height: var(--app-vertical-banner-height) !important;
   overflow: hidden;
   border-radius: var(--border-radius-sm);
   margin-top: 0;
@@ -72,12 +64,8 @@
 
 /* Banner vertical fijo hardcodeado */
 #banner-vertical-160x600 {
-  position: absolute;
-  top: var(--app-content-offset);
-  right: 0;
   width: var(--app-vertical-banner-width);
-  height: 600px;
-  z-index: 980;
+  height: var(--app-vertical-banner-height);
   background-color: rgba(13, 6, 31, 0.9);
   border-left: 1px solid var(--omashu-border);
   border-bottom: 1px solid var(--omashu-border);

@@ -14,10 +14,6 @@
   display: flex;
   flex-direction: column;
   margin: 0 !important;
-  position: fixed;
-  top: calc(var(--app-header-height) + var(--app-banner-height)) !important; /* Usar variables globales */
-  left: 0; /* Posicionar a la izquierda en lugar de centrado */
-  transform: none; /* Eliminar la transformación de centrado */
   z-index: var(--z-index-sticky); /* Usar variable global para z-index */
   box-shadow: var(--shadow-md);
   pointer-events: auto; /* Asegurar que se pueden hacer clic en las pestañas */
@@ -164,12 +160,12 @@
 .tabs__content {
   width: var(--app-content-width) !important;
   max-width: var(--app-content-width) !important;
-  padding: 15px !important;
+  padding: 0 !important; /* Eliminamos el padding para que sea manejado por las pestañas individuales */
   z-index: var(--z-index-above);
-  margin-top: var(--app-content-offset) !important; /* Posicionar debajo de header + banner + tabs */
+  /* Eliminamos el margin-top para usar el layout absoluto */
   position: relative;
   box-sizing: border-box !important;
-  height: calc(100vh - var(--app-content-offset)); /* Altura exacta desde el offset hasta el final de la ventana */
+  height: 100%; /* Usamos 100% para que se ajuste al contenedor padre main-content-wrapper */
   overflow-y: auto; /* Permitir scroll si el contenido es más grande */
 }
 

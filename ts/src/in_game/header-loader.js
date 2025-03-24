@@ -30,8 +30,19 @@ function loadHeaderContent(container) {
     if (xhr.status >= 200 && xhr.status < 400) {
       // Éxito - insertar el contenido del header
       container.innerHTML = xhr.responseText;
-      // Inicializar funcionalidades después de cargar
-      initializeHeader();
+      
+      // Asegurarnos de que el header se ajusta correctamente al contenedor
+      const header = container.querySelector('#header');
+      if (header) {
+        // Eliminar cualquier posicionamiento absoluto o fijo que pueda heredar
+        header.style.position = 'relative';
+        header.style.top = 'auto';
+        header.style.left = 'auto';
+        header.style.transform = 'none';
+        
+        // Inicializar funcionalidades del header
+        initializeHeader();
+      }
     } else {
       // Error - cargar versión de respaldo
       console.error('Error al cargar el header:', xhr.statusText);
@@ -95,10 +106,20 @@ function loadFallbackHeader(container) {
  * Inicializa las funcionalidades del header
  */
 function initializeHeader() {
+  console.log('Inicializando header...');
+  
   // Configurar los botones de control de ventana
   const minimizeButton = document.getElementById('minimizeButton');
   const maximizeButton = document.getElementById('maximizeButton');
   const closeButton = document.getElementById('closeButton');
+  const hotkeyElem = document.getElementById('hotkey');
+
+  console.log('Elementos encontrados:', {
+    minimizeButton: !!minimizeButton,
+    maximizeButton: !!maximizeButton,
+    closeButton: !!closeButton,
+    hotkeyElem: !!hotkeyElem
+  });
 
   if (minimizeButton) {
     minimizeButton.addEventListener('click', () => {

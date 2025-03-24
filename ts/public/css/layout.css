@@ -1,0 +1,116 @@
+/* 
+ * ==============================
+ * OMASHU.GG - LAYOUT PRINCIPAL
+ * ==============================
+ *
+ * Este archivo define la estructura principal de la aplicación con medidas FIJAS
+ * que NO DEBEN ser modificadas. Las dimensiones están definidas en variables.css.
+ */
+
+/* Contenedor principal de la aplicación - Dimensiones totales: 740px x 776px */
+.app-container {
+  width: var(--app-width);
+  height: var(--app-height);
+  position: relative;
+  overflow: hidden; /* Evita scroll bars innecesarios */
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+
+/* Contenedor del header - Dimensiones: 740px x 44px */
+.header-container {
+  width: 100%;
+  height: var(--app-header-height);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 990; /* Por encima de todo excepto modales */
+  box-sizing: border-box;
+  overflow: hidden; /* Prevenir desbordamiento */
+  background: linear-gradient(90deg, rgba(19, 11, 55, 0.95), rgba(39, 22, 100, 0.95));
+}
+
+/* El header en sí mismo debe ocupar el ancho completo */
+.header {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+  box-sizing: border-box;
+}
+
+/* Contenedor del banner horizontal - Dimensiones: 740px x 90px */
+.banner-horizontal-container {
+  width: 100%;
+  height: var(--app-banner-height);
+  position: absolute;
+  top: var(--app-header-height);
+  left: 0;
+  z-index: 985;
+  display: flex;
+  justify-content: center; /* Centra el banner de 728px dentro del contenedor de 740px */
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Contenedor del menú de tabs - Dimensiones: 740px x 42px */
+.tabs-menu-container {
+  width: 100%;
+  height: var(--app-tabs-height);
+  position: absolute;
+  top: calc(var(--app-header-height) + var(--app-banner-height));
+  left: 0;
+  z-index: 987;
+  box-sizing: border-box;
+}
+
+/* Wrapper principal para el contenido y el banner vertical */
+.main-content-wrapper {
+  position: absolute;
+  top: var(--app-content-offset); /* A 174px del inicio (44+90+42) */
+  left: 0;
+  width: var(--app-width);
+  height: calc(var(--app-height) - var(--app-content-offset)); /* 776px - 174px = 602px */
+  display: flex;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Contenedor de las pestañas - Dimensiones: 580px x 602px */
+.tabs__content {
+  width: var(--app-content-width);
+  height: 100%;
+  position: relative;
+  overflow-y: auto; /* Permite scroll vertical solo en el contenido */
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Contenedor del banner vertical - Dimensiones: 160px x 600px */
+.banner-vertical-container {
+  width: var(--app-vertical-banner-width);
+  height: var(--app-vertical-banner-height);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+/* Ajuste para pestañas individuales */
+.tabs__pane {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  padding: var(--spacing-md); /* Padding uniforme en todas las pestañas */
+}
+
+/* Ocultar pestañas inactivas */
+.tabs__pane:not(.tabs__pane--active) {
+  display: none;
+} 

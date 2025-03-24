@@ -10,63 +10,62 @@
   <link rel="stylesheet" href="../../css/in-game.css" />
 </head>
 <body class="in-game">
-  <div id="app-container" class="banner-container">
-    <div class="content-wrapper">
-      <!-- -------------------------------- Header ------------------------------- -->
-
-      <!-- El header se cargará aquí mediante JavaScript -->
-      <div id="header-container"></div>
-
-      <!-- El banner horizontal se cargará aquí mediante JavaScript -->
-      <div id="banner-horizontal-container"></div>
-
-      <!-- El menú de tabs se cargará aquí mediante JavaScript -->
-      <div id="tabs-menu-container"></div>
-
-      <!-- Contenido de las pestañas -->
-          <div class="tabs__content">
+  <div id="app-container" class="app-container">
+    <!-- Header - Fijo en la parte superior, 740px x 44px -->
+    <div id="header-container" class="header-container"></div>
+    
+    <!-- Banner Horizontal - Debajo del header, 740px x 90px -->
+    <div id="banner-horizontal-container" class="banner-horizontal-container"></div>
+    
+    <!-- Tabs - Debajo del banner horizontal, 740px x 42px -->
+    <div id="tabs-menu-container" class="tabs-menu-container"></div>
+    
+    <!-- Contenedor principal que contiene el contenido de las tabs y el banner vertical -->
+    <div class="main-content-wrapper">
+      <!-- Contenido de las pestañas - A la izquierda, 580px de ancho -->
+      <div class="tabs__content">
         <!-- Contenedores vacíos para las pestañas, el contenido se cargará dinámicamente -->
-            <div id="overview-tab" class="tabs__pane tabs__pane--active">
+        <div id="overview-tab" class="tabs__pane tabs__pane--active">
           <!-- El contenido se cargará desde tab-overview.html -->
           <div class="loading-indicator">Cargando resumen de jugador...</div>
-                  </div>
-                  
-            <div id="stats-tab" class="tabs__pane">
+        </div>
+
+        <div id="stats-tab" class="tabs__pane">
           <!-- El contenido se cargará desde tab-stats.html -->
           <div class="loading-indicator">Cargando estadísticas...</div>
-                  </div>
-                  
-            <div id="events-tab" class="tabs__pane">
+        </div>
+
+        <div id="events-tab" class="tabs__pane">
           <!-- El contenido se cargará desde tab-events.html -->
           <div class="loading-indicator">Cargando eventos...</div>
-                  </div>
-                  
-            <div id="clips-tab" class="tabs__pane">
+        </div>
+
+        <div id="clips-tab" class="tabs__pane">
           <!-- El contenido se cargará desde tab-clips.html -->
           <div class="loading-indicator">Cargando clips...</div>
-                  </div>
-                  
-            <div id="performance-tab" class="tabs__pane">
+        </div>
+
+        <div id="performance-tab" class="tabs__pane">
           <!-- El contenido se cargará desde tab-performance.html -->
           <div class="loading-indicator">Cargando análisis de rendimiento...</div>
-                  </div>
-                  
-            <div id="improve-tab" class="tabs__pane">
+        </div>
+
+        <div id="improve-tab" class="tabs__pane">
           <!-- El contenido se cargará desde tab-improve.html -->
           <div class="loading-indicator">Cargando recomendaciones...</div>
-                  </div>
-                  
-            <div id="heatmap-tab" class="tabs__pane">
+        </div>
+
+        <div id="heatmap-tab" class="tabs__pane">
           <!-- El contenido se cargará desde tab-heatmap.html -->
           <div class="loading-indicator">Cargando mapa de calor...</div>
-              </div>
-            </div>
-            
-      <!-- El banner vertical se cargará aquí mediante JavaScript -->
-      <div id="banner-vertical-container"></div>
-              </div>
-            </div>
-            
+        </div>
+      </div>
+      
+      <!-- Banner Vertical - A la derecha, 160px x 600px -->
+      <div id="banner-vertical-container" class="banner-vertical-container"></div>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="../../scripts/libs/jquery.min.js"></script>
   <script src="../../js/in_game.js"></script>

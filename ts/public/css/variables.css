@@ -84,6 +84,7 @@
   
   /* Tamaño de la aplicación */
   --app-width: 740px;            /* Ancho total de la aplicación */
+  --app-height: 776px;           /* Altura total de la aplicación */
   
   /* Espaciados */
   --spacing-xxs: 4px;
@@ -164,8 +165,10 @@
   --app-banner-width: 728px;     /* Ancho del banner horizontal (requisito de Overwolf) */
   --app-tabs-height: 42px;       /* Altura de la barra de pestañas */
   --app-vertical-banner-width: 160px; /* Ancho del banner vertical */
-  --app-content-offset: 176px;   /* Desplazamiento vertical del contenido principal (header + banner + tabs) */
+  --app-vertical-banner-height: 600px; /* Altura del banner vertical */
   --app-content-width: 580px;    /* Ancho del área de contenido (app-width - vertical-banner-width) */
+  --app-content-offset: 174px;   /* Distancia desde el inicio hasta el contenido (header + banner + tabs) */
+  --app-content-height: 602px;   /* Altura del área de contenido (app-height - app-content-offset) */
   
   /* Sombras */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
