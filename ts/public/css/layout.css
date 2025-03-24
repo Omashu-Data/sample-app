@@ -29,6 +29,9 @@
   box-sizing: border-box;
   overflow: hidden; /* Prevenir desbordamiento */
   background: linear-gradient(90deg, rgba(19, 11, 55, 0.95), rgba(39, 22, 100, 0.95));
+  /* No interferir con la configuración de draggable en el header */
+  -webkit-app-region: no-drag; 
+  app-region: no-drag;
 }
 
 /* El header en sí mismo debe ocupar el ancho completo */

@@ -34,11 +34,11 @@ function loadHeaderContent(container) {
       // Asegurarnos de que el header se ajusta correctamente al contenedor
       const header = container.querySelector('#header');
       if (header) {
-        // Eliminar cualquier posicionamiento absoluto o fijo que pueda heredar
-        header.style.position = 'relative';
-        header.style.top = 'auto';
-        header.style.left = 'auto';
-        header.style.transform = 'none';
+        // Nos aseguramos de que el header tenga la clase draggable pero
+        // no modificamos sus propiedades de posición para que pueda ser arrastrable
+        if (!header.classList.contains('header--draggable')) {
+          header.classList.add('header--draggable');
+        }
         
         // Inicializar funcionalidades del header
         initializeHeader();

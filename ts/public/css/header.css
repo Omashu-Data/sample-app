@@ -22,6 +22,23 @@
   box-sizing: border-box;
 }
 
+/* Modificador para permitir arrastrar la ventana */
+.header--draggable {
+  -webkit-app-region: drag; /* Propiedad de Overwolf/Electron para permitir arrastrar */
+  app-region: drag; /* Versión estándar de la propiedad */
+  cursor: move; /* Cambiar cursor para indicar que se puede arrastrar */
+}
+
+/* Asegurarse de que los elementos interactivos dentro del header no sean arrastables */
+.header--draggable button,
+.header--draggable .header__controls,
+.header--draggable input,
+.header--draggable select {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+  cursor: pointer; /* Restaurar cursor para elementos interactivos */
+}
+
 /* Contenedor para el logotipo */
 .header__logo-container {
   display: flex;
