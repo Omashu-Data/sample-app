@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Inicializar los listeners de tabs
   initTabsListeners();
+  
+  // Escuchar específicamente cuando se carga la pestaña de eventos
+  document.addEventListener('tabContentLoaded', function(e) {
+    if (e.detail && e.detail.tabId === 'events-tab') {
+      console.log('Tab de eventos cargado, inicializando observadores...');
+      triggerEventsObservers();
+    }
+  });
 });
 
 /**
@@ -146,6 +154,12 @@ function loadTabContent(tabId) {
     return;
   }
   
+  // Mostrar indicador de carga
+  tabPane.innerHTML = `<div class="loading-indicator" style="text-align: center; padding: 20px; margin-top: 30px;">
+    <div style="font-size: 16px; margin-bottom: 10px;">Cargando ${tabName}...</div>
+    <div style="font-size: 12px; color: #aaa;">Por favor espere mientras se preparan los datos</div>
+  </div>`;
+  
   fetch(htmlFile)
     .then(response => {
       if (!response.ok) {
@@ -154,8 +168,56 @@ function loadTabContent(tabId) {
       return response.text();
     })
     .then(html => {
+      // Insertar el HTML
       tabPane.innerHTML = html;
-      console.log(`Contenido cargado exitosamente para ${tabId}`);
+      console.log(`Contenido HTML cargado exitosamente para ${tabId}`);
+      
+      // Si es la pestaña de resumen, aplicar datos inmediatamente
+      if (tabId === 'overview-tab') {
+        // Asegurarnos de que el elemento está listo antes de actualizarlo
+        setTimeout(() => {
+          try {
+            // Actualizar directamente los elementos principales
+            directUpdateTab(tabId);
+            
+            // Crear un script simple para manejar futuras actualizaciones
+            const script = document.createElement('script');
+            script.textContent = `
+              (function() {
+                // Función para recibir actualizaciones centralizadas
+                window.receiveGameData = function(data) {
+                  console.log('${tabId}: Recibiendo actualización directa');
+                  if (typeof updateUI === 'function') {
+                    updateUI(data);
+                  } else {
+                    console.warn('No se encontró función updateUI en ${tabId}');
+                  }
+                };
+                
+                // Registrar que el tab está listo para recibir datos
+                if (window.parent && window.parent.registerTabReady) {
+                  window.parent.registerTabReady('${tabId}');
+                }
+                
+                console.log('${tabId}: Preparado para recibir datos');
+              })();
+            `;
+            tabPane.appendChild(script);
+            
+            // Establecer un timer para actualizar periódicamente
+            if (!window._tabUpdateTimers) window._tabUpdateTimers = {};
+            if (window._tabUpdateTimers[tabId]) clearInterval(window._tabUpdateTimers[tabId]);
+            
+            window._tabUpdateTimers[tabId] = setInterval(() => {
+              directUpdateTab(tabId);
+            }, 1000);
+            
+            console.log(`Tab ${tabId} configurado para actualizaciones automáticas`);
+          } catch (e) {
+            console.error(`Error inicializando tab ${tabId}:`, e);
+          }
+        }, 200);
+      }
       
       // Disparar evento para notificar que el contenido se ha cargado
       const event = new CustomEvent('tabContentLoaded', { detail: { tabId } });
@@ -163,12 +225,135 @@ function loadTabContent(tabId) {
     })
     .catch(error => {
       console.error(`Error al cargar el contenido para ${tabId}:`, error);
-      tabPane.innerHTML = `<div class="error-message">Error al cargar el contenido: ${error.message}</div>`;
+      tabPane.innerHTML = `<div class="error-message" style="color: red; padding: 20px; text-align: center;">
+        Error al cargar ${tabName}: ${error.message}
+      </div>`;
     });
+}
+
+/**
+ * Actualiza directamente los elementos de una pestaña con los datos actuales del juego
+ * @param {string} tabId - El ID de la pestaña a actualizar
+ */
+function directUpdateTab(tabId) {
+  if (!window.gameDataManager) {
+    console.warn(`No se puede actualizar ${tabId}: gameDataManager no disponible`);
+    return;
+  }
+  
+  try {
+    const tabPane = document.getElementById(tabId);
+    if (!tabPane) {
+      console.warn(`Pestaña ${tabId} no encontrada`);
+      return;
+    }
+    
+    const data = window.gameDataManager.getData();
+    console.log(`Actualizando ${tabId} con datos:`, {
+      summoner: data.summoner.name,
+      gameTime: data.match.gameTime,
+      kda: `${data.match.kills}/${data.match.deaths}/${data.match.assists}`
+    });
+    
+    // Actualización específica para overview-tab
+    if (tabId === 'overview-tab') {
+      const playerNameElement = tabPane.querySelector('#player-name');
+      const gameTimeElement = tabPane.querySelector('#game-time-value');
+      const killsElement = tabPane.querySelector('#kda-kills');
+      const deathsElement = tabPane.querySelector('#kda-deaths');
+      const assistsElement = tabPane.querySelector('#kda-assists');
+      
+      if (playerNameElement && data.summoner && data.summoner.name) {
+        playerNameElement.textContent = data.summoner.name;
+      }
+      
+      if (gameTimeElement && data.match && data.match.gameTime !== undefined) {
+        const minutes = Math.floor(data.match.gameTime / 60);
+        const seconds = data.match.gameTime % 60;
+        gameTimeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+      
+      if (killsElement && data.match) {
+        killsElement.textContent = data.match.kills || '0';
+      }
+      
+      if (deathsElement && data.match) {
+        deathsElement.textContent = data.match.deaths || '0';
+      }
+      
+      if (assistsElement && data.match) {
+        assistsElement.textContent = data.match.assists || '0';
+      }
+      
+      // Actualizar también el panel de rendimiento para mostrar la hora de actualización
+      const ratingPanel = tabPane.querySelector('.overview-rating');
+      if (ratingPanel) {
+        ratingPanel.innerHTML = `
+          <div style="text-align: center; font-size: 12px; margin-bottom: 5px;">
+            Actualizado: ${new Date().toLocaleTimeString()}
+          </div>
+          <div style="font-size: 18px; font-weight: bold;">B+</div>
+        `;
+      }
+    }
+  } catch (e) {
+    console.error(`Error actualizando ${tabId}:`, e);
+  }
+}
+
+/**
+ * Función para asegurarse de que los observers de eventos se inicialicen
+ * correctamente cuando se carga la pestaña de eventos
+ */
+function triggerEventsObservers() {
+  try {
+    console.log('Intentando forzar la inicialización de los observers de eventos...');
+    
+    // Verificar si los divs ocultos existen y tienen contenido
+    const eventsLog = document.getElementById('eventsLog');
+    const infoLog = document.getElementById('infoLog');
+    
+    console.log('Estado de los logs originales:', {
+      eventsLog: eventsLog ? `encontrado (${eventsLog.childNodes.length} nodos)` : 'no encontrado',
+      infoLog: infoLog ? `encontrado (${infoLog.childNodes.length} nodos)` : 'no encontrado'
+    });
+    
+    // Asegurarse de que los divs visibles existan
+    const eventsTab = document.getElementById('events-tab');
+    if (eventsTab && eventsTab.querySelector) {
+      const visibleEventsLog = eventsTab.querySelector('#visible-events-log');
+      const visibleInfoLog = eventsTab.querySelector('#visible-info-log');
+      
+      console.log('Estado de los logs visibles:', {
+        visibleEventsLog: visibleEventsLog ? 'encontrado' : 'no encontrado',
+        visibleInfoLog: visibleInfoLog ? 'encontrado' : 'no encontrado'
+      });
+      
+      // Copiar manualmente cualquier contenido existente
+      if (eventsLog && visibleEventsLog) {
+        console.log('Copiando eventos existentes a la visualización...');
+        Array.from(eventsLog.children).forEach(node => {
+          const clone = node.cloneNode(true);
+          visibleEventsLog.appendChild(clone);
+        });
+      }
+      
+      if (infoLog && visibleInfoLog) {
+        console.log('Copiando info existente a la visualización...');
+        Array.from(infoLog.children).forEach(node => {
+          const clone = node.cloneNode(true);
+          visibleInfoLog.appendChild(clone);
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Error al inicializar observers:', error);
+  }
 }
 
 // Exportar funciones para uso externo si es necesario
 window.tabLoader = {
   loadTabContent,
-  initTabsListeners
+  initTabsListeners,
+  triggerEventsObservers
 }; 

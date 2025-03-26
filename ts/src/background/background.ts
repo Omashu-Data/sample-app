@@ -24,6 +24,7 @@ class BackgroundController {
     // Populating the background controller's window dictionary
     this._windows[kWindowNames.desktop] = new OWWindow(kWindowNames.desktop);
     this._windows[kWindowNames.inGame] = new OWWindow(kWindowNames.inGame);
+    this._windows['eventos'] = new OWWindow('eventos');
 
     // When a a supported game game is started or is ended, toggle the app's windows
     this._gameListener = new OWGameListener({
@@ -50,11 +51,16 @@ class BackgroundController {
   public async run() {
     this._gameListener.start();
 
-    const currWindowName = (await this.isSupportedGameRunning())
-      ? kWindowNames.inGame
-      : kWindowNames.desktop;
+    const isGameRunning = await this.isSupportedGameRunning();
+    const currWindowName = isGameRunning ? kWindowNames.inGame : kWindowNames.desktop;
 
     this._windows[currWindowName].restore();
+    
+    if (isGameRunning) {
+      setTimeout(() => {
+        this._windows['eventos'].restore();
+      }, 2000);
+    }
   }
 
   private async onAppLaunchTriggered(e: AppLaunchTriggeredEvent) {
@@ -64,12 +70,17 @@ class BackgroundController {
       return;
     }
 
-    if (await this.isSupportedGameRunning()) {
+    const isGameRunning = await this.isSupportedGameRunning();
+    if (isGameRunning) {
       this._windows[kWindowNames.desktop].close();
       this._windows[kWindowNames.inGame].restore();
+      setTimeout(() => {
+        this._windows['eventos'].restore();
+      }, 2000);
     } else {
       this._windows[kWindowNames.desktop].restore();
       this._windows[kWindowNames.inGame].close();
+      this._windows['eventos'].close();
     }
   }
 
@@ -81,9 +92,13 @@ class BackgroundController {
     if (info.isRunning) {
       this._windows[kWindowNames.desktop].close();
       this._windows[kWindowNames.inGame].restore();
+      setTimeout(() => {
+        this._windows['eventos'].restore();
+      }, 2000);
     } else {
       this._windows[kWindowNames.desktop].restore();
       this._windows[kWindowNames.inGame].close();
+      this._windows['eventos'].close();
     }
   }
 

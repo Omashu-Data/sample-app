@@ -31,6 +31,11 @@
         "title": "Mostrar/Ocultar Ventana en Juego",
         "action-type": "toggle",
         "default": "Ctrl+F"
+      },
+      "lol_eventos_showhide": {
+        "title": "Mostrar/Ocultar Ventana de Eventos",
+        "action-type": "toggle",
+        "default": "Ctrl+E"
       }
     },
     "protocol_override_domains": {
@@ -88,6 +93,22 @@
         "popup_blocker": true,
         "mute": true,
         "keep_window_location": true
+      },
+      "eventos": {
+        "file": "eventos.html",
+        "in_game_only": true,
+        "focus_game_takeover": "ReleaseOnHidden",
+        "focus_game_takeover_release_hotkey": "lol_eventos_showhide",
+        "resizable": true,
+        "transparent": false,
+        "size": {
+          "width": 800,
+          "height": 600
+        },
+        "min_size": {
+          "width": 400,
+          "height": 300
+        }
       }
     },
     "game_targeting": {

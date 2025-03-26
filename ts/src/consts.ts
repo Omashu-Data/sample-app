@@ -71,7 +71,9 @@ export const kGamesFeatures = new Map<number, string[]>([
       'announcer',
       'counters',
       'damage',
-      'heal'
+      'heal',
+      'jungle_camps',
+      'team_frames'
     ]
   ],
   // Escape From Tarkov
@@ -239,9 +241,11 @@ export const kGameClassIds = Array.from(kGamesFeatures.keys());
 
 export const kWindowNames = {
   inGame: 'in_game',
-  desktop: 'desktop'
+  desktop: 'desktop',
+  eventos: 'eventos'
 };
 
 export const kHotkeys = {
-  toggle: 'lol_metrics_showhide'
+  toggle: 'lol_metrics_showhide',
+  toggleEventos: 'lol_eventos_showhide'
 };
