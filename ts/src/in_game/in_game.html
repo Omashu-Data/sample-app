@@ -1060,6 +1060,62 @@
         return;
       }
       
+      // ----- CAMBIO IMPORTANTE ------
+      // En lugar de actualizar manualmente cada elemento,
+      // utilizamos el patrón centralizado de actualización
+      
+      // Obtener los datos actuales del juego
+      const data = gameDataManager.getData();
+      
+      // Método 1: Intentar usar window.updateUI si existe
+      if (typeof window.updateUI === 'function') {
+        console.log("Llamando a window.updateUI para actualización centralizada");
+        window.updateUI(data);
+        return;
+      }
+      
+      // Método 2: Intentar encontrar updateUI dentro del tab
+      const updateUIScripts = overviewTab.querySelectorAll('script');
+      let tabUpdateUI = null;
+      
+      for (const script of updateUIScripts) {
+        if (script.textContent.includes('function updateUI')) {
+          try {
+            // Ejecutar el script para acceder a la función
+            const scriptFunc = new Function(`
+              let updateUI;
+              ${script.textContent}
+              return updateUI;
+            `);
+            tabUpdateUI = scriptFunc();
+            break;
+          } catch (e) {
+            console.error("Error extrayendo updateUI del script:", e);
+          }
+        }
+      }
+      
+      if (typeof tabUpdateUI === 'function') {
+        console.log("Usando updateUI encontrada en el tab");
+        tabUpdateUI(data);
+        return;
+      }
+      
+      // Método 3: Buscar window.frames[0].updateUI
+      try {
+        if (overviewTab.querySelector('iframe') && 
+            typeof overviewTab.querySelector('iframe').contentWindow.updateUI === 'function') {
+          console.log("Usando updateUI del iframe");
+          overviewTab.querySelector('iframe').contentWindow.updateUI(data);
+          return;
+        }
+      } catch (e) {
+        console.log("No se pudo acceder a updateUI del iframe:", e);
+      }
+      
+      // Fallback: Actualización manual si no encontramos updateUI
+      console.log("No se encontró updateUI, actualizando elementos manualmente");
+      
       // Buscar los elementos dentro de la pestaña
       const playerNameElement = overviewTab.querySelector('#player-name');
       const gameTimeElement = overviewTab.querySelector('#game-time-value');
@@ -1067,56 +1123,52 @@
       const deathsElement = overviewTab.querySelector('#kda-deaths');
       const assistsElement = overviewTab.querySelector('#kda-assists');
       
-      // Intentar actualizar directamente los elementos
+      // Actualizar elementos manualmente como ultimo recurso
       try {
         // Actualizar nombre
         if (playerNameElement) {
-          playerNameElement.textContent = gameDataManager.currentData.summoner.name || "Desconocido";
-          console.log("Nombre actualizado a:", gameDataManager.currentData.summoner.name);
+          playerNameElement.textContent = data.summoner.name || "Desconocido";
+          console.log("Nombre actualizado a:", data.summoner.name);
         }
         
         // Actualizar tiempo
         if (gameTimeElement) {
-          const formattedTime = formatGameTime(gameDataManager.currentData.match.gameTime);
+          const formattedTime = formatGameTime(data.match.gameTime);
           gameTimeElement.textContent = formattedTime;
           console.log("Tiempo actualizado a:", formattedTime);
         }
         
         // Actualizar KDA
         if (killsElement) {
-          killsElement.textContent = gameDataManager.currentData.match.kills || "0";
+          killsElement.textContent = data.match.kills || "0";
         }
         if (deathsElement) {
-          deathsElement.textContent = gameDataManager.currentData.match.deaths || "0";
+          deathsElement.textContent = data.match.deaths || "0";
         }
         if (assistsElement) {
-          assistsElement.textContent = gameDataManager.currentData.match.assists || "0";
+          assistsElement.textContent = data.match.assists || "0";
         }
         
-        console.log("Actualización directa completada");
+        // También actualizamos los elementos de retos como fallback
+        const challengeKillsElement = overviewTab.querySelector('#challenge-kills-value');
+        const challengeWardsElement = overviewTab.querySelector('#challenge-wards-value');
+        const challengeCSElement = overviewTab.querySelector('#challenge-cs-value');
         
-        // Intentar ejecutar updateUI si existe
-        try {
-          const script = document.createElement('script');
-          script.textContent = `
-            try {
-              if (typeof window.frames[0].updateUI === 'function') {
-                window.frames[0].updateUI(${JSON.stringify(gameDataManager.currentData)});
-                console.log("updateUI ejecutado en frame");
-              } else if (typeof window.updateUI === 'function') {
-                window.updateUI(${JSON.stringify(gameDataManager.currentData)});
-                console.log("updateUI ejecutado en ventana principal");
-              } else {
-                console.log("updateUI no encontrada");
-              }
-            } catch(e) {
-              console.error("Error ejecutando updateUI:", e);
-            }
-          `;
-          document.body.appendChild(script);
-        } catch (e) {
-          console.error("Error al ejecutar script:", e);
+        if (challengeKillsElement && data.match) {
+          challengeKillsElement.textContent = (data.match.kills || 0) + "/3";
         }
+        
+        if (challengeWardsElement && data.vision) {
+          challengeWardsElement.textContent = (data.vision.wardsPlaced || 0) + "/5";
+        }
+        
+        if (challengeCSElement && data.match && data.match.cs !== undefined && data.match.gameTime !== undefined) {
+          const gameTimeInMinutes = Math.max(data.match.gameTime / 60, 1);
+          const csPerMinute = (data.match.cs / gameTimeInMinutes).toFixed(1);
+          challengeCSElement.textContent = csPerMinute + "/8";
+        }
+        
+        console.log("Actualización manual completada");
       } catch (e) {
         console.error("Error actualizando elementos:", e);
       }

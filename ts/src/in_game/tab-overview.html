@@ -1,11 +1,11 @@
-<!-- Tab de Resumen - Página principal de la aplicación optimizada con principios de neuromarketing -->
+<!-- Tab de Resumen -->
 <div class="overview-container">
   <div class="overview-header glass-panel">
     <div class="overview-player">
       <div class="overview-player-profile">
-        <div class="overview-player-image shimmer-effect" aria-label="Imagen de perfil del jugador"></div>
+        <div class="overview-player-image"></div>
         <div class="overview-player-info">
-          <h2 id="player-name" class="text-glow">Invocador</h2>
+          <h2 id="player-name">Invocador</h2>
           <div class="overview-player-role">
             <img src="../../img/role-icon.svg" alt="Rol" />
             <span id="player-role">Rol Principal</span>
@@ -13,24 +13,24 @@
         </div>
       </div>
       <div class="overview-match-info">
-        <div class="overview-timer pulse-effect">
+        <div class="overview-timer">
           <span class="overview-label">Tiempo de juego:</span>
-          <span id="game-time-value" class="highlight-value">00:00</span>
+          <span id="game-time-value">00:00</span>
         </div>
         <div class="overview-kda">
           <div class="kda-container">
             <span class="kda-label">K</span>
-            <span id="kda-kills" class="kda-value highlight-primary">0</span>
+            <span id="kda-kills">0</span>
           </div>
           <span class="kda-separator">/</span>
           <div class="kda-container">
             <span class="kda-label">D</span>
-            <span id="kda-deaths" class="kda-value highlight-danger">0</span>
+            <span id="kda-deaths">0</span>
           </div>
           <span class="kda-separator">/</span>
           <div class="kda-container">
             <span class="kda-label">A</span>
-            <span id="kda-assists" class="kda-value highlight-success">0</span>
+            <span id="kda-assists">0</span>
           </div>
         </div>
       </div>
@@ -38,407 +38,51 @@
   </div>
   
   <div class="overview-sections">
-    <!-- Sección de retos mejorada visualmente -->
-    <div class="overview-section glass-panel challenges-panel">
+    <!-- Sección de retos -->
+    <div class="overview-section glass-panel">
       <div class="overview-section-header">
-        <h3>
-          <span class="icon-container primary-bg">
-            <img src="../../img/challenges-icon.svg" alt="Retos" />
-          </span>
-          Retos para esta partida
-        </h3>
-        <div class="section-actions">
-          <button class="micro-button pulse-effect" aria-label="Nueva misión">
-            <i class="icon-add"></i>
-          </button>
-        </div>
+        <h3>Retos para esta partida</h3>
       </div>
-      <div class="overview-section-content challenges">
-        <div class="overview-challenge interactive-panel enhanced">
-          <div class="overview-challenge-icon primary-pulse">
-            <img src="../../img/ward-icon.svg" alt="Colocar wards" />
+      <div class="overview-section-content">
+        <div class="overview-challenge">
+          <div class="overview-challenge-icon">
+            <img src="../../img/ward-icon.svg" alt="Wards" />
           </div>
           <div class="overview-challenge-info">
             <div class="overview-challenge-name">Coloca 5 wards</div>
             <div class="overview-challenge-progress">
-              <div class="progress-bar">
-                <div class="progress-fill animate-width" style="width: 0%;"></div>
-              </div>
-              <div class="progress-text">0/5</div>
+              <div id="challenge-wards-value">0/5</div>
             </div>
           </div>
         </div>
         
-        <div class="overview-challenge interactive-panel enhanced">
-          <div class="overview-challenge-icon primary-pulse">
-            <img src="../../img/sword-icon.svg" alt="Conseguir kills" />
+        <div class="overview-challenge">
+          <div class="overview-challenge-icon">
+            <img src="../../img/sword-icon.svg" alt="Kills" />
           </div>
           <div class="overview-challenge-info">
             <div class="overview-challenge-name">Consigue 3 eliminaciones</div>
             <div class="overview-challenge-progress">
-              <div class="progress-bar">
-                <div class="progress-fill animate-width" style="width: 0%;"></div>
-              </div>
-              <div class="progress-text">0/3</div>
+              <div id="challenge-kills-value">0/3</div>
             </div>
           </div>
         </div>
         
-        <div class="overview-challenge interactive-panel enhanced">
-          <div class="overview-challenge-icon primary-pulse">
-            <img src="../../img/cs-icon.svg" alt="CS por minuto" />
+        <div class="overview-challenge">
+          <div class="overview-challenge-icon">
+            <img src="../../img/cs-icon.svg" alt="CS" />
           </div>
           <div class="overview-challenge-info">
             <div class="overview-challenge-name">Obtén 8 CS por minuto</div>
             <div class="overview-challenge-progress">
-              <div class="progress-bar">
-                <div class="progress-fill animate-width" style="width: 0%;"></div>
-              </div>
-              <div class="progress-text">0/8</div>
+              <div id="challenge-cs-value">0/8</div>
             </div>
           </div>
         </div>
-        
-        <!-- Contenedor para retos dinámicos adicionales -->
-        <div id="dynamic-challenges-container"></div>
       </div>
-    </div>
-  </div>
-  
-  <div class="overview-performance glass-panel">
-    <div class="performance-header">
-      <h3>Rendimiento General</h3>
-      <div class="performance-trend positive">
-        <span class="trend-icon">↑</span>
-        <span class="trend-value">+5%</span>
-      </div>
-    </div>
-    <div class="overview-rating shimmer-effect">B+</div>
-  </div>
-
-  <!-- Notificaciones flotantes emergentes -->
-  <div class="notification-container" id="notification-container">
-    <!-- Las notificaciones se agregarán dinámicamente -->
-  </div>
-  
-  <!-- Panel de eventos para depuración y análisis -->
-  <div id="events-panel" class="events-panel glass-panel">
-    <div class="events-panel-header">
-      <h4>Eventos de Juego</h4>
-      <span class="events-count">0</span>
-    </div>
-    <div class="events-list" id="events-list">
-      <!-- Los eventos se mostrarán aquí -->
     </div>
   </div>
 </div>
-
-<style>
-  /* Estilos complementarios para efectos adicionales */
-  .glass-panel {
-    background: linear-gradient(135deg, rgba(29, 16, 75, 0.7), rgba(19, 11, 55, 0.9));
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(109, 61, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  }
-  
-  .text-glow {
-    text-shadow: 0 0 10px rgba(109, 61, 255, 0.6);
-  }
-  
-  .highlight-primary {
-    color: var(--omashu-purple-light);
-    font-weight: var(--font-weight-bold);
-  }
-  
-  .highlight-success {
-    color: var(--positive-color);
-    font-weight: var(--font-weight-bold);
-  }
-  
-  .highlight-warning {
-    color: var(--warning-color);
-    font-weight: var(--font-weight-bold);
-  }
-  
-  .highlight-danger {
-    color: var(--negative-color);
-    font-weight: var(--font-weight-bold);
-  }
-  
-  .highlight-value {
-    color: var(--omashu-highlight);
-    font-weight: var(--font-weight-bold);
-  }
-  
-  .success-bg {
-    background-color: rgba(76, 175, 80, 0.2);
-  }
-  
-  .warning-bg {
-    background-color: rgba(255, 183, 77, 0.2);
-  }
-  
-  .primary-bg {
-    background-color: rgba(109, 61, 255, 0.2);
-  }
-  
-  .success-pulse {
-    animation: pulse-green 2s infinite;
-  }
-  
-  .warning-pulse {
-    animation: pulse-gold 2s infinite;
-  }
-  
-  .primary-pulse {
-    animation: pulse-blue 2s infinite;
-  }
-  
-  .scale-on-hover {
-    transition: transform var(--transition-fast);
-  }
-  
-  .scale-on-hover:hover {
-    transform: scale(1.03);
-  }
-  
-  .interactive-panel {
-    transition: all var(--transition-fast);
-    cursor: pointer;
-  }
-  
-  .interactive-panel:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    transform: translateY(-2px);
-  }
-  
-  .kda-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1;
-  }
-  
-  .kda-label {
-    font-size: var(--font-size-xs);
-    color: var(--text-tertiary);
-    margin-bottom: 2px;
-  }
-  
-  .section-actions {
-    margin-left: auto;
-  }
-  
-  .micro-button {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-  }
-  
-  .micro-button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-primary);
-    border-color: var(--border-active);
-  }
-  
-  .animate-width {
-    transition: width 1s ease-in-out;
-  }
-  
-  .performance-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .performance-trend {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: var(--font-size-sm);
-  }
-  
-  .performance-trend.positive {
-    color: var(--positive-color);
-  }
-  
-  .performance-trend.negative {
-    color: var(--negative-color);
-  }
-  
-  .notification-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: var(--z-index-toast);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    pointer-events: none;
-  }
-  
-  /* Mejoras visuales para los retos */
-  .challenges-panel {
-    margin-bottom: 16px;
-  }
-  
-  .overview-challenge.enhanced {
-    border-radius: 10px;
-    padding: 12px;
-    margin-bottom: 12px;
-    background: linear-gradient(135deg, rgba(40, 25, 100, 0.4), rgba(30, 20, 80, 0.6));
-    border-left: 3px solid rgba(109, 61, 255, 0.6);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-  
-  .overview-challenge.enhanced:hover {
-    background: linear-gradient(135deg, rgba(50, 35, 120, 0.5), rgba(40, 30, 100, 0.7));
-    border-left: 3px solid rgba(129, 81, 255, 0.8);
-    transform: translateY(-3px) scale(1.01);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-  }
-  
-  .overview-challenge.enhanced.challenge-completed {
-    border-left: 3px solid rgba(76, 175, 80, 0.8);
-    background: linear-gradient(135deg, rgba(40, 100, 40, 0.4), rgba(30, 80, 30, 0.6));
-  }
-  
-  .overview-challenge-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(109, 61, 255, 0.2);
-    margin-right: 12px;
-  }
-  
-  .overview-challenge-icon img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .overview-challenge-name {
-    font-weight: var(--font-weight-bold);
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: var(--text-primary);
-  }
-  
-  .progress-bar {
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 4px;
-  }
-  
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(to right, var(--omashu-purple-light), var(--omashu-highlight));
-    border-radius: 4px;
-  }
-  
-  .challenge-completed .progress-fill {
-    background: linear-gradient(to right, var(--positive-color-dim), var(--positive-color));
-  }
-  
-  .progress-text {
-    font-size: 12px;
-    color: var(--text-secondary);
-    text-align: right;
-  }
-  
-  /* Panel de eventos */
-  .events-panel {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 250px;
-    max-height: 200px;
-    border-radius: 8px;
-    overflow: hidden;
-    z-index: 900;
-    opacity: 0.8;
-    transition: opacity 0.3s, max-height 0.3s;
-  }
-  
-  .events-panel:hover {
-    opacity: 1;
-    max-height: 300px;
-  }
-  
-  .events-panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    background: rgba(29, 16, 75, 0.8);
-    border-bottom: 1px solid rgba(109, 61, 255, 0.3);
-  }
-  
-  .events-panel-header h4 {
-    margin: 0;
-    font-size: 12px;
-    color: var(--text-secondary);
-  }
-  
-  .events-count {
-    display: inline-block;
-    background: rgba(109, 61, 255, 0.3);
-    color: var(--text-primary);
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 10px;
-  }
-  
-  .events-list {
-    max-height: 170px;
-    overflow-y: auto;
-    padding: 0 8px;
-  }
-  
-  .event-item {
-    font-size: 11px;
-    padding: 6px 8px;
-    margin: 4px 0;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-  }
-  
-  .event-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
-    background: rgba(109, 61, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-  }
-  
-  .event-text {
-    flex: 1;
-  }
-  
-  .event-time {
-    font-size: 9px;
-    color: var(--text-tertiary);
-  }
-</style>
 
 <script>
   // Función para formatear el tiempo de juego
@@ -449,954 +93,94 @@
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
 
-  // Función para crear y mostrar notificaciones temporales
-  function showNotification(message, type = 'info') {
-    const container = document.getElementById('notification-container');
-    const notification = document.createElement('div');
-    notification.className = `notification notification--${type} animate-in`;
-    notification.innerHTML = `
-      <div class="notification-icon"></div>
-      <div class="notification-content">${message}</div>
-    `;
-    container.appendChild(notification);
-    
-    // Animar salida y eliminar
-    setTimeout(() => {
-      notification.classList.add('animate-out');
-      setTimeout(() => notification.remove(), 500);
-    }, 3000);
-  }
-
-  // Función para actualizar los elementos de la UI con los datos del juego
+  // Única función para actualizar la UI - Sigue exactamente el mismo flujo que el KDA
   function updateUI(gameData) {
-    console.log('tab-overview: updateUI llamada con datos:', 
-      JSON.stringify({
-        summoner: gameData.summoner ? gameData.summoner.name : 'no disponible',
-        gameTime: gameData.match ? gameData.match.gameTime : 'no disponible',
-        kda: gameData.match ? `${gameData.match.kills}/${gameData.match.deaths}/${gameData.match.assists}` : 'no disponible',
-        vision: gameData.vision ? gameData.vision.wardsPlaced : 'no disponible',
-        eventos: gameData.events ? gameData.events.length : 'no disponible'
-      })
-    );
+    console.log("Recibiendo actualización de datos:", gameData);
+    
+    // Actualizar nombre y rol - igual que antes
+    if (gameData.summoner) {
+      document.getElementById('player-name').textContent = gameData.summoner.name || "Invocador";
+      document.getElementById('player-role').textContent = gameData.summoner.position || gameData.summoner.role || "Rol Principal";
+    }
 
-    try {
-      // Crear un marcador de tiempo para depuración
-      const ahora = new Date();
-      const tiempoUI = document.createElement('div');
-      tiempoUI.style.position = 'absolute';
-      tiempoUI.style.top = '5px';
-      tiempoUI.style.right = '5px';
-      tiempoUI.style.background = 'rgba(0,0,0,0.5)';
-      tiempoUI.style.color = 'white';
-      tiempoUI.style.padding = '3px 6px';
-      tiempoUI.style.borderRadius = '3px';
-      tiempoUI.style.fontSize = '10px';
-      tiempoUI.style.zIndex = '9999';
-      tiempoUI.textContent = `Última actualización: ${ahora.toLocaleTimeString()}.${ahora.getMilliseconds()}`;
-      document.querySelector('.overview-container').appendChild(tiempoUI);
-      
-      // Eliminar marcadores antiguos (mantener solo el último)
-      const marcadores = document.querySelectorAll('.overview-container > div[style*="position: absolute"]');
-      if (marcadores.length > 1) {
-        for (let i = 0; i < marcadores.length - 1; i++) {
-          marcadores[i].remove();
-        }
-      }
-      
-      // Actualizar nombre del jugador
-      if (gameData.summoner && gameData.summoner.name) {
-        const playerNameElement = document.getElementById('player-name');
-        if (playerNameElement) {
-          const oldName = playerNameElement.textContent;
-          const newName = gameData.summoner.name || "Desconocido";
-          
-          if (oldName !== newName) {
-            playerNameElement.textContent = newName;
-            
-            // Actualizar también el icono de jugador con la primera letra
-            const playerImageElement = document.querySelector('.overview-player-image');
-            if (playerImageElement) {
-              playerImageElement.textContent = (newName.charAt(0) || "?").toUpperCase();
-            }
-            
-            // Mostrar notificación de bienvenida la primera vez
-            if (oldName === "Invocador") {
-              showNotification(`¡Bienvenido, ${newName}! Estamos analizando tu partida en tiempo real.`, 'success');
-              
-              // Registrar evento
-              if (gameData.events && Array.isArray(gameData.events)) {
-                gameData.events.push({
-                  type: 'player_welcome',
-                  name: newName,
-                  timestamp: Date.now()
-                });
-              }
-            }
-            
-            console.log('Nombre de jugador actualizado:', newName);
-          }
-        } else {
-          console.error('Elemento player-name no encontrado');
-        }
-        
-        // Actualizar rol del jugador si está disponible
-        if (gameData.summoner.position || gameData.summoner.role) {
-          const playerRoleElement = document.getElementById('player-role');
-          if (playerRoleElement) {
-            playerRoleElement.textContent = gameData.summoner.position || gameData.summoner.role || "Rol Principal";
-          }
-        }
-      }
+    // Actualizar tiempo - igual que antes
+    if (gameData.match && gameData.match.gameTime !== undefined) {
+      document.getElementById('game-time-value').textContent = formatGameTime(gameData.match.gameTime);
+    }
 
-      // Actualizar tiempo de juego - MEJORADO para asegurar actualización
-      if (gameData.match && gameData.match.gameTime !== undefined) {
-        const gameTimeElement = document.getElementById('game-time-value');
-        if (gameTimeElement) {
-          const formattedTime = formatGameTime(gameData.match.gameTime);
-          if (gameTimeElement.textContent !== formattedTime) {
-            gameTimeElement.textContent = formattedTime;
-            gameTimeElement.setAttribute('data-last-update', Date.now().toString());
-            console.log('Tiempo de juego actualizado:', formattedTime);
-          }
-        } else {
-          console.error('Elemento game-time-value no encontrado');
-        }
-      }
-
-      // Actualizar KDA con atributos para comparar versiones
-      if (gameData.match) {
-        // Actualizar Kills
-        const killsElement = document.getElementById('kda-kills');
-        if (killsElement) {
-          const killsValue = gameData.match.kills || 0;
-          const oldValue = parseInt(killsElement.getAttribute('data-value') || '0');
-          
-          if (oldValue !== killsValue) {
-            killsElement.textContent = killsValue.toString();
-            killsElement.setAttribute('data-value', killsValue.toString());
-            
-            // Si aumentaron las kills, mostrar notificación y registrar evento
-            if (oldValue < killsValue) {
-              showNotification(`¡Nueva eliminación conseguida!`, 'success');
-              
-              // Registrar evento si no existe ya
-              const killEvent = {
-                type: 'kill',
-                timestamp: Date.now(),
-                data: { kills: killsValue }
-              };
-              
-              // Solo registrar si no tenemos ya este evento por otro medio
-              if (gameData.events && Array.isArray(gameData.events)) {
-                const lastEvents = gameData.events.slice(-5);
-                const hasRecentKillEvent = lastEvents.some(e => e.type === 'kill');
-                
-                if (!hasRecentKillEvent) {
-                  gameData.events.push(killEvent);
-                }
-              }
-            }
-            
-            // Animar el cambio
-            killsElement.style.animation = 'none';
-            killsElement.offsetHeight; // Forzar reflow
-            killsElement.style.animation = 'pulse-red 0.5s';
-            
-            console.log('Kills actualizadas:', killsValue, '(anterior:', oldValue, ')');
-          }
-        } else {
-          console.error('Elemento kda-kills no encontrado');
-        }
-        
-        // Actualizar Deaths
-        const deathsElement = document.getElementById('kda-deaths');
-        if (deathsElement) {
-          const deathsValue = gameData.match.deaths || 0;
-          const oldValue = parseInt(deathsElement.getAttribute('data-value') || '0');
-          
-          if (oldValue !== deathsValue) {
-            deathsElement.textContent = deathsValue.toString();
-            deathsElement.setAttribute('data-value', deathsValue.toString());
-            
-            // Si aumentaron las muertes, mostrar notificación y registrar evento
-            if (oldValue < deathsValue) {
-              showNotification(`Muerte registrada. ¡Mantén la calma!`, 'warning');
-              
-              // Registrar evento si no existe ya
-              const deathEvent = {
-                type: 'death',
-                timestamp: Date.now(),
-                data: { deaths: deathsValue }
-              };
-              
-              // Solo registrar si no tenemos ya este evento por otro medio
-              if (gameData.events && Array.isArray(gameData.events)) {
-                const lastEvents = gameData.events.slice(-5);
-                const hasRecentDeathEvent = lastEvents.some(e => e.type === 'death');
-                
-                if (!hasRecentDeathEvent) {
-                  gameData.events.push(deathEvent);
-                }
-              }
-            }
-            
-            deathsElement.style.animation = 'none';
-            deathsElement.offsetHeight; // Forzar reflow
-            deathsElement.style.animation = 'pulse-red 0.5s';
-            
-            console.log('Deaths actualizadas:', deathsValue, '(anterior:', oldValue, ')');
-          }
-        } else {
-          console.error('Elemento kda-deaths no encontrado');
-        }
-        
-        // Actualizar Assists
-        const assistsElement = document.getElementById('kda-assists');
-        if (assistsElement) {
-          const assistsValue = gameData.match.assists || 0;
-          const oldValue = parseInt(assistsElement.getAttribute('data-value') || '0');
-          
-          if (oldValue !== assistsValue) {
-            assistsElement.textContent = assistsValue.toString();
-            assistsElement.setAttribute('data-value', assistsValue.toString());
-            
-            // Si aumentaron las asistencias, mostrar notificación y registrar evento
-            if (oldValue < assistsValue) {
-              showNotification(`¡Nueva asistencia registrada!`, 'info');
-              
-              // Registrar evento si no existe ya
-              const assistEvent = {
-                type: 'assist',
-                timestamp: Date.now(),
-                data: { assists: assistsValue }
-              };
-              
-              // Solo registrar si no tenemos ya este evento por otro medio
-              if (gameData.events && Array.isArray(gameData.events)) {
-                const lastEvents = gameData.events.slice(-5);
-                const hasRecentAssistEvent = lastEvents.some(e => e.type === 'assist');
-                
-                if (!hasRecentAssistEvent) {
-                  gameData.events.push(assistEvent);
-                }
-              }
-            }
-            
-            assistsElement.style.animation = 'none';
-            assistsElement.offsetHeight; // Forzar reflow
-            assistsElement.style.animation = 'pulse-green 0.5s';
-            
-            console.log('Assists actualizadas:', assistsValue, '(anterior:', oldValue, ')');
-          }
-        } else {
-          console.error('Elemento kda-assists no encontrado');
-        }
-      }
+    // Actualizar KDA - MISMO PATRÓN PARA TODO
+    if (gameData.match) {
+      // KDA - Acceso directo con getElementById
+      document.getElementById('kda-kills').textContent = gameData.match.kills || 0;
+      document.getElementById('kda-deaths').textContent = gameData.match.deaths || 0;
+      document.getElementById('kda-assists').textContent = gameData.match.assists || 0;
       
-      // Asegurar que gameData.events existe
-      if (!gameData.events) {
-        gameData.events = [];
-      }
+      // Reto de kills - MISMO PATRÓN que KDA
+      document.getElementById('challenge-kills-value').textContent = (gameData.match.kills || 0) + "/3";
       
-      // Actualizar los retos basados en los datos recibidos
-      updateChallenges(gameData);
-
-      // Actualizar métricas de rendimiento
-      updatePerformanceMetrics(gameData);
-
-    } catch (e) {
-      console.error('Error al actualizar la UI:', e);
-      document.querySelector('.overview-rating').innerHTML = `
-        <div style="text-align: center; padding: 5px; background: rgba(255,0,0,0.2); border-radius: 5px; margin-bottom: 5px; font-size: 12px;">
-          <strong>Error al actualizar UI:</strong><br>
-          ${e.message}<br>
-          <small>Última actualización: ${new Date().toLocaleTimeString()}</small>
-        </div>
-        B+`;
-    }
-  }
-  
-  // Función para actualizar los retos basados en los datos del juego
-  function updateChallenges(gameData) {
-    console.log('Actualizando retos con datos:', 
-                JSON.stringify({
-                  vision: gameData.vision ? gameData.vision.wardsPlaced : 'no disponible',
-                  kills: gameData.match ? gameData.match.kills : 'no disponible', 
-                  cs: gameData.match ? gameData.match.cs : 'no disponible',
-                  tiempo: gameData.match ? gameData.match.gameTime : 'no disponible',
-                  eventos: gameData.events ? gameData.events.length : 'no disponible'
-                }));
-    
-    // Reto 1: Colocar wards
-    if (gameData.vision && gameData.vision.wardsPlaced !== undefined) {
-      const wardGoal = 5;
-      const wardCurrent = gameData.vision.wardsPlaced;
-      const wardProgress = Math.min((wardCurrent / wardGoal) * 100, 100);
-      
-      const wardProgressBar = document.querySelector('.overview-challenge:nth-child(1) .progress-fill');
-      const wardProgressText = document.querySelector('.overview-challenge:nth-child(1) .progress-text');
-      
-      if (wardProgressBar) {
-        wardProgressBar.style.width = `${wardProgress}%`;
-      }
-      if (wardProgressText) {
-        wardProgressText.textContent = `${wardCurrent}/${wardGoal}`;
-      }
-      
-      // Verificar si el reto está completado
-      if (wardCurrent >= wardGoal) {
-        const challenge = document.querySelector('.overview-challenge:nth-child(1)');
-        if (challenge && !challenge.classList.contains('challenge-completed')) {
-          challenge.classList.add('challenge-completed');
-          // Cambiar el pulso a verde
-          const icon = challenge.querySelector('.overview-challenge-icon');
-          if (icon) {
-            icon.classList.remove('primary-pulse');
-            icon.classList.add('success-pulse');
-          }
-          showNotification('¡Reto completado! Colocaste 5 wards', 'success');
-          
-          // Registrar evento de reto completado
-          logGameEvent({
-            type: 'challenge_completed',
-            name: 'Coloca 5 wards',
-            timestamp: Date.now()
-          });
-        }
+      // Reto de CS - MISMO PATRÓN que KDA
+      if (gameData.match.cs !== undefined && gameData.match.gameTime !== undefined) {
+        const gameTimeInMinutes = Math.max(gameData.match.gameTime / 60, 1);
+        const csPerMinute = (gameData.match.cs / gameTimeInMinutes).toFixed(1);
+        document.getElementById('challenge-cs-value').textContent = csPerMinute + "/8";
       }
     }
     
-    // Reto 2: Conseguir 3 kills
-    if (gameData.match && gameData.match.kills !== undefined) {
-      const killsGoal = 3;
-      const killsCurrent = gameData.match.kills;
-      const killsProgress = Math.min((killsCurrent / killsGoal) * 100, 100);
-      
-      const killsProgressBar = document.querySelector('.overview-challenge:nth-child(2) .progress-fill');
-      const killsProgressText = document.querySelector('.overview-challenge:nth-child(2) .progress-text');
-      
-      if (killsProgressBar) {
-        killsProgressBar.style.width = `${killsProgress}%`;
-      }
-      if (killsProgressText) {
-        killsProgressText.textContent = `${killsCurrent}/${killsGoal}`;
-      }
-      
-      // Verificar si el reto está completado
-      if (killsCurrent >= killsGoal) {
-        const challenge = document.querySelector('.overview-challenge:nth-child(2)');
-        if (challenge && !challenge.classList.contains('challenge-completed')) {
-          challenge.classList.add('challenge-completed');
-          // Cambiar el pulso a verde
-          const icon = challenge.querySelector('.overview-challenge-icon');
-          if (icon) {
-            icon.classList.remove('primary-pulse');
-            icon.classList.add('success-pulse');
-          }
-          showNotification('¡Reto completado! Conseguiste 3 eliminaciones', 'success');
-          
-          // Registrar evento de reto completado
-          logGameEvent({
-            type: 'challenge_completed',
-            name: 'Consigue 3 eliminaciones',
-            timestamp: Date.now()
-          });
-        }
-      }
-    }
-    
-    // Reto 3: Obtener 8 CS por minuto
-    if (gameData.match && gameData.match.cs !== undefined && gameData.match.gameTime !== undefined) {
-      // Calcular CS por minuto
-      const gameTimeInMinutes = Math.max(gameData.match.gameTime / 60, 1); // Evitar división por cero
-      const csPerMinute = gameData.match.cs / gameTimeInMinutes;
-      const csGoal = 8;
-      // Calcular progreso (8 CS/min = 100%)
-      const csProgress = Math.min((csPerMinute / csGoal) * 100, 100);
-      
-      const csProgressBar = document.querySelector('.overview-challenge:nth-child(3) .progress-fill');
-      const csProgressText = document.querySelector('.overview-challenge:nth-child(3) .progress-text');
-      
-      if (csProgressBar) {
-        csProgressBar.style.width = `${csProgress}%`;
-      }
-      if (csProgressText) {
-        csProgressText.textContent = `${csPerMinute.toFixed(1)}/${csGoal}`;
-      }
-      
-      // Verificar si el reto está completado
-      if (csPerMinute >= csGoal) {
-        const challenge = document.querySelector('.overview-challenge:nth-child(3)');
-        if (challenge && !challenge.classList.contains('challenge-completed')) {
-          challenge.classList.add('challenge-completed');
-          // Cambiar el pulso a verde
-          const icon = challenge.querySelector('.overview-challenge-icon');
-          if (icon) {
-            icon.classList.remove('primary-pulse');
-            icon.classList.add('success-pulse');
-          }
-          showNotification('¡Reto completado! Alcanzaste 8 CS por minuto', 'success');
-          
-          // Registrar evento de reto completado
-          logGameEvent({
-            type: 'challenge_completed',
-            name: 'Obtén 8 CS por minuto',
-            timestamp: Date.now()
-          });
-        }
-      }
-    }
-    
-    // Analizar y mostrar eventos del juego
-    updateEventsPanel(gameData);
-    
-    // Actualizar o crear retos dinámicos basados en eventos
-    if (gameData.events && gameData.events.length > 0) {
-      createEventBasedChallenges(gameData);
-    }
-  }
-  
-  // Función para analizar y mostrar eventos del juego
-  function updateEventsPanel(gameData) {
-    if (!gameData.events || !gameData.events.length) return;
-    
-    // Actualizar contador de eventos
-    const eventsCount = document.querySelector('.events-count');
-    if (eventsCount) {
-      eventsCount.textContent = gameData.events.length.toString();
-    }
-    
-    // Obtener contenedor de eventos
-    const eventsList = document.getElementById('events-list');
-    if (!eventsList) return;
-    
-    // Limpiar lista si hay demasiados eventos (para evitar overflow)
-    if (eventsList.children.length > 30) {
-      while (eventsList.children.length > 15) {
-        eventsList.removeChild(eventsList.firstChild);
-      }
-    }
-    
-    // Mostrar los 5 eventos más recientes
-    const recentEvents = gameData.events.slice(-5);
-    
-    recentEvents.forEach(event => {
-      // Comprobar si ya existe este evento (por timestamp)
-      const existingEvent = document.querySelector(`.event-item[data-timestamp="${event.timestamp}"]`);
-      if (existingEvent) return;
-      
-      // Crear nuevo elemento de evento
-      const eventItem = document.createElement('div');
-      eventItem.className = 'event-item';
-      eventItem.setAttribute('data-timestamp', event.timestamp);
-      
-      // Determinar icono según tipo de evento
-      let iconText = '•';
-      let eventClass = '';
-      
-      switch(event.type) {
-        case 'kill':
-          iconText = 'K';
-          eventClass = 'event-kill';
-          break;
-        case 'death':
-          iconText = 'D';
-          eventClass = 'event-death';
-          break;
-        case 'assist':
-          iconText = 'A';
-          eventClass = 'event-assist';
-          break;
-        case 'ward_placed':
-          iconText = 'W';
-          eventClass = 'event-ward';
-          break;
-        case 'objective':
-        case 'turret_kill':
-        case 'dragon_kill':
-        case 'baron_kill':
-        case 'herald_kill':
-          iconText = 'O';
-          eventClass = 'event-objective';
-          break;
-        case 'challenge_completed':
-          iconText = '★';
-          eventClass = 'event-challenge';
-          break;
-      }
-      
-      // Formatear hora
-      const eventTime = new Date(event.timestamp).toLocaleTimeString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      });
-      
-      // Crear HTML del evento
-      eventItem.innerHTML = `
-        <div class="event-icon ${eventClass}">${iconText}</div>
-        <div class="event-text">${formatEventText(event)}</div>
-        <div class="event-time">${eventTime}</div>
-      `;
-      
-      // Añadir al principio para mostrar más recientes arriba
-      eventsList.insertBefore(eventItem, eventsList.firstChild);
-      
-      // Aplicar animación de entrada
-      setTimeout(() => {
-        eventItem.classList.add('event-fade-in');
-      }, 10);
-    });
-  }
-  
-  // Función para formatear texto de eventos
-  function formatEventText(event) {
-    switch(event.type) {
-      case 'kill':
-        return `Nueva eliminación`;
-      case 'death':
-        return `Muerte registrada`;
-      case 'assist':
-        return `Asistencia realizada`;
-      case 'ward_placed':
-        return `Ward colocado`;
-      case 'turret_kill':
-        return `Torreta destruida`;
-      case 'dragon_kill':
-        return `Dragón conseguido`;
-      case 'baron_kill':
-        return `Barón conseguido`;
-      case 'herald_kill':
-        return `Heraldo conseguido`;
-      case 'challenge_completed':
-        return `Reto completado: ${event.name || 'Desconocido'}`;
-      default:
-        return `Evento: ${event.type}`;
-    }
-  }
-  
-  // Función para registrar eventos de juego
-  function logGameEvent(event) {
-    console.log('Evento registrado:', event);
-    
-    // Si tenemos acceso al gameDataManager, añadir a la lista de eventos
-    if (window.gameDataManager && window.gameDataManager.currentData) {
-      if (!window.gameDataManager.currentData.events) {
-        window.gameDataManager.currentData.events = [];
-      }
-      window.gameDataManager.currentData.events.push(event);
-    }
-    
-    // Actualizar inmediatamente el panel de eventos
-    const eventsList = document.getElementById('events-list');
-    if (!eventsList) return;
-    
-    // Crear nuevo elemento de evento
-    const eventItem = document.createElement('div');
-    eventItem.className = 'event-item';
-    eventItem.setAttribute('data-timestamp', event.timestamp);
-    
-    // Determinar icono según tipo de evento
-    let iconText = '•';
-    let eventClass = '';
-    
-    if (event.type === 'challenge_completed') {
-      iconText = '★';
-      eventClass = 'event-challenge';
-    }
-    
-    // Formatear hora
-    const eventTime = new Date(event.timestamp).toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-    
-    // Crear HTML del evento
-    eventItem.innerHTML = `
-      <div class="event-icon ${eventClass}">${iconText}</div>
-      <div class="event-text">${formatEventText(event)}</div>
-      <div class="event-time">${eventTime}</div>
-    `;
-    
-    // Añadir al principio para mostrar más recientes arriba
-    eventsList.insertBefore(eventItem, eventsList.firstChild);
-    
-    // Actualizar contador de eventos
-    const eventsCount = document.querySelector('.events-count');
-    if (eventsCount) {
-      const currentCount = parseInt(eventsCount.textContent) || 0;
-      eventsCount.textContent = (currentCount + 1).toString();
-    }
-  }
-  
-  // Función para crear retos dinámicos basados en eventos
-  function createEventBasedChallenges(gameData) {
-    const container = document.getElementById('dynamic-challenges-container');
-    if (!container) return;
-    
-    // Verificar si ya existen retos dinámicos
-    if (container.children.length > 0) {
-      // Actualizar retos existentes
-      return updateDynamicChallenges(gameData);
-    }
-    
-    // Contar tipos de eventos
-    const eventCounts = {};
-    gameData.events.forEach(event => {
-      eventCounts[event.type] = (eventCounts[event.type] || 0) + 1;
-    });
-    
-    // Crear reto basado en objetivos si hay suficientes eventos
-    if (eventCounts['turret_kill'] || eventCounts['dragon_kill'] || eventCounts['baron_kill'] || eventCounts['herald_kill']) {
-      const objectiveChallenge = document.createElement('div');
-      objectiveChallenge.className = 'overview-challenge interactive-panel enhanced';
-      objectiveChallenge.setAttribute('data-challenge', 'objectives');
-      
-      objectiveChallenge.innerHTML = `
-        <div class="overview-challenge-icon primary-pulse">
-          <img src="../../img/objective-icon.svg" alt="Objetivos" />
-        </div>
-        <div class="overview-challenge-info">
-          <div class="overview-challenge-name">Participa en 3 objetivos</div>
-          <div class="overview-challenge-progress">
-            <div class="progress-bar">
-              <div class="progress-fill animate-width" style="width: 0%;"></div>
-            </div>
-            <div class="progress-text">0/3</div>
-          </div>
-        </div>
-      `;
-      
-      container.appendChild(objectiveChallenge);
-    }
-    
-    // Actualizar inmediatamente
-    updateDynamicChallenges(gameData);
-  }
-  
-  // Función para actualizar retos dinámicos
-  function updateDynamicChallenges(gameData) {
-    // Actualizar reto de objetivos
-    const objectiveChallenge = document.querySelector('.overview-challenge[data-challenge="objectives"]');
-    if (objectiveChallenge && gameData.objectives) {
-      const objectiveGoal = 3;
-      
-      // Contar objetivos totales
-      const objectivesCount = (gameData.objectives.turretKills || 0) + 
-                            (gameData.objectives.dragonKills || 0) + 
-                            (gameData.objectives.baronKills || 0) + 
-                            (gameData.objectives.heraldKills || 0);
-      
-      const objectiveProgress = Math.min((objectivesCount / objectiveGoal) * 100, 100);
-      
-      const progressBar = objectiveChallenge.querySelector('.progress-fill');
-      const progressText = objectiveChallenge.querySelector('.progress-text');
-      
-      if (progressBar) {
-        progressBar.style.width = `${objectiveProgress}%`;
-      }
-      if (progressText) {
-        progressText.textContent = `${objectivesCount}/${objectiveGoal}`;
-      }
-      
-      // Verificar si está completo
-      if (objectivesCount >= objectiveGoal) {
-        if (!objectiveChallenge.classList.contains('challenge-completed')) {
-          objectiveChallenge.classList.add('challenge-completed');
-          
-          // Cambiar el pulso a verde
-          const icon = objectiveChallenge.querySelector('.overview-challenge-icon');
-          if (icon) {
-            icon.classList.remove('primary-pulse');
-            icon.classList.add('success-pulse');
-          }
-          
-          showNotification('¡Reto completado! Participaste en 3 objetivos', 'success');
-          
-          // Registrar evento de reto completado
-          logGameEvent({
-            type: 'challenge_completed',
-            name: 'Participa en 3 objetivos',
-            timestamp: Date.now()
-          });
-        }
-      }
-    }
-  }
-  
-  // Función para actualizar métricas de rendimiento
-  function updatePerformanceMetrics(gameData) {
-    // Actualizar calificación general
-    const ratingElement = document.querySelector('.overview-rating');
-    if (ratingElement && gameData.performance && gameData.match) {
-      // Calcular calificación basada en KDA, oro por minuto y objetivos
-      const kda = gameData.performance.kda || 0;
-      const goldPerMinute = gameData.performance.goldPerMinute || 0;
-      const objectives = (gameData.objectives?.turretKills || 0) + 
-                       (gameData.objectives?.dragonKills || 0) + 
-                       (gameData.objectives?.baronKills || 0) + 
-                       (gameData.objectives?.heraldKills || 0);
-      
-      // Factores de puntuación
-      const kdaScore = Math.min(kda * 25, 100);
-      const goldScore = Math.min(goldPerMinute * 2, 100);
-      const objectiveScore = Math.min(objectives * 20, 100);
-      
-      // Puntuación total (máximo 100)
-      const totalScore = (kdaScore * 0.4) + (goldScore * 0.3) + (objectiveScore * 0.3);
-      
-      // Convertir a letra
-      let grade;
-      if (totalScore >= 90) grade = 'S';
-      else if (totalScore >= 80) grade = 'A+';
-      else if (totalScore >= 70) grade = 'A';
-      else if (totalScore >= 65) grade = 'A-';
-      else if (totalScore >= 60) grade = 'B+';
-      else if (totalScore >= 55) grade = 'B';
-      else if (totalScore >= 50) grade = 'B-';
-      else if (totalScore >= 45) grade = 'C+';
-      else if (totalScore >= 40) grade = 'C';
-      else if (totalScore >= 35) grade = 'C-';
-      else if (totalScore >= 30) grade = 'D+';
-      else if (totalScore >= 25) grade = 'D';
-      else grade = 'F';
-      
-      // Actualizar calificación
-      ratingElement.textContent = grade;
-      
-      // Actualizar tendencia
-      const trendElement = document.querySelector('.performance-trend');
-      if (trendElement) {
-        // Simular cambio de tendencia basado en eventos recientes
-        const recentKills = gameData.match.kills - (parseInt(localStorage.getItem('previous_kills') || '0'));
-        const recentDeaths = gameData.match.deaths - (parseInt(localStorage.getItem('previous_deaths') || '0'));
-        
-        // Guardar valores actuales para la próxima comparación
-        localStorage.setItem('previous_kills', gameData.match.kills);
-        localStorage.setItem('previous_deaths', gameData.match.deaths);
-        
-        // Calcular tendencia (positiva si más kills que deaths recientes)
-        const trendValue = ((recentKills - recentDeaths) * 2) || 5; // Default a +5% si no hay cambios
-        
-        // Actualizar UI de tendencia
-        const trendValueElement = trendElement.querySelector('.trend-value');
-        const trendIconElement = trendElement.querySelector('.trend-icon');
-        
-        if (trendValueElement && trendIconElement) {
-          if (trendValue > 0) {
-            trendElement.classList.remove('negative');
-            trendElement.classList.add('positive');
-            trendIconElement.textContent = '↑';
-            trendValueElement.textContent = `+${trendValue}%`;
-          } else {
-            trendElement.classList.remove('positive');
-            trendElement.classList.add('negative');
-            trendIconElement.textContent = '↓';
-            trendValueElement.textContent = `${trendValue}%`;
-          }
-        }
-      }
+    // Reto de wards - MISMO PATRÓN que KDA
+    if (gameData.vision) {
+      document.getElementById('challenge-wards-value').textContent = (gameData.vision.wardsPlaced || 0) + "/5";
     }
   }
 
-  // Verificar y suscribirse a los datos del juego con métodos mejorados
-  function initGameDataSubscription() {
-    console.log('tab-overview: Intentando inicializar suscripción a datos del juego');
-    
-    // ---- NUEVO MÉTODO: Leer datos desde archivo ----
-    function readGameDataFromFile() {
-      // Leer datos de archivo temporal (varios intentos para asegurar compatibilidad)
-      const possiblePaths = [
-        overwolf.io.paths.localAppData + '\\Overwolf\\eMePe-AppData\\lol-game-data.json',
-        overwolf.io.paths.localAppData + '\\Overwolf\\eMePe-AppData\\lol-game-data-backup.json',
-        overwolf.io.paths.documents + '\\Overwolf\\lol-game-data.json'
-      ];
-      
-      // Función para intentar leer cada archivo en secuencia
-      function tryReadFile(index) {
-        if (index >= possiblePaths.length) {
-          console.log('No se encontraron archivos de datos de juego');
-          return;
-        }
-        
-        const path = possiblePaths[index];
-        overwolf.io.fileExists(path, (existsResult) => {
-          if (existsResult.success && existsResult.exists) {
-            overwolf.io.readFileContents(path, 'UTF8', (readResult) => {
-              if (readResult.success) {
-                try {
-                  const gameData = JSON.parse(readResult.content);
-                  console.log('Datos leídos exitosamente del archivo:', path);
-                  console.log('Datos de juego:', {
-                    nombre: gameData.summoner.name,
-                    champion: gameData.summoner.champion,
-                    kda: `${gameData.match.kills}/${gameData.match.deaths}/${gameData.match.assists}`,
-                    tiempo: gameData.match.gameTime
-                  });
-                  updateUI(gameData);
-                } catch (e) {
-                  console.error('Error al parsear datos del archivo:', e);
-                  // Intenta el siguiente archivo
-                  tryReadFile(index + 1);
-                }
-              } else {
-                console.error('Error al leer el archivo:', readResult.error);
-                // Intenta el siguiente archivo
-                tryReadFile(index + 1);
-              }
-            });
-          } else {
-            console.log(`Archivo no encontrado: ${path}`);
-            // Intenta el siguiente archivo
-            tryReadFile(index + 1);
-          }
-        });
-      }
-      
-      // Iniciar intentos de lectura
-      tryReadFile(0);
-      
-      // Comprobar periódicamente el archivo
-      setTimeout(readGameDataFromFile, 1000);
-    }
-    
-    // Iniciar lectura de archivo
-    readGameDataFromFile();
-    
-    // Mantener métodos anteriores también
-    function checkLocalStorage() {
-      try {
-        const storedData = localStorage.getItem('lol_game_data');
-        if (storedData) {
-          console.log('Datos encontrados en localStorage');
-          const gameData = JSON.parse(storedData);
-          updateUI(gameData);
-        }
-      } catch (e) {
-        console.error('Error al leer de localStorage:', e);
-      }
-    }
-    
-    // Verificar localStorage cada 2 segundos
-    setInterval(checkLocalStorage, 2000);
-    
-    // Escuchar mensajes directos
-    function setupDirectMessageListener() {
-      overwolf.windows.onMessageReceived.removeListener(handleDirectMessage);
-      overwolf.windows.onMessageReceived.addListener(handleDirectMessage);
-      console.log('Listener de mensajes directos configurado');
-    }
-    
-    function handleDirectMessage(message) {
-      console.log('Mensaje directo recibido:', message);
-      if (message && message.id === 'game_data_update' && message.content) {
-        console.log('Actualizando UI desde mensaje directo');
-        updateUI(message.content);
-      }
-    }
-    
-    // Configurar el listener para mensajes directos
-    setupDirectMessageListener();
-    
-    // Verificar datos en la ventana principal periódicamente
-    function checkMainWindowData() {
-      overwolf.windows.getMainWindow(function(mainWindow) {
-        if (mainWindow && mainWindow._latestGameData) {
-          console.log('Datos encontrados en mainWindow._latestGameData');
-          updateUI(mainWindow._latestGameData);
-        }
-      });
-    }
-    
-    // Comprobar datos de la ventana principal cada 2 segundos
-    setInterval(checkMainWindowData, 2000);
-  }
-
-  // Inicializa la suscripción a los datos del juego
+  // Inicialización - Simplificada y más clara
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('tab-overview: DOM cargado, intentando conectar con gameDataManager...');
+    console.log("Tab-overview cargado, intentando suscribirme a gameDataManager");
     
-    // Inicializar panel de eventos
-    initEventsPanel();
-    
-    // MÉTODO DIRECTO: Intentar obtener el gameDataManager de la ventana padre
     try {
-      // Método 1: Suscribirse directamente usando window.subscribeToGameData (método expuesto)
+      // Método 1: window.subscribeToGameData - Como el KDA
       if (typeof window.subscribeToGameData === 'function') {
-        console.log('tab-overview: Usando window.subscribeToGameData...');
+        console.log("Usando window.subscribeToGameData");
         window.subscribeToGameData(updateUI);
-        
-        // Mostrar notificación de bienvenida
-        setTimeout(() => {
-          showNotification('Análisis de partida iniciado. ¡Buena suerte!', 'info');
-        }, 1000);
-        
-        console.log('tab-overview: Conexión exitosa con gameDataManager');
       } 
-      // Método 2: Usar el objeto global gameDataManager directamente
+      // Método 2: gameDataManager global - Como el KDA
       else if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'function') {
-        console.log('tab-overview: Usando window.gameDataManager.subscribe...');
+        console.log("Usando window.gameDataManager.subscribe");
         window.gameDataManager.subscribe(updateUI);
-        
-        // Mostrar notificación de bienvenida
-        setTimeout(() => {
-          showNotification('Análisis de partida iniciado. ¡Buena suerte!', 'info');
-        }, 1000);
-        
-        console.log('tab-overview: Conexión exitosa con gameDataManager.subscribe');
       } 
-      // Método 3: Acceder a través de la ventana principal
+      // Método 3: mainWindow - Como el KDA
       else {
-        console.log('tab-overview: Accediendo a gameDataManager a través de overwolf.windows.getMainWindow...');
+        console.log("Intentando acceder a través de mainWindow");
         overwolf.windows.getMainWindow(function(mainWindow) {
-          if (mainWindow && mainWindow.gameDataManager && typeof mainWindow.gameDataManager.subscribe === 'function') {
-            console.log('tab-overview: Acceso exitoso a gameDataManager a través de getMainWindow');
+          if (mainWindow && mainWindow.gameDataManager) {
+            console.log("Usando mainWindow.gameDataManager.subscribe");
             mainWindow.gameDataManager.subscribe(updateUI);
-            
-            // Mostrar notificación de bienvenida
-            setTimeout(() => {
-              showNotification('Análisis de partida iniciado. ¡Buena suerte!', 'info');
-            }, 1000);
           } else {
-            console.error('tab-overview: No se pudo acceder a gameDataManager desde la ventana principal');
-            // Si falla, iniciar los métodos anteriores
-            initGameDataSubscription();
+            console.error("No se pudo acceder al gameDataManager");
           }
         });
       }
-    } catch (e) {
-      console.error('tab-overview: Error al conectar con gameDataManager:', e);
       
-      // Si falla, iniciar los métodos anteriores
-      initGameDataSubscription();
-    }
-    
-    // Inicializar interacciones de retos
-    document.querySelectorAll('.overview-challenge').forEach(challenge => {
-      challenge.addEventListener('click', () => {
-        const challengeName = challenge.querySelector('.overview-challenge-name').textContent;
-        showNotification(`Reto seleccionado: ${challengeName}`, 'info');
+      // IMPORTANTE: Llamar a updateUI directamente - Como el KDA
+      console.log("Llamando a updateUI directamente con datos de prueba");
+      
+      // Datos de prueba que provocan una actualización visual
+      updateUI({
+        summoner: { name: "Invocador de prueba", position: "Test" },
+        match: { gameTime: 120, kills: 2, deaths: 1, assists: 3, cs: 50 },
+        vision: { wardsPlaced: 2 }
       });
-    });
+      
+      // IMPORTANTE: Llamamos explícitamente al método global para forzar actualizaciones
+      if (window.forceUpdateOverviewTab) {
+        console.log("Llamando a forceUpdateOverviewTab");
+        window.forceUpdateOverviewTab();
+      }
+      
+    } catch (e) {
+      console.error('Error al inicializar tab-overview:', e);
+    }
   });
   
-  // Inicializar panel de eventos
-  function initEventsPanel() {
-    const eventsPanel = document.getElementById('events-panel');
-    if (!eventsPanel) return;
-    
-    // Añadir toggle para mostrar/ocultar
-    const header = eventsPanel.querySelector('.events-panel-header');
-    if (header) {
-      header.addEventListener('click', () => {
-        eventsPanel.classList.toggle('events-panel-collapsed');
-      });
-    }
-    
-    // Inicialmente colapsado en móvil
-    if (window.innerWidth < 768) {
-      eventsPanel.classList.add('events-panel-collapsed');
-    }
-  }
+  // IMPORTANTE: Exponer updateUI globalmente para que pueda ser llamada desde in_game.html
+  window.updateUI = updateUI;
 </script> 

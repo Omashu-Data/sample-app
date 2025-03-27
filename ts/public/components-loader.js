@@ -257,6 +257,24 @@ function directUpdateTab(tabId) {
     
     // Actualización específica para overview-tab
     if (tabId === 'overview-tab') {
+      // Primero intentamos encontrar updateUI en el ámbito global
+      if (typeof window.updateUI === 'function') {
+        console.log('Usando window.updateUI global para actualizar todos los elementos');
+        window.updateUI(data);
+        return;
+      }
+      
+      // Como fallback, intentamos buscar updateUI en el contexto del tab
+      const tabUpdateUI = findTabUpdateUIFunction(tabPane);
+      if (tabUpdateUI) {
+        console.log('Usando updateUI del tab para actualizar todos los elementos');
+        tabUpdateUI(data);
+        return;
+      }
+      
+      // Si no encontramos updateUI, volvemos al método tradicional como fallback
+      console.log('No se encontró updateUI, actualizando elementos manualmente (solo KDA)');
+      
       const playerNameElement = tabPane.querySelector('#player-name');
       const gameTimeElement = tabPane.querySelector('#game-time-value');
       const killsElement = tabPane.querySelector('#kda-kills');
@@ -284,20 +302,44 @@ function directUpdateTab(tabId) {
       if (assistsElement && data.match) {
         assistsElement.textContent = data.match.assists || '0';
       }
-      
-      // Actualizar también el panel de rendimiento para mostrar la hora de actualización
-      const ratingPanel = tabPane.querySelector('.overview-rating');
-      if (ratingPanel) {
-        ratingPanel.innerHTML = `
-          <div style="text-align: center; font-size: 12px; margin-bottom: 5px;">
-            Actualizado: ${new Date().toLocaleTimeString()}
-          </div>
-          <div style="font-size: 18px; font-weight: bold;">B+</div>
-        `;
-      }
     }
   } catch (e) {
     console.error(`Error actualizando ${tabId}:`, e);
+  }
+}
+
+/**
+ * Intenta encontrar la función updateUI dentro de un tab
+ * @param {HTMLElement} tabElement - El elemento del tab
+ * @return {Function|null} - La función updateUI o null si no se encuentra
+ */
+function findTabUpdateUIFunction(tabElement) {
+  try {
+    // Método 1: Buscar updateUI como variable global en el documento
+    if (typeof updateUI === 'function') {
+      return updateUI;
+    }
+    
+    // Método 2: Buscarla en el contexto del script del tab
+    const scriptElements = tabElement.querySelectorAll('script');
+    for (const script of scriptElements) {
+      const scriptContent = script.textContent;
+      if (scriptContent && scriptContent.includes('function updateUI')) {
+        // Extraer la función y evaluarla
+        const functionMatch = scriptContent.match(/function\s+updateUI\s*\([^)]*\)\s*\{[\s\S]*?\}/);
+        if (functionMatch) {
+          // Crear una función a partir del texto extraído
+          return new Function('gameData', 
+            functionMatch[0].replace('function updateUI(gameData)', '') // Extraer solo el cuerpo
+          );
+        }
+      }
+    }
+    
+    return null;
+  } catch (e) {
+    console.error('Error buscando función updateUI:', e);
+    return null;
   }
 }
 
