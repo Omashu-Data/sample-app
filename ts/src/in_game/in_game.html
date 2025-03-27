@@ -319,6 +319,9 @@
       addToLog(infoLog, info);
       console.log("Recibida actualización de info:", info);
       
+      // NUEVO: Analizar estructura de datos GEP
+      analizarEstructuraGEP(info);
+      
       try {
         const updates = {
           summoner: {},
@@ -817,6 +820,9 @@
         .then(data => {
           console.log("Datos obtenidos de API:", data);
           
+          // NUEVO: Analizar estructura de Live Client Data
+          analizarEstructuraLiveClientData(data);
+          
           const updates = {
             summoner: {},
             match: {}
@@ -1261,6 +1267,583 @@
     setInterval(forceUpdateActiveTab, 1000);
     
     console.log('Sistema integrado de captura de eventos y gestión de datos inicializado. Versión: 2.0');
+
+    // NUEVO: Sistema de análisis de estructuras de datos
+    
+    // Objeto para almacenar todas las claves únicas detectadas
+    const keyRegistry = {
+      gep: new Set(),
+      liveClient: new Set(),
+      timestamps: {
+        firstDetected: {},
+        lastDetected: {}
+      },
+      
+      // Método para registrar claves nuevas de GEP
+      registerGEPKeys: function(info) {
+        if (!info) return;
+        
+        try {
+          this._registerKeys(info, 'gep');
+          this._updatePanel();
+        } catch (e) {
+          console.error("Error registrando claves GEP:", e);
+        }
+      },
+      
+      // Método para registrar claves nuevas de Live Client
+      registerLiveClientKeys: function(data) {
+        if (!data) return;
+        
+        try {
+          this._registerKeys(data, 'liveClient');
+          this._updatePanel();
+        } catch (e) {
+          console.error("Error registrando claves Live Client:", e);
+        }
+      },
+      
+      // Método interno para registrar claves recursivamente
+      _registerKeys: function(data, source, prefix = '') {
+        if (typeof data !== 'object' || data === null) return;
+        
+        // Evitar desbordamiento de pila con objetos circulares
+        if (prefix.split('.').length > 10) return;
+        
+        Object.keys(data).forEach(key => {
+          const fullKey = prefix ? `${prefix}.${key}` : key;
+          
+          // Guardar la clave
+          this[source].add(fullKey);
+          
+          // Registrar timestamps
+          const now = new Date();
+          if (!this.timestamps.firstDetected[`${source}.${fullKey}`]) {
+            this.timestamps.firstDetected[`${source}.${fullKey}`] = now;
+          }
+          this.timestamps.lastDetected[`${source}.${fullKey}`] = now;
+          
+          // Si el valor es un objeto, continuar recursivamente
+          if (data[key] && typeof data[key] === 'object' && !Array.isArray(data[key])) {
+            this._registerKeys(data[key], source, fullKey);
+          }
+          
+          // Si es un array de objetos, analizar el primer elemento
+          if (Array.isArray(data[key]) && data[key].length > 0 && typeof data[key][0] === 'object') {
+            this._registerKeys(data[key][0], source, `${fullKey}[0]`);
+          }
+        });
+      },
+      
+      // Método para actualizar el panel visual
+      _updatePanel: function() {
+        let panel = document.getElementById('keys-registry-panel');
+        
+        if (!panel) {
+          // Crear panel si no existe
+          panel = document.createElement('div');
+          panel.id = 'keys-registry-panel';
+          panel.style.position = 'fixed';
+          panel.style.right = '10px';
+          panel.style.top = '10px';
+          panel.style.width = '400px';
+          panel.style.maxHeight = '80%';
+          panel.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+          panel.style.color = '#4CAF50';
+          panel.style.padding = '15px';
+          panel.style.borderRadius = '5px';
+          panel.style.fontSize = '14px';
+          panel.style.overflow = 'auto';
+          panel.style.zIndex = '99999';
+          panel.style.border = '2px solid #4CAF50';
+          panel.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.5)';
+          document.body.appendChild(panel);
+          
+          // Crear encabezado
+          const header = document.createElement('div');
+          header.innerHTML = `
+            <h2 style="margin-top: 0; text-align: center; color: #4CAF50;">Registro de Claves</h2>
+            <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+              <span>GEP: <strong id="gep-count">0</strong> claves</span>
+              <span>Live Client: <strong id="live-count">0</strong> claves</span>
+            </div>
+          `;
+          panel.appendChild(header);
+          
+          // Crear contenedor para las claves
+          const keysContainer = document.createElement('div');
+          keysContainer.id = 'keys-container';
+          keysContainer.style.maxHeight = '300px';
+          keysContainer.style.overflow = 'auto';
+          keysContainer.style.marginBottom = '10px';
+          keysContainer.style.padding = '10px';
+          keysContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+          keysContainer.style.borderRadius = '3px';
+          panel.appendChild(keysContainer);
+          
+          // Crear contenedor para botones
+          const buttonsContainer = document.createElement('div');
+          buttonsContainer.style.display = 'flex';
+          buttonsContainer.style.justifyContent = 'space-between';
+          
+          // Botón para exportar datos
+          const exportButton = document.createElement('button');
+          exportButton.textContent = 'Exportar Datos';
+          exportButton.style.backgroundColor = '#4CAF50';
+          exportButton.style.color = 'white';
+          exportButton.style.border = 'none';
+          exportButton.style.padding = '8px 15px';
+          exportButton.style.borderRadius = '3px';
+          exportButton.style.cursor = 'pointer';
+          exportButton.onclick = this.exportData.bind(this);
+          
+          // Botón para mostrar datos en consola
+          const logButton = document.createElement('button');
+          logButton.textContent = 'Mostrar en Consola';
+          logButton.style.backgroundColor = '#2196F3';
+          logButton.style.color = 'white';
+          logButton.style.border = 'none';
+          logButton.style.padding = '8px 15px';
+          logButton.style.borderRadius = '3px';
+          logButton.style.cursor = 'pointer';
+          logButton.onclick = this.logDataToConsole.bind(this);
+          
+          // Botón para limpiar datos
+          const clearButton = document.createElement('button');
+          clearButton.textContent = 'Limpiar Registro';
+          clearButton.style.backgroundColor = '#f44336';
+          clearButton.style.color = 'white';
+          clearButton.style.border = 'none';
+          clearButton.style.padding = '8px 15px';
+          clearButton.style.borderRadius = '3px';
+          clearButton.style.cursor = 'pointer';
+          clearButton.onclick = this.clearData.bind(this);
+          
+          buttonsContainer.appendChild(exportButton);
+          buttonsContainer.appendChild(logButton);
+          buttonsContainer.appendChild(clearButton);
+          panel.appendChild(buttonsContainer);
+          
+          // Texto informativo
+          const infoText = document.createElement('div');
+          infoText.innerHTML = `
+            <p style="margin-top: 10px; font-size: 12px; color: #aaa;">
+              Este panel registra todas las claves únicas detectadas en eventos y datos del juego.
+              Úsalo para entender qué información está disponible para tu app.
+            </p>
+          `;
+          panel.appendChild(infoText);
+        }
+        
+        // Actualizar contadores
+        document.getElementById('gep-count').textContent = this.gep.size.toString();
+        document.getElementById('live-count').textContent = this.liveClient.size.toString();
+        
+        // Actualizar lista de claves
+        const keysContainer = document.getElementById('keys-container');
+        
+        // Preparar datos para mostrar
+        const allKeys = [
+          ...Array.from(this.gep).map(key => ({ key, source: 'GEP' })),
+          ...Array.from(this.liveClient).map(key => ({ key, source: 'Live Client' }))
+        ];
+        
+        // Ordenar alfabéticamente
+        allKeys.sort((a, b) => a.key.localeCompare(b.key));
+        
+        // Generar HTML
+        keysContainer.innerHTML = allKeys.map(item => `
+          <div style="margin-bottom: 5px; display: flex; justify-content: space-between;">
+            <span style="color: ${item.source === 'GEP' ? '#FFD700' : '#00BFFF'};">
+              [${item.source}]
+            </span>
+            <span style="margin-left: 10px; flex-grow: 1; word-break: break-all;">
+              ${item.key}
+            </span>
+          </div>
+        `).join('');
+        
+        // Si no hay claves, mostrar mensaje
+        if (allKeys.length === 0) {
+          keysContainer.innerHTML = '<div style="text-align: center; color: #aaa;">No se han detectado claves todavía. Inicia una partida para comenzar a capturar datos.</div>';
+        }
+      },
+      
+      // Método para exportar datos a un archivo
+      exportData: function() {
+        try {
+          const data = {
+            timestamp: new Date().toISOString(),
+            gepKeys: Array.from(this.gep),
+            liveClientKeys: Array.from(this.liveClient),
+            detectionTimestamps: this.timestamps,
+            gameDataManager: gameDataManager.currentData
+          };
+          
+          const jsonStr = JSON.stringify(data, null, 2);
+          
+          // Usar la API de Overwolf para guardar el archivo
+          const fileName = `LOL-DataKeys-${new Date().toISOString().replace(/:/g, '-')}.json`;
+          const overwolfFileName = `${overwolf.io.paths.documents}\\Overwolf\\${fileName}`;
+          
+          // Método específico de Overwolf para escribir archivos
+          overwolf.io.writeFileContents(
+            overwolfFileName, 
+            jsonStr, 
+            "UTF8", 
+            true, 
+            (result) => {
+              if (result.success) {
+                // Mostrar notificación de éxito
+                overwolf.notifications.showToast({
+                  header: "Archivo guardado",
+                  message: `Claves exportadas a: ${overwolfFileName}`,
+                  duration: 5
+                });
+                
+                console.log(`Archivo guardado con éxito en: ${overwolfFileName}`);
+              } else {
+                console.error("Error al guardar archivo:", result.error);
+                alert(`Error al guardar archivo: ${result.error}`);
+              }
+            }
+          );
+          
+          // También hacer backup del método del navegador como alternativa
+          const blob = new Blob([jsonStr], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch (e) {
+          console.error("Error exportando datos:", e);
+          alert("Error al exportar datos: " + e.message);
+        }
+      },
+      
+      // Método para mostrar datos en la consola
+      logDataToConsole: function() {
+        console.log("===== REGISTRO COMPLETO DE CLAVES =====");
+        console.log("Claves GEP:", Array.from(this.gep));
+        console.log("Claves Live Client:", Array.from(this.liveClient));
+        console.log("Timestamps de detección:", this.timestamps);
+        console.log("Estado actual de gameDataManager:", gameDataManager.currentData);
+      },
+      
+      // Método para limpiar todos los datos
+      clearData: function() {
+        if (confirm("¿Estás seguro de que quieres limpiar todos los datos registrados?")) {
+          this.gep.clear();
+          this.liveClient.clear();
+          this.timestamps = { firstDetected: {}, lastDetected: {} };
+          this._updatePanel();
+        }
+      }
+    };
+    
+    // Reemplazar las funciones de análisis para usar el nuevo registro de claves
+    function analizarEstructuraGEP(info) {
+      keyRegistry.registerGEPKeys(info);
+    }
+    
+    function analizarEstructuraLiveClientData(data) {
+      keyRegistry.registerLiveClientKeys(data);
+    }
+    
+    // Exponer el registro globalmente
+    window.keyRegistry = keyRegistry;
+
+    // Exponer APIs de análisis globalmente
+    window.estructuraDatos = estructuraDatos;
+    window.analizarEstructuraGEP = analizarEstructuraGEP;
+    window.analizarEstructuraLiveClientData = analizarEstructuraLiveClientData;
+    window.mostrarDatosCompletos = mostrarDatosCompletos;
+
+    // REGISTRADOR DE CLAVES ÚNICAS - Panel visible
+    const keysRegistrar = {
+      gepKeys: new Set(),
+      liveClientKeys: new Set(),
+      
+      // Registrar claves GEP
+      registerGEPKeys: function(data, prefix = '') {
+        if (!data || typeof data !== 'object') return;
+        
+        Object.keys(data).forEach(key => {
+          const fullKey = prefix ? `${prefix}.${key}` : key;
+          this.gepKeys.add(fullKey);
+          
+          // Procesamiento recursivo para objetos anidados (limitar profundidad)
+          if (data[key] && typeof data[key] === 'object' && !Array.isArray(data[key]) 
+              && fullKey.split('.').length < 5) {
+            this.registerGEPKeys(data[key], fullKey);
+          }
+        });
+        
+        this.updatePanel();
+      },
+      
+      // Registrar claves de Live Client API
+      registerLiveClientKeys: function(data, prefix = '') {
+        if (!data || typeof data !== 'object') return;
+        
+        Object.keys(data).forEach(key => {
+          const fullKey = prefix ? `${prefix}.${key}` : key;
+          this.liveClientKeys.add(fullKey);
+          
+          // Procesamiento recursivo para objetos anidados (limitar profundidad)
+          if (data[key] && typeof data[key] === 'object' && !Array.isArray(data[key])
+              && fullKey.split('.').length < 5) {
+            this.registerLiveClientKeys(data[key], fullKey);
+          }
+        });
+        
+        this.updatePanel();
+      },
+      
+      // Crear y actualizar panel visual
+      updatePanel: function() {
+        let panel = document.getElementById('keys-panel');
+        
+        if (!panel) {
+          // Crear panel si no existe
+          panel = document.createElement('div');
+          panel.id = 'keys-panel';
+          panel.style.position = 'fixed';
+          panel.style.top = '100px';
+          panel.style.left = '10px';  // Cambio a lado izquierdo
+          panel.style.width = '350px';
+          panel.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+          panel.style.color = '#00FF00';  // Verde más brillante
+          panel.style.padding = '15px';
+          panel.style.borderRadius = '8px';
+          panel.style.zIndex = '99999';
+          panel.style.border = '3px solid #00FF00';  // Borde más grueso
+          panel.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.7)';  // Brillo más intenso
+          panel.style.maxHeight = '500px';  // Panel más grande
+          panel.style.overflow = 'auto';
+          panel.style.fontFamily = 'Arial, sans-serif';  // Tipografía más legible
+          document.body.appendChild(panel);
+          
+          // Crear elementos del panel
+          const header = document.createElement('div');
+          header.innerHTML = `
+            <h3 style="text-align: center; margin-top: 0; font-size: 18px; text-shadow: 0 0 5px #00FF00;">REGISTRADOR DE CLAVES</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px;">
+              <div>GEP: <span id="gep-count" style="font-weight: bold;">0</span></div>
+              <div>Live Client: <span id="client-count" style="font-weight: bold;">0</span></div>
+            </div>
+          `;
+          panel.appendChild(header);
+          
+          // Contenedor para las claves
+          const keysContainer = document.createElement('div');
+          keysContainer.id = 'keys-list';
+          keysContainer.style.maxHeight = '300px';  // Más espacio para mostrar claves
+          keysContainer.style.overflow = 'auto';
+          keysContainer.style.marginBottom = '15px';
+          keysContainer.style.backgroundColor = 'rgba(0, 20, 0, 0.7)';  // Fondo más oscuro
+          keysContainer.style.padding = '10px';
+          keysContainer.style.borderRadius = '5px';
+          keysContainer.style.border = '1px solid #00AA00';  // Borde para el contenedor
+          panel.appendChild(keysContainer);
+          
+          // Botones de acción
+          const buttonsContainer = document.createElement('div');
+          buttonsContainer.style.display = 'flex';
+          buttonsContainer.style.justifyContent = 'space-between';
+          
+          // Botón para exportar
+          const exportButton = document.createElement('button');
+          exportButton.innerText = 'Exportar JSON';
+          exportButton.style.backgroundColor = '#008800';
+          exportButton.style.color = 'white';
+          exportButton.style.border = 'none';
+          exportButton.style.padding = '8px 15px';
+          exportButton.style.borderRadius = '5px';
+          exportButton.style.cursor = 'pointer';
+          exportButton.style.fontWeight = 'bold';
+          exportButton.style.boxShadow = '0 0 5px rgba(0, 255, 0, 0.5)';
+          exportButton.onmouseover = function() { this.style.backgroundColor = '#00AA00'; };
+          exportButton.onmouseout = function() { this.style.backgroundColor = '#008800'; };
+          exportButton.onclick = this.exportKeys.bind(this);
+          
+          // Botón para mostrar en consola
+          const logButton = document.createElement('button');
+          logButton.innerText = 'Ver en Consola';
+          logButton.style.backgroundColor = '#0055AA';
+          logButton.style.color = 'white';
+          logButton.style.border = 'none';
+          logButton.style.padding = '8px 15px';
+          logButton.style.borderRadius = '5px';
+          logButton.style.cursor = 'pointer';
+          logButton.style.fontWeight = 'bold';
+          logButton.style.boxShadow = '0 0 5px rgba(0, 150, 255, 0.5)';
+          logButton.onmouseover = function() { this.style.backgroundColor = '#0077CC'; };
+          logButton.onmouseout = function() { this.style.backgroundColor = '#0055AA'; };
+          logButton.onclick = this.logToConsole.bind(this);
+          
+          // Botón para ocultar el panel
+          const hideButton = document.createElement('button');
+          hideButton.innerText = 'Ocultar Panel';
+          hideButton.style.backgroundColor = '#AA0000';
+          hideButton.style.color = 'white';
+          hideButton.style.border = 'none';
+          hideButton.style.padding = '8px 15px';
+          hideButton.style.borderRadius = '5px';
+          hideButton.style.cursor = 'pointer';
+          hideButton.style.fontWeight = 'bold';
+          hideButton.style.boxShadow = '0 0 5px rgba(255, 0, 0, 0.5)';
+          hideButton.onmouseover = function() { this.style.backgroundColor = '#CC0000'; };
+          hideButton.onmouseout = function() { this.style.backgroundColor = '#AA0000'; };
+          hideButton.onclick = function() { 
+            panel.style.display = 'none'; 
+            // Crear botón flotante para mostrar de nuevo
+            const showButton = document.createElement('button');
+            showButton.innerText = 'Mostrar Registrador';
+            showButton.style.position = 'fixed';
+            showButton.style.top = '10px';
+            showButton.style.left = '10px';
+            showButton.style.backgroundColor = '#008800';
+            showButton.style.color = 'white';
+            showButton.style.border = 'none';
+            showButton.style.padding = '5px 10px';
+            showButton.style.borderRadius = '5px';
+            showButton.style.zIndex = '99999';
+            showButton.style.cursor = 'pointer';
+            showButton.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.7)';
+            showButton.id = 'show-keys-panel';
+            showButton.onclick = function() {
+              panel.style.display = 'block';
+              document.body.removeChild(showButton);
+            };
+            document.body.appendChild(showButton);
+          };
+          
+          buttonsContainer.appendChild(exportButton);
+          buttonsContainer.appendChild(logButton);
+          buttonsContainer.appendChild(hideButton);
+          panel.appendChild(buttonsContainer);
+          
+          // Texto informativo
+          const infoText = document.createElement('div');
+          infoText.innerHTML = `
+            <p style="margin-top: 10px; font-size: 12px; color: #aaa; text-align: center;">
+              Todas las claves detectadas serán guardadas automáticamente.
+              <br>Haz clic en "Exportar JSON" para guardar archivo en Documentos/Overwolf.
+            </p>
+          `;
+          panel.appendChild(infoText);
+        }
+        
+        // Actualizar contadores
+        document.getElementById('gep-count').textContent = this.gepKeys.size;
+        document.getElementById('client-count').textContent = this.liveClientKeys.size;
+        
+        // Actualizar lista de claves
+        const keysListElement = document.getElementById('keys-list');
+        if (keysListElement) {
+          // Combinar y ordenar todas las claves
+          const allKeys = [
+            ...Array.from(this.gepKeys).map(key => ({ key, source: 'GEP' })),
+            ...Array.from(this.liveClientKeys).map(key => ({ key, source: 'Live' }))
+          ];
+          
+          // Ordenar alfabéticamente
+          allKeys.sort((a, b) => a.key.localeCompare(b.key));
+          
+          // Limitar a las últimas 50 claves para mejorar rendimiento
+          const keysToShow = allKeys.slice(0, 50);
+          
+          // Generar HTML
+          keysListElement.innerHTML = keysToShow.map(item => `
+            <div style="margin-bottom: 3px; font-size: 12px;">
+              <span style="color: ${item.source === 'GEP' ? 'yellow' : 'aqua'};">[${item.source}]</span>
+              <span>${item.key}</span>
+            </div>
+          `).join('') + (allKeys.length > 50 ? 
+            `<div style="text-align: center; color: #aaa;">...y ${allKeys.length - 50} más</div>` : '');
+        }
+      },
+      
+      // Exportar todas las claves a un archivo JSON
+      exportKeys: function() {
+        const data = {
+          timestamp: new Date().toISOString(),
+          gepKeys: Array.from(this.gepKeys),
+          liveClientKeys: Array.from(this.liveClientKeys)
+        };
+        
+        const jsonStr = JSON.stringify(data, null, 2);
+        
+        // Usar la API de Overwolf para guardar el archivo
+        const fileName = `lol-keys-${new Date().toISOString().replace(/:/g, '-')}.json`;
+        const overwolfFileName = `${overwolf.io.paths.documents}\\Overwolf\\${fileName}`;
+        
+        // Método específico de Overwolf para escribir archivos
+        overwolf.io.writeFileContents(
+          overwolfFileName, 
+          jsonStr, 
+          "UTF8", 
+          true, 
+          (result) => {
+            if (result.success) {
+              // Mostrar notificación de éxito
+              overwolf.notifications.showToast({
+                header: "Archivo guardado",
+                message: `Claves exportadas a: ${overwolfFileName}`,
+                duration: 5
+              });
+              
+              console.log(`Archivo guardado con éxito en: ${overwolfFileName}`);
+            } else {
+              console.error("Error al guardar archivo:", result.error);
+              alert(`Error al guardar archivo: ${result.error}`);
+            }
+          }
+        );
+        
+        // También hacer backup del método del navegador como alternativa
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      },
+      
+      // Mostrar todas las claves en la consola
+      logToConsole: function() {
+        console.log('===== CLAVES ÚNICAS DETECTADAS =====');
+        console.log('GEP Keys:', Array.from(this.gepKeys));
+        console.log('Live Client Keys:', Array.from(this.liveClientKeys));
+        console.log('Total Keys:', this.gepKeys.size + this.liveClientKeys.size);
+      }
+    };
+    
+    // Modificar las funciones de análisis para usar el registrador de claves
+    const originalGEPAnalyzer = analizarEstructuraGEP;
+    analizarEstructuraGEP = function(info) {
+      originalGEPAnalyzer(info);
+      keysRegistrar.registerGEPKeys(info);
+    };
+    
+    const originalLiveClientAnalyzer = analizarEstructuraLiveClientData;
+    analizarEstructuraLiveClientData = function(data) {
+      originalLiveClientAnalyzer(data);
+      keysRegistrar.registerLiveClientKeys(data);
+    };
+    
+    // Exponer el registrador globalmente
+    window.keysRegistrar = keysRegistrar;
   </script>
 
   <style>
