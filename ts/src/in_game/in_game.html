@@ -1060,117 +1060,146 @@
         return;
       }
       
-      // ----- CAMBIO IMPORTANTE ------
-      // En lugar de actualizar manualmente cada elemento,
-      // utilizamos el patrón centralizado de actualización
-      
       // Obtener los datos actuales del juego
       const data = gameDataManager.getData();
       
-      // Método 1: Intentar usar window.updateUI si existe
+      // Método 1: Intentar usar window.updateUI si existe (siempre preferible)
       if (typeof window.updateUI === 'function') {
         console.log("Llamando a window.updateUI para actualización centralizada");
         window.updateUI(data);
         return;
       }
       
-      // Método 2: Intentar encontrar updateUI dentro del tab
-      const updateUIScripts = overviewTab.querySelectorAll('script');
-      let tabUpdateUI = null;
-      
-      for (const script of updateUIScripts) {
-        if (script.textContent.includes('function updateUI')) {
-          try {
-            // Ejecutar el script para acceder a la función
-            const scriptFunc = new Function(`
-              let updateUI;
-              ${script.textContent}
-              return updateUI;
-            `);
-            tabUpdateUI = scriptFunc();
-            break;
-          } catch (e) {
-            console.error("Error extrayendo updateUI del script:", e);
-          }
-        }
-      }
-      
-      if (typeof tabUpdateUI === 'function') {
-        console.log("Usando updateUI encontrada en el tab");
-        tabUpdateUI(data);
+      // Método 2: Buscar cualquier implementación de updateUI disponible
+      // Se usa findUpdateUIFunction que es una función auxiliar definida más abajo
+      const updateUIFn = findUpdateUIFunction(overviewTab);
+      if (updateUIFn) {
+        console.log("Usando updateUI encontrada");
+        updateUIFn(data);
         return;
-      }
-      
-      // Método 3: Buscar window.frames[0].updateUI
-      try {
-        if (overviewTab.querySelector('iframe') && 
-            typeof overviewTab.querySelector('iframe').contentWindow.updateUI === 'function') {
-          console.log("Usando updateUI del iframe");
-          overviewTab.querySelector('iframe').contentWindow.updateUI(data);
-          return;
-        }
-      } catch (e) {
-        console.log("No se pudo acceder a updateUI del iframe:", e);
       }
       
       // Fallback: Actualización manual si no encontramos updateUI
       console.log("No se encontró updateUI, actualizando elementos manualmente");
+      updateTabManually(overviewTab, data);
+    }
+    
+    // Función auxiliar para encontrar cualquier implementación de updateUI
+    function findUpdateUIFunction(tabElement) {
+      // Método 1: Buscar en window global
+      if (typeof window.updateUI === 'function') {
+        return window.updateUI;
+      }
       
-      // Buscar los elementos dentro de la pestaña
-      const playerNameElement = overviewTab.querySelector('#player-name');
-      const gameTimeElement = overviewTab.querySelector('#game-time-value');
-      const killsElement = overviewTab.querySelector('#kda-kills');
-      const deathsElement = overviewTab.querySelector('#kda-deaths');
-      const assistsElement = overviewTab.querySelector('#kda-assists');
-      
-      // Actualizar elementos manualmente como ultimo recurso
+      // Método 2: Buscar en scripts del tab
       try {
-        // Actualizar nombre
-        if (playerNameElement) {
-          playerNameElement.textContent = data.summoner.name || "Desconocido";
-          console.log("Nombre actualizado a:", data.summoner.name);
+        const scripts = tabElement.querySelectorAll('script');
+        for (const script of scripts) {
+          if (script.textContent.includes('function updateUI')) {
+            try {
+              // Extraer y evaluar la función
+              const fnMatch = script.textContent.match(/function\s+updateUI\s*\([^)]*\)\s*\{[\s\S]*?\}/);
+              if (fnMatch) {
+                return new Function('gameData', fnMatch[0].replace('function updateUI(gameData)', ''));
+              }
+            } catch (e) {
+              console.error("Error extrayendo updateUI:", e);
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Error buscando scripts:", e);
+      }
+      
+      // Método 3: Buscar en iframes
+      try {
+        const iframes = tabElement.querySelectorAll('iframe');
+        for (const iframe of iframes) {
+          if (iframe.contentWindow && typeof iframe.contentWindow.updateUI === 'function') {
+            return iframe.contentWindow.updateUI;
+          }
+        }
+      } catch (e) {
+        console.error("Error buscando en iframes:", e);
+      }
+      
+      return null;
+    }
+    
+    // Función auxiliar para actualizar manualmente los elementos como último recurso
+    function updateTabManually(tabElement, data) {
+      try {
+        // Actualizar elementos básicos
+        const elements = {
+          playerName: tabElement.querySelector('#player-name'),
+          playerRole: tabElement.querySelector('#player-role'),
+          gameTime: tabElement.querySelector('#game-time-value'),
+          kills: tabElement.querySelector('#kda-kills'),
+          deaths: tabElement.querySelector('#kda-deaths'),
+          assists: tabElement.querySelector('#kda-assists'),
+          challengeKills: tabElement.querySelector('#challenge-kills-value'),
+          challengeWards: tabElement.querySelector('#challenge-wards-value'),
+          challengeCS: tabElement.querySelector('#challenge-cs-value')
+        };
+        
+        // Actualizar nombre y rol
+        if (elements.playerName && data.summoner && data.summoner.name) {
+          elements.playerName.textContent = data.summoner.name;
+        }
+        
+        if (elements.playerRole && data.summoner) {
+          const role = data.summoner.position || data.summoner.role || 
+                      (data.summoner.champion ? "Campeón: " + data.summoner.champion : "Rol Principal");
+          elements.playerRole.textContent = role;
         }
         
         // Actualizar tiempo
-        if (gameTimeElement) {
-          const formattedTime = formatGameTime(data.match.gameTime);
-          gameTimeElement.textContent = formattedTime;
-          console.log("Tiempo actualizado a:", formattedTime);
+        if (elements.gameTime && data.match && data.match.gameTime !== undefined) {
+          elements.gameTime.textContent = formatGameTime(data.match.gameTime);
         }
         
         // Actualizar KDA
-        if (killsElement) {
-          killsElement.textContent = data.match.kills || "0";
+        if (elements.kills && data.match) {
+          elements.kills.textContent = data.match.kills || "0";
         }
-        if (deathsElement) {
-          deathsElement.textContent = data.match.deaths || "0";
+        if (elements.deaths && data.match) {
+          elements.deaths.textContent = data.match.deaths || "0";
         }
-        if (assistsElement) {
-          assistsElement.textContent = data.match.assists || "0";
-        }
-        
-        // También actualizamos los elementos de retos como fallback
-        const challengeKillsElement = overviewTab.querySelector('#challenge-kills-value');
-        const challengeWardsElement = overviewTab.querySelector('#challenge-wards-value');
-        const challengeCSElement = overviewTab.querySelector('#challenge-cs-value');
-        
-        if (challengeKillsElement && data.match) {
-          challengeKillsElement.textContent = (data.match.kills || 0) + "/3";
+        if (elements.assists && data.match) {
+          elements.assists.textContent = data.match.assists || "0";
         }
         
-        if (challengeWardsElement && data.vision) {
-          challengeWardsElement.textContent = (data.vision.wardsPlaced || 0) + "/5";
+        // Actualizar reto de kills
+        if (elements.challengeKills && data.match) {
+          elements.challengeKills.textContent = (data.match.kills || 0) + "/3";
         }
         
-        if (challengeCSElement && data.match && data.match.cs !== undefined && data.match.gameTime !== undefined) {
+        // Actualizar reto de wards (según docs de Overwolf)
+        if (elements.challengeWards) {
+          let wardsPlaced = 0;
+          
+          // Buscar en varias fuentes posibles
+          if (data.ward && data.ward.placed !== undefined) {
+            wardsPlaced = parseInt(data.ward.placed) || 0;
+          } else if (data.vision && data.vision.wardsPlaced !== undefined) {
+            wardsPlaced = data.vision.wardsPlaced;
+          } else if (data.objectives && data.objectives.wardPlaced !== undefined) {
+            wardsPlaced = data.objectives.wardPlaced;
+          }
+          
+          elements.challengeWards.textContent = wardsPlaced + "/5";
+        }
+        
+        // Actualizar reto de CS
+        if (elements.challengeCS && data.match && data.match.cs !== undefined && data.match.gameTime !== undefined) {
           const gameTimeInMinutes = Math.max(data.match.gameTime / 60, 1);
           const csPerMinute = (data.match.cs / gameTimeInMinutes).toFixed(1);
-          challengeCSElement.textContent = csPerMinute + "/8";
+          elements.challengeCS.textContent = csPerMinute + "/8";
         }
         
         console.log("Actualización manual completada");
       } catch (e) {
-        console.error("Error actualizando elementos:", e);
+        console.error("Error actualizando elementos manualmente:", e);
       }
     }
     

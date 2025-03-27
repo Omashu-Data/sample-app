@@ -1,64 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../../css/general.css" />
   <link rel="stylesheet" href="../../css/header.css" />
   <link rel="stylesheet" href="../../css/desktop.css" />
   <link rel="stylesheet" href="../../css/modal.css" />
-  <title>Overwolf Sample App - Desktop page</title>
+  <title>Omashu.gg - Escritorio</title>
 </head>
 
 <body class="desktop">
   <!-- -------------------------------- Header ------------------------------- -->
 
   <header id="header" class="app-header">
-    <img src="../../img/header_icon.svg" />
-    <h1>Sample App / desktop window</h1>
-    <div class="window-controls-group">
-      <button id="minimizeButton" class="window-control window-control-minimize" />
-      <button id="maximizeButton" class="window-control window-control-maximize" />
-      <button id="closeButton" class="window-control window-control-close" />
+    <div class="logo-container">
+      <img src="../../img/logo.svg" alt="Omashu.gg Logo" />
+      <h1>Omashu.gg</h1>
+    </div>
+    <div class="header-controls">
+      <button id="settingsButton" class="header-button">
+        <img src="../../img/settings-icon.svg" alt="Configuración" />
+      </button>
+      <button id="minimizeButton" class="header-button">
+        <img src="../../img/minimize-icon.svg" alt="Minimizar" />
+      </button>
+      <button id="closeButton" class="header-button">
+        <img src="../../img/close-icon.svg" alt="Cerrar" />
+      </button>
     </div>
   </header>
 
   <!-- --------------------------------- Main -------------------------------- -->
-  <main>
-    <div class="desktopTop">
-      <h1>Overwolf Sample App</h1>
-      <p>
-        Welcome to the Overwolf tutorial app for developers.<br />
-        Learn how to build an app by using one!
-      </p>
-      <div id="version"></div>
-    </div>
-    <div class="desktopBottom">
-      <!-- Launch a game! -->
-      <div id="left">
-        <h1>
-          Launch a game and the In-Game window will pop-up automatically!
-        </h1>
-      </div>
-      <!-- Launch a game! -->
-      <div id="middle">
-        What can you learn with this sample app?
-        <br /><br />
-        1. How to listen to real-time game events and how to identify specific
-        events like match start/end, kill, and death.
-        <br /><br />
-        2. How to use a transparent background window as a service bus, that
-        acts as the main controller of your app.
-        <br /><br />
-        3. How to use Hotkeys that show/hide your app while you are in-game.
-      </div>
-      <!-- picture -->
-      <div id="right">
-        <div style="text-align: center">
-          <div style="display: inline-block">
-            <img src="../../img/cool_wolf.png" />
+  <main class="desktop-main">
+    <div class="desktop-cards">
+      <div class="desktop-card">
+        <div class="card-header">
+          <h2>Estadísticas Globales</h2>
+        </div>
+        <div class="card-content">
+          <div class="stat-row">
+            <span class="stat-label">Partidas Jugadas:</span>
+            <span class="stat-value">243</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Victorias:</span>
+            <span class="stat-value">132</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Derrotas:</span>
+            <span class="stat-value">111</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Winrate:</span>
+            <span class="stat-value highlight">54.3%</span>
           </div>
         </div>
+      </div>
+
+      <div class="desktop-card">
+        <div class="card-header">
+          <h2>Últimas Partidas</h2>
+        </div>
+        <div class="card-content">
+          <div class="match-list">
+            <div class="match-item win">
+              <div class="match-champion">
+                <img src="../../img/champions/lux.jpg" alt="Lux" />
+              </div>
+              <div class="match-details">
+                <div class="match-result">Victoria</div>
+                <div class="match-kda">8/2/15</div>
+              </div>
+            </div>
+            <div class="match-item loss">
+              <div class="match-champion">
+                <img src="../../img/champions/yasuo.jpg" alt="Yasuo" />
+              </div>
+              <div class="match-details">
+                <div class="match-result">Derrota</div>
+                <div class="match-kda">3/7/2</div>
+              </div>
+            </div>
+            <div class="match-item win">
+              <div class="match-champion">
+                <img src="../../img/champions/ahri.jpg" alt="Ahri" />
+              </div>
+              <div class="match-details">
+                <div class="match-result">Victoria</div>
+                <div class="match-kda">11/4/9</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="desktop-notice">
+      <div class="notice-icon">
+        <img src="../../img/info-icon.svg" alt="Información" />
+      </div>
+      <div class="notice-content">
+        <h3>¡Bienvenido a Omashu.gg!</h3>
+        <p>Esta aplicación te ayudará a mejorar tu rendimiento en League of Legends con análisis de partidas en tiempo real, estadísticas detalladas y consejos personalizados.</p>
+        <p>Inicia una partida de League of Legends para comenzar a usar todas las funciones.</p>
       </div>
     </div>
   </main>
@@ -80,6 +126,44 @@
     ga('set', 'checkProtocolTask', function () { });
     ga('require', 'displayfeatures');
     ga('send', 'pageview', '/desktop.html');
+  </script>
+
+  <script src="../../js/desktop.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Funcionalidad de los botones de la cabecera
+      const minimizeButton = document.getElementById('minimizeButton');
+      const closeButton = document.getElementById('closeButton');
+      const settingsButton = document.getElementById('settingsButton');
+
+      if (minimizeButton) {
+        minimizeButton.addEventListener('click', function() {
+          overwolf.windows.getCurrentWindow(function(result) {
+            if (result.success) {
+              overwolf.windows.minimize(result.window.id);
+            }
+          });
+        });
+      }
+
+      if (closeButton) {
+        closeButton.addEventListener('click', function() {
+          overwolf.windows.getCurrentWindow(function(result) {
+            if (result.success) {
+              overwolf.windows.close(result.window.id);
+            }
+          });
+        });
+      }
+
+      if (settingsButton) {
+        settingsButton.addEventListener('click', function() {
+          // Abrir ventana de configuración
+          console.log("Botón de configuración presionado");
+        });
+      }
+    });
   </script>
 </body>
 

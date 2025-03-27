@@ -1,274 +1,298 @@
-<!-- Pestaña de Estadísticas -->
-<div class="dashboard dashboard--stats">
-  <!-- Sección principal: Contenido estadístico con tarjetas pequeñas y compactas -->
-  <div class="dashboard__stats-grid">
-    <!-- Tarjeta de Daño por Segundo -->
-    <div class="card card--primary" data-metric="dps">
-      <div class="card__header">
-        <div class="card__icon">⚡</div>
-        <span class="card__label">DAMAGE PER SECOND</span>
-      </div>
-      <div class="card__body">
-        <div class="card__value-container">
-          <span id="dps-value" class="card__value">0</span>
-        </div>
-      </div>
-      <div class="card__footer">
-        <span class="card__rank">SILVER</span>
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Avg:</span>
-          <span class="card__comparison-value card__comparison-value--positive">+15%</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Tarjeta de KDA -->
-    <div class="card card--success" data-metric="kda">
-      <div class="card__header">
-        <div class="card__icon">🎯</div>
-        <span class="card__label">KDA</span>
-      </div>
-      <div class="card__body">
-        <div class="card__value-container">
-          <span id="kda-value" class="card__value">7</span>
-        </div>
-      </div>
-      <div class="card__footer">
-        <span class="card__rank">GOLD</span>
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Avg:</span>
-          <span class="card__comparison-value card__comparison-value--positive">+25%</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Tarjeta de CS por Min -->
-    <div class="card card--accent" data-metric="cs">
-      <div class="card__header">
-        <div class="card__icon">🧩</div>
-        <span class="card__label">CS PER MIN</span>
-      </div>
-      <div class="card__body">
-        <div class="card__value-container">
-          <span id="cspm-value" class="card__value">0.8</span>
-        </div>
-      </div>
-      <div class="card__footer">
-        <span class="card__rank">DIAMOND</span>
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Avg:</span>
-          <span class="card__comparison-value card__comparison-value--positive">+40%</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Tarjeta de Oro -->
-    <div class="card card--accent" data-metric="gold">
-      <div class="card__header">
-        <div class="card__icon">💰</div>
-        <span class="card__label">GOLD</span>
-      </div>
-      <div class="card__body">
-        <span id="gold-value" class="card__value">8879.97</span>
-      </div>
-      <div class="card__footer">
-        <span class="card__rank">SILVER</span>
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Avg:</span>
-          <span class="card__comparison-value card__comparison-value--positive">+20%</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Tarjeta de Visión -->
-    <div class="card card--warning" data-metric="vision">
-      <div class="card__header">
-        <div class="card__icon">🛡️</div>
-        <span class="card__label">VISION</span>
-      </div>
-      <div class="card__body">
-        <span id="vision-value" class="card__value">0.8</span>
-      </div>
-      <div class="card__footer">
-        <span class="card__rank">BRONZE</span>
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Avg:</span>
-          <span class="card__comparison-value card__comparison-value--negative">-15%</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Tarjeta de Tiempo de Juego -->
-    <div class="card card--primary" data-metric="time">
-      <div class="card__header">
-        <div class="card__icon">⏱️</div>
-        <span class="card__label">GAME TIME</span>
-      </div>
-      <div class="card__body">
-        <span id="game-time" class="card__value">12:45</span>
-      </div>
-      <div class="card__footer">
-        <span class="card__rank">NORMAL</span>
-        <span class="card__phase">Mid</span>
-      </div>
-    </div>
-    
-    <!-- Tarjeta de Rotaciones -->
-    <div class="card card--success" data-metric="rotations">
-      <div class="card__header">
-        <div class="card__icon">🔄</div>
-        <span class="card__label">ROTATIONS</span>
-      </div>
-      <div class="card__body">
-        <span id="rotations-value" class="card__value">8</span>
-      </div>
-      <div class="card__footer">
-        <span class="card__rank">GOLD</span>
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Avg:</span>
-          <span class="card__comparison-value card__comparison-value--positive">+10%</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Tarjeta de Objetivos -->
-    <div class="card card--accent" data-metric="objectives">
-      <div class="card__header">
-        <div class="card__icon">🎯</div>
-        <span class="card__label">OBJECTIVES</span>
-      </div>
-      <div class="card__body">
-        <span id="objectives-value" class="card__value">3</span>
-      </div>
-      <div class="card__footer">
-        <span class="card__rank">SILVER</span>
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Avg:</span>
-          <span class="card__comparison-value card__comparison-value--neutral">0%</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Tarjeta de Daño Total -->
-    <div class="card card--danger" data-metric="damage">
-      <div class="card__header">
-        <div class="card__icon">💥</div>
-        <span class="card__label">TOTAL DAMAGE</span>
-      </div>
-      <div class="card__body">
-        <span id="total-damage-value" class="card__value">12.5K</span>
-      </div>
-      <div class="card__footer">
-        <span class="card__rank">GOLD</span>
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Avg:</span>
-          <span class="card__comparison-value card__comparison-value--positive">+22%</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="card card--primary">
-      <div class="card__header">
-        <div class="card__icon">❤️</div>
-        <span class="card__label">Curación</span>
-      </div>
-      <div class="card__body">
-        <div class="card__value-container">
-          <span id="healing-value" class="card__value">3.2K</span>
-          <span class="card__rank">Plata</span>
-        </div>
-        <div class="card__chart">
-          <div class="card__bar">
-            <div class="card__fill" style="width: 45%"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card__footer">
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Prom:</span>
-          <span class="card__comparison-value card__comparison-value--negative">-5%</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="card card--success">
-      <div class="card__header">
-        <div class="card__icon">👁️</div>
-        <span class="card__label">Control Mapa</span>
-      </div>
-      <div class="card__body">
-        <div class="card__value-container">
-          <span id="map-control-value" class="card__value">62%</span>
-          <span class="card__rank">Diamante</span>
-        </div>
-        <div class="card__chart">
-          <div class="card__bar">
-            <div class="card__fill" style="width: 85%"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card__footer">
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Prom:</span>
-          <span class="card__comparison-value card__comparison-value--positive">+30%</span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="card card--accent">
-      <div class="card__header">
-        <div class="card__icon">🏹</div>
-        <span class="card__label">Precisión</span>
-      </div>
-      <div class="card__body">
-        <div class="card__value-container">
-          <span id="accuracy-value" class="card__value">68%</span>
-          <span class="card__rank">Platino</span>
-        </div>
-        <div class="card__chart">
-          <div class="card__bar">
-            <div class="card__fill" style="width: 75%"></div>
-          </div>
-        </div>
-      </div>
-      <div class="card__footer">
-        <div class="card__comparison">
-          <span class="card__comparison-label">vs. Prom:</span>
-          <span class="card__comparison-value card__comparison-value--positive">+18%</span>
-        </div>
+<!-- Tab de Estadísticas -->
+<div class="stats-container">
+  <div class="stats-header glass-panel">
+    <div class="stats-title">
+      <h2>Estadísticas de <span id="stats-player-name">Invocador</span></h2>
+      <div class="stats-subtitle">
+        <span id="stats-match-type">Partida Normal</span> - <span id="stats-game-time">00:00</span>
       </div>
     </div>
   </div>
   
-  <!-- Información de partida y consejos con nuevo diseño compacto -->
-  <div class="card card--insight">
-    <div class="card__header">
-      <div class="card__icon card__icon--insight">💡</div>
-      <h3 class="card__title">Consejo Personalizado</h3>
-    </div>
-    <div class="card__body">
-      <p>Aumenta tu visión colocando wards en puntos clave del mapa y compra más wards de control. Mejorará tu supervivencia un 35%.</p>
-    </div>
-  </div>
-  
-  <!-- Espacio para anuncio integrado más pequeño -->
-  <div class="dashboard__ad-container">
-    <div class="ad-placeholder ad-placeholder--compact">
-      <div class="ad-placeholder__logo">
-        <img src="../../img/header_icon.svg" alt="omashu.gg logo" class="ad-placeholder__icon">
-        <span>omashu.gg</span>
+  <div class="stats-sections">
+    <!-- Sección de KDA Detallado -->
+    <div class="stats-section glass-panel">
+      <div class="stats-section-header">
+        <h3>Desempeño en Combate</h3>
       </div>
-      <div class="ad-placeholder__text">ESPACIO PUBLICITARIO</div>
-      <div class="ad-placeholder__size">300 × 100</div>
+      <div class="stats-section-content">
+        <div class="stats-kda-container">
+          <div class="stats-kda-card">
+            <div class="stats-kda-value" id="stats-kills">0</div>
+            <div class="stats-kda-label">Eliminaciones</div>
+          </div>
+          <div class="stats-kda-card">
+            <div class="stats-kda-value" id="stats-deaths">0</div>
+            <div class="stats-kda-label">Muertes</div>
+          </div>
+          <div class="stats-kda-card">
+            <div class="stats-kda-value" id="stats-assists">0</div>
+            <div class="stats-kda-label">Asistencias</div>
+          </div>
+          <div class="stats-kda-card">
+            <div class="stats-kda-value" id="stats-kda-ratio">0.0</div>
+            <div class="stats-kda-label">Ratio KDA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sección de Recursos -->
+    <div class="stats-section glass-panel">
+      <div class="stats-section-header">
+        <h3>Recursos y Economía</h3>
+      </div>
+      <div class="stats-section-content">
+        <div class="stats-metrics-grid">
+          <div class="stats-metric">
+            <div class="stats-metric-icon">
+              <img src="../../img/gold-icon.svg" alt="Oro" />
+            </div>
+            <div class="stats-metric-info">
+              <div class="stats-metric-name">Oro Total</div>
+              <div class="stats-metric-value" id="stats-gold">0</div>
+            </div>
+          </div>
+          
+          <div class="stats-metric">
+            <div class="stats-metric-icon">
+              <img src="../../img/cs-icon.svg" alt="CS" />
+            </div>
+            <div class="stats-metric-info">
+              <div class="stats-metric-name">CS Total</div>
+              <div class="stats-metric-value" id="stats-cs">0</div>
+            </div>
+          </div>
+          
+          <div class="stats-metric">
+            <div class="stats-metric-icon">
+              <img src="../../img/cs-per-min-icon.svg" alt="CS por minuto" />
+            </div>
+            <div class="stats-metric-info">
+              <div class="stats-metric-name">CS por Minuto</div>
+              <div class="stats-metric-value" id="stats-cs-per-min">0.0</div>
+            </div>
+          </div>
+          
+          <div class="stats-metric">
+            <div class="stats-metric-icon">
+              <img src="../../img/ward-icon.svg" alt="Wards" />
+            </div>
+            <div class="stats-metric-info">
+              <div class="stats-metric-name">Wards Colocados</div>
+              <div class="stats-metric-value" id="stats-wards-placed">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sección de Daño -->
+    <div class="stats-section glass-panel">
+      <div class="stats-section-header">
+        <h3>Análisis de Daño</h3>
+      </div>
+      <div class="stats-section-content">
+        <div class="stats-metrics-grid">
+          <div class="stats-metric">
+            <div class="stats-metric-icon damage-icon">
+              <img src="../../img/damage-icon.svg" alt="Daño" />
+            </div>
+            <div class="stats-metric-info">
+              <div class="stats-metric-name">Daño Total</div>
+              <div class="stats-metric-value" id="stats-total-damage">0</div>
+            </div>
+          </div>
+          
+          <div class="stats-metric">
+            <div class="stats-metric-icon damage-icon">
+              <img src="../../img/champion-damage-icon.svg" alt="Daño a campeones" />
+            </div>
+            <div class="stats-metric-info">
+              <div class="stats-metric-name">Daño a Campeones</div>
+              <div class="stats-metric-value" id="stats-champion-damage">0</div>
+            </div>
+          </div>
+          
+          <div class="stats-metric">
+            <div class="stats-metric-icon heal-icon">
+              <img src="../../img/healing-icon.svg" alt="Curación" />
+            </div>
+            <div class="stats-metric-info">
+              <div class="stats-metric-name">Curación Total</div>
+              <div class="stats-metric-value" id="stats-total-healing">0</div>
+            </div>
+          </div>
+          
+          <div class="stats-metric">
+            <div class="stats-metric-icon damage-icon">
+              <img src="../../img/damage-taken-icon.svg" alt="Daño recibido" />
+            </div>
+            <div class="stats-metric-info">
+              <div class="stats-metric-name">Daño Recibido</div>
+              <div class="stats-metric-value" id="stats-damage-taken">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- CTA Premium más compacto -->
-<div class="premium-cta-compact">
-  <div class="premium-cta-compact__badge">PREMIUM</div>
-  <div class="premium-cta-compact__content">
-    <p class="premium-cta-compact__text">Mejora tu juego con análisis avanzados y sin anuncios</p>
-    <button class="premium-cta-compact__button pulse-button">PRUEBA 7 DÍAS GRATIS</button>
-  </div>
-</div> 
+<script>
+  // Función para formatear el tiempo de juego - misma que en tab-overview.html
+  function formatGameTime(seconds) {
+    if (!seconds && seconds !== 0) return "00:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  // Función para formatear números grandes con separadores de mil
+  function formatNumber(num) {
+    return new Intl.NumberFormat('es-ES').format(num);
+  }
+
+  // Función para calcular el ratio KDA
+  function calculateKDARatio(kills, deaths, assists) {
+    if (deaths === 0) return ((kills + assists) > 0 ? "Perfect" : "0.0");
+    return ((kills + assists) / deaths).toFixed(1);
+  }
+
+  // Función de actualización para esta tab específica
+  function updateUI(gameData) {
+    console.log("Tab-stats recibiendo actualización de datos:", gameData);
+    
+    // Información del jugador
+    if (gameData.summoner && gameData.summoner.name) {
+      document.getElementById('stats-player-name').textContent = gameData.summoner.name;
+    }
+    
+    // Tipo de partida y tiempo
+    if (gameData.match) {
+      if (gameData.match.gameMode) {
+        document.getElementById('stats-match-type').textContent = gameData.match.gameMode;
+      }
+      
+      if (gameData.match.gameTime !== undefined) {
+        document.getElementById('stats-game-time').textContent = formatGameTime(gameData.match.gameTime);
+      }
+      
+      // KDA
+      document.getElementById('stats-kills').textContent = gameData.match.kills || 0;
+      document.getElementById('stats-deaths').textContent = gameData.match.deaths || 0;
+      document.getElementById('stats-assists').textContent = gameData.match.assists || 0;
+      
+      // Ratio KDA
+      const kills = parseInt(gameData.match.kills) || 0;
+      const deaths = parseInt(gameData.match.deaths) || 0;
+      const assists = parseInt(gameData.match.assists) || 0;
+      document.getElementById('stats-kda-ratio').textContent = calculateKDARatio(kills, deaths, assists);
+      
+      // CS y CS por minuto
+      if (gameData.match.cs !== undefined) {
+        document.getElementById('stats-cs').textContent = gameData.match.cs;
+        
+        if (gameData.match.gameTime !== undefined && gameData.match.gameTime > 0) {
+          const gameTimeInMinutes = Math.max(gameData.match.gameTime / 60, 1);
+          const csPerMinute = (gameData.match.cs / gameTimeInMinutes).toFixed(1);
+          document.getElementById('stats-cs-per-min').textContent = csPerMinute;
+        }
+      }
+      
+      // Oro
+      if (gameData.match.gold !== undefined) {
+        document.getElementById('stats-gold').textContent = formatNumber(gameData.match.gold);
+      }
+    }
+    
+    // Wards desde múltiples fuentes posibles
+    let wardsPlaced = 0;
+    if (gameData.ward && gameData.ward.placed !== undefined) {
+      wardsPlaced = parseInt(gameData.ward.placed) || 0;
+    } else if (gameData.vision && gameData.vision.wardsPlaced !== undefined) {
+      wardsPlaced = gameData.vision.wardsPlaced;
+    } else if (gameData.objectives && gameData.objectives.wardPlaced !== undefined) {
+      wardsPlaced = gameData.objectives.wardPlaced;
+    }
+    document.getElementById('stats-wards-placed').textContent = wardsPlaced;
+    
+    // Daño desde diferentes fuentes
+    if (gameData.combat) {
+      if (gameData.combat.damageDealt !== undefined) {
+        document.getElementById('stats-total-damage').textContent = formatNumber(gameData.combat.damageDealt);
+      }
+      
+      if (gameData.combat.totalDamageToChampions !== undefined) {
+        document.getElementById('stats-champion-damage').textContent = formatNumber(gameData.combat.totalDamageToChampions);
+      } else if (gameData.combat.damageDealtToChampions !== undefined) {
+        document.getElementById('stats-champion-damage').textContent = formatNumber(gameData.combat.damageDealtToChampions);
+      }
+      
+      if (gameData.combat.damageTaken !== undefined) {
+        document.getElementById('stats-damage-taken').textContent = formatNumber(gameData.combat.damageTaken);
+      }
+      
+      if (gameData.combat.healing !== undefined) {
+        document.getElementById('stats-total-healing').textContent = formatNumber(gameData.combat.healing);
+      } else if (gameData.combat.healingDone !== undefined) {
+        document.getElementById('stats-total-healing').textContent = formatNumber(gameData.combat.healingDone);
+      }
+    }
+  }
+
+  // Inicialización para suscribirse al gameDataManager - similar a tab-overview.html
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log("Tab-stats cargado, intentando suscribirme a gameDataManager");
+    
+    try {
+      // Métodos para suscribirse al gameDataManager - igual que en tab-overview.html
+      if (typeof window.subscribeToGameData === 'function') {
+        console.log("Usando window.subscribeToGameData");
+        window.subscribeToGameData(updateUI);
+      } 
+      else if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'function') {
+        console.log("Usando window.gameDataManager.subscribe");
+        window.gameDataManager.subscribe(updateUI);
+      } 
+      else {
+        console.log("Intentando acceder a través de mainWindow");
+        overwolf.windows.getMainWindow(function(mainWindow) {
+          if (mainWindow && mainWindow.gameDataManager) {
+            console.log("Usando mainWindow.gameDataManager.subscribe");
+            mainWindow.gameDataManager.subscribe(updateUI);
+          } else {
+            console.error("No se pudo acceder al gameDataManager desde tab-stats");
+          }
+        });
+      }
+      
+      // Datos de prueba - similares pero ampliados respecto a tab-overview.html
+      updateUI({
+        summoner: { name: "Invocador de prueba", position: "Test" },
+        match: { 
+          gameTime: 1200, 
+          gameMode: "Ranked Solo/Duo",
+          kills: 5, 
+          deaths: 2, 
+          assists: 8,
+          cs: 180,
+          gold: 8500
+        },
+        ward: { placed: 12 },
+        combat: {
+          damageDealt: 85000,
+          damageDealtToChampions: 12500,
+          damageTaken: 15000,
+          healing: 3500
+        }
+      });
+      
+    } catch (e) {
+      console.error('Error al inicializar tab-stats:', e);
+    }
+  });
+  
+  // IMPORTANTE: Exponer updateUI globalmente para que pueda ser llamada desde in_game.html
+  window.updateUI = updateUI;
+</script> 
