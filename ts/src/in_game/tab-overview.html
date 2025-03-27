@@ -79,11 +79,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Contenedor para retos dinámicos que vengan de la API -->
-        <div id="dynamic-challenges-container">
-          <!-- Aquí se añadirán dinámicamente los retos que vengan de la API -->
-        </div>
       </div>
     </div>
   </div>
@@ -98,18 +93,14 @@
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
 
-  // Única función para actualizar la UI - Ahora con las rutas correctas de los datos
+  // Única función para actualizar la UI - Sigue exactamente el mismo flujo que el KDA
   function updateUI(gameData) {
     console.log("Recibiendo actualización de datos:", gameData);
     
-    // Actualizar nombre y rol - CORREGIDO según la documentación de Overwolf
+    // Actualizar nombre y rol - igual que antes
     if (gameData.summoner) {
       document.getElementById('player-name').textContent = gameData.summoner.name || "Invocador";
-      
-      // ---- CORREGIDO: Buscar el rol en varios lugares posibles según la documentación de Overwolf ----
-      const role = gameData.summoner.position || gameData.summoner.role || 
-                  (gameData.summoner.champion ? "Campeón: " + gameData.summoner.champion : "Rol Principal");
-      document.getElementById('player-role').textContent = role;
+      document.getElementById('player-role').textContent = gameData.summoner.position || gameData.summoner.role || "Rol Principal";
     }
 
     // Actualizar tiempo - igual que antes
@@ -135,70 +126,10 @@
       }
     }
     
-    // ---- CORREGIDO: Actualizar reto de wards según la documentación de Overwolf ----
-    // Verificar múltiples fuentes posibles para los datos de wards
-    let wardsPlaced = 0;
-    
-    // Opción 1: gameData.ward como indica la documentación de Overwolf
-    if (gameData.ward && gameData.ward.placed !== undefined) {
-      wardsPlaced = parseInt(gameData.ward.placed) || 0;
+    // Reto de wards - MISMO PATRÓN que KDA
+    if (gameData.vision) {
+      document.getElementById('challenge-wards-value').textContent = (gameData.vision.wardsPlaced || 0) + "/5";
     }
-    // Opción 2: gameData.vision como estaba antes
-    else if (gameData.vision && gameData.vision.wardsPlaced !== undefined) {
-      wardsPlaced = gameData.vision.wardsPlaced;
-    }
-    // Opción 3: gameData.objectives como otra posible fuente
-    else if (gameData.objectives && gameData.objectives.wardPlaced !== undefined) {
-      wardsPlaced = gameData.objectives.wardPlaced;
-    }
-    
-    document.getElementById('challenge-wards-value').textContent = wardsPlaced + "/5";
-
-    // ---- NUEVO: Manejar dinámicamente retos adicionales que vengan de una API ----
-    if (gameData.challenges && Array.isArray(gameData.challenges)) {
-      updateDynamicChallenges(gameData.challenges);
-    }
-  }
-
-  // ---- NUEVO: Función para manejar retos dinámicos de la API ----
-  function updateDynamicChallenges(challenges) {
-    const container = document.getElementById('dynamic-challenges-container');
-    if (!container) return;
-    
-    // Opcional: limpiar retos anteriores
-    // container.innerHTML = '';
-    
-    challenges.forEach(challenge => {
-      // Verificar si el reto ya existe
-      const existingChallenge = document.getElementById(`challenge-${challenge.id}-container`);
-      
-      if (existingChallenge) {
-        // Actualizar reto existente
-        const valueElement = document.getElementById(`challenge-${challenge.id}-value`);
-        if (valueElement) {
-          valueElement.textContent = `${challenge.current || 0}/${challenge.goal || 1}`;
-        }
-      } else {
-        // Crear nuevo elemento de reto
-        const newChallenge = document.createElement('div');
-        newChallenge.className = 'overview-challenge';
-        newChallenge.id = `challenge-${challenge.id}-container`;
-        
-        newChallenge.innerHTML = `
-          <div class="overview-challenge-icon">
-            <img src="${challenge.icon || '../../img/challenge-icon.svg'}" alt="${challenge.name}" />
-          </div>
-          <div class="overview-challenge-info">
-            <div class="overview-challenge-name">${challenge.name}</div>
-            <div class="overview-challenge-progress">
-              <div id="challenge-${challenge.id}-value">${challenge.current || 0}/${challenge.goal || 1}</div>
-            </div>
-          </div>
-        `;
-        
-        container.appendChild(newChallenge);
-      }
-    });
   }
 
   // Inicialización - Simplificada y más clara
@@ -236,7 +167,7 @@
       updateUI({
         summoner: { name: "Invocador de prueba", position: "Test" },
         match: { gameTime: 120, kills: 2, deaths: 1, assists: 3, cs: 50 },
-        ward: { placed: 2 }
+        vision: { wardsPlaced: 2 }
       });
       
       // IMPORTANTE: Llamamos explícitamente al método global para forzar actualizaciones
