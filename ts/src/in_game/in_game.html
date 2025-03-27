@@ -1061,20 +1061,41 @@
       }
       
       // ----- CAMBIO IMPORTANTE ------
-      // En lugar de actualizar manualmente cada elemento,
-      // utilizamos el patrón centralizado de actualización
+      // Usamos el mismo patrón que en components-loader.js para encontrar la función updateUI
       
       // Obtener los datos actuales del juego
       const data = gameDataManager.getData();
       
-      // Método 1: Intentar usar window.updateUI si existe
+      // Método 1: Buscar la función updateUI adjunta al elemento de pestaña
+      if (overviewTab.updateUIFunction && typeof overviewTab.updateUIFunction === 'function') {
+        console.log("Usando función updateUI adjunta al elemento 'overview-tab'");
+        overviewTab.updateUIFunction(data);
+        return;
+      }
+      
+      // Método 2: Buscar en el objeto tabUpdateFunctions
+      if (window.tabUpdateFunctions && window.tabUpdateFunctions['overview-tab'] && 
+          typeof window.tabUpdateFunctions['overview-tab'] === 'function') {
+        console.log("Usando función updateUI desde tabUpdateFunctions['overview-tab']");
+        window.tabUpdateFunctions['overview-tab'](data);
+        return;
+      }
+      
+      // Método 3: Buscar en nombres de función específicos por tab
+      if (window._overviewUpdateUI && typeof window._overviewUpdateUI === 'function') {
+        console.log("Usando función específica window._overviewUpdateUI");
+        window._overviewUpdateUI(data);
+        return;
+      }
+      
+      // Método 4: Como fallback intentar window.updateUI global
       if (typeof window.updateUI === 'function') {
-        console.log("Llamando a window.updateUI para actualización centralizada");
+        console.log("Fallback: Usando window.updateUI global");
         window.updateUI(data);
         return;
       }
       
-      // Método 2: Intentar encontrar updateUI dentro del tab
+      // Método 5: Intentar encontrar updateUI dentro del tab
       const updateUIScripts = overviewTab.querySelectorAll('script');
       let tabUpdateUI = null;
       
@@ -1101,7 +1122,7 @@
         return;
       }
       
-      // Método 3: Buscar window.frames[0].updateUI
+      // Método 6: Buscar window.frames[0].updateUI
       try {
         if (overviewTab.querySelector('iframe') && 
             typeof overviewTab.querySelector('iframe').contentWindow.updateUI === 'function') {
@@ -1114,7 +1135,7 @@
       }
       
       // Fallback: Actualización manual si no encontramos updateUI
-      console.log("No se encontró updateUI, actualizando elementos manualmente");
+      console.log("No se encontró ninguna función updateUI, actualizando elementos manualmente");
       
       // Buscar los elementos dentro de la pestaña
       const playerNameElement = overviewTab.querySelector('#player-name');
@@ -1176,6 +1197,68 @@
     
     // Llamar periódicamente a la función de actualización forzada
     setInterval(forceUpdateOverviewTab, 1000);
+    
+    // NUEVA FUNCIÓN: Actualiza cualquier pestaña activa (no solo overview)
+    function forceUpdateActiveTab() {
+      try {
+        // Obtener la pestaña activa
+        const activeTab = document.querySelector('.tabs__pane--active');
+        if (!activeTab || !activeTab.id) {
+          console.log("No se encontró pestaña activa para actualizar");
+          return;
+        }
+        
+        // No hacer nada si ya es la pestaña overview (para evitar duplicación)
+        if (activeTab.id === 'overview-tab') {
+          return;
+        }
+        
+        console.log(`Forzando actualización de pestaña activa: ${activeTab.id}`);
+        
+        // Obtener los datos actuales
+        const data = gameDataManager.getData();
+        
+        // Misma estrategia de búsqueda que en forceUpdateOverviewTab
+        // Método 1: Buscar la función updateUI adjunta al elemento de pestaña
+        if (activeTab.updateUIFunction && typeof activeTab.updateUIFunction === 'function') {
+          console.log(`Usando función updateUI adjunta al elemento ${activeTab.id}`);
+          activeTab.updateUIFunction(data);
+          return;
+        }
+        
+        // Método 2: Buscar en el objeto tabUpdateFunctions
+        if (window.tabUpdateFunctions && window.tabUpdateFunctions[activeTab.id] && 
+            typeof window.tabUpdateFunctions[activeTab.id] === 'function') {
+          console.log(`Usando función updateUI desde tabUpdateFunctions['${activeTab.id}']`);
+          window.tabUpdateFunctions[activeTab.id](data);
+          return;
+        }
+        
+        // Método 3: Buscar en nombres de función específicos por tab
+        const tabName = activeTab.id.replace('-tab', '');
+        const specificFunctionName = `_${tabName}UpdateUI`;
+        if (window[specificFunctionName] && typeof window[specificFunctionName] === 'function') {
+          console.log(`Usando función específica window.${specificFunctionName}`);
+          window[specificFunctionName](data);
+          return;
+        }
+        
+        // Si no encontramos una función específica, usar directUpdateTab
+        console.log(`Usando directUpdateTab para actualizar ${activeTab.id}`);
+        if (typeof directUpdateTab === 'function') {
+          directUpdateTab(activeTab.id);
+        } else if (window.tabLoader && typeof window.tabLoader.directUpdateTab === 'function') {
+          window.tabLoader.directUpdateTab(activeTab.id);
+        } else {
+          console.warn(`No se pudo encontrar directUpdateTab para actualizar ${activeTab.id}`);
+        }
+      } catch (e) {
+        console.error("Error en forceUpdateActiveTab:", e);
+      }
+    }
+    
+    // Establecer intervalo para actualizar cualquier pestaña activa
+    setInterval(forceUpdateActiveTab, 1000);
     
     console.log('Sistema integrado de captura de eventos y gestión de datos inicializado. Versión: 2.0');
   </script>

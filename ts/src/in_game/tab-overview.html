@@ -95,7 +95,7 @@
 
   // Única función para actualizar la UI - Sigue exactamente el mismo flujo que el KDA
   function updateUI(gameData) {
-    console.log("Recibiendo actualización de datos:", gameData);
+    console.log("Tab-overview recibiendo actualización de datos:", gameData);
     
     // Actualizar nombre y rol - igual que antes
     if (gameData.summoner) {
@@ -137,6 +137,22 @@
     console.log("Tab-overview cargado, intentando suscribirme a gameDataManager");
     
     try {
+      // CAMBIO IMPORTANTE: Adjuntar la función updateUI al elemento de pestaña
+      const tabElement = document.querySelector('.overview-container').closest('.tabs__pane') || 
+                        document.getElementById('overview-tab');
+      
+      if (tabElement) {
+        console.log("Adjuntando función updateUI al elemento de pestaña:", tabElement.id);
+        // Guardar la función en el elemento
+        tabElement.updateUIFunction = updateUI;
+        
+        // También registrar en el objeto tabUpdateFunctions como respaldo
+        if (!window.tabUpdateFunctions) window.tabUpdateFunctions = {};
+        window.tabUpdateFunctions['overview-tab'] = updateUI;
+      } else {
+        console.warn("No se pudo encontrar el elemento de pestaña para adjuntar updateUI");
+      }
+      
       // Método 1: window.subscribeToGameData - Como el KDA
       if (typeof window.subscribeToGameData === 'function') {
         console.log("Usando window.subscribeToGameData");
@@ -181,6 +197,9 @@
     }
   });
   
-  // IMPORTANTE: Exponer updateUI globalmente para que pueda ser llamada desde in_game.html
-  window.updateUI = updateUI;
+  // CAMBIO IMPORTANTE: Ya no exponemos updateUI globalmente
+  // window.updateUI = updateUI;
+  
+  // Pero mantenemos una referencia para compatibilidad temporal
+  window._overviewUpdateUI = updateUI;
 </script> 

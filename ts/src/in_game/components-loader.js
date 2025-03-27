@@ -255,25 +255,49 @@ function directUpdateTab(tabId) {
       kda: `${data.match.kills}/${data.match.deaths}/${data.match.assists}`
     });
     
-    // Actualización específica para overview-tab
+    // CAMBIO IMPORTANTE: Nueva estrategia para encontrar la función updateUI
+    
+    // Método 1: Buscar la función updateUI adjunta al elemento de pestaña
+    if (tabPane.updateUIFunction && typeof tabPane.updateUIFunction === 'function') {
+      console.log(`Usando función updateUI adjunta al elemento ${tabId}`);
+      tabPane.updateUIFunction(data);
+      return;
+    }
+    
+    // Método 2: Buscar en el objeto tabUpdateFunctions
+    if (window.tabUpdateFunctions && window.tabUpdateFunctions[tabId] && 
+        typeof window.tabUpdateFunctions[tabId] === 'function') {
+      console.log(`Usando función updateUI desde tabUpdateFunctions['${tabId}']`);
+      window.tabUpdateFunctions[tabId](data);
+      return;
+    }
+    
+    // Método 3: Buscar en nombres de función específicos por tab
+    const specificFunctionName = `_${tabId.replace('-tab', '')}UpdateUI`;
+    if (window[specificFunctionName] && typeof window[specificFunctionName] === 'function') {
+      console.log(`Usando función específica window.${specificFunctionName}`);
+      window[specificFunctionName](data);
+      return;
+    }
+    
+    // Método 4: Como fallback intentar window.updateUI global (para compatibilidad)
+    if (typeof window.updateUI === 'function') {
+      console.log('Fallback: Usando window.updateUI global');
+      window.updateUI(data);
+      return;
+    }
+    
+    // Método 5: Buscar dentro de scripts del tab
+    const tabUpdateUI = findTabUpdateUIFunction(tabPane);
+    if (tabUpdateUI) {
+      console.log('Usando updateUI extraída del script del tab');
+      tabUpdateUI(data);
+      return;
+    }
+    
+    // Actualización específica para overview-tab - COMO ÚLTIMO RECURSO
     if (tabId === 'overview-tab') {
-      // Primero intentamos encontrar updateUI en el ámbito global
-      if (typeof window.updateUI === 'function') {
-        console.log('Usando window.updateUI global para actualizar todos los elementos');
-        window.updateUI(data);
-        return;
-      }
-      
-      // Como fallback, intentamos buscar updateUI en el contexto del tab
-      const tabUpdateUI = findTabUpdateUIFunction(tabPane);
-      if (tabUpdateUI) {
-        console.log('Usando updateUI del tab para actualizar todos los elementos');
-        tabUpdateUI(data);
-        return;
-      }
-      
-      // Si no encontramos updateUI, volvemos al método tradicional como fallback
-      console.log('No se encontró updateUI, actualizando elementos manualmente (solo KDA)');
+      console.log('Último recurso: Actualizando elementos manualmente (solo algunos)');
       
       const playerNameElement = tabPane.querySelector('#player-name');
       const gameTimeElement = tabPane.querySelector('#game-time-value');
@@ -301,6 +325,25 @@ function directUpdateTab(tabId) {
       
       if (assistsElement && data.match) {
         assistsElement.textContent = data.match.assists || '0';
+      }
+      
+      // También intentamos actualizar los retos
+      const challengeKillsElement = tabPane.querySelector('#challenge-kills-value');
+      const challengeWardsElement = tabPane.querySelector('#challenge-wards-value');
+      const challengeCSElement = tabPane.querySelector('#challenge-cs-value');
+      
+      if (challengeKillsElement && data.match) {
+        challengeKillsElement.textContent = (data.match.kills || 0) + "/3";
+      }
+      
+      if (challengeWardsElement && data.vision) {
+        challengeWardsElement.textContent = (data.vision.wardsPlaced || 0) + "/5";
+      }
+      
+      if (challengeCSElement && data.match && data.match.cs !== undefined && data.match.gameTime !== undefined) {
+        const gameTimeInMinutes = Math.max(data.match.gameTime / 60, 1);
+        const csPerMinute = (data.match.cs / gameTimeInMinutes).toFixed(1);
+        challengeCSElement.textContent = csPerMinute + "/8";
       }
     }
   } catch (e) {
@@ -397,5 +440,16 @@ function triggerEventsObservers() {
 window.tabLoader = {
   loadTabContent,
   initTabsListeners,
-  triggerEventsObservers
+  triggerEventsObservers,
+  directUpdateTab  // Exportar directUpdateTab para que pueda ser llamada desde otros scripts
+};
+
+// Añadir una función global para actualizar cualquier pestaña
+window.updateTab = function(tabId) {
+  console.log(`Llamada externa a updateTab para ${tabId}`);
+  if (typeof directUpdateTab === 'function') {
+    directUpdateTab(tabId);
+  } else {
+    console.warn(`No se pudo encontrar directUpdateTab para actualizar ${tabId}`);
+  }
 }; 

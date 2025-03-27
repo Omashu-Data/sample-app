@@ -163,6 +163,36 @@
   function updateUI(gameData) {
     console.log("Tab-stats recibiendo actualización de datos:", gameData);
     
+    // CÓDIGO DE DEPURACIÓN: Verificar estructura real de datos
+    console.log("Estructura de datos recibida en tab-stats:", 
+      JSON.stringify({
+        summoner: gameData.summoner ? Object.keys(gameData.summoner) : "undefined",
+        match: gameData.match ? Object.keys(gameData.match) : "undefined",
+        combat: gameData.combat ? Object.keys(gameData.combat) : "undefined",
+        ward: gameData.ward ? Object.keys(gameData.ward) : "undefined",
+        vision: gameData.vision ? Object.keys(gameData.vision) : "undefined",
+        objectives: gameData.objectives ? Object.keys(gameData.objectives) : "undefined"
+      })
+    );
+    
+    // Si match o combat son undefined, intentar ver por qué
+    if (!gameData.match) {
+      console.warn("La propiedad 'match' es undefined en tab-stats");
+      console.log("Propiedades en gameData:", Object.keys(gameData));
+    }
+    
+    if (!gameData.combat) {
+      console.warn("La propiedad 'combat' es undefined en tab-stats");
+      // Buscar alternativas potenciales
+      if (gameData.match && gameData.match.combat) {
+        console.log("Se encontró una propiedad alternativa: gameData.match.combat");
+        gameData.combat = gameData.match.combat;
+      } else if (gameData.damage) {
+        console.log("Se encontró una propiedad alternativa: gameData.damage");
+        gameData.combat = gameData.damage;
+      }
+    }
+    
     // Información del jugador
     if (gameData.summoner && gameData.summoner.name) {
       document.getElementById('stats-player-name').textContent = gameData.summoner.name;
@@ -200,9 +230,12 @@
         }
       }
       
-      // Oro
+      // Oro - Verificar múltiples ubicaciones posibles
       if (gameData.match.gold !== undefined) {
         document.getElementById('stats-gold').textContent = formatNumber(gameData.match.gold);
+      } else if (gameData.gold !== undefined) {
+        console.log("Encontrado oro en gameData.gold en lugar de gameData.match.gold");
+        document.getElementById('stats-gold').textContent = formatNumber(gameData.gold);
       }
     }
     
@@ -246,6 +279,22 @@
     console.log("Tab-stats cargado, intentando suscribirme a gameDataManager");
     
     try {
+      // CAMBIO IMPORTANTE: Adjuntar la función updateUI al elemento de pestaña
+      const tabElement = document.querySelector('.stats-container').closest('.tabs__pane') || 
+                        document.getElementById('stats-tab');
+      
+      if (tabElement) {
+        console.log("Adjuntando función updateUI al elemento de pestaña:", tabElement.id);
+        // Guardar la función en el elemento
+        tabElement.updateUIFunction = updateUI;
+        
+        // También registrar en el objeto tabUpdateFunctions como respaldo
+        if (!window.tabUpdateFunctions) window.tabUpdateFunctions = {};
+        window.tabUpdateFunctions['stats-tab'] = updateUI;
+      } else {
+        console.warn("No se pudo encontrar el elemento de pestaña para adjuntar updateUI");
+      }
+      
       // Métodos para suscribirse al gameDataManager - igual que en tab-overview.html
       if (typeof window.subscribeToGameData === 'function') {
         console.log("Usando window.subscribeToGameData");
@@ -293,6 +342,9 @@
     }
   });
   
-  // IMPORTANTE: Exponer updateUI globalmente para que pueda ser llamada desde in_game.html
-  window.updateUI = updateUI;
+  // CAMBIO IMPORTANTE: Ya no exponemos updateUI globalmente
+  // window.updateUI = updateUI;
+  
+  // Pero mantenemos una referencia para compatibilidad temporal
+  window._statsUpdateUI = updateUI;
 </script> 
