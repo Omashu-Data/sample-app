@@ -136,6 +136,42 @@
         </div>
       </div>
     </div>
+    
+    <!-- NUEVA SECCIÓN: TABLA DE VARIABLES -->
+    <div class="stats-section glass-panel">
+      <div class="stats-section-header">
+        <h3>Variables Disponibles</h3>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button id="btn-filtrar-vars" style="background: #444; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+            Filtrar Vacíos
+          </button>
+          <button id="btn-exportar-vars" style="background: #00AA00; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+            Exportar JSON
+          </button>
+        </div>
+          </div>
+      <div class="stats-section-content">
+        <div class="variables-filtro">
+          <input type="text" id="filtro-variables" placeholder="Filtrar variables..." style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #444; background: rgba(0,0,0,0.2); color: white;">
+        </div>
+        <div class="variables-wrapper" style="max-height: 400px; overflow-y: auto;">
+          <table id="tabla-variables" style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead>
+              <tr style="background-color: rgba(0,0,0,0.3); position: sticky; top: 0;">
+                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #444;">Variable</th>
+                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #444;">Valor</th>
+              </tr>
+            </thead>
+            <tbody id="variables-body">
+              <!-- Aquí se insertarán dinámicamente las variables -->
+              <tr>
+                <td colspan="2" style="text-align: center; padding: 20px;">Cargando variables...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -158,44 +194,132 @@
     if (deaths === 0) return ((kills + assists) > 0 ? "Perfect" : "0.0");
     return ((kills + assists) / deaths).toFixed(1);
   }
-
-  // Función de actualización para esta tab específica
-  function updateUI(gameData) {
-    console.log("Tab-stats recibiendo actualización de datos:", gameData);
+  
+  // Variables para seguimiento de datos
+  let ultimosDatos = {};
+  let variablesFiltradas = false;
+  
+  // Función para actualizar la tabla de variables - NO INTERFIERE con updateUI
+  function actualizarTablaVariables(gameData) {
+    // Guardar los datos para exportación
+    ultimosDatos = JSON.parse(JSON.stringify(gameData || {}));
     
-    // CÓDIGO DE DEPURACIÓN: Verificar estructura real de datos
-    console.log("Estructura de datos recibida en tab-stats:", 
-      JSON.stringify({
-        summoner: gameData.summoner ? Object.keys(gameData.summoner) : "undefined",
-        match: gameData.match ? Object.keys(gameData.match) : "undefined",
-        combat: gameData.combat ? Object.keys(gameData.combat) : "undefined",
-        ward: gameData.ward ? Object.keys(gameData.ward) : "undefined",
-        vision: gameData.vision ? Object.keys(gameData.vision) : "undefined",
-        objectives: gameData.objectives ? Object.keys(gameData.objectives) : "undefined"
-      })
-    );
+    // Obtener el cuerpo de la tabla
+    const tbody = document.getElementById('variables-body');
+    if (!tbody) return;
     
-    // Si match o combat son undefined, intentar ver por qué
-    if (!gameData.match) {
-      console.warn("La propiedad 'match' es undefined en tab-stats");
-      console.log("Propiedades en gameData:", Object.keys(gameData));
-    }
+    // Obtener el valor del filtro
+    const filtroTexto = document.getElementById('filtro-variables')?.value.toLowerCase() || '';
     
-    if (!gameData.combat) {
-      console.warn("La propiedad 'combat' es undefined en tab-stats");
-      // Buscar alternativas potenciales
-      if (gameData.match && gameData.match.combat) {
-        console.log("Se encontró una propiedad alternativa: gameData.match.combat");
-        gameData.combat = gameData.match.combat;
-      } else if (gameData.damage) {
-        console.log("Se encontró una propiedad alternativa: gameData.damage");
-        gameData.combat = gameData.damage;
+    // Limpiar contenido existente
+    tbody.innerHTML = '';
+    
+    // Función recursiva para procesar todas las propiedades anidadas
+    function procesarObjeto(obj, prefijo = '') {
+      if (!obj || typeof obj !== 'object') return;
+      
+      // Ordenar las claves alfabéticamente
+      const claves = Object.keys(obj).sort();
+      
+      for (const clave of claves) {
+        const valor = obj[clave];
+        const nombreCompleto = prefijo ? `${prefijo}.${clave}` : clave;
+        
+        // Filtrar por texto si existe un filtro
+        if (filtroTexto && !nombreCompleto.toLowerCase().includes(filtroTexto)) {
+          continue;
+        }
+        
+        // Filtrar valores vacíos si está activado
+        if (variablesFiltradas && (valor === undefined || valor === null || valor === '' || 
+            (typeof valor === 'object' && Object.keys(valor).length === 0))) {
+          continue;
+        }
+        
+        // Crear fila para esta propiedad
+        const fila = document.createElement('tr');
+        fila.style.borderBottom = '1px solid #333';
+        
+        // Celda para el nombre de la variable
+        const celdaNombre = document.createElement('td');
+        celdaNombre.style.padding = '6px';
+        celdaNombre.style.fontWeight = 'bold';
+        celdaNombre.textContent = nombreCompleto;
+        
+        // Celda para el valor
+        const celdaValor = document.createElement('td');
+        celdaValor.style.padding = '6px';
+        
+        // Formatear el valor según su tipo
+        if (valor === null) {
+          celdaValor.textContent = 'null';
+          celdaValor.style.color = '#888';
+        } else if (valor === undefined) {
+          celdaValor.textContent = 'undefined';
+          celdaValor.style.color = '#888';
+        } else if (typeof valor === 'object') {
+          if (Array.isArray(valor)) {
+            celdaValor.textContent = `Array[${valor.length}]`;
+            celdaValor.style.color = '#5F9EA0';
+          } else {
+            celdaValor.textContent = `Object{${Object.keys(valor).length} props}`;
+            celdaValor.style.color = '#7B68EE';
+          }
+          
+          // Si es un objeto, procesar sus propiedades de forma recursiva
+          procesarObjeto(valor, nombreCompleto);
+        } else {
+          // Para valores simples
+          if (typeof valor === 'boolean') {
+            celdaValor.textContent = valor.toString();
+            celdaValor.style.color = valor ? '#4CAF50' : '#F44336';
+          } else if (typeof valor === 'number') {
+            celdaValor.textContent = valor.toString();
+            celdaValor.style.color = '#03A9F4';
+          } else {
+            celdaValor.textContent = valor.toString();
+          }
+        }
+        
+        // Añadir celdas a la fila
+        fila.appendChild(celdaNombre);
+        fila.appendChild(celdaValor);
+        
+        // Añadir fila a la tabla
+        tbody.appendChild(fila);
       }
     }
     
+    // Iniciar procesamiento
+    procesarObjeto(gameData);
+    
+    // Mostrar mensaje si no hay variables
+    if (tbody.childElementCount === 0) {
+      const fila = document.createElement('tr');
+      const celda = document.createElement('td');
+      celda.colSpan = 2;
+      celda.style.textAlign = 'center';
+      celda.style.padding = '20px';
+      celda.textContent = 'No se encontraron variables con los filtros actuales';
+      fila.appendChild(celda);
+      tbody.appendChild(fila);
+    }
+  }
+
+  // ========== FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN DE UI ==========
+  // Esta función sigue EXACTAMENTE el mismo patrón que tab-overview.html
+  function updateUI(gameData) {
+    console.log("[tab-stats] Actualizando con datos:", {
+      summoner: gameData.summoner ? gameData.summoner.name : "no disponible",
+      gameTime: gameData.match ? gameData.match.gameTime : "no disponible",
+      kda: gameData.match ? `${gameData.match.kills}/${gameData.match.deaths}/${gameData.match.assists}` : "no disponible"
+    });
+    
+    // IMPORTANTE: Actualizar primero las variables principales
+    
     // Información del jugador
-    if (gameData.summoner && gameData.summoner.name) {
-      document.getElementById('stats-player-name').textContent = gameData.summoner.name;
+    if (gameData.summoner) {
+      document.getElementById('stats-player-name').textContent = gameData.summoner.name || "Invocador";
     }
     
     // Tipo de partida y tiempo
@@ -208,7 +332,7 @@
         document.getElementById('stats-game-time').textContent = formatGameTime(gameData.match.gameTime);
       }
       
-      // KDA
+      // KDA - MISMO PATRÓN QUE TAB-OVERVIEW
       document.getElementById('stats-kills').textContent = gameData.match.kills || 0;
       document.getElementById('stats-deaths').textContent = gameData.match.deaths || 0;
       document.getElementById('stats-assists').textContent = gameData.match.assists || 0;
@@ -272,30 +396,107 @@
         document.getElementById('stats-total-healing').textContent = formatNumber(gameData.combat.healingDone);
       }
     }
+    
+    // IMPORTANTE: Actualizar tabla de variables DESPUÉS de updateUI principal
+    // para que no interfiera con la actualización principal
+    setTimeout(function() {
+      try {
+        actualizarTablaVariables(gameData);
+      } catch (e) {
+        console.error("Error al actualizar tabla de variables:", e);
+        // Esto no debe detener la actualización principal
+      }
+    }, 10);
   }
-
-  // Inicialización para suscribirse al gameDataManager - similar a tab-overview.html
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log("Tab-stats cargado, intentando suscribirme a gameDataManager");
+  
+  // Función para exportar datos a JSON
+  function exportarVariablesJSON() {
+    if (!ultimosDatos || Object.keys(ultimosDatos).length === 0) {
+      alert("No hay datos disponibles para exportar");
+      return;
+    }
     
     try {
+      const jsonStr = JSON.stringify(ultimosDatos, null, 2);
+      
+      // Usar la API de Overwolf para guardar el archivo
+      const fileName = `lol-variables-${new Date().toISOString().replace(/:/g, '-')}.json`;
+      const overwolfFileName = `${overwolf.io.paths.documents}\\Overwolf\\${fileName}`;
+      
+      // Método específico de Overwolf para escribir archivos
+      overwolf.io.writeFileContents(
+        overwolfFileName, 
+        jsonStr, 
+        "UTF8", 
+        true, 
+        (result) => {
+          if (result.success) {
+            // Mostrar notificación de éxito
+            overwolf.notifications.showToast({
+              header: "Variables exportadas",
+              message: `Guardado en: ${overwolfFileName}`,
+              duration: 5
+            });
+            
+            console.log(`Variables guardadas con éxito en: ${overwolfFileName}`);
+          } else {
+            console.error("Error al exportar variables:", result.error);
+            alert(`Error al exportar variables: ${result.error}`);
+          }
+        }
+      );
+    } catch (e) {
+      console.error("Error exportando datos:", e);
+      alert("Error al exportar datos: " + e.message);
+    }
+  }
+
+  // Inicialización - SIGUE EXACTAMENTE EL MISMO PATRÓN QUE TAB-OVERVIEW.HTML
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log("Tab-stats cargado, iniciando exactamente como tab-overview...");
+    
+    try {
+      // Adjuntar eventos a los botones y filtro
+      const btnFiltrar = document.getElementById('btn-filtrar-vars');
+      if (btnFiltrar) {
+        btnFiltrar.addEventListener('click', function() {
+          variablesFiltradas = !variablesFiltradas;
+          this.textContent = variablesFiltradas ? 'Mostrar Todos' : 'Filtrar Vacíos';
+          actualizarTablaVariables(ultimosDatos);
+        });
+      }
+      
+      const btnExportar = document.getElementById('btn-exportar-vars');
+      if (btnExportar) {
+        btnExportar.addEventListener('click', exportarVariablesJSON);
+      }
+      
+      const filtroInput = document.getElementById('filtro-variables');
+      if (filtroInput) {
+        filtroInput.addEventListener('input', function() {
+          actualizarTablaVariables(ultimosDatos);
+        });
+      }
+      
       // CAMBIO IMPORTANTE: Adjuntar la función updateUI al elemento de pestaña
+      // EXACTAMENTE como en tab-overview.html
       const tabElement = document.querySelector('.stats-container').closest('.tabs__pane') || 
                         document.getElementById('stats-tab');
       
       if (tabElement) {
         console.log("Adjuntando función updateUI al elemento de pestaña:", tabElement.id);
-        // Guardar la función en el elemento
+        
+        // Guardar la función en el elemento - EXACTAMENTE como en tab-overview.html
         tabElement.updateUIFunction = updateUI;
         
-        // También registrar en el objeto tabUpdateFunctions como respaldo
+        // Registro global como respaldo - EXACTAMENTE como en tab-overview.html
         if (!window.tabUpdateFunctions) window.tabUpdateFunctions = {};
         window.tabUpdateFunctions['stats-tab'] = updateUI;
       } else {
         console.warn("No se pudo encontrar el elemento de pestaña para adjuntar updateUI");
       }
       
-      // Métodos para suscribirse al gameDataManager - igual que en tab-overview.html
+      // SUBSCRIPCIONES - EXACTAMENTE como en tab-overview.html
       if (typeof window.subscribeToGameData === 'function') {
         console.log("Usando window.subscribeToGameData");
         window.subscribeToGameData(updateUI);
@@ -316,24 +517,23 @@
         });
       }
       
-      // Datos de prueba - similares pero ampliados respecto a tab-overview.html
+      // FORZAR ACTUALIZACIÓN DIRECTAMENTE - EXACTAMENTE como en tab-overview.html
+      console.log("Llamando a forceUpdateActiveTab para actualizar inmediatamente");
+      if (window.forceUpdateActiveTab) {
+        window.forceUpdateActiveTab();
+      }
+      
+      // Datos iniciales de test - SIMPLIFICADOS para evitar interferencias
+      console.log("Llamando a updateUI directamente con datos de prueba");
       updateUI({
         summoner: { name: "Invocador de prueba", position: "Test" },
-        match: { 
-          gameTime: 1200, 
-          gameMode: "Ranked Solo/Duo",
-          kills: 5, 
-          deaths: 2, 
-          assists: 8,
-          cs: 180,
-          gold: 8500
-        },
-        ward: { placed: 12 },
+        match: { gameTime: 120, kills: 2, deaths: 1, assists: 3, cs: 50 },
+        vision: { wardsPlaced: 2 },
         combat: {
-          damageDealt: 85000,
-          damageDealtToChampions: 12500,
-          damageTaken: 15000,
-          healing: 3500
+          damageDealt: 1000,
+          damageDealtToChampions: 500,
+          damageTaken: 300,
+          healing: 100
         }
       });
       
@@ -342,9 +542,9 @@
     }
   });
   
-  // CAMBIO IMPORTANTE: Ya no exponemos updateUI globalmente
+  // NO EXPONER updateUI GLOBALMENTE - EXACTAMENTE como en tab-overview.html
   // window.updateUI = updateUI;
   
-  // Pero mantenemos una referencia para compatibilidad temporal
+  // REFERENCIA TEMPORAL PARA COMPATIBILIDAD - EXACTAMENTE como en tab-overview.html
   window._statsUpdateUI = updateUI;
 </script> 

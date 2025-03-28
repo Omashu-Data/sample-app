@@ -1216,6 +1216,7 @@
         
         // No hacer nada si ya es la pestaña overview (para evitar duplicación)
         if (activeTab.id === 'overview-tab') {
+          // Ya se actualiza con forceUpdateOverviewTab
           return;
         }
         
@@ -1223,21 +1224,35 @@
         
         // Obtener los datos actuales
         const data = gameDataManager.getData();
+        console.log(`Datos enviados a ${activeTab.id}:`, {
+          summoner: data.summoner ? data.summoner.name : "no disponible",
+          gameTime: data.match ? data.match.gameTime : "no disponible",
+          kda: data.match ? `${data.match.kills}/${data.match.deaths}/${data.match.assists}` : "no disponible"
+        });
         
-        // Misma estrategia de búsqueda que en forceUpdateOverviewTab
+        // Usar la misma estrategia que forceUpdateOverviewTab para encontrar la función updateUI
+        
         // Método 1: Buscar la función updateUI adjunta al elemento de pestaña
         if (activeTab.updateUIFunction && typeof activeTab.updateUIFunction === 'function') {
           console.log(`Usando función updateUI adjunta al elemento ${activeTab.id}`);
-          activeTab.updateUIFunction(data);
-          return;
+          try {
+            activeTab.updateUIFunction(data);
+            return true;
+          } catch (e) {
+            console.error(`Error al llamar updateUIFunction en ${activeTab.id}:`, e);
+          }
         }
         
         // Método 2: Buscar en el objeto tabUpdateFunctions
         if (window.tabUpdateFunctions && window.tabUpdateFunctions[activeTab.id] && 
             typeof window.tabUpdateFunctions[activeTab.id] === 'function') {
           console.log(`Usando función updateUI desde tabUpdateFunctions['${activeTab.id}']`);
-          window.tabUpdateFunctions[activeTab.id](data);
-          return;
+          try {
+            window.tabUpdateFunctions[activeTab.id](data);
+            return true;
+          } catch (e) {
+            console.error(`Error al llamar tabUpdateFunctions['${activeTab.id}']:`, e);
+          }
         }
         
         // Método 3: Buscar en nombres de función específicos por tab
@@ -1245,21 +1260,219 @@
         const specificFunctionName = `_${tabName}UpdateUI`;
         if (window[specificFunctionName] && typeof window[specificFunctionName] === 'function') {
           console.log(`Usando función específica window.${specificFunctionName}`);
-          window[specificFunctionName](data);
-          return;
+          try {
+            window[specificFunctionName](data);
+            return true;
+          } catch (e) {
+            console.error(`Error al llamar ${specificFunctionName}:`, e);
+          }
         }
         
-        // Si no encontramos una función específica, usar directUpdateTab
-        console.log(`Usando directUpdateTab para actualizar ${activeTab.id}`);
-        if (typeof directUpdateTab === 'function') {
-          directUpdateTab(activeTab.id);
-        } else if (window.tabLoader && typeof window.tabLoader.directUpdateTab === 'function') {
-          window.tabLoader.directUpdateTab(activeTab.id);
-        } else {
-          console.warn(`No se pudo encontrar directUpdateTab para actualizar ${activeTab.id}`);
+        // Método 4: Como fallback intentar window.updateUI global
+        if (typeof window.updateUI === 'function') {
+          console.log('Fallback: Usando window.updateUI global para actualizar');
+          try {
+            window.updateUI(data);
+            return true;
+          } catch (e) {
+            console.error(`Error al llamar window.updateUI:`, e);
+          }
+        }
+        
+        // Método 5: Extraer la función updateUI del script del tab
+        try {
+          console.log('Intentando extraer updateUI del script del tab');
+          const scripts = activeTab.querySelectorAll('script');
+          let updateUIFn = null;
+          
+          for (const script of scripts) {
+            if (script.textContent.includes('function updateUI')) {
+              try {
+                // Extraer la función
+                const scriptContent = script.textContent;
+                const fnMatch = scriptContent.match(/function\s+updateUI\s*\([^)]*\)\s*\{([\s\S]*?)\}/);
+                if (fnMatch) {
+                  updateUIFn = new Function('gameData', fnMatch[1]);
+                  break;
+                }
+              } catch (extractError) {
+                console.error('Error extrayendo updateUI:', extractError);
+              }
+            }
+          }
+          
+          if (typeof updateUIFn === 'function') {
+            console.log('Usando updateUI extraída del script');
+            updateUIFn(data);
+            return true;
+          }
+        } catch (scriptError) {
+          console.error('Error procesando scripts:', scriptError);
+        }
+        
+        // Método 6: Buscar elementos directamente como último recurso
+        console.log(`Actualizando manualmente elementos clave de ${activeTab.id}`);
+        
+        try {
+          // Elementos comunes que podrían existir en cualquier pestaña
+          const playerNameElements = activeTab.querySelectorAll('[id$="-player-name"], [id$="player-name"], [id="player-name"]');
+          const gameTimeElements = activeTab.querySelectorAll('[id$="-game-time"], [id$="game-time"], [id="game-time-value"]');
+          const killsElements = activeTab.querySelectorAll('[id$="-kills"], [id="kda-kills"], [id="stats-kills"]');
+          const deathsElements = activeTab.querySelectorAll('[id$="-deaths"], [id="kda-deaths"], [id="stats-deaths"]');
+          const assistsElements = activeTab.querySelectorAll('[id$="-assists"], [id="kda-assists"], [id="stats-assists"]');
+          
+          let updated = false;
+          
+          // Actualizar nombre del jugador
+          if (data.summoner && data.summoner.name) {
+            playerNameElements.forEach(el => {
+              el.textContent = data.summoner.name;
+              updated = true;
+            });
+          }
+          
+          // Actualizar tiempo de juego
+          if (data.match && data.match.gameTime !== undefined) {
+            const formattedTime = formatGameTime(data.match.gameTime);
+            gameTimeElements.forEach(el => {
+              el.textContent = formattedTime;
+              updated = true;
+            });
+          }
+          
+          // Actualizar KDA
+          if (data.match) {
+            if (data.match.kills !== undefined) {
+              killsElements.forEach(el => {
+                el.textContent = data.match.kills;
+                updated = true;
+              });
+            }
+            
+            if (data.match.deaths !== undefined) {
+              deathsElements.forEach(el => {
+                el.textContent = data.match.deaths;
+                updated = true;
+              });
+            }
+            
+            if (data.match.assists !== undefined) {
+              assistsElements.forEach(el => {
+                el.textContent = data.match.assists;
+                updated = true;
+              });
+            }
+          }
+          
+          // Para pestaña de estadísticas específicamente
+          if (activeTab.id === 'stats-tab') {
+            console.log('Aplicando actualizaciones específicas para stats-tab');
+            
+            // Oro
+            const goldElement = activeTab.querySelector('#stats-gold');
+            if (goldElement && data.match && data.match.gold !== undefined) {
+              const formattedGold = new Intl.NumberFormat('es-ES').format(data.match.gold);
+              goldElement.textContent = formattedGold;
+              updated = true;
+            }
+            
+            // CS
+            const csElement = activeTab.querySelector('#stats-cs');
+            if (csElement && data.match && data.match.cs !== undefined) {
+              csElement.textContent = data.match.cs;
+              updated = true;
+            }
+            
+            // CS por minuto
+            const csPerMinElement = activeTab.querySelector('#stats-cs-per-min');
+            if (csPerMinElement && data.match && data.match.cs !== undefined && data.match.gameTime !== undefined) {
+              const gameTimeInMinutes = Math.max(data.match.gameTime / 60, 1);
+              const csPerMinute = (data.match.cs / gameTimeInMinutes).toFixed(1);
+              csPerMinElement.textContent = csPerMinute;
+              updated = true;
+            }
+            
+            // Wards
+            const wardsElement = activeTab.querySelector('#stats-wards-placed');
+            if (wardsElement) {
+              let wardsPlaced = 0;
+              if (data.vision && data.vision.wardsPlaced !== undefined) {
+                wardsPlaced = data.vision.wardsPlaced;
+              } else if (data.ward && data.ward.placed !== undefined) {
+                wardsPlaced = data.ward.placed;
+              } else if (data.objectives && data.objectives.wardPlaced !== undefined) {
+                wardsPlaced = data.objectives.wardPlaced;
+              }
+              
+              wardsElement.textContent = wardsPlaced;
+              updated = true;
+            }
+            
+            // Daño
+            if (data.combat) {
+              const damageElements = {
+                'stats-total-damage': data.combat.damageDealt,
+                'stats-champion-damage': data.combat.damageDealtToChampions || data.combat.totalDamageToChampions,
+                'stats-damage-taken': data.combat.damageTaken,
+                'stats-total-healing': data.combat.healing || data.combat.healingDone
+              };
+              
+              for (const [id, value] of Object.entries(damageElements)) {
+                const element = activeTab.querySelector(`#${id}`);
+                if (element && value !== undefined) {
+                  const formattedValue = new Intl.NumberFormat('es-ES').format(value);
+                  element.textContent = formattedValue;
+                  updated = true;
+                }
+              }
+            }
+            
+            // Si hay una función actualizarTablaVariables disponible en el contexto, llamarla
+            try {
+              // Buscar la función en el tab de stats
+              let actualizarTablaVariablesFn = null;
+              const scripts = activeTab.querySelectorAll('script');
+              
+              for (const script of scripts) {
+                if (script.textContent.includes('function actualizarTablaVariables')) {
+                  try {
+                    // Extraer la función
+                    const scriptContent = script.textContent;
+                    const fnMatch = scriptContent.match(/function\s+actualizarTablaVariables\s*\([^)]*\)\s*\{([\s\S]*?)\}/);
+                    if (fnMatch) {
+                      actualizarTablaVariablesFn = new Function('gameData', fnMatch[1]);
+                      break;
+                    }
+                  } catch (e) {
+                    console.error('Error extrayendo actualizarTablaVariables:', e);
+                  }
+                }
+              }
+              
+              if (typeof actualizarTablaVariablesFn === 'function') {
+                console.log('Usando actualizarTablaVariables extraída del script');
+                setTimeout(() => {
+                  try {
+                    actualizarTablaVariablesFn(data);
+                    updated = true;
+                  } catch (e) {
+                    console.error('Error al ejecutar actualizarTablaVariables extraída:', e);
+                  }
+                }, 10);  // Pequeño retraso para no entorpecer las actualizaciones principales
+              }
+            } catch (e) {
+              console.error('Error al actualizar tabla de variables:', e);
+            }
+          }
+          
+          return updated;
+        } catch (e) {
+          console.error(`Error durante la actualización manual de ${activeTab.id}:`, e);
+          return false;
         }
       } catch (e) {
-        console.error("Error en forceUpdateActiveTab:", e);
+        console.error("Error general en forceUpdateActiveTab:", e);
+        return false;
       }
     }
     
