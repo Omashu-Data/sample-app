@@ -497,3 +497,207 @@ src/
 
 ## Licencia
 Propietaria - Todos los derechos reservados
+
+## Acceso a Métricas de League of Legends
+
+Esta sección documenta cómo acceder a las métricas del juego en tiempo real que proporciona la API de Overwolf para League of Legends.
+
+### Estructura de Datos Principales
+
+Las métricas del juego se organizan en un objeto central con esta estructura:
+
+```typescript
+interface GameData {
+  summoner: {
+    name: string;
+    champion: string;
+    level: number;
+    position: string;
+    team: string;
+  };
+  match: {
+    gameMode: string;
+    gameTime: number;
+    kills: number;
+    deaths: number;
+    assists: number;
+    cs: number;
+    gold: number;
+  };
+  combat: {
+    damageDealt: number;
+    damageTaken: number;
+    healingDone: number;
+    damageDealtToChampions: number;
+  };
+  objectives: {
+    wardPlaced: number;
+    turretKills: number;
+  };
+  events: Array<any>;
+}
+```
+
+### Cómo Acceder a las Métricas
+
+Todos los datos están disponibles a través del `gameDataManager`. Aquí hay ejemplos de cómo acceder a datos específicos:
+
+#### Ejemplo 1: Acceder a KDA (Kills, Deaths, Assists)
+
+```javascript
+// Obtener KDA
+const kills = gameData.match.kills || 0;
+const deaths = gameData.match.deaths || 0;
+const assists = gameData.match.assists || 0;
+
+// Actualizar elementos HTML
+document.getElementById('kills-element').textContent = kills;
+document.getElementById('deaths-element').textContent = deaths;
+document.getElementById('assists-element').textContent = assists;
+
+// Calcular ratio KDA
+function calculateKDARatio(kills, deaths, assists) {
+  if (deaths === 0) return ((kills + assists) > 0 ? "Perfect" : "0.0");
+  return ((kills + assists) / deaths).toFixed(1);
+}
+const kdaRatio = calculateKDARatio(kills, deaths, assists);
+document.getElementById('kda-ratio').textContent = kdaRatio;
+```
+
+#### Ejemplo 2: Acceder a CS (Creep Score) y CS por minuto
+
+```javascript
+// Obtener CS
+const cs = gameData.match.cs || 0;
+document.getElementById('cs-element').textContent = cs;
+
+// Calcular CS por minuto
+const gameTime = gameData.match.gameTime || 0;
+if (gameTime > 0) {
+  const gameTimeInMinutes = Math.max(gameTime / 60, 1);
+  const csPerMinute = (cs / gameTimeInMinutes).toFixed(1);
+  document.getElementById('cs-per-min').textContent = csPerMinute;
+}
+```
+
+#### Ejemplo 3: Acceder a Wards colocados
+
+```javascript
+// Buscar wards en diferentes ubicaciones posibles
+let wardsPlaced = 0;
+if (gameData.ward && gameData.ward.placed !== undefined) {
+  wardsPlaced = parseInt(gameData.ward.placed) || 0;
+} else if (gameData.vision && gameData.vision.wardsPlaced !== undefined) {
+  wardsPlaced = gameData.vision.wardsPlaced;
+} else if (gameData.objectives && gameData.objectives.wardPlaced !== undefined) {
+  wardsPlaced = gameData.objectives.wardPlaced;
+}
+document.getElementById('wards-placed').textContent = wardsPlaced;
+```
+
+#### Ejemplo 4: Acceder a Daño y Curación
+
+```javascript
+// Acceder a datos de combate
+if (gameData.combat) {
+  // Daño total
+  if (gameData.combat.damageDealt !== undefined) {
+    const formattedDamage = new Intl.NumberFormat('es-ES').format(gameData.combat.damageDealt);
+    document.getElementById('total-damage').textContent = formattedDamage;
+  }
+  
+  // Daño a campeones
+  if (gameData.combat.totalDamageToChampions !== undefined) {
+    const formattedDamage = new Intl.NumberFormat('es-ES').format(gameData.combat.totalDamageToChampions);
+    document.getElementById('champion-damage').textContent = formattedDamage;
+  } else if (gameData.combat.damageDealtToChampions !== undefined) {
+    const formattedDamage = new Intl.NumberFormat('es-ES').format(gameData.combat.damageDealtToChampions);
+    document.getElementById('champion-damage').textContent = formattedDamage;
+  }
+  
+  // Curación
+  if (gameData.combat.healing !== undefined) {
+    const formattedHealing = new Intl.NumberFormat('es-ES').format(gameData.combat.healing);
+    document.getElementById('total-healing').textContent = formattedHealing;
+  } else if (gameData.combat.healingDone !== undefined) {
+    const formattedHealing = new Intl.NumberFormat('es-ES').format(gameData.combat.healingDone);
+    document.getElementById('total-healing').textContent = formattedHealing;
+  }
+}
+```
+
+### Lista de Claves Disponibles
+
+Las claves disponibles incluyen:
+
+#### Datos del Invocador
+- `gameData.summoner.name`: Nombre del invocador
+- `gameData.summoner.champion`: Campeón que está jugando
+- `gameData.summoner.level`: Nivel del invocador
+- `gameData.summoner.position`: Posición en el juego
+- `gameData.summoner.team`: Equipo (Azul/Rojo)
+
+#### Datos de la Partida
+- `gameData.match.gameMode`: Modo de juego (Ranked, Normal, ARAM, etc.)
+- `gameData.match.gameTime`: Tiempo de juego en segundos
+- `gameData.match.kills`: Eliminaciones del jugador
+- `gameData.match.deaths`: Muertes del jugador
+- `gameData.match.assists`: Asistencias del jugador
+- `gameData.match.cs`: Súbditos eliminados
+- `gameData.match.gold`: Oro acumulado
+
+#### Datos de Combate
+- `gameData.combat.damageDealt`: Daño total infligido
+- `gameData.combat.damageTaken`: Daño recibido
+- `gameData.combat.damageDealtToChampions`: Daño infligido a campeones
+- `gameData.combat.totalDamageToChampions`: Otra forma de acceder al daño a campeones
+- `gameData.combat.healing` o `gameData.combat.healingDone`: Curación total realizada
+
+#### Datos de Objetivos
+- `gameData.objectives.wardPlaced`: Guardianes colocados
+- `gameData.objectives.turretKills`: Torres destruidas
+- `gameData.vision.wardsPlaced`: Otra forma de acceder a guardianes colocados
+
+### Acceso a Datos Del Jugador Activo (Live Client Data)
+
+También puedes acceder a datos más detallados del jugador activo mediante:
+
+```javascript
+// Habilidades
+const abilities = gameData.activePlayer?.abilities;
+if (abilities) {
+  const qLevel = abilities.Q?.abilityLevel || 0;
+  const wLevel = abilities.W?.abilityLevel || 0;
+  const eLevel = abilities.E?.abilityLevel || 0;
+  const rLevel = abilities.R?.abilityLevel || 0;
+}
+
+// Estadísticas del campeón
+const stats = gameData.activePlayer?.championStats;
+if (stats) {
+  const currentHealth = stats.currentHealth;
+  const maxHealth = stats.maxHealth;
+  const attackDamage = stats.attackDamage;
+  const abilityPower = stats.abilityPower;
+}
+```
+
+### Subscribirse a Actualizaciones
+
+Para recibir actualizaciones automáticas cuando cambian los datos del juego:
+
+```javascript
+function updateUI(gameData) {
+  // Actualizar la UI con los nuevos datos
+  document.getElementById('kills').textContent = gameData.match.kills || 0;
+  document.getElementById('deaths').textContent = gameData.match.deaths || 0;
+  // Más actualizaciones...
+}
+
+// Subscribirse a actualizaciones
+if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'function') {
+  window.gameDataManager.subscribe(updateUI);
+}
+```
+
+Este sistema permite mostrar en tiempo real las estadísticas del jugador durante el juego, ofreciendo una experiencia interactiva y útil.

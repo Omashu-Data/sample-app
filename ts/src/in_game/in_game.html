@@ -1502,7 +1502,7 @@
             if (actualizarTablaVariablesFn) {
               console.log('Llamando a actualizarTablaVariables extraída del script');
               actualizarTablaVariablesFn(data);
-            } else {
+              } else {
               console.log('No se encontró la función actualizarTablaVariables en el script');
               
               // Método 3: Actualizar el contenido del tbody directamente
@@ -1579,14 +1579,14 @@
                     if (rowCount === 0) {
                       tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px;">No se encontraron variables para mostrar</td></tr>';
                     }
-                  } catch (e) {
+        } catch (e) {
                     console.error('Error al generar filas de la tabla:', e);
                     tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; padding: 20px; color: #FF5555;">Error al procesar variables: ${e.message}</td></tr>`;
                   }
                 }, 50);
               }
-            }
-          } catch (e) {
+        }
+      } catch (e) {
             console.error('Error general actualizando tabla de variables:', e);
           }
         }

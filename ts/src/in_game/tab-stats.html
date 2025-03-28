@@ -142,18 +142,12 @@
       <div class="stats-section-header">
         <h3>Variables Disponibles</h3>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
-          <button id="btn-filtrar-vars" style="background: #444; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
-            Filtrar Vacíos
-          </button>
           <button id="btn-exportar-vars" style="background: #00AA00; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
             Exportar JSON
           </button>
         </div>
           </div>
       <div class="stats-section-content">
-        <div class="variables-filtro">
-          <input type="text" id="filtro-variables" placeholder="Filtrar variables..." style="width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #444; background: rgba(0,0,0,0.2); color: white;">
-        </div>
         <div class="variables-wrapper" style="max-height: 400px; overflow-y: auto;">
           <table id="tabla-variables" style="width: 100%; border-collapse: collapse; font-size: 12px;">
             <thead>
@@ -197,7 +191,7 @@
   
   // Variables para seguimiento de datos
   let ultimosDatos = {};
-  let variablesFiltradas = false;
+  let variablesFiltradas = false; // Ya no filtramos, mostramos todo
   
   // Función para actualizar la tabla de variables - NO INTERFIERE con updateUI
   function actualizarTablaVariables(gameData) {
@@ -215,9 +209,6 @@
         console.error("[TABLA] No se encontró el elemento #variables-body");
         return;
       }
-      
-      // Obtener el valor del filtro
-      const filtroTexto = document.getElementById('filtro-variables')?.value.toLowerCase() || '';
       
       // Limpiar contenido existente
       tbody.innerHTML = '';
@@ -245,23 +236,12 @@
         
         // Ordenar las claves alfabéticamente
         const claves = Object.keys(obj).sort();
-        console.log("[TABLA] Procesando objeto con claves:", claves.join(", ").substring(0, 100) + "...");
         
         let filas = 0;
+        
         for (const clave of claves) {
           const valor = obj[clave];
           const nombreCompleto = prefijo ? `${prefijo}.${clave}` : clave;
-          
-          // Filtrar por texto si existe un filtro
-          if (filtroTexto && !nombreCompleto.toLowerCase().includes(filtroTexto)) {
-            continue;
-          }
-          
-          // Filtrar valores vacíos si está activado
-          if (variablesFiltradas && (valor === undefined || valor === null || valor === '' || 
-              (typeof valor === 'object' && Object.keys(valor).length === 0))) {
-            continue;
-          }
           
           // Crear fila para esta propiedad
           const fila = document.createElement('tr');
@@ -342,10 +322,9 @@
         celda.colSpan = 2;
         celda.style.textAlign = 'center';
         celda.style.padding = '20px';
-        celda.textContent = 'No se encontraron variables con los filtros actuales';
+        celda.textContent = 'No se encontraron variables para mostrar';
         fila.appendChild(celda);
         tbody.appendChild(fila);
-        console.warn("[TABLA] No se encontraron variables que coincidan con los filtros");
       }
     } catch (error) {
       console.error("[TABLA] Error al procesar la tabla de variables:", error);
@@ -521,26 +500,10 @@
     console.log("Tab-stats cargado, iniciando exactamente como tab-overview...");
     
     try {
-      // Adjuntar eventos a los botones y filtro
-      const btnFiltrar = document.getElementById('btn-filtrar-vars');
-      if (btnFiltrar) {
-        btnFiltrar.addEventListener('click', function() {
-          variablesFiltradas = !variablesFiltradas;
-          this.textContent = variablesFiltradas ? 'Mostrar Todos' : 'Filtrar Vacíos';
-          actualizarTablaVariables(ultimosDatos);
-        });
-      }
-      
+      // Adjuntar eventos a los botones
       const btnExportar = document.getElementById('btn-exportar-vars');
       if (btnExportar) {
         btnExportar.addEventListener('click', exportarVariablesJSON);
-      }
-      
-      const filtroInput = document.getElementById('filtro-variables');
-      if (filtroInput) {
-        filtroInput.addEventListener('input', function() {
-          actualizarTablaVariables(ultimosDatos);
-        });
       }
       
       // CAMBIO IMPORTANTE: Adjuntar la función updateUI al elemento de pestaña
