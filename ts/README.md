@@ -701,3 +701,228 @@ if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'funct
 ```
 
 Este sistema permite mostrar en tiempo real las estadísticas del jugador durante el juego, ofreciendo una experiencia interactiva y útil.
+
+## Sistema de Exportación de Datos Crudos
+
+Este proyecto incluye un sistema completo para exportar todos los datos crudos de League of Legends, tanto del Game Events Provider (GEP) como de la Live Client Data API. El sistema está diseñado para capturar y almacenar todos los datos sin filtrar en archivos JSON para análisis posterior.
+
+### Características principales
+
+- Captura completa de datos crudos sin filtrar
+- Guardado automático de datos en archivos JSON
+- Detección automática de inicio y fin de partida
+- Preparado para envío de datos a servidor externo
+- Seguimiento de serie temporal con timestamps precisos
+- Fácil integración con sistemas de análisis externos
+- **Exportación automática al final de cada partida**
+
+### Configuración
+
+La configuración del exportador se encuentra en el archivo `sample-app/ts/src/in_game/raw-data-exporter.js`:
+
+```javascript
+const RAW_DATA_EXPORTER = {
+  // Intervalo de guardado automático en milisegundos (5 minutos)
+  AUTOSAVE_INTERVAL: 5 * 60 * 1000,
+  
+  // Intervalo de recopilación de datos en milisegundos (15 segundos)
+  DATA_COLLECTION_INTERVAL: 15 * 1000,
+  
+  // URL del servidor para enviar datos (reemplazar con la URL real)
+  SERVER_ENDPOINT: "https://tu-servidor.com/api/lol-data",
+  
+  // Carpeta donde se guardarán los archivos
+  SAVE_FOLDER: "Overwolf/lol-data",
+  
+  // Habilitar guardado automático
+  ENABLE_AUTO_SAVE: true,
+  
+  // Habilitar envío automático al servidor
+  ENABLE_SERVER_UPLOAD: false
+};
+```
+
+### Detección automática del fin de partida
+
+El sistema detecta automáticamente el fin de la partida a través de tres mecanismos diferentes:
+
+1. **Eventos del juego**: Detecta eventos `match_end` o `game_end` enviados por la API de eventos de League of Legends.
+2. **Cambio de estado del juego**: Monitorea cuando el juego deja de ejecutarse a través de `overwolf.games.onGameInfoUpdated`.
+3. **Cierre de ventana**: Detecta cuando la ventana in-game va a cerrarse utilizando `overwolf.windows.onStateChanged` y el evento `beforeunload`.
+
+Este sistema de triple detección garantiza que los datos siempre se exporten correctamente, incluso si el juego se cierra abruptamente o si hay cambios en el sistema de eventos del juego.
+
+### Estructura de los datos exportados
+
+Los datos se guardan con la siguiente estructura:
+
+```javascript
+{
+  // Metadatos de la sesión
+  "sessionInfo": {
+    "startTime": "2023-04-15T12:34:56.789Z",
+    "gameVersion": "13.7.0",
+    "playerName": "PlayerName",
+    "gameMode": "CLASSIC",
+    "gameStartTime": "2023-04-15T12:35:00.123Z",
+    "gameEndTime": "2023-04-15T13:05:45.678Z"
+  },
+  
+  // Serie temporal con datos capturados periódicamente
+  "timeSeriesData": [
+    {
+      "timestamp": "2023-04-15T12:35:15.000Z",
+      "gameTime": 15,
+      "data": {
+        // Estructura completa de datos del juego
+        "summoner": { /* datos del invocador */ },
+        "match": { /* datos de la partida */ },
+        "combat": { /* estadísticas de combate */ },
+        "objectives": { /* datos de objetivos */ },
+        // ... y todos los demás datos disponibles
+      }
+    },
+    // ... más puntos de datos en intervalos regulares
+  ],
+  
+  // Eventos importantes detectados
+  "events": [
+    {
+      "name": "kill",
+      "data": { /* detalles del evento */ },
+      "timestamp": "2023-04-15T12:40:23.456Z",
+      "capturedAt": "2023-04-15T12:40:23.789Z"
+    },
+    // ... más eventos
+  ],
+  
+  // Estado final del juego al terminar la partida
+  "finalState": {
+    // Estructura completa de datos al finalizar
+  }
+}
+```
+
+### Dónde se guardan los archivos
+
+Los archivos JSON se guardan por defecto en:
+```
+C:\Users\TuUsuario\Documents\Overwolf\lol-data\
+```
+
+El formato del nombre del archivo es:
+```
+lol-raw-data-[NombreJugador]-[Timestamp].json
+```
+
+Al finalizar la partida, se guarda un archivo final con el sufijo `-FINAL-`:
+```
+lol-raw-data-[NombreJugador]-FINAL-[Timestamp].json
+```
+
+### Envío automático al servidor
+
+Al final de cada partida, el sistema intentará enviar los datos completos al servidor configurado antes de que se cierre la ventana del juego. Este proceso se realiza de manera sincrónica para garantizar que los datos se envíen correctamente.
+
+Para habilitar el envío automático:
+
+1. Configura la URL del servidor:
+```javascript
+SERVER_ENDPOINT: "https://tu-servidor.com/api/lol-data"
+```
+
+2. Habilita el envío automático:
+```javascript
+ENABLE_SERVER_UPLOAD: true
+```
+
+### Cómo acceder a los datos desde JavaScript
+
+```javascript
+// Acceder a los datos a través del objeto global
+const exporter = window.rawDataExporter;
+
+// Guardar datos manualmente
+exporter.saveToFile('mi-archivo-personalizado.json')
+  .then(success => {
+    if (success) {
+      console.log('Datos guardados correctamente');
+    }
+  });
+
+// Enviar datos al servidor manualmente
+exporter.sendToServer()
+  .then(success => {
+    if (success) {
+      console.log('Datos enviados al servidor');
+    }
+  });
+
+// Acceder a los datos actuales
+const currentData = exporter.sessionData;
+console.log('Datos del jugador:', currentData.sessionInfo.playerName);
+console.log('Tiempo de juego actual:', 
+  currentData.timeSeriesData.length > 0 
+    ? currentData.timeSeriesData[currentData.timeSeriesData.length - 1].gameTime 
+    : 0
+);
+```
+
+### Ejemplos de uso de los datos exportados
+
+#### Extraer KDA y CS por minuto a lo largo de la partida
+
+```javascript
+function analizarProgresionKDA(datosPartida) {
+  return datosPartida.timeSeriesData.map(punto => {
+    const gameTimeMinutes = punto.gameTime / 60;
+    const match = punto.data.match || {};
+    
+    return {
+      timestamp: punto.timestamp,
+      gameTimeMinutes: gameTimeMinutes.toFixed(2),
+      kills: match.kills || 0,
+      deaths: match.deaths || 0, 
+      assists: match.assists || 0,
+      cs: match.cs || 0,
+      csPerMinute: gameTimeMinutes > 0 ? (match.cs / gameTimeMinutes).toFixed(2) : 0
+    };
+  });
+}
+```
+
+#### Analizar eventos de eliminaciones (kills)
+
+```javascript
+function extraerEventosKill(datosPartida) {
+  return datosPartida.events
+    .filter(evento => evento.name === 'kill')
+    .map(evento => {
+      return {
+        timestamp: evento.timestamp,
+        gameTime: datosPartida.timeSeriesData.find(
+          p => new Date(p.timestamp) <= new Date(evento.timestamp)
+        )?.gameTime || 0,
+        killer: evento.data.killer,
+        victim: evento.data.victim,
+        position: evento.data.position
+      };
+    });
+}
+```
+
+### Integración con sistemas de backend
+
+Para enviar los datos a tu propio servidor:
+
+1. Modifica la URL del servidor en la configuración:
+```javascript
+SERVER_ENDPOINT: "https://tu-servidor.com/api/lol-data"
+```
+
+2. Habilita el envío automático:
+```javascript
+ENABLE_SERVER_UPLOAD: true
+```
+
+3. En tu servidor, implementa un endpoint que acepte solicitudes POST con la estructura JSON descrita anteriormente.
