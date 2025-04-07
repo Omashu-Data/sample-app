@@ -313,12 +313,18 @@
     function onError(info) {
       console.error("Error:", info);
       addToLog(eventsLog, { type: 'error', info: info }, true);
+      
+      // Enviar error a la pestaña de eventos
+      sendEventToTabEvents({ type: 'error', info: info });
     }
     
     // Manejar actualizaciones de información
     function onInfoUpdates(info) {
       addToLog(infoLog, info);
       console.log("Recibida actualización de info:", info);
+      
+      // Enviar info a la pestaña de eventos
+      sendInfoToTabEvents(info);
       
       // NUEVO: Analizar estructura de datos GEP
       analizarEstructuraGEP(info);
@@ -726,6 +732,9 @@
       );
       
       addToLog(eventsLog, e, isHighlight);
+      
+      // Enviar evento a la pestaña de eventos
+      sendEventToTabEvents(e);
       
       if (e.events) {
         const updates = {
@@ -1673,6 +1682,10 @@
       
       // Método para actualizar el panel visual
       _updatePanel: function() {
+        // NUEVO: Desactivar completamente la creación y actualización del panel
+        return; 
+        
+        // El código original del panel se mantiene abajo pero no se ejecutará
         let panel = document.getElementById('keys-registry-panel');
         
         if (!panel) {
@@ -2180,6 +2193,102 @@
     
     // Exponer el registrador globalmente
     window.keysRegistrar = keysRegistrar;
+
+    // Función para enviar evento a la pestaña de eventos
+    function sendEventToTabEvents(eventData) {
+      try {
+        // Forma 1: Buscar elemento de la pestaña directamente
+        const eventsTab = document.getElementById('events-tab');
+        if (eventsTab && typeof eventsTab.addEventToVisibleLog === 'function') {
+          eventsTab.addEventToVisibleLog(eventData);
+          return true;
+        }
+        
+        // Forma 2: Buscar la función global en el iframe
+        const eventsIframe = document.querySelector('iframe[src*="tab-events.html"]');
+        if (eventsIframe && eventsIframe.contentWindow) {
+          try {
+            // Intentar mediante la función adjunta al elemento iframe
+            if (typeof eventsIframe.addEventToVisibleLog === 'function') {
+              eventsIframe.addEventToVisibleLog(eventData);
+              return true;
+            }
+            
+            // Intentar mediante la función global en el contentWindow
+            if (typeof eventsIframe.contentWindow.addEventToVisibleLog === 'function') {
+              eventsIframe.contentWindow.addEventToVisibleLog(eventData);
+              return true;
+            }
+          } catch (iframeError) {
+            console.warn("Error accediendo a iframe:", iframeError);
+          }
+        }
+        
+        // Forma 3: Intentar a través de mensajes
+        const tabs = document.querySelectorAll('.tab-content');
+        for (let i = 0; i < tabs.length; i++) {
+          const tab = tabs[i];
+          if (tab.id === 'events-tab' || (tab.querySelector && tab.querySelector('iframe[src*="tab-events.html"]'))) {
+            // Intentar crear un evento personalizado
+            const updateEvent = new CustomEvent('event-update', { detail: eventData });
+            tab.dispatchEvent(updateEvent);
+          }
+        }
+        
+        return false;
+      } catch (error) {
+        console.error("Error al enviar evento a la pestaña:", error);
+        return false;
+      }
+    }
+    
+    // Función para enviar info a la pestaña de eventos
+    function sendInfoToTabEvents(infoData) {
+      try {
+        // Forma 1: Buscar elemento de la pestaña directamente
+        const eventsTab = document.getElementById('events-tab');
+        if (eventsTab && typeof eventsTab.addInfoToVisibleLog === 'function') {
+          eventsTab.addInfoToVisibleLog(infoData);
+          return true;
+        }
+        
+        // Forma 2: Buscar la función global en el iframe
+        const eventsIframe = document.querySelector('iframe[src*="tab-events.html"]');
+        if (eventsIframe && eventsIframe.contentWindow) {
+          try {
+            // Intentar mediante la función adjunta al elemento iframe
+            if (typeof eventsIframe.addInfoToVisibleLog === 'function') {
+              eventsIframe.addInfoToVisibleLog(infoData);
+              return true;
+            }
+            
+            // Intentar mediante la función global en el contentWindow
+            if (typeof eventsIframe.contentWindow.addInfoToVisibleLog === 'function') {
+              eventsIframe.contentWindow.addInfoToVisibleLog(infoData);
+              return true;
+            }
+          } catch (iframeError) {
+            console.warn("Error accediendo a iframe:", iframeError);
+          }
+        }
+        
+        // Forma 3: Intentar a través de mensajes
+        const tabs = document.querySelectorAll('.tab-content');
+        for (let i = 0; i < tabs.length; i++) {
+          const tab = tabs[i];
+          if (tab.id === 'events-tab' || (tab.querySelector && tab.querySelector('iframe[src*="tab-events.html"]'))) {
+            // Intentar crear un evento personalizado
+            const updateEvent = new CustomEvent('info-update', { detail: infoData });
+            tab.dispatchEvent(updateEvent);
+          }
+        }
+        
+        return false;
+      } catch (error) {
+        console.error("Error al enviar info a la pestaña:", error);
+        return false;
+      }
+    }
   </script>
 
   <style>
@@ -2204,4 +2313,7 @@
     }
   </style>
 </body>
+
+<!-- Script para sincronizar la pestaña eventos con la ventana "eventos de lol" -->
+<script src="eventos-fix.js"></script>
 </html>

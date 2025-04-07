@@ -1,212 +1,267 @@
-<!-- Tab de Eventos - Contiene logs de eventos del juego y actualizaciones de información -->
-<div class="events-container">
-  <h2 class="events__title">Eventos del Juego en Tiempo Real</h2>
-  <p class="events__description">Aquí se muestran todos los eventos y actualizaciones de datos del juego en tiempo real.</p>
-  
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/ingame.css">
+  <link rel="stylesheet" href="../css/tabs.css">
+  <style>
+    #visible-events-log, #visible-info-log {
+      height: 450px;
+      overflow: auto;
+      padding: 10px;
+      background-color: rgba(0,0,0,0.3);
+      border-radius: 5px;
+      margin-bottom: 15px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    
+    pre {
+      margin: 5px 0;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    
+    pre.highlight {
+      background-color: rgba(255, 215, 0, 0.2);
+      border-left: 3px solid #FFD700;
+    }
+    
+    .events__logs-container {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      height: 100%;
+    }
+    
+    .events__log-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .events__logs-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+    
+    .events__logs-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+    }
+    
+    .events__debug-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    #heartbeat-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: gray;
+      margin-right: 10px;
+      transition: background-color 0.3s;
+    }
+    
+    #last-update-time {
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="events__debug-info">
+    <div id="heartbeat-indicator"></div>
+    <div id="last-update-time">Sin actualización</div>
+  </div>
+    
   <div class="events__logs-container">
+    <!-- Columna de Eventos -->
     <div class="events__log-column">
-      <h3 class="events__log-title">Eventos</h3>
-      <div id="visible-events-log" class="events__log-content"></div>
+      <div class="events__logs-header">
+        <div class="events__logs-title">Eventos</div>
+      </div>
+      <div id="visible-events-log"></div>
     </div>
     
+    <!-- Columna de Actualizaciones de Info -->
     <div class="events__log-column">
-      <h3 class="events__log-title">Actualizaciones de Info</h3>
-      <div id="visible-info-log" class="events__log-content"></div>
+      <div class="events__logs-header">
+        <div class="events__logs-title">Actualizaciones de Info</div>
+      </div>
+      <div id="visible-info-log"></div>
     </div>
   </div>
-</div>
-
-<script>
-  // Script para sincronizar los logs ocultos con la visualización
-  (function() {
-    console.log('Iniciando script de sincronización de eventos...');
+  
+  <script>
+    // Referencias a contenedores
+    const eventsLog = document.getElementById('visible-events-log');
+    const infoLog = document.getElementById('visible-info-log');
+    const heartbeatIndicator = document.getElementById('heartbeat-indicator');
+    const lastUpdateTime = document.getElementById('last-update-time');
     
-    const intervalCheckLogs = setInterval(checkAndSetupLogs, 1000);
-    let logsSetup = false;
-    let observers = [];
+    // Contadores
+    let totalEventsSynced = 0;
+    let totalInfoSynced = 0;
     
-    // Función para verificar y configurar los logs
-    function checkAndSetupLogs() {
-      if (logsSetup) {
-        clearInterval(intervalCheckLogs);
-        return;
-      }
-      
-      // Intentar encontrar los elementos de log
-      const originalEventsLog = document.getElementById('eventsLog');
-      const originalInfoLog = document.getElementById('infoLog');
-      
-      if (originalEventsLog && originalInfoLog) {
-        console.log('¡Logs encontrados! Configurando observadores...');
-        setupObservers(originalEventsLog, originalInfoLog);
-        logsSetup = true;
-        clearInterval(intervalCheckLogs);
+    // Conjunto para evitar duplicados
+    let processedEventTexts = new Set();
+    let processedInfoTexts = new Set();
+    
+    // Funciones para añadir datos a los logs (estas funciones serán llamadas desde eventos-fix.js)
+    window.addEventToVisibleLog = function(eventData) {
+      try {
+        // Convertir a texto para comparación
+        const eventText = JSON.stringify(eventData);
         
-        // Copiar contenido existente
-        copyExistingContent(originalEventsLog, originalInfoLog);
-      } else {
-        console.log('Logs no encontrados, reintentando...');
-        // Intentar buscar en el documento principal
-        try {
-          const parentEventsLog = window.parent.document.getElementById('eventsLog');
-          const parentInfoLog = window.parent.document.getElementById('infoLog');
+        // Verificar si ya procesamos este evento
+        if (!processedEventTexts.has(eventText)) {
+          processedEventTexts.add(eventText);
           
-          if (parentEventsLog && parentInfoLog) {
-            console.log('Logs encontrados en documento principal! Configurando observadores...');
-            setupObservers(parentEventsLog, parentInfoLog);
-            logsSetup = true;
-            clearInterval(intervalCheckLogs);
-            
-            // Copiar contenido existente
-            copyExistingContent(parentEventsLog, parentInfoLog);
+          // Crear elemento
+          const line = document.createElement('pre');
+          line.textContent = JSON.stringify(eventData, null, 2);
+          
+          // Verificar si es un evento importante
+          const isHighlight = eventData.events && eventData.events.some(evt => 
+            ['kill', 'death', 'assist', 'level', 'matchStart', 'matchEnd'].includes(evt.name)
+          );
+          
+          if (isHighlight) {
+            line.className = 'highlight';
           }
-        } catch (e) {
-          console.log('Error al buscar en documento principal:', e);
+          
+          // Insertar en contenedor
+          eventsLog.appendChild(line);
+          
+          // Limitar tamaño
+          while (eventsLog.childNodes.length > 100) {
+            eventsLog.removeChild(eventsLog.firstChild);
+          }
+          
+          // Autoscroll
+          eventsLog.scrollTop = eventsLog.scrollHeight;
+          
+          // Actualizar contador y timestamp
+          totalEventsSynced++;
+          updateDebugStatus();
+          
+          console.log("[EVENTOS-PESTAÑA] Evento agregado:", eventData);
+          return true;
         }
+        
+        return false;
+      } catch (error) {
+        console.warn("[EVENTOS-PESTAÑA] Error añadiendo evento:", error);
+        return false;
       }
-    }
+    };
     
-    // Configurar observadores para los logs
-    function setupObservers(eventsLog, infoLog) {
-      // Limpiar observadores existentes
-      observers.forEach(obs => obs.disconnect());
-      observers = [];
-      
-      // Crear observador para eventos
-      const eventsObserver = new MutationObserver(function(mutations) {
-        const visibleLog = document.getElementById('visible-events-log');
-        if (!visibleLog) return;
+    window.addInfoToVisibleLog = function(infoData) {
+      try {
+        // Convertir a texto para comparación
+        const infoText = JSON.stringify(infoData);
         
-        mutations.forEach(function(mutation) {
-          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-            mutation.addedNodes.forEach(node => {
-              try {
-                const clone = node.cloneNode(true);
-                visibleLog.appendChild(clone);
-                visibleLog.scrollTop = visibleLog.scrollHeight;
-                console.log('Evento añadido al log visible:', node.textContent.substring(0, 30) + '...');
-              } catch (e) {
-                console.error('Error al clonar nodo de evento:', e);
-              }
-            });
-          }
-        });
-      });
-      
-      // Crear observador para info
-      const infoObserver = new MutationObserver(function(mutations) {
-        const visibleLog = document.getElementById('visible-info-log');
-        if (!visibleLog) return;
-        
-        mutations.forEach(function(mutation) {
-          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-            mutation.addedNodes.forEach(node => {
-              try {
-                const clone = node.cloneNode(true);
-                visibleLog.appendChild(clone);
-                visibleLog.scrollTop = visibleLog.scrollHeight;
-                console.log('Info añadida al log visible:', node.textContent.substring(0, 30) + '...');
-              } catch (e) {
-                console.error('Error al clonar nodo de info:', e);
-              }
-            });
-          }
-        });
-      });
-      
-      // Iniciar observación
-      eventsObserver.observe(eventsLog, { childList: true });
-      infoObserver.observe(infoLog, { childList: true });
-      
-      observers.push(eventsObserver, infoObserver);
-      console.log('Observadores configurados correctamente');
-      
-      // También añadir listeners directos para duplicar el contenido
-      // Esto es un respaldo por si los observers no funcionan
-      if (typeof overwolf !== 'undefined') {
-        try {
-          overwolf.games.events.onNewEvents.addListener(function(e) {
-            const visibleLog = document.getElementById('visible-events-log');
-            if (visibleLog) {
-              const line = document.createElement('pre');
-              line.textContent = JSON.stringify(e);
-              
-              if (e.events && e.events.some(evt => ['kill', 'death', 'assist', 'level'].includes(evt.name))) {
-                line.className = 'highlight';
-              }
-              
-              visibleLog.appendChild(line);
-              visibleLog.scrollTop = visibleLog.scrollHeight;
-              console.log('Evento añadido directamente al log visible');
-            }
-          });
+        // Verificar si ya procesamos esta info
+        if (!processedInfoTexts.has(infoText)) {
+          processedInfoTexts.add(infoText);
           
-          overwolf.games.events.onInfoUpdates2.addListener(function(info) {
-            const visibleLog = document.getElementById('visible-info-log');
-            if (visibleLog) {
-              const line = document.createElement('pre');
-              line.textContent = JSON.stringify(info);
-              visibleLog.appendChild(line);
-              visibleLog.scrollTop = visibleLog.scrollHeight;
-              console.log('Info añadida directamente al log visible');
-            }
-          });
+          // Crear elemento
+          const line = document.createElement('pre');
+          line.textContent = JSON.stringify(infoData, null, 2);
           
-          console.log('Listeners directos de Overwolf configurados');
-        } catch (e) {
-          console.error('Error al configurar listeners directos:', e);
+          // Insertar en contenedor
+          infoLog.appendChild(line);
+          
+          // Limitar tamaño
+          while (infoLog.childNodes.length > 100) {
+            infoLog.removeChild(infoLog.firstChild);
+          }
+          
+          // Autoscroll
+          infoLog.scrollTop = infoLog.scrollHeight;
+          
+          // Actualizar contador y timestamp
+          totalInfoSynced++;
+          updateDebugStatus();
+          
+          console.log("[EVENTOS-PESTAÑA] Info agregada:", infoData);
+          return true;
         }
+        
+        return false;
+      } catch (error) {
+        console.warn("[EVENTOS-PESTAÑA] Error añadiendo info:", error);
+        return false;
       }
+    };
+    
+    // Función para actualizar estado de depuración
+    function updateDebugStatus() {
+      // Actualizar indicador de heartbeat
+      heartbeatIndicator.style.backgroundColor = '#00ff00';
+      setTimeout(() => {
+        heartbeatIndicator.style.backgroundColor = 'gray';
+      }, 500);
+      
+      // Actualizar timestamp y contadores
+      const now = new Date();
+      const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
+                      now.getMinutes().toString().padStart(2, '0') + ':' + 
+                      now.getSeconds().toString().padStart(2, '0');
+      lastUpdateTime.textContent = `${timeStr} - Eventos: ${totalEventsSynced}, Info: ${totalInfoSynced}`;
     }
     
-    // Copiar contenido existente
-    function copyExistingContent(eventsLog, infoLog) {
-      const visibleEventsLog = document.getElementById('visible-events-log');
-      const visibleInfoLog = document.getElementById('visible-info-log');
-      
-      if (eventsLog && visibleEventsLog) {
-        console.log(`Copiando ${eventsLog.childNodes.length} eventos existentes...`);
-        Array.from(eventsLog.childNodes).forEach(node => {
-          if (node.nodeType === 1) { // Solo elementos
-            const clone = node.cloneNode(true);
-            visibleEventsLog.appendChild(clone);
-          }
-        });
-      }
-      
-      if (infoLog && visibleInfoLog) {
-        console.log(`Copiando ${infoLog.childNodes.length} infos existentes...`);
-        Array.from(infoLog.childNodes).forEach(node => {
-          if (node.nodeType === 1) { // Solo elementos
-            const clone = node.cloneNode(true);
-            visibleInfoLog.appendChild(clone);
-          }
-        });
-      }
-      
-      console.log('Contenido existente copiado');
-    }
-    
-    // Verificar regularmente si hay nuevos eventos
-    setInterval(function() {
-      if (!logsSetup) return;
-      
-      // Verificar si hay nuevos eventos que no se copiaron
-      const originalEventsLog = document.getElementById('eventsLog') || 
-                              (window.parent && window.parent.document.getElementById('eventsLog'));
-      const originalInfoLog = document.getElementById('infoLog') || 
-                            (window.parent && window.parent.document.getElementById('infoLog'));
-      
-      if (originalEventsLog && originalInfoLog) {
-        copyExistingContent(originalEventsLog, originalInfoLog);
-      }
-    }, 5000);
-    
-    // También intentar iniciar cuando la pestaña se hace visible
-    document.addEventListener('visibilitychange', function() {
-      if (!document.hidden && !logsSetup) {
-        checkAndSetupLogs();
+    // Listener para eventos personalizados
+    document.addEventListener('sync-event-to-tab', (e) => {
+      console.log("[EVENTOS-PESTAÑA] Evento personalizado recibido:", e.detail);
+      if (e.detail && e.detail.eventData) {
+        window.addEventToVisibleLog(e.detail.eventData);
       }
     });
-  })();
-</script> 
+    
+    document.addEventListener('sync-info-to-tab', (e) => {
+      console.log("[EVENTOS-PESTAÑA] Info personalizada recibida:", e.detail);
+      if (e.detail && e.detail.infoData) {
+        window.addInfoToVisibleLog(e.detail.infoData);
+      }
+    });
+    
+    // Iniciar comprobación de latido para mostrar que la página está viva
+    setInterval(() => {
+      heartbeatIndicator.style.backgroundColor = '#ff9800';
+      setTimeout(() => {
+        heartbeatIndicator.style.backgroundColor = 'gray';
+      }, 200);
+    }, 5000);
+    
+    // Notificar que la pestaña está cargada
+    console.log("[EVENTOS-PESTAÑA] Pestaña de eventos inicializada");
+    
+    // Verificar el origen y asegurar que estamos listos para recibir eventos
+    window.addEventListener('message', (event) => {
+      try {
+        if (event.data) {
+          if (event.data.eventData) {
+            window.addEventToVisibleLog(event.data.eventData);
+          } else if (event.data.infoData) {
+            window.addInfoToVisibleLog(event.data.infoData);
+          }
+        }
+      } catch (e) {
+        console.warn("[EVENTOS-PESTAÑA] Error procesando mensaje:", e);
+      }
+    });
+  </script>
+  <!-- Script para sincronizar la pestaña eventos con la ventana "eventos de lol" -->
+  <script src="eventos-fix.js"></script>
+</body>
+</html> 
