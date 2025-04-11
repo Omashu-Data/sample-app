@@ -72,6 +72,7 @@
   <!-- SISTEMA INTEGRADO DE CAPTURA DE EVENTOS Y GESTIÓN DE DATOS -->
   <script src="game-data-manager.js"></script>
   <script src="in_game_utils.js"></script>
+  <script src="in_game_listeners.js"></script>
   <script>
     // ---- GESTOR CENTRALIZADO DE DATOS DEL JUEGO ----
     // const gameDataManager = { ... }; // <--- Definición movida a game-data-manager.js
@@ -89,42 +90,12 @@
     
     // ---- SISTEMA DE CAPTURA DE EVENTOS DE LOL ----
     
-    // Lista de características que necesitamos capturar
-    const features = [
-      'gep_internal',
-      'live_client_data',
-      'matchState',
-      'match_info',
-      'death',
-      'respawn',
-      'abilities',
-      'kill',
-      'assist',
-      'gold',
-      'minions',
-      'summoner_info',
-      'gameMode',
-      'teams',
-      'level',
-      'announcer',
-      'counters',
-      'damage',
-      'heal',
-      'items',
-      'ward',
-      'vision',
-      'objective',
-      'spell_cast'
-    ];
-    
-    // Elementos DOM para logs
-    const eventsLog = document.getElementById('eventsLog');
-    const infoLog = document.getElementById('infoLog');
+    // ---- Constantes y referencias al DOM movidas a in_game_listeners.js ----
+    // const features = [ ... ];
+    // const eventsLog = document.getElementById('eventsLog');
+    // const infoLog = document.getElementById('infoLog');
     
     // ---- Funciones de utilidad movidas a in_game_utils.js ----
-    // function addToLog(logElement, data, highlight = false) { ... }
-    // function formatGameTime(timeInSeconds) { ... }
-    // window.formatGameTime = formatGameTime; // <-- Eliminado, parece innecesario
     
     // ---- MANEJADORES DE EVENTOS DE OVERWOLF ----
     
