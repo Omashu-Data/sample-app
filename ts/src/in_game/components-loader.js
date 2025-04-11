@@ -381,7 +381,9 @@ function findTabUpdateUIFunction(tabElement) {
     
     return null;
   } catch (e) {
-    console.error('Error buscando función updateUI:', e);
+    // Modificación: Añadir ID del tab al mensaje de error
+    const tabId = tabElement ? (tabElement.id || tabElement.dataset?.tabId || '(sin ID identificable)') : '(elemento nulo)';
+    console.error(`[components-loader] Error buscando función updateUI en tab: ${tabId}. Error:`, e);
     return null;
   }
 }

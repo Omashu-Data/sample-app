@@ -189,6 +189,13 @@
         </div>
       </div>
     </div>
+    
+    <!-- CONTENEDOR ADICIONAL PARA DEBUG DE VARIABLES EN TEXTO PLANO -->
+    <div id="plain-text-variables-debug" style="margin-top: var(--spacing-md); padding: var(--spacing-md); background: rgba(0,0,0,0.4); border-radius: var(--border-radius-md); border: 1px dashed #888; max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 11px; color: #ccc; line-height: 1.4;">
+      <h4 style="margin: 0 0 10px 0; color: #FF9800; border-bottom: 1px solid #555; padding-bottom: 5px;">DEBUG: Rutas de Variables (Texto Plano)</h4>
+      <!-- Las rutas se insertarán aquí -->
+    </div>
+
   </div>
 </div>
 
@@ -216,12 +223,20 @@
   let ultimosDatos = {};
   let variablesFiltradas = false; // Ya no filtramos, mostramos todo
   
-  // Función para actualizar la tabla de variables - NO INTERFIERE con updateUI
+  // Función para actualizar la tabla de variables - AHORA MUESTRA RUTAS COMPLETAS Y LOGS DETALLADOS
   function actualizarTablaVariables(gameData) {
-    console.log("[TABLA] Iniciando actualizarTablaVariables con datos:", 
-                gameData ? "datos presentes" : "sin datos", 
-                "allPlayers:", gameData && gameData.allPlayers ? "presentes" : "no disponibles");
+    // DEBUG: Loguear inicio de la función de tabla
+    console.log("[TABLA | actualizarTablaVariables] Iniciando con datos:", gameData ? 'Datos presentes' : 'Datos ausentes');
     
+    // Referencia al contenedor de texto plano para debug
+    const plainTextOutput = document.getElementById('plain-text-variables-debug');
+    if (plainTextOutput) {
+      // Limpiar solo el contenido, no el título
+      const titleElement = plainTextOutput.querySelector('h4');
+      plainTextOutput.innerHTML = ''; 
+      if (titleElement) plainTextOutput.appendChild(titleElement);
+    }
+
     try {
       // Guardar los datos para exportación
       ultimosDatos = JSON.parse(JSON.stringify(gameData || {}));
@@ -233,17 +248,12 @@
         return;
       }
       
-      // Limpiar contenido existente
+      // Limpiar contenido existente de la tabla
       tbody.innerHTML = '';
       
-      // Si no hay datos, mostrar mensaje
+      // Si no hay datos, mostrar mensaje en tabla y debug
       if (!gameData || Object.keys(gameData).length === 0) {
-        const fila = document.createElement('tr');
-        const celda = document.createElement('td');
-        celda.colSpan = 2;
-        celda.style.textAlign = 'center';
-        celda.style.padding = '30px';
-        celda.innerHTML = `
+        const noDataHtml = `
           <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
@@ -254,36 +264,62 @@
             </div>
           </div>
         `;
+        // Mensaje en tabla
+        const fila = document.createElement('tr');
+        const celda = document.createElement('td');
+        celda.colSpan = 2;
+        celda.style.textAlign = 'center';
+        celda.style.padding = '30px';
+        celda.innerHTML = noDataHtml;
         fila.appendChild(celda);
         tbody.appendChild(fila);
+        // Mensaje en debug
+        if(plainTextOutput) plainTextOutput.innerHTML += '<p style="color:#888;">No hay datos disponibles del juego.</p>';
         console.error("[TABLA] No hay datos disponibles para mostrar");
         return;
       }
       
-      // Variables destacadas para detectar y resaltar
+      // Variables destacadas (se mantienen para estilo)
       const variablesDestacadas = [
         'summoner.name', 'summoner.position', 'match.gameTime', 
         'match.kills', 'match.deaths', 'match.assists', 
         'match.cs', 'gold', 'match.gold', 'vision.wardsPlaced'
       ];
       
+      let filasProcesadas = 0;
+      const maxFilas = 500; // Límite para evitar sobrecarga
+
       // Función recursiva para procesar todas las propiedades anidadas
       function procesarObjeto(obj, prefijo = '') {
-        if (!obj || typeof obj !== 'object') {
-          console.log("[TABLA] Objeto inválido o no es un objeto:", obj);
+        // DEBUG: Loguear entrada a procesarObjeto (DESCOMENTADO)
+        console.log(`[TABLA | procesarObjeto] Procesando prefijo: '${prefijo}', tipo: ${typeof obj}`);
+
+        if (!obj || typeof obj !== 'object' || filasProcesadas >= maxFilas) {
           return;
         }
         
         // Ordenar las claves alfabéticamente
         const claves = Object.keys(obj).sort();
         
-        let filas = 0;
-        
         for (const clave of claves) {
+          if (filasProcesadas >= maxFilas) break;
+          
           const valor = obj[clave];
           const nombreCompleto = prefijo ? `${prefijo}.${clave}` : clave;
           
-          // Verificar si es una variable destacada
+          // DEBUG: Loguear cada clave/valor que se procesa (DESCOMENTADO)
+          console.log(`[TABLA | procesarObjeto]   - Clave: '${clave}', Ruta: '${nombreCompleto}', Tipo Valor: ${typeof valor}`);
+
+          // --- Añadir ruta a texto plano para DEBUG ---
+          if (plainTextOutput) {
+             const p = document.createElement('p');
+             p.style.margin = '2px 0';
+             p.textContent = nombreCompleto;
+             plainTextOutput.appendChild(p);
+          }
+          // ---------------------------------------------
+
+          // Verificar si es una variable destacada (solo para estilo)
           const esDestacada = variablesDestacadas.includes(nombreCompleto);
           
           // Crear fila para esta propiedad
@@ -292,30 +328,31 @@
           
           if (esDestacada) {
             fila.style.background = 'rgba(109, 61, 255, 0.08)';
-            fila.style.fontWeight = 'bold';
           }
           
-          // Celda para el nombre de la variable
+          // --- Celda para el nombre de la variable (RUTA COMPLETA) ---
           const celdaNombre = document.createElement('td');
           celdaNombre.style.padding = '8px 12px';
+          celdaNombre.style.wordBreak = 'break-all'; // Para rutas largas
           
-          // Agregar icono según el tipo de variable
+          // Agregar icono (basado en la parte inicial de la ruta)
           let iconoHTML = '';
-          if (nombreCompleto.includes('summoner')) {
-            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">👤</span>';
-          } else if (nombreCompleto.includes('match')) {
-            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">🎮</span>';
-          } else if (nombreCompleto.includes('vision') || nombreCompleto.includes('ward')) {
-            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">👁️</span>';
-          } else if (nombreCompleto.includes('combat') || nombreCompleto.includes('damage')) {
-            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">⚔️</span>';
-          } else if (nombreCompleto.includes('gold') || nombreCompleto.includes('cs')) {
-            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">💰</span>';
-          }
+          const rutaInicial = nombreCompleto.split('.')[0];
+          if (rutaInicial === 'summoner') iconoHTML = '👤';
+          else if (rutaInicial === 'match') iconoHTML = '🎮';
+          else if (rutaInicial === 'vision' || rutaInicial === 'ward') iconoHTML = '👁️';
+          else if (rutaInicial === 'combat' || rutaInicial === 'damage' || rutaInicial === 'heal') iconoHTML = '⚔️';
+          else if (rutaInicial === 'gold' || rutaInicial === 'cs') iconoHTML = '💰';
+          else if (rutaInicial === 'live_client_data') iconoHTML = '⚡'; // Icono para Live Client Data
+          else if (rutaInicial === 'events') iconoHTML = '🔔'; // Icono para events array
+          else if (rutaInicial === 'objectives') iconoHTML = '🏰'; // Icono para objectives
           
-          celdaNombre.innerHTML = `${iconoHTML}<span style="${esDestacada ? 'color:#bc76ff;' : ''}">${nombreCompleto}</span>`;
+          celdaNombre.innerHTML = `
+            <span style="opacity:0.7; margin-right:6px;">${iconoHTML}</span>
+            <span style="${esDestacada ? 'color:#bc76ff; font-weight:bold;' : ''}">${nombreCompleto}</span>
+          `;
           
-          // Celda para el valor
+          // --- Celda para el valor --- 
           const celdaValor = document.createElement('td');
           celdaValor.style.padding = '8px 12px';
           
@@ -327,59 +364,68 @@
           } else if (typeof valor === 'object') {
             if (Array.isArray(valor)) {
               // Formato para arrays
-              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(95, 158, 160, 0.1); padding:3px 8px; border-radius:4px; color:#5F9EA0; border:1px solid rgba(95, 158, 160, 0.2);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="8" y1="6" x2="21" y2="6"></line>
-                  <line x1="8" y1="12" x2="21" y2="12"></line>
-                  <line x1="8" y1="18" x2="21" y2="18"></line>
-                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                </svg>
+              celdaValor.innerHTML = `<span class="valor-tag valor-array">
+                <svg width="14" height="14" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
                 Array[${valor.length}]
               </span>`;
-              
-              // Para arrays, mostrar elementos si no son muchos
-              if (valor.length > 0 && valor.length < 10) {
-                procesarObjeto(valor, nombreCompleto);
+              // DEBUG: Loguear antes de la llamada recursiva para Array (DESCOMENTADO)
+              console.log(`[TABLA | procesarObjeto]     Recursión para Array: ${nombreCompleto}`);
+              // Llamada recursiva para los elementos del array (si no es muy grande)
+              if (valor.length < 20) { // Limitar recursión en arrays grandes
+                 // DEBUG: Log ANTES de recursión Array
+                 console.log(`[TABLA | recursión] ===> Llamando procesarObjeto para Array: ${nombreCompleto}`);
+                 try {
+                   procesarObjeto(valor, nombreCompleto);
+                   // DEBUG: Log DESPUÉS de recursión Array (éxito)
+                   console.log(`[TABLA | recursión] <=== Retorno procesarObjeto para Array: ${nombreCompleto}`);
+                 } catch (e) {
+                   // DEBUG: Log DESPUÉS de recursión Array (ERROR)
+                   console.error(`[TABLA | recursión] <=== ERROR en procesarObjeto para Array: ${nombreCompleto}`, e);
+                 }
               }
             } else {
               // Formato para objetos
-              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(123, 104, 238, 0.1); padding:3px 8px; border-radius:4px; color:#7B68EE; border:1px solid rgba(123, 104, 238, 0.2);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                  <line x1="8" y1="21" x2="16" y2="21"></line>
-                  <line x1="12" y1="17" x2="12" y2="21"></line>
-                </svg>
-                Object{${Object.keys(valor).length} props}
+              celdaValor.innerHTML = `<span class="valor-tag valor-object">
+                 <svg width="14" height="14" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                 Object{${Object.keys(valor).length} props}
               </span>`;
+              // DEBUG: Loguear antes de la llamada recursiva para Object (DESCOMENTADO)
+              // console.log(`[TABLA | procesarObjeto]     Recursión para Object: ${nombreCompleto}`);
               
-              // Si es un objeto, procesar sus propiedades de forma recursiva
-              procesarObjeto(valor, nombreCompleto);
+              // Llamada recursiva para las propiedades del objeto
+              // DEBUG: Log ANTES de recursión Object
+              console.log(`[TABLA | recursión] ===> Llamando procesarObjeto para Object: ${nombreCompleto}`);
+              const clavesInternas = Object.keys(valor);
+              console.log(`[TABLA | recursión]       Claves internas para ${nombreCompleto}: ${clavesInternas.join(', ')}`);
+              try {
+                procesarObjeto(valor, nombreCompleto);
+                // DEBUG: Log DESPUÉS de recursión Object (éxito)
+                console.log(`[TABLA | recursión] <=== Retorno procesarObjeto para Object: ${nombreCompleto}`);
+              } catch (e) {
+                // DEBUG: Log DESPUÉS de recursión Object (ERROR)
+                console.error(`[TABLA | recursión] <=== ERROR en procesarObjeto para Object: ${nombreCompleto}`, e);
+              }
             }
           } else {
             // Para valores simples
             if (typeof valor === 'boolean') {
-              // Formato para booleanos
               const colorBool = valor ? '#4CAF50' : '#F44336';
-              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(${valor ? '76, 175, 80' : '244, 67, 54'}, 0.1); padding:3px 8px; border-radius:4px; color:${colorBool}; border:1px solid rgba(${valor ? '76, 175, 80' : '244, 67, 54'}, 0.2);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  ${valor ? 
-                    '<path d="M20 6L9 17l-5-5"></path>' : 
-                    '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'}
-                </svg>
+              const bgColorBool = valor ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)';
+              const borderColorBool = valor ? 'rgba(76, 175, 80, 0.2)' : 'rgba(244, 67, 54, 0.2)';
+              const iconBool = valor ? 
+                '<path d="M20 6L9 17l-5-5"></path>' : 
+                '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+                
+              celdaValor.innerHTML = `<span class="valor-tag valor-boolean" style="background:${bgColorBool}; color:${colorBool}; border-color:${borderColorBool};">
+                <svg width="14" height="14" viewBox="0 0 24 24">${iconBool}</svg>
                 ${valor.toString()}
               </span>`;
             } else if (typeof valor === 'number') {
               // Formato para números
-              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(3, 169, 244, 0.1); padding:3px 8px; border-radius:4px; color:#03A9F4; border:1px solid rgba(3, 169, 244, 0.2);">
-                ${esDestacada ? '<strong>' : ''}${valor.toString()}${esDestacada ? '</strong>' : ''}
-              </span>`;
+              celdaValor.innerHTML = `<span class="valor-tag valor-number" ${esDestacada ? 'style="font-weight:bold;"' : ''}>${valor.toString()}</span>`;
             } else {
               // Formato para strings y otros
-              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(255, 255, 255, 0.08); padding:3px 8px; border-radius:4px; color:white; border:1px solid rgba(255, 255, 255, 0.15);">
-                ${esDestacada ? '<strong style="color:#bc76ff;">' : ''}${valor.toString()}${esDestacada ? '</strong>' : ''}
-              </span>`;
+              celdaValor.innerHTML = `<span class="valor-tag valor-string" ${esDestacada ? 'style="color:#bc76ff; font-weight:bold;"' : ''}>${valor.toString()}</span>`;
             }
           }
           
@@ -389,63 +435,59 @@
           
           // Añadir fila a la tabla
           tbody.appendChild(fila);
-          filas++;
-          
-          // Limitar el número de filas para evitar sobrecarga
-          if (filas > 500) {
-            console.warn("[TABLA] Limitando visualización a 500 filas para evitar sobrecarga");
-            
-            // Añadir un mensaje al final
-            const filaFinal = document.createElement('tr');
-            const celdaFinal = document.createElement('td');
-            celdaFinal.colSpan = 2;
-            celdaFinal.style.textAlign = 'center';
-            celdaFinal.style.padding = '10px';
-            celdaFinal.style.color = '#FF9800';
-            celdaFinal.style.fontStyle = 'italic';
-            celdaFinal.textContent = `Mostrando 500 de ${Object.keys(gameData).length * 5}+ variables para mejorar rendimiento...`;
-            filaFinal.appendChild(celdaFinal);
-            tbody.appendChild(filaFinal);
-            
-            break;
-          }
-        }
-        
-        return filas;
-      }
+          filasProcesadas++; // Incrementar contador aquí
+        } // Fin del bucle for
+      } // Fin de procesarObjeto
       
       // Iniciar procesamiento
-      const totalFilas = procesarObjeto(gameData);
-      console.log(`[TABLA] Total de filas procesadas: ${totalFilas || 0}`);
+      procesarObjeto(gameData);
+      console.log(`[TABLA | actualizarTablaVariables] Finalizado. Total filas tabla: ${tbody.childElementCount}, Filas procesadas: ${filasProcesadas}`); // Modificado log final
       
-      // Mostrar mensaje si no hay variables
-      if (tbody.childElementCount === 0) {
+      // Añadir mensaje de límite si se alcanzó (tanto en tabla como en debug)
+      if (filasProcesadas >= maxFilas) {
+         const limitMsg = `Mostrando ${maxFilas} variables para mejorar rendimiento...`;
+         // Mensaje en tabla
+         const filaFinal = document.createElement('tr');
+         const celdaFinal = document.createElement('td');
+         celdaFinal.colSpan = 2;
+         celdaFinal.style.textAlign = 'center';
+         celdaFinal.style.padding = '10px';
+         celdaFinal.style.color = '#FF9800';
+         celdaFinal.style.fontStyle = 'italic';
+         celdaFinal.textContent = limitMsg;
+         filaFinal.appendChild(celdaFinal);
+         tbody.appendChild(filaFinal);
+         // Mensaje en debug
+         if(plainTextOutput) plainTextOutput.innerHTML += `<p style="color:#FF9800; font-style:italic;">${limitMsg}</p>`;
+      }
+      
+      // Mostrar mensaje si no hay variables después de procesar (tanto en tabla como en debug)
+      if (tbody.childElementCount === 0) { // Revisa si la tabla está vacía
+        const noVarsHtml = `
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+             <svg width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 15h8M9.5 9h.01M14.5 9h.01"/></svg>
+             <div style="font-size: var(--font-size-md); color: var(--text-secondary); font-weight: var(--font-weight-medium);">No se encontraron variables para mostrar</div>
+           </div>`;
+        // Mensaje en tabla
         const fila = document.createElement('tr');
         const celda = document.createElement('td');
         celda.colSpan = 2;
         celda.style.textAlign = 'center';
         celda.style.padding = '30px';
-        celda.innerHTML = `
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M8 15h8M9.5 9h.01M14.5 9h.01"></path>
-            </svg>
-            <div style="font-size: var(--font-size-md); color: var(--text-secondary); font-weight: var(--font-weight-medium);">
-              No se encontraron variables para mostrar
-            </div>
-          </div>
-        `;
+        celda.innerHTML = noVarsHtml;
         fila.appendChild(celda);
         tbody.appendChild(fila);
+        // Mensaje en debug
+        if(plainTextOutput) plainTextOutput.innerHTML += '<p style="color:#888;">No se encontraron variables para mostrar.</p>';
       }
     } catch (error) {
+      // ... (manejo de error existente)
       console.error("[TABLA] Error al procesar la tabla de variables:", error);
-      
-      // Crear mensaje de error en la tabla
+      // DEBUG: Loguear el error
+      console.log("[TABLA | actualizarTablaVariables] Error procesando tabla: ", error);
       const tbody = document.getElementById('variables-body');
       if (tbody) {
-        tbody.innerHTML = '';
+        tbody.innerHTML = ''; // Limpiar antes de mostrar error
         const fila = document.createElement('tr');
         const celda = document.createElement('td');
         celda.colSpan = 2;
@@ -453,18 +495,13 @@
         celda.style.padding = '30px';
         celda.innerHTML = `
           <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F44336" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-            <div style="font-size: var(--font-size-md); color: #F44336; font-weight: var(--font-weight-medium);">
-              Error al procesar variables: ${error.message}
-            </div>
-          </div>
-        `;
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F44336" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <div style="font-size: var(--font-size-md); color: #F44336; font-weight: var(--font-weight-medium);">Error: ${error.message}</div>
+          </div>`;
         fila.appendChild(celda);
         tbody.appendChild(fila);
+        // Mensaje en debug
+        if(plainTextOutput) plainTextOutput.innerHTML += `<p style="color:#F44336;">Error procesando variables: ${error.message}</p>`;
       }
     }
   }
@@ -472,6 +509,10 @@
   // ========== FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN DE UI ==========
   // Esta función sigue EXACTAMENTE el mismo patrón que tab-overview.html
   function updateUI(gameData) {
+    // DEBUG: Loguear los datos completos recibidos
+    console.log("[tab-stats | updateUI] Datos recibidos:", gameData ? JSON.stringify(gameData).substring(0, 300) + '...' : 'null/undefined');
+    console.log("[tab-stats | updateUI] Tipos de claves principales:", gameData ? Object.keys(gameData).map(k => `${k}: ${typeof gameData[k]}`) : 'N/A');
+
     console.log("[tab-stats] Actualizando con datos:", {
       summoner: gameData.summoner ? gameData.summoner.name : "no disponible",
       gameTime: gameData.match ? gameData.match.gameTime : "no disponible",
@@ -567,7 +608,8 @@
     // para que no interfiera con la actualización principal
     setTimeout(function() {
       try {
-        console.log("[tab-stats] Llamando a actualizarTablaVariables con datos del juego");
+        // DEBUG: Confirmar llamada y datos pasados
+        console.log("[tab-stats | updateUI -> setTimeout] Llamando a actualizarTablaVariables con datos del juego:", gameData ? 'Datos presentes' : 'Datos ausentes');
         actualizarTablaVariables(gameData);
       } catch (e) {
         console.error("Error al actualizar tabla de variables:", e);
@@ -811,7 +853,7 @@
   window._statsUpdateUI = updateUI;
 </script>
 
-<!-- Añadir estilos específicos de animación -->
+<!-- Estilos movidos fuera y después del script -->
 <style>
   @keyframes pulse {
     0% { opacity: 1; }
@@ -823,10 +865,6 @@
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
-</style>
-
-<!-- Añadir estilos adicionales para la tabla de variables -->
-<style>
   /* Estilos para filas de la tabla de variables */
   #tabla-variables tbody tr {
     border-bottom: 1px solid rgba(109, 61, 255, 0.1);
@@ -871,5 +909,96 @@
   .stats-metric:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Estilos para tags de valor */
+  .valor-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    font-size: var(--font-size-xs);
+  }
+
+  .valor-tag svg {
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.8;
+  }
+
+  .valor-array {
+    background: rgba(95, 158, 160, 0.1);
+    color: #5F9EA0;
+    border-color: rgba(95, 158, 160, 0.2);
+  }
+
+  .valor-object {
+    background: rgba(123, 104, 238, 0.1);
+    color: #7B68EE;
+    border-color: rgba(123, 104, 238, 0.2);
+  }
+
+  .valor-boolean {
+    /* Estilos ya definidos inline por simplicidad */
+  }
+
+  .valor-number {
+    background: rgba(3, 169, 244, 0.1);
+    color: #03A9F4;
+    border-color: rgba(3, 169, 244, 0.2);
+  }
+
+  .valor-string {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  /* ANIMACIONES ADICIONALES */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .stats-metric-value, .stats-kda-value {
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .stats-section {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .stats-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .stats-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+      rgba(109, 61, 255, 0) 0%, 
+      rgba(109, 61, 255, 0.05) 50%, 
+      rgba(109, 61, 255, 0) 100%);
+    animation: shimmer 3s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
   }
 </style> 
