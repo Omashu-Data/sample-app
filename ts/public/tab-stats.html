@@ -1,165 +1,188 @@
-<!-- Tab de Estadísticas -->
-<div class="stats-container">
-  <div class="stats-header glass-panel">
-    <div class="stats-title">
-      <h2>Estadísticas de <span id="stats-player-name">Invocador</span></h2>
-      <div class="stats-subtitle">
-        <span id="stats-match-type">Partida Normal</span> - <span id="stats-game-time">00:00</span>
+<!-- Tab de Estadísticas - Diseño Mejorado -->
+<div class="stats-container layout-column" style="background: var(--background-primary, #090521); color: var(--text-primary, #fff); padding: var(--spacing-md) var(--spacing-lg); gap: var(--spacing-md);">
+
+  <!-- Encabezado con nombre del jugador y tiempo de partida -->
+  <div class="stats-header" style="background: linear-gradient(to right, rgba(19, 11, 55, 0.95), rgba(39, 22, 100, 0.85)); border-radius: var(--border-radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-sm); box-shadow: var(--shadow-md); border: 1px solid rgba(109, 61, 255, 0.2);">
+    <div class="stats-title flex-row align-center justify-between">
+      <div>
+        <h2 style="color: var(--omashu-purple-light, #bc76ff); text-shadow: 0 0 5px rgba(188, 118, 255, 0.5); margin: 0; font-size: var(--font-size-xl);">Estadísticas de <span id="stats-player-name" style="font-weight: var(--font-weight-bold);">Invocador</span></h2>
+        <div class="stats-subtitle" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-top: var(--spacing-xs);">
+          <span id="stats-match-type">Partida Normal</span> - <span id="stats-game-time" style="color: var(--omashu-active, #7747ea); text-shadow: 0 0 5px rgba(119, 71, 234, 0.3);">00:00</span>
+          <span style="font-size: var(--font-size-xs); padding: 2px 8px; background: linear-gradient(to right, #6d3dff, #7747ea); border-radius: var(--border-radius-round); animation: pulse 2s infinite; margin-left: var(--spacing-sm); box-shadow: 0 0 12px rgba(109, 61, 255, 0.5);">EN VIVO</span>
         </div>
       </div>
     </div>
+  </div>
     
-  <div class="stats-sections">
+  <div class="stats-sections layout-column" style="gap: var(--spacing-md);">
     <!-- Sección de KDA Detallado -->
-    <div class="stats-section glass-panel">
-      <div class="stats-section-header">
-        <h3>Desempeño en Combate</h3>
+    <div class="stats-section" style="background: linear-gradient(180deg, rgba(39, 22, 100, 0.8), rgba(19, 11, 55, 0.8)); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid rgba(109, 61, 255, 0.15);">
+      <div class="stats-section-header" style="padding: var(--spacing-sm) var(--spacing-md); border-bottom: 1px solid rgba(109, 61, 255, 0.15); background: rgba(109, 61, 255, 0.1);">
+        <h3 style="font-size: var(--font-size-md); color: var(--omashu-purple-light, #bc76ff); text-shadow: 0 0 5px rgba(188, 118, 255, 0.3); margin: 0; font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: 0.5px;">Desempeño en Combate</h3>
       </div>
-      <div class="stats-section-content">
-        <div class="stats-kda-container">
-          <div class="stats-kda-card">
-            <div class="stats-kda-value" id="stats-kills">0</div>
-            <div class="stats-kda-label">Eliminaciones</div>
+      <div class="stats-section-content" style="padding: var(--spacing-md);">
+        <div class="stats-kda-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-md);">
+          <div class="stats-kda-card" style="background: rgba(19, 11, 55, 0.5); padding: var(--spacing-md); border-radius: var(--border-radius-md); text-align: center; display: flex; flex-direction: column; gap: var(--spacing-xs); transition: transform 0.2s ease; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+            <div id="stats-kills" class="stats-kda-value" style="font-size: var(--font-size-xxl); font-weight: var(--font-weight-bold); color: var(--positive-color, #4caf50); text-shadow: 0 0 8px rgba(76, 175, 80, 0.5);">0</div>
+            <div class="stats-kda-label" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.5px;">Eliminaciones</div>
         </div>
-          <div class="stats-kda-card">
-            <div class="stats-kda-value" id="stats-deaths">0</div>
-            <div class="stats-kda-label">Muertes</div>
+          <div class="stats-kda-card" style="background: rgba(19, 11, 55, 0.5); padding: var(--spacing-md); border-radius: var(--border-radius-md); text-align: center; display: flex; flex-direction: column; gap: var(--spacing-xs); transition: transform 0.2s ease; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+            <div id="stats-deaths" class="stats-kda-value" style="font-size: var(--font-size-xxl); font-weight: var(--font-weight-bold); color: var(--negative-color, #f44336); text-shadow: 0 0 8px rgba(244, 67, 54, 0.5);">0</div>
+            <div class="stats-kda-label" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.5px;">Muertes</div>
       </div>
-          <div class="stats-kda-card">
-            <div class="stats-kda-value" id="stats-assists">0</div>
-            <div class="stats-kda-label">Asistencias</div>
+          <div class="stats-kda-card" style="background: rgba(19, 11, 55, 0.5); padding: var(--spacing-md); border-radius: var(--border-radius-md); text-align: center; display: flex; flex-direction: column; gap: var(--spacing-xs); transition: transform 0.2s ease; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+            <div id="stats-assists" class="stats-kda-value" style="font-size: var(--font-size-xxl); font-weight: var(--font-weight-bold); color: var(--info-color, #29b6f6); text-shadow: 0 0 8px rgba(41, 182, 246, 0.5);">0</div>
+            <div class="stats-kda-label" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.5px;">Asistencias</div>
         </div>
-          <div class="stats-kda-card">
-            <div class="stats-kda-value" id="stats-kda-ratio">0.0</div>
-            <div class="stats-kda-label">Ratio KDA</div>
+          <div class="stats-kda-card" style="background: rgba(19, 11, 55, 0.5); padding: var(--spacing-md); border-radius: var(--border-radius-md); text-align: center; display: flex; flex-direction: column; gap: var(--spacing-xs); transition: transform 0.2s ease; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+            <div id="stats-kda-ratio" class="stats-kda-value" style="font-size: var(--font-size-xxl); font-weight: var(--font-weight-bold); color: var(--omashu-purple-light, #bc76ff); text-shadow: 0 0 8px rgba(188, 118, 255, 0.5);">0.0</div>
+            <div class="stats-kda-label" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.5px;">Ratio KDA</div>
       </div>
         </div>
       </div>
     </div>
     
     <!-- Sección de Recursos -->
-    <div class="stats-section glass-panel">
-      <div class="stats-section-header">
-        <h3>Recursos y Economía</h3>
+    <div class="stats-section" style="background: linear-gradient(180deg, rgba(39, 22, 100, 0.8), rgba(19, 11, 55, 0.8)); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid rgba(109, 61, 255, 0.15); margin-top: var(--spacing-md);">
+      <div class="stats-section-header" style="padding: var(--spacing-sm) var(--spacing-md); border-bottom: 1px solid rgba(109, 61, 255, 0.15); background: rgba(109, 61, 255, 0.1);">
+        <h3 style="font-size: var(--font-size-md); color: var(--omashu-purple-light, #bc76ff); text-shadow: 0 0 5px rgba(188, 118, 255, 0.3); margin: 0; font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: 0.5px;">Recursos y Economía</h3>
       </div>
-      <div class="stats-section-content">
-        <div class="stats-metrics-grid">
-          <div class="stats-metric">
-            <div class="stats-metric-icon">
-              <img src="../../img/gold-icon.svg" alt="Oro" />
-      </div>
-            <div class="stats-metric-info">
-              <div class="stats-metric-name">Oro Total</div>
-              <div class="stats-metric-value" id="stats-gold">0</div>
-      </div>
-    </div>
-    
-          <div class="stats-metric">
-            <div class="stats-metric-icon">
-              <img src="../../img/cs-icon.svg" alt="CS" />
-      </div>
-            <div class="stats-metric-info">
-              <div class="stats-metric-name">CS Total</div>
-              <div class="stats-metric-value" id="stats-cs">0</div>
-      </div>
-    </div>
-    
-          <div class="stats-metric">
-            <div class="stats-metric-icon">
-              <img src="../../img/cs-per-min-icon.svg" alt="CS por minuto" />
-      </div>
-            <div class="stats-metric-info">
-              <div class="stats-metric-name">CS por Minuto</div>
-              <div class="stats-metric-value" id="stats-cs-per-min">0.0</div>
-      </div>
-    </div>
-    
-          <div class="stats-metric">
-            <div class="stats-metric-icon">
-              <img src="../../img/ward-icon.svg" alt="Wards" />
-      </div>
-            <div class="stats-metric-info">
-              <div class="stats-metric-name">Wards Colocados</div>
-              <div class="stats-metric-value" id="stats-wards-placed">0</div>
-      </div>
-    </div>
+      <div class="stats-section-content" style="padding: var(--spacing-md);">
+        <div class="stats-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md);">
+          
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(255, 193, 7, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);">
+              <img src="../../img/gold-icon.svg" alt="Oro" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(255, 193, 7, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Oro Total</div>
+              <div id="stats-gold" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #FFC107; text-shadow: 0 0 8px rgba(255, 193, 7, 0.5);">0</div>
+            </div>
+          </div>
+        
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(76, 175, 80, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);">
+              <img src="../../img/cs-icon.svg" alt="CS" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(76, 175, 80, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">CS Total</div>
+              <div id="stats-cs" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #4CAF50; text-shadow: 0 0 8px rgba(76, 175, 80, 0.5);">0</div>
+            </div>
+          </div>
+        
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(76, 175, 80, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);">
+              <img src="../../img/cs-per-min-icon.svg" alt="CS por minuto" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(76, 175, 80, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">CS por Minuto</div>
+              <div id="stats-cs-per-min" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #4CAF50; text-shadow: 0 0 8px rgba(76, 175, 80, 0.5);">0.0</div>
+            </div>
+          </div>
+        
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(109, 61, 255, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(109, 61, 255, 0.2), rgba(109, 61, 255, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(109, 61, 255, 0.3);">
+              <img src="../../img/ward-icon.svg" alt="Wards" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(109, 61, 255, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Wards Colocados</div>
+              <div id="stats-wards-placed" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--omashu-purple-light, #bc76ff); text-shadow: 0 0 8px rgba(188, 118, 255, 0.5);">0</div>
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>
     
     <!-- Sección de Daño -->
-    <div class="stats-section glass-panel">
-      <div class="stats-section-header">
-        <h3>Análisis de Daño</h3>
+    <div class="stats-section" style="background: linear-gradient(180deg, rgba(39, 22, 100, 0.8), rgba(19, 11, 55, 0.8)); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid rgba(109, 61, 255, 0.15); margin-top: var(--spacing-md);">
+      <div class="stats-section-header" style="padding: var(--spacing-sm) var(--spacing-md); border-bottom: 1px solid rgba(109, 61, 255, 0.15); background: rgba(109, 61, 255, 0.1);">
+        <h3 style="font-size: var(--font-size-md); color: var(--omashu-purple-light, #bc76ff); text-shadow: 0 0 5px rgba(188, 118, 255, 0.3); margin: 0; font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: 0.5px;">Análisis de Daño</h3>
       </div>
-      <div class="stats-section-content">
-        <div class="stats-metrics-grid">
-          <div class="stats-metric">
-            <div class="stats-metric-icon damage-icon">
-              <img src="../../img/damage-icon.svg" alt="Daño" />
-      </div>
-            <div class="stats-metric-info">
-              <div class="stats-metric-name">Daño Total</div>
-              <div class="stats-metric-value" id="stats-total-damage">0</div>
-      </div>
-    </div>
-    
-          <div class="stats-metric">
-            <div class="stats-metric-icon damage-icon">
-              <img src="../../img/champion-damage-icon.svg" alt="Daño a campeones" />
-      </div>
-            <div class="stats-metric-info">
-              <div class="stats-metric-name">Daño a Campeones</div>
-              <div class="stats-metric-value" id="stats-champion-damage">0</div>
-      </div>
-    </div>
-    
-          <div class="stats-metric">
-            <div class="stats-metric-icon heal-icon">
-              <img src="../../img/healing-icon.svg" alt="Curación" />
-      </div>
-            <div class="stats-metric-info">
-              <div class="stats-metric-name">Curación Total</div>
-              <div class="stats-metric-value" id="stats-total-healing">0</div>
-      </div>
-    </div>
-    
-          <div class="stats-metric">
-            <div class="stats-metric-icon damage-icon">
-              <img src="../../img/damage-taken-icon.svg" alt="Daño recibido" />
-      </div>
-            <div class="stats-metric-info">
-              <div class="stats-metric-name">Daño Recibido</div>
-              <div class="stats-metric-value" id="stats-damage-taken">0</div>
-        </div>
+      <div class="stats-section-content" style="padding: var(--spacing-md);">
+        <div class="stats-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md);">
+          
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(233, 30, 99, 0.8);">
+            <div class="stats-metric-icon damage-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(233, 30, 99, 0.2), rgba(233, 30, 99, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(233, 30, 99, 0.3);">
+              <img src="../../img/damage-icon.svg" alt="Daño" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(233, 30, 99, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Daño Total</div>
+              <div id="stats-total-damage" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #E91E63; text-shadow: 0 0 8px rgba(233, 30, 99, 0.5);">0</div>
+            </div>
           </div>
+        
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(244, 67, 54, 0.8);">
+            <div class="stats-metric-icon damage-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(244, 67, 54, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);">
+              <img src="../../img/champion-damage-icon.svg" alt="Daño a campeones" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(244, 67, 54, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Daño a Campeones</div>
+              <div id="stats-champion-damage" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #F44336; text-shadow: 0 0 8px rgba(244, 67, 54, 0.5);">0</div>
+            </div>
+          </div>
+        
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(76, 175, 80, 0.8);">
+            <div class="stats-metric-icon heal-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);">
+              <img src="../../img/healing-icon.svg" alt="Curación" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(76, 175, 80, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Curación Total</div>
+              <div id="stats-total-healing" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #4CAF50; text-shadow: 0 0 8px rgba(76, 175, 80, 0.5);">0</div>
+            </div>
+          </div>
+        
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(255, 152, 0, 0.8);">
+            <div class="stats-metric-icon damage-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 152, 0, 0.2), rgba(255, 152, 0, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 152, 0, 0.3);">
+              <img src="../../img/damage-taken-icon.svg" alt="Daño recibido" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(255, 152, 0, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Daño Recibido</div>
+              <div id="stats-damage-taken" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #FF9800; text-shadow: 0 0 8px rgba(255, 152, 0, 0.5);">0</div>
+            </div>
+          </div>
+            
         </div>
       </div>
     </div>
     
     <!-- NUEVA SECCIÓN: TABLA DE VARIABLES -->
-    <div class="stats-section glass-panel">
-      <div class="stats-section-header">
-        <h3>Variables Disponibles</h3>
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-          <button id="btn-exportar-vars" style="background: #00AA00; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+    <div class="stats-section" style="background: linear-gradient(180deg, rgba(39, 22, 100, 0.8), rgba(19, 11, 55, 0.8)); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid rgba(109, 61, 255, 0.15); margin-top: var(--spacing-md);">
+      <div class="stats-section-header" style="padding: var(--spacing-sm) var(--spacing-md); border-bottom: 1px solid rgba(109, 61, 255, 0.15); background: rgba(109, 61, 255, 0.1); display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: var(--font-size-md); color: var(--omashu-purple-light, #bc76ff); text-shadow: 0 0 5px rgba(188, 118, 255, 0.3); margin: 0; font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: 0.5px;">Variables del Juego</h3>
+        <div style="display: flex; gap: 10px;">
+          <button id="btn-exportar-vars" style="background: linear-gradient(135deg, #2e7d32, #43a047); color: white; border: none; padding: 6px 12px; border-radius: var(--border-radius-sm); cursor: pointer; font-weight: var(--font-weight-bold); font-size: var(--font-size-sm); display: flex; align-items: center; gap: 5px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
             Exportar JSON
           </button>
         </div>
-          </div>
-      <div class="stats-section-content">
-        <div class="variables-wrapper" style="max-height: 400px; overflow-y: auto;">
-          <table id="tabla-variables" style="width: 100%; border-collapse: collapse; font-size: 12px;">
+      </div>
+      <div class="stats-section-content" style="padding: var(--spacing-md);">
+        <div class="variables-wrapper" style="max-height: 400px; overflow-y: auto; background: rgba(13, 7, 35, 0.6); border-radius: var(--border-radius-md); border: 1px solid rgba(109, 61, 255, 0.1); box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);">
+          <table id="tabla-variables" style="width: 100%; border-collapse: collapse; font-size: var(--font-size-sm);">
             <thead>
-              <tr style="background-color: rgba(0,0,0,0.3); position: sticky; top: 0;">
-                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #444;">Variable</th>
-                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #444;">Valor</th>
+              <tr style="background: linear-gradient(90deg, rgba(39, 22, 100, 0.9), rgba(39, 22, 100, 0.7)); position: sticky; top: 0; z-index: 1; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">
+                <th style="padding: 10px 12px; text-align: left; color: var(--omashu-purple-light, #bc76ff); font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid rgba(109, 61, 255, 0.3);">Variable</th>
+                <th style="padding: 10px 12px; text-align: left; color: var(--omashu-purple-light, #bc76ff); font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid rgba(109, 61, 255, 0.3);">Valor</th>
               </tr>
             </thead>
-            <tbody id="variables-body">
+            <tbody id="variables-body" style="color: var(--text-primary, #fff);">
               <!-- Aquí se insertarán dinámicamente las variables -->
               <tr>
-                <td colspan="2" style="text-align: center; padding: 20px;">Cargando variables...</td>
+                <td colspan="2" style="text-align: center; padding: 30px; font-size: var(--font-size-md); color: var(--text-secondary, rgba(255,255,255,0.65));">
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.6;">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="8" x2="12" y2="12"></line>
+                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    Cargando variables...
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -219,13 +242,30 @@
         const celda = document.createElement('td');
         celda.colSpan = 2;
         celda.style.textAlign = 'center';
-        celda.style.padding = '20px';
-        celda.textContent = 'No hay datos disponibles del juego';
+        celda.style.padding = '30px';
+        celda.innerHTML = `
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8 15h8M9.5 9h.01M14.5 9h.01"></path>
+            </svg>
+            <div style="font-size: var(--font-size-md); color: var(--text-secondary); font-weight: var(--font-weight-medium);">
+              No hay datos disponibles del juego
+            </div>
+          </div>
+        `;
         fila.appendChild(celda);
         tbody.appendChild(fila);
         console.error("[TABLA] No hay datos disponibles para mostrar");
         return;
       }
+      
+      // Variables destacadas para detectar y resaltar
+      const variablesDestacadas = [
+        'summoner.name', 'summoner.position', 'match.gameTime', 
+        'match.kills', 'match.deaths', 'match.assists', 
+        'match.cs', 'gold', 'match.gold', 'vision.wardsPlaced'
+      ];
       
       // Función recursiva para procesar todas las propiedades anidadas
       function procesarObjeto(obj, prefijo = '') {
@@ -243,39 +283,76 @@
           const valor = obj[clave];
           const nombreCompleto = prefijo ? `${prefijo}.${clave}` : clave;
           
+          // Verificar si es una variable destacada
+          const esDestacada = variablesDestacadas.includes(nombreCompleto);
+          
           // Crear fila para esta propiedad
           const fila = document.createElement('tr');
-          fila.style.borderBottom = '1px solid #333';
+          fila.style.borderBottom = '1px solid rgba(109, 61, 255, 0.1)';
+          
+          if (esDestacada) {
+            fila.style.background = 'rgba(109, 61, 255, 0.08)';
+            fila.style.fontWeight = 'bold';
+          }
           
           // Celda para el nombre de la variable
           const celdaNombre = document.createElement('td');
-          celdaNombre.style.padding = '6px';
-          celdaNombre.style.fontWeight = 'bold';
-          celdaNombre.textContent = nombreCompleto;
+          celdaNombre.style.padding = '8px 12px';
+          
+          // Agregar icono según el tipo de variable
+          let iconoHTML = '';
+          if (nombreCompleto.includes('summoner')) {
+            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">👤</span>';
+          } else if (nombreCompleto.includes('match')) {
+            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">🎮</span>';
+          } else if (nombreCompleto.includes('vision') || nombreCompleto.includes('ward')) {
+            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">👁️</span>';
+          } else if (nombreCompleto.includes('combat') || nombreCompleto.includes('damage')) {
+            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">⚔️</span>';
+          } else if (nombreCompleto.includes('gold') || nombreCompleto.includes('cs')) {
+            iconoHTML = '<span style="opacity:0.7; margin-right:6px;">💰</span>';
+          }
+          
+          celdaNombre.innerHTML = `${iconoHTML}<span style="${esDestacada ? 'color:#bc76ff;' : ''}">${nombreCompleto}</span>`;
           
           // Celda para el valor
           const celdaValor = document.createElement('td');
-          celdaValor.style.padding = '6px';
+          celdaValor.style.padding = '8px 12px';
           
           // Formatear el valor según su tipo
           if (valor === null) {
-            celdaValor.textContent = 'null';
-            celdaValor.style.color = '#888';
+            celdaValor.innerHTML = '<span style="color:#888; font-style:italic;">null</span>';
           } else if (valor === undefined) {
-            celdaValor.textContent = 'undefined';
-            celdaValor.style.color = '#888';
+            celdaValor.innerHTML = '<span style="color:#888; font-style:italic;">undefined</span>';
           } else if (typeof valor === 'object') {
             if (Array.isArray(valor)) {
-              celdaValor.textContent = `Array[${valor.length}]`;
-              celdaValor.style.color = '#5F9EA0';
+              // Formato para arrays
+              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(95, 158, 160, 0.1); padding:3px 8px; border-radius:4px; color:#5F9EA0; border:1px solid rgba(95, 158, 160, 0.2);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                Array[${valor.length}]
+              </span>`;
               
               // Para arrays, mostrar elementos si no son muchos
               if (valor.length > 0 && valor.length < 10) {
                 procesarObjeto(valor, nombreCompleto);
               }
             } else {
-              celdaValor.textContent = `Object{${Object.keys(valor).length} props}`;
-              celdaValor.style.color = '#7B68EE';
+              // Formato para objetos
+              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(123, 104, 238, 0.1); padding:3px 8px; border-radius:4px; color:#7B68EE; border:1px solid rgba(123, 104, 238, 0.2);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                Object{${Object.keys(valor).length} props}
+              </span>`;
               
               // Si es un objeto, procesar sus propiedades de forma recursiva
               procesarObjeto(valor, nombreCompleto);
@@ -283,13 +360,26 @@
           } else {
             // Para valores simples
             if (typeof valor === 'boolean') {
-              celdaValor.textContent = valor.toString();
-              celdaValor.style.color = valor ? '#4CAF50' : '#F44336';
+              // Formato para booleanos
+              const colorBool = valor ? '#4CAF50' : '#F44336';
+              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(${valor ? '76, 175, 80' : '244, 67, 54'}, 0.1); padding:3px 8px; border-radius:4px; color:${colorBool}; border:1px solid rgba(${valor ? '76, 175, 80' : '244, 67, 54'}, 0.2);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  ${valor ? 
+                    '<path d="M20 6L9 17l-5-5"></path>' : 
+                    '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'}
+                </svg>
+                ${valor.toString()}
+              </span>`;
             } else if (typeof valor === 'number') {
-              celdaValor.textContent = valor.toString();
-              celdaValor.style.color = '#03A9F4';
+              // Formato para números
+              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(3, 169, 244, 0.1); padding:3px 8px; border-radius:4px; color:#03A9F4; border:1px solid rgba(3, 169, 244, 0.2);">
+                ${esDestacada ? '<strong>' : ''}${valor.toString()}${esDestacada ? '</strong>' : ''}
+              </span>`;
             } else {
-              celdaValor.textContent = valor.toString();
+              // Formato para strings y otros
+              celdaValor.innerHTML = `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(255, 255, 255, 0.08); padding:3px 8px; border-radius:4px; color:white; border:1px solid rgba(255, 255, 255, 0.15);">
+                ${esDestacada ? '<strong style="color:#bc76ff;">' : ''}${valor.toString()}${esDestacada ? '</strong>' : ''}
+              </span>`;
             }
           }
           
@@ -304,6 +394,19 @@
           // Limitar el número de filas para evitar sobrecarga
           if (filas > 500) {
             console.warn("[TABLA] Limitando visualización a 500 filas para evitar sobrecarga");
+            
+            // Añadir un mensaje al final
+            const filaFinal = document.createElement('tr');
+            const celdaFinal = document.createElement('td');
+            celdaFinal.colSpan = 2;
+            celdaFinal.style.textAlign = 'center';
+            celdaFinal.style.padding = '10px';
+            celdaFinal.style.color = '#FF9800';
+            celdaFinal.style.fontStyle = 'italic';
+            celdaFinal.textContent = `Mostrando 500 de ${Object.keys(gameData).length * 5}+ variables para mejorar rendimiento...`;
+            filaFinal.appendChild(celdaFinal);
+            tbody.appendChild(filaFinal);
+            
             break;
           }
         }
@@ -321,8 +424,18 @@
         const celda = document.createElement('td');
         celda.colSpan = 2;
         celda.style.textAlign = 'center';
-        celda.style.padding = '20px';
-        celda.textContent = 'No se encontraron variables para mostrar';
+        celda.style.padding = '30px';
+        celda.innerHTML = `
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8 15h8M9.5 9h.01M14.5 9h.01"></path>
+            </svg>
+            <div style="font-size: var(--font-size-md); color: var(--text-secondary); font-weight: var(--font-weight-medium);">
+              No se encontraron variables para mostrar
+            </div>
+          </div>
+        `;
         fila.appendChild(celda);
         tbody.appendChild(fila);
       }
@@ -337,9 +450,19 @@
         const celda = document.createElement('td');
         celda.colSpan = 2;
         celda.style.textAlign = 'center';
-        celda.style.padding = '20px';
-        celda.style.color = '#FF5555';
-        celda.textContent = `Error al procesar variables: ${error.message}`;
+        celda.style.padding = '30px';
+        celda.innerHTML = `
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F44336" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <div style="font-size: var(--font-size-md); color: #F44336; font-weight: var(--font-weight-medium);">
+              Error al procesar variables: ${error.message}
+            </div>
+          </div>
+        `;
         fila.appendChild(celda);
         tbody.appendChild(fila);
       }
@@ -455,16 +578,47 @@
   
   // Función para exportar datos a JSON
   function exportarVariablesJSON() {
+    // Referencia al botón para mostrar estados
+    const btnExportar = document.getElementById('btn-exportar-vars');
+    
     if (!ultimosDatos || Object.keys(ultimosDatos).length === 0) {
-      alert("No hay datos disponibles para exportar");
+      // Mostrar mensaje de error visual en el botón
+      const btnTextoOriginal = btnExportar.innerHTML;
+      btnExportar.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        Sin datos
+      `;
+      btnExportar.style.background = 'linear-gradient(135deg, #d32f2f, #f44336)';
+      
+      setTimeout(() => {
+        btnExportar.innerHTML = btnTextoOriginal;
+        btnExportar.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
+      }, 2000);
+      
       return;
     }
     
     try {
+      // Cambiar aspecto del botón para mostrar estado de carga
+      const btnTextoOriginal = btnExportar.innerHTML;
+      btnExportar.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite;">
+          <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+        </svg>
+        Exportando...
+      `;
+      btnExportar.disabled = true;
+      btnExportar.style.opacity = '0.8';
+      
       const jsonStr = JSON.stringify(ultimosDatos, null, 2);
       
       // Usar la API de Overwolf para guardar el archivo
-      const fileName = `lol-variables-${new Date().toISOString().replace(/:/g, '-')}.json`;
+      const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
+      const fileName = `lol-variables-${timestamp}.json`;
       const overwolfFileName = `${overwolf.io.paths.documents}\\Overwolf\\${fileName}`;
       
       // Método específico de Overwolf para escribir archivos
@@ -482,16 +636,83 @@
               duration: 5
             });
             
+            // Actualizar botón con confirmación visual
+            btnExportar.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 6L9 17l-5-5"></path>
+              </svg>
+              Exportado
+            `;
+            btnExportar.style.background = 'linear-gradient(135deg, #388e3c, #4caf50)';
+            
+            // Restaurar botón después de un tiempo
+            setTimeout(() => {
+              btnExportar.innerHTML = btnTextoOriginal;
+              btnExportar.disabled = false;
+              btnExportar.style.opacity = '1';
+              btnExportar.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
+            }, 2000);
+            
             console.log(`Variables guardadas con éxito en: ${overwolfFileName}`);
           } else {
             console.error("Error al exportar variables:", result.error);
+            
+            // Mostrar error visualmente en el botón
+            btnExportar.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
+              Error
+            `;
+            btnExportar.style.background = 'linear-gradient(135deg, #d32f2f, #f44336)';
+            
+            // Mostrar alerta con el error completo
             alert(`Error al exportar variables: ${result.error}`);
+            
+            // Restaurar botón después de un tiempo
+            setTimeout(() => {
+              btnExportar.innerHTML = btnTextoOriginal;
+              btnExportar.disabled = false;
+              btnExportar.style.opacity = '1';
+              btnExportar.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
+            }, 2000);
           }
         }
       );
     } catch (e) {
       console.error("Error exportando datos:", e);
+      
+      // Mostrar error visualmente
+      btnExportar.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        Error
+      `;
+      btnExportar.style.background = 'linear-gradient(135deg, #d32f2f, #f44336)';
+      
+      // Mostrar alerta con el error
       alert("Error al exportar datos: " + e.message);
+      
+      // Restaurar botón después de un tiempo
+      setTimeout(() => {
+        const btnTextoOriginal = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Exportar JSON
+        `;
+        btnExportar.innerHTML = btnTextoOriginal;
+        btnExportar.disabled = false;
+        btnExportar.style.opacity = '1';
+        btnExportar.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
+      }, 2000);
     }
   }
 
@@ -588,4 +809,67 @@
   
   // REFERENCIA TEMPORAL PARA COMPATIBILIDAD - EXACTAMENTE como en tab-overview.html
   window._statsUpdateUI = updateUI;
-</script> 
+</script>
+
+<!-- Añadir estilos específicos de animación -->
+<style>
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+  
+  .stats-kda-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+</style>
+
+<!-- Añadir estilos adicionales para la tabla de variables -->
+<style>
+  /* Estilos para filas de la tabla de variables */
+  #tabla-variables tbody tr {
+    border-bottom: 1px solid rgba(109, 61, 255, 0.1);
+    transition: background-color 0.2s ease;
+  }
+  
+  #tabla-variables tbody tr:hover {
+    background-color: rgba(109, 61, 255, 0.1);
+  }
+  
+  /* Estilos para el botón de exportar */
+  #btn-exportar-vars:hover {
+    background: linear-gradient(135deg, #43a047, #66bb6a);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+  
+  #btn-exportar-vars:active {
+    transform: translateY(0px);
+  }
+  
+  /* Estilos para la barra de desplazamiento */
+  .variables-wrapper::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .variables-wrapper::-webkit-scrollbar-track {
+    background: rgba(13, 7, 35, 0.3);
+    border-radius: 4px;
+  }
+  
+  .variables-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(109, 61, 255, 0.3);
+    border-radius: 4px;
+  }
+  
+  .variables-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(109, 61, 255, 0.5);
+  }
+  
+  /* Efectos hover para métricas */
+  .stats-metric:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+</style> 
