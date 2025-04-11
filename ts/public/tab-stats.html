@@ -200,6 +200,9 @@
 </div>
 
 <script>
+(function() { // Inicio de IIFE
+  // Todo el código JS existente de la pestaña va aquí dentro
+
   // Función para formatear el tiempo de juego - misma que en tab-overview.html
   function formatGameTime(seconds) {
     if (!seconds && seconds !== 0) return "00:00";
@@ -221,9 +224,9 @@
   
   // Variables para seguimiento de datos
   let ultimosDatos = {};
-  let variablesFiltradas = false; // Ya no filtramos, mostramos todo
+  // let variablesFiltradas = false; // Ya no es necesario si no filtramos
   
-  // Función para actualizar la tabla de variables - AHORA MUESTRA RUTAS COMPLETAS Y LOGS DETALLADOS
+  // Función para actualizar la tabla de variables (ahora local a la IIFE)
   function actualizarTablaVariables(gameData) {
     // DEBUG: Loguear inicio de la función de tabla
     console.log("[TABLA | actualizarTablaVariables] Iniciando con datos:", gameData ? 'Datos presentes' : 'Datos ausentes');
@@ -506,8 +509,7 @@
     }
   }
 
-  // ========== FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN DE UI ==========
-  // Esta función sigue EXACTAMENTE el mismo patrón que tab-overview.html
+  // ========== FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN DE UI ========== (ahora local a la IIFE)
   function updateUI(gameData) {
     // DEBUG: Loguear los datos completos recibidos
     console.log("[tab-stats | updateUI] Datos recibidos:", gameData ? JSON.stringify(gameData).substring(0, 300) + '...' : 'null/undefined');
@@ -618,7 +620,7 @@
     }, 10);
   }
   
-  // Función para exportar datos a JSON
+  // Función para exportar datos a JSON (ahora local a la IIFE)
   function exportarVariablesJSON() {
     // Referencia al botón para mostrar estados
     const btnExportar = document.getElementById('btn-exportar-vars');
@@ -758,9 +760,9 @@
     }
   }
 
-  // Inicialización - SIGUE EXACTAMENTE EL MISMO PATRÓN QUE TAB-OVERVIEW.HTML
+  // Inicialización
   document.addEventListener('DOMContentLoaded', function() {
-    console.log("Tab-stats cargado, iniciando exactamente como tab-overview...");
+    console.log("[stats-IIFE] Tab-stats cargado, iniciando...");
     
     try {
       // Adjuntar eventos a los botones
@@ -769,88 +771,76 @@
         btnExportar.addEventListener('click', exportarVariablesJSON);
       }
       
-      // CAMBIO IMPORTANTE: Adjuntar la función updateUI al elemento de pestaña
-      // EXACTAMENTE como en tab-overview.html
-      const tabElement = document.querySelector('.stats-container').closest('.tabs__pane') || 
-                        document.getElementById('stats-tab');
+      // Encontrar el elemento de la pestaña ACTUAL
+      const thisScriptElement = document.currentScript;
+      const tabElement = thisScriptElement ? thisScriptElement.closest('.stats-container') : document.getElementById('stats-tab'); // Ajustar selector si es necesario
       
-      if (tabElement) {
-        console.log("Adjuntando función updateUI al elemento de pestaña:", tabElement.id);
-        
-        // Guardar la función en el elemento - EXACTAMENTE como en tab-overview.html
-        tabElement.updateUIFunction = updateUI;
-        
-        // Registro global como respaldo - EXACTAMENTE como en tab-overview.html
-        if (!window.tabUpdateFunctions) window.tabUpdateFunctions = {};
-        window.tabUpdateFunctions['stats-tab'] = updateUI;
-        
-        // Exponer la función actualizarTablaVariables para acceso directo
-        tabElement.actualizarTablaVariables = actualizarTablaVariables;
+      if (!tabElement) {
+         console.error("[stats-IIFE] No se pudo encontrar el elemento raíz de la pestaña.");
+         // Intentar buscar por ID como fallback
+         const fallbackTabElement = document.getElementById('stats-tab');
+         if(fallbackTabElement) {
+             console.warn("[stats-IIFE] Usando fallback getElementById('stats-tab')");
+             fallbackTabElement.updateUIFunction = updateUI;
+             // Exponer la función actualizarTablaVariables para acceso directo (si se necesita)
+             fallbackTabElement.actualizarTablaVariables = actualizarTablaVariables;
+         } else {
+             return; // Salir si no se encuentra el elemento
+         }
       } else {
-        console.warn("No se pudo encontrar el elemento de pestaña para adjuntar updateUI");
+          // Adjuntar la función updateUI LOCAL al elemento de la pestaña
+          tabElement.updateUIFunction = updateUI;
+          // Exponer la función actualizarTablaVariables para acceso directo (si se necesita)
+          tabElement.actualizarTablaVariables = actualizarTablaVariables;
+          console.log("[stats-IIFE] updateUI y actualizarTablaVariables adjuntadas al elemento de la pestaña.");
       }
       
-      // SUBSCRIPCIONES - EXACTAMENTE como en tab-overview.html
-      if (typeof window.subscribeToGameData === 'function') {
-        console.log("Usando window.subscribeToGameData");
-        window.subscribeToGameData(updateUI);
-      } 
-      else if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'function') {
-        console.log("Usando window.gameDataManager.subscribe");
-        window.gameDataManager.subscribe(updateUI);
-      } 
-      else {
-        console.log("Intentando acceder a través de mainWindow");
-        overwolf.windows.getMainWindow(function(mainWindow) {
-          if (mainWindow && mainWindow.gameDataManager) {
-            console.log("Usando mainWindow.gameDataManager.subscribe");
-            mainWindow.gameDataManager.subscribe(updateUI);
+      // Registrar globalmente (opcional, preferiblemente evitar)
+      // if (!window.tabUpdateFunctions) window.tabUpdateFunctions = {};
+      // window.tabUpdateFunctions['stats-tab'] = updateUI;
+      
+      // SUBSCRIPCIONES
+      function subscribeToData() {
+          // ... (código de suscripción existente, igual que en overview)
+          if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'function') {
+            console.log("[stats-IIFE] Suscribiendo via window.gameDataManager");
+            window.gameDataManager.subscribe(updateUI);
           } else {
-            console.error("No se pudo acceder al gameDataManager desde tab-stats");
+            overwolf.windows.getMainWindow(mainWindow => {
+              if (mainWindow && mainWindow.gameDataManager && typeof mainWindow.gameDataManager.subscribe === 'function') {
+                console.log("[stats-IIFE] Suscribiendo via mainWindow.gameDataManager");
+                mainWindow.gameDataManager.subscribe(updateUI);
+              } else {
+                console.error("[stats-IIFE] No se pudo encontrar gameDataManager para suscribir.");
+              }
+            });
           }
-        });
       }
+      subscribeToData();
       
-      // FORZAR ACTUALIZACIÓN DIRECTAMENTE - EXACTAMENTE como en tab-overview.html
-      console.log("Llamando a forceUpdateActiveTab para actualizar inmediatamente");
-      if (window.forceUpdateActiveTab) {
-        window.forceUpdateActiveTab();
-      }
+      // FORZAR ACTUALIZACIÓN INICIAL SI ES NECESARIO
+      // (El código existente para forzar ya no debería ser necesario si la suscripción funciona)
+      // console.log("Llamando a forceUpdateActiveTab para actualizar inmediatamente");
+      // if (window.forceUpdateActiveTab) { window.forceUpdateActiveTab(); }
       
-      // Datos iniciales de test - SIMPLIFICADOS para evitar interferencias
-      console.log("Llamando a updateUI directamente con datos de prueba");
+      // Datos iniciales de test (solo si la suscripción tarda)
+      console.log("[stats-IIFE] Llamando a updateUI directamente con datos de prueba iniciales");
       updateUI({
-        summoner: { name: "Invocador de prueba", position: "Test" },
-        match: { gameMode: "PRACTICETOOL", gameTime: 120, kills: 2, deaths: 1, assists: 3, cs: 50 },
-        vision: { wardsPlaced: 2 },
-        combat: {
-          damageDealt: 1000,
-          damageDealtToChampions: 500,
-          damageTaken: 300,
-          healing: 100
-        },
-        // Añadir algunas variables para mostrar en la tabla
-        testVariables: {
-          variable1: "valor1",
-          variable2: 123,
-          variable3: true,
-          variable4: {
-            subvar1: "subvalor1",
-            subvar2: 456
-          }
-        }
+        summoner: { name: "Cargando...", position: "-" },
+        match: { gameMode: "-", gameTime: 0, kills: 0, deaths: 0, assists: 0, cs: 0, gold: 0 },
+        vision: { wardsPlaced: 0 },
+        combat: { damageDealt: 0, damageDealtToChampions: 0, damageTaken: 0, healing: 0 }
       });
       
     } catch (e) {
-      console.error('Error al inicializar tab-stats:', e);
+      console.error('[stats-IIFE] Error al inicializar:', e);
     }
   });
   
-  // NO EXPONER updateUI GLOBALMENTE - EXACTAMENTE como en tab-overview.html
-  // window.updateUI = updateUI;
-  
-  // REFERENCIA TEMPORAL PARA COMPATIBILIDAD - EXACTAMENTE como en tab-overview.html
-  window._statsUpdateUI = updateUI;
+  // Ya no necesitamos la referencia global window._statsUpdateUI
+  // window._statsUpdateUI = updateUI;
+
+})(); // Fin de IIFE
 </script>
 
 <!-- Estilos movidos fuera y después del script -->

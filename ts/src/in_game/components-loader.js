@@ -255,8 +255,6 @@ function directUpdateTab(tabId) {
       kda: `${data.match.kills}/${data.match.deaths}/${data.match.assists}`
     });
     
-    // CAMBIO IMPORTANTE: Nueva estrategia para encontrar la función updateUI
-    
     // Método 1: Buscar la función updateUI adjunta al elemento de pestaña
     if (tabPane.updateUIFunction && typeof tabPane.updateUIFunction === 'function') {
       console.log(`Usando función updateUI adjunta al elemento ${tabId}`);
@@ -274,26 +272,32 @@ function directUpdateTab(tabId) {
     
     // Método 3: Buscar en nombres de función específicos por tab
     const specificFunctionName = `_${tabId.replace('-tab', '')}UpdateUI`;
-    if (window[specificFunctionName] && typeof window[specificFunctionName] === 'function') {
-      console.log(`Usando función específica window.${specificFunctionName}`);
-      window[specificFunctionName](data);
-      return;
-    }
+    // COMENTADO: Ya no usamos esta convención global
+    // if (window[specificFunctionName] && typeof window[specificFunctionName] === 'function') {
+    //   console.log(`Usando función específica window.${specificFunctionName}`);
+    //   window[specificFunctionName](data);
+    //   return;
+    // }
     
     // Método 4: Como fallback intentar window.updateUI global (para compatibilidad)
-    if (typeof window.updateUI === 'function') {
-      console.log('Fallback: Usando window.updateUI global');
-      window.updateUI(data);
-      return;
-    }
+    // COMENTADO: Evitar este método global conflictivo
+    // if (typeof window.updateUI === 'function') {
+    //   console.log('Fallback: Usando window.updateUI global');
+    //   window.updateUI(data);
+    //   return;
+    // }
     
     // Método 5: Buscar dentro de scripts del tab
-    const tabUpdateUI = findTabUpdateUIFunction(tabPane);
-    if (tabUpdateUI) {
-      console.log('Usando updateUI extraída del script del tab');
-      tabUpdateUI(data);
-      return;
-    }
+    // COMENTADO: Se deshabilitó en findTabUpdateUIFunction
+    // const tabUpdateUI = findTabUpdateUIFunction(tabPane);
+    // if (tabUpdateUI) {
+    //   console.log('Usando updateUI extraída del script del tab');
+    //   tabUpdateUI(data);
+    //   return;
+    // }
+    
+    // Si ningún método de función funcionó, intentar actualización manual (fallback)
+    console.log(`[components-loader] No se encontró función updateUI específica para ${tabId}. Intentando actualización manual.`);
     
     // Actualización específica para overview-tab - COMO ÚLTIMO RECURSO
     if (tabId === 'overview-tab') {
@@ -357,35 +361,58 @@ function directUpdateTab(tabId) {
  * @return {Function|null} - La función updateUI o null si no se encuentra
  */
 function findTabUpdateUIFunction(tabElement) {
+  // --- INICIO DE MODIFICACIÓN ---
+  // Se deshabilita la extracción de funciones mediante regex y new Function()
+  // porque es propensa a errores de sintaxis y problemas de contexto.
+  // Confiaremos en la asignación directa (tabElement.updateUIFunction) 
+  // o el registro global (window.tabUpdateFunctions).
+  const tabId = tabElement ? (tabElement.id || tabElement.dataset?.tabId || '(sin ID identificable)') : '(elemento nulo)';
+  console.warn(`[components-loader] La extracción de funciones (findTabUpdateUIFunction) para el tab '${tabId}' está deshabilitada. Se usará el fallback si la función no se encontró por métodos directos.`);
+  return null;
+  // --- FIN DE MODIFICACIÓN ---
+
+  /* CÓDIGO ORIGINAL COMENTADO
   try {
     // Método 1: Buscar updateUI como variable global en el documento
-    if (typeof updateUI === 'function') {
-      return updateUI;
-    }
+    // (Este método es poco fiable en contextos de módulos o scripts aislados)
+    // if (typeof updateUI === 'function') { 
+    //   return updateUI;
+    // }
     
     // Método 2: Buscarla en el contexto del script del tab
     const scriptElements = tabElement.querySelectorAll('script');
     for (const script of scriptElements) {
       const scriptContent = script.textContent;
       if (scriptContent && scriptContent.includes('function updateUI')) {
-        // Extraer la función y evaluarla
+        // Extraer la función y evaluarla (FRÁGIL)
         const functionMatch = scriptContent.match(/function\s+updateUI\s*\([^)]*\)\s*\{[\s\S]*?\}/);
         if (functionMatch) {
-          // Crear una función a partir del texto extraído
-          return new Function('gameData', 
-            functionMatch[0].replace('function updateUI(gameData)', '') // Extraer solo el cuerpo
-          );
+          // Crear una función a partir del texto extraído (PROPENSO A ERRORES)
+          // return new Function('gameData', 
+          //   functionMatch[0].replace('function updateUI(gameData)', '') // Extraer solo el cuerpo
+          // );
+          console.warn("[components-loader] Se encontró texto 'function updateUI', pero la extracción está deshabilitada.");
+          return null; // Devolver null incluso si se encuentra el texto
         }
       }
     }
     
     return null;
   } catch (e) {
-    // Modificación: Añadir ID del tab al mensaje de error
-    const tabId = tabElement ? (tabElement.id || tabElement.dataset?.tabId || '(sin ID identificable)') : '(elemento nulo)';
-    console.error(`[components-loader] Error buscando función updateUI en tab: ${tabId}. Error:`, e);
+    // ... (código de manejo de error existente) ...
+    const tabIdCatch = tabElement ? (tabElement.id || tabElement.dataset?.tabId || '(sin ID identificable)') : '(elemento nulo)';
+    let problematicScriptContent = '(No se pudo obtener el contenido del script)';
+    try {
+      const scriptElements = tabElement.querySelectorAll('script');
+      if (scriptElements.length > 0) {
+        problematicScriptContent = scriptElements[scriptElements.length - 1].textContent.substring(0, 500) + "...";
+      }
+    } catch (innerE) {}
+    console.error(`[components-loader] Error buscando/procesando función updateUI en tab: ${tabIdCatch}. Error:`, e);
+    console.error(`[components-loader] Contenido del script (aproximado) donde ocurrió el error en ${tabIdCatch}:\n--- START SCRIPT ---\n${problematicScriptContent}\n--- END SCRIPT ---`);
     return null;
   }
+  */
 }
 
 /**

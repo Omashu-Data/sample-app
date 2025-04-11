@@ -123,6 +123,7 @@
 </div>
 
 <script>
+(function() { // Inicio de IIFE
   // Función para formatear el tiempo de juego
   function formatGameTime(seconds) {
     if (!seconds && seconds !== 0) return "00:00";
@@ -142,7 +143,7 @@
     }
   }
 
-  // Única función para actualizar la UI
+  // Única función para actualizar la UI (ahora local a la IIFE)
   function updateUI(gameData) {
     const playerNameEl = document.getElementById('player-name');
     const playerRoleEl = document.getElementById('player-role');
@@ -207,48 +208,51 @@
     });
   }
 
-  // Añadir efectos y estilos adicionales
-  document.head.insertAdjacentHTML('beforeend', `
-    <style>
-      @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.7; }
-        100% { opacity: 1; }
-      }
-      
-      .challenge-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-      }
-    </style>
-  `);
-
   // Inicialización
   document.addEventListener('DOMContentLoaded', function() {
-    console.log("Tab-overview mejorado cargado, suscribiendo...");
+    console.log("[overview-IIFE] Tab-overview cargado, suscribiendo...");
     try {
-      const tabElement = document.getElementById('overview-tab');
-      if (tabElement) {
-        tabElement.updateUIFunction = updateUI;
-        if (!window.tabUpdateFunctions) window.tabUpdateFunctions = {};
-        window.tabUpdateFunctions['overview-tab'] = updateUI;
+      // Encontrar el elemento de la pestaña ACTUAL (importante dentro de la IIFE)
+      // Asumiendo que el script está dentro del div principal o podemos encontrarlo
+      const thisScriptElement = document.currentScript;
+      const tabElement = thisScriptElement ? thisScriptElement.closest('.overview-tab-content') : document.getElementById('overview-tab'); // Ajustar selector si es necesario
+      
+      if (!tabElement) {
+        console.error("[overview-IIFE] No se pudo encontrar el elemento raíz de la pestaña.");
+        // Intentar buscar por ID como fallback, aunque puede no ser fiable si se carga múltiples veces
+        const fallbackTabElement = document.getElementById('overview-tab');
+        if (fallbackTabElement) {
+            console.warn("[overview-IIFE] Usando fallback getElementById('overview-tab')");
+            // Adjuntar la función al elemento encontrado
+            fallbackTabElement.updateUIFunction = updateUI;
+        } else {
+            return; // No podemos continuar sin el elemento
+        }
       } else {
-          console.warn("#overview-tab no encontrado.");
+         // Adjuntar la función updateUI LOCAL al elemento de la pestaña
+         tabElement.updateUIFunction = updateUI;
+         console.log("[overview-IIFE] updateUI adjuntada al elemento de la pestaña.");
       }
 
-      if (typeof window.subscribeToGameData === 'function') {
-        window.subscribeToGameData(updateUI);
-      } else if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'function') {
-        window.gameDataManager.subscribe(updateUI);
-      } else {
-        overwolf.windows.getMainWindow(mainWindow => {
-          if (mainWindow && mainWindow.gameDataManager) {
-            mainWindow.gameDataManager.subscribe(updateUI);
-          } else {
-            console.error("No se pudo acceder al gameDataManager.");
-          }
-        });
+      // Suscripción a datos
+      function subscribeToData() {
+        if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'function') {
+          console.log("[overview] Suscribiendo via window.gameDataManager");
+          window.gameDataManager.subscribe(updateUI);
+        } else {
+          overwolf.windows.getMainWindow(mainWindow => {
+            if (mainWindow && mainWindow.gameDataManager && typeof mainWindow.gameDataManager.subscribe === 'function') {
+              console.log("[overview] Suscribiendo via mainWindow.gameDataManager");
+              mainWindow.gameDataManager.subscribe(updateUI);
+            } else {
+              console.error("[overview] No se pudo encontrar gameDataManager para suscribir.");
+              // Reintentar suscripción después de un breve retraso
+              // setTimeout(subscribeToData, 2000);
+            }
+          });
+        }
       }
+      subscribeToData();
 
       // Aplicar estado inicial visual
       updateUI({
@@ -258,10 +262,23 @@
       });
 
     } catch (e) {
-      console.error('Error inicializando tab-overview mejorado:', e);
+      console.error('[overview-IIFE] Error inicializando:', e);
     }
   });
 
-  window._overviewUpdateUI = updateUI;
+})(); // Fin de IIFE
+</script>
 
-</script> 
+<!-- Estilos CSS movidos aquí, fuera del script -->
+<style>
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+  
+  .challenge-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+</style> 
