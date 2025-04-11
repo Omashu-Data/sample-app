@@ -457,42 +457,37 @@ describe('GameDataManager', () => {
 
 ```
 src/
+├── AppWindow.ts         # Clase principal de ventana (no documentada previamente)
+├── consts.ts            # Constantes globales (movido desde shared/constants)
 ├── background/
-│   ├── background.ts         # Gestión del ciclo de vida
-│   └── services/
-│       ├── window.service.ts # Gestión de ventanas
-│       └── auth.service.ts   # Autenticación
+│   ├── background.html  # HTML para la ventana de fondo
+│   └── background.ts    # Lógica principal de la ventana de fondo
+├── css/                 # Archivos CSS globales (no documentado previamente)
+│   └── ...              # (Contenido no inspeccionado)
 ├── desktop/
-│   ├── desktop.ts           # Interfaz de escritorio
-│   └── components/
-│       └── settings/        # Componentes de configuración
-├── in_game/
-│   ├── components/          # Componentes UI reutilizables
-│   │   ├── tab-overview/
-│   │   │   ├── index.ts
-│   │   │   ├── overview.html
-│   │   │   └── overview.css
-│   │   ├── tab-stats/
-│   │   └── tab-events/
-│   ├── services/           # Servicios de datos y lógica
-│   │   ├── gep.service.ts  # Game Events Provider
-│   │   ├── lcd.service.ts  # Live Client Data
-│   │   └── ads.service.ts  # Gestión de anuncios
-│   ├── utils/             # Utilidades y helpers
-│   │   ├── time.ts        # Formateo de tiempo
-│   │   ├── stats.ts       # Cálculos estadísticos
-│   │   └── dom.ts         # Manipulación DOM
-│   └── in_game.ts         # Lógica principal in-game
-└── shared/
-    ├── interfaces/        # Definiciones TypeScript
-    │   ├── game-data.ts
-    │   └── events.ts
-    ├── constants/         # Constantes globales
-    │   ├── features.ts
-    │   └── config.ts
-    └── helpers/          # Funciones auxiliares
-        ├── logger.ts
-        └── performance.ts
+│   ├── desktop.html     # HTML para la ventana de escritorio
+│   └── desktop.ts       # Lógica principal de la ventana de escritorio
+└── in_game/             # Lógica y UI principal en partida (estructura simplificada)
+    ├── ads.ts           # Gestión de anuncios (movido desde services/)
+    ├── banner-horizontal.html
+    ├── banner-vertical.html
+    ├── components-loader.js # Carga dinámica de componentes UI
+    ├── eventos-fix.js
+    ├── eventos.html     # HTML para visualización de eventos
+    ├── header-loader.js
+    ├── header.html      # Plantilla HTML para la cabecera
+    ├── heatmap.ts       # Lógica para el mapa de calor (no documentado previamente)
+    ├── in_game.html     # HTML principal de la ventana en partida
+    ├── in_game.ts       # Lógica principal de la ventana en partida
+    ├── raw-data-exporter.js # Exportador de datos crudos (no documentado previamente)
+    ├── tab-clips.html
+    ├── tab-events.html
+    ├── tab-heatmap.html
+    ├── tab-improve.html
+    ├── tab-overview.html
+    ├── tab-performance.html
+    ├── tab-stats.html
+    └── tabs-menu.html   # Plantilla HTML para el menú de pestañas
 ```
 
 ## Licencia
