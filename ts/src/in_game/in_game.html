@@ -569,43 +569,11 @@
       }
     }
     
-    // Registrar manejadores de eventos
-    function registerEvents() {
-      unregisterEvents();
-      
-      overwolf.games.events.onError.addListener(onError);
-      overwolf.games.events.onInfoUpdates2.addListener(onInfoUpdates);
-      overwolf.games.events.onNewEvents.addListener(onNewEvents);
-      
-      console.log("Eventos registrados directamente en in_game.html");
-    }
-    
-    // Eliminar manejadores de eventos
-    function unregisterEvents() {
-      try {
-        overwolf.games.events.onError.removeListener(onError);
-        overwolf.games.events.onInfoUpdates2.removeListener(onInfoUpdates);
-        overwolf.games.events.onNewEvents.removeListener(onNewEvents);
-      } catch (e) {
-        console.log("Error al eliminar listeners:", e);
-      }
-    }
-    
-    // Configurar características requeridas
-    function setFeatures() {
-      console.log("Intentando establecer características:", features);
-      
-      overwolf.games.events.setRequiredFeatures(features, function(info) {
-        if (!info.success) {
-          console.log("No se pudieron establecer las características:", info.error);
-          setTimeout(setFeatures, 2000);
-          return;
-        }
-        
-        console.log("Características establecidas correctamente");
-      });
-    }
-    
+    // ---- FUNCIONES DE REGISTRO Y CONFIGURACIÓN (movidas a in_game_listeners.js) ----
+    // function registerEvents() { ... }
+    // function unregisterEvents() { ... }
+    // function setFeatures() { ... }
+
     // Función para obtener datos de la API Live Client de LoL
     function fetchLiveClientData() {
       console.log("Obteniendo datos de Live Client Data API...");

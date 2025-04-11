@@ -504,5 +504,194 @@ function onNewEvents(e) {
   }
 }
 
+// ---- FUNCIONES DE REGISTRO Y CONFIGURACIÓN DE EVENTOS ----
+
+// Registrar manejadores de eventos
+function registerEvents() {
+  unregisterEvents();
+  
+  overwolf.games.events.onError.addListener(onError);
+  overwolf.games.events.onInfoUpdates2.addListener(onInfoUpdates);
+  overwolf.games.events.onNewEvents.addListener(onNewEvents);
+  
+  console.log("Eventos registrados directamente en in_game.html (ahora en listeners.js)");
+}
+
+// Eliminar manejadores de eventos
+function unregisterEvents() {
+  try {
+    overwolf.games.events.onError.removeListener(onError);
+    overwolf.games.events.onInfoUpdates2.removeListener(onInfoUpdates);
+    overwolf.games.events.onNewEvents.removeListener(onNewEvents);
+  } catch (e) {
+    console.log("Error al eliminar listeners:", e);
+  }
+}
+
+// Configurar características requeridas
+function setFeatures() {
+  console.log("Intentando establecer características:", features);
+  
+  overwolf.games.events.setRequiredFeatures(features, function(info) {
+    if (!info.success) {
+      console.log("No se pudieron establecer las características:", info.error);
+      setTimeout(setFeatures, 2000);
+      return;
+    }
+    
+    console.log("Características establecidas correctamente");
+  });
+}
+
+// ---- LÓGICA DE ESTADO DEL JUEGO Y LIVE CLIENT API ----
+
+let lolDataInterval = null;
+let uiUpdateInterval = null;
+
+// Función para obtener datos de la API Live Client de LoL
+function fetchLiveClientData() {
+  console.log("Obteniendo datos de Live Client Data API...");
+  
+  fetch('https://127.0.0.1:2999/liveclientdata/allgamedata')
+    .then(response => {
+      if (!response.ok) {
+        // No lanzar error si es 404 (juego no iniciado o API no lista)
+        if (response.status === 404) {
+          console.log("Live Client API no disponible (404).");
+          return null; // Devolver null para indicar que no hay datos
+        } 
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Si no hay datos (ej. por 404), salir
+      if (data === null) return;
+      
+      console.log("Datos obtenidos de API:", data);
+      
+      // Analizar estructura de Live Client Data
+      analizarEstructuraLiveClientData(data);
+      
+      const updates = {
+        summoner: {},
+        match: {}
+        // Asegurarse de inicializar otros campos si se usan abajo
+      };
+      
+      if (data && data.activePlayer) {
+        if (data.activePlayer.summonerName) {
+          updates.summoner.name = data.activePlayer.summonerName;
+        }
+        
+        if (data.activePlayer.level) {
+          updates.summoner.level = data.activePlayer.level;
+        }
+        
+        // Buscar datos del jugador activo en allPlayers para más detalles
+        if (data.allPlayers) {
+          const activePlayerData = data.allPlayers.find(p => 
+            p.summonerName === data.activePlayer.summonerName
+          );
+          
+          if (activePlayerData) {
+            updates.summoner.champion = activePlayerData.championName || '';
+            
+            if (activePlayerData.scores) {
+              updates.match.kills = activePlayerData.scores.kills || 0;
+              updates.match.deaths = activePlayerData.scores.deaths || 0;
+              updates.match.assists = activePlayerData.scores.assists || 0;
+              updates.match.cs = 
+                (activePlayerData.scores.creepScore || 0) + 
+                (activePlayerData.scores.neutralMinionsKilled || 0);
+              updates.match.gold = Math.round(activePlayerData.scores.currentGold || 0);
+            }
+          }
+        }
+      }
+        
+      if (data.gameData && data.gameData.gameTime) {
+        updates.match.gameTime = Math.floor(data.gameData.gameTime);
+      }
+      
+      if (data.gameData && data.gameData.gameMode) {
+        updates.match.gameMode = data.gameData.gameMode;
+      }
+      
+      // Solo actualizar si hemos obtenido algún dato útil
+      if (Object.keys(updates.summoner).length > 0 || Object.keys(updates.match).length > 0) {
+         gameDataManager.updateData(updates);
+      }
+    })
+    .catch(error => {
+      // No mostrar errores de conexión como errores críticos si son comunes
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          console.log("Error conectando a Live Client API (puede ser normal si el juego no está activo):");
+      } else {
+          console.error("Error procesando Live Client API:", error);
+      }
+    });
+}
+
+// Manejar cambios en el estado del juego
+function handleGameStateChange(gameInfo) {
+  // Comprobar si el juego es LoL (ID 5426) y está corriendo
+  const isLolRunning = gameInfo && gameInfo.isRunning && Math.floor(gameInfo.id/10) === 5426;
+  
+  if (isLolRunning) {
+    // Si LoL está corriendo y no teníamos intervalo, iniciarlo
+    if (!lolDataInterval) {
+      console.log("LoL detectado. Iniciando captura de eventos y Live Client API...");
+      
+      registerEvents();
+      setTimeout(setFeatures, 1000); // Dar tiempo a registrar antes de configurar
+      
+      fetchLiveClientData(); // Primera llamada inmediata
+      lolDataInterval = setInterval(fetchLiveClientData, 2000); // Actualizar cada 2 segundos
+      
+      // Iniciar intervalo de actualización de UI si no existe
+      if (!uiUpdateInterval) {
+        uiUpdateInterval = setInterval(function() {
+          forceUpdateActiveTab(); // Usamos la función que actualiza la pestaña activa
+          // Log de estado (opcional, puede ser muy verboso)
+          // console.log("UI Update Tick. Estado actual:", gameDataManager.getData());
+        }, 1000); // Actualizar UI cada segundo
+      }
+    }
+  } else {
+    // Si LoL no está corriendo y teníamos intervalo, detenerlo
+    if (lolDataInterval) {
+      console.log("LoL no detectado o cerrado. Deteniendo captura...");
+      unregisterEvents();
+      
+      clearInterval(lolDataInterval);
+      lolDataInterval = null;
+      
+      // Detener también el intervalo de UI
+      if (uiUpdateInterval) {
+        clearInterval(uiUpdateInterval);
+        uiUpdateInterval = null;
+      }
+    }
+  }
+}
+
+// ---- INICIALIZACIÓN DE LISTENERS DE ESTADO DEL JUEGO ----
+console.log("Inicializando listeners de estado del juego...");
+
+// Verificar estado inicial
+overwolf.games.getRunningGameInfo(function(gameInfo) {
+  if (gameInfo) {
+    handleGameStateChange(gameInfo);
+  }
+});
+
+// Escuchar cambios
+overwolf.games.onGameInfoUpdated.addListener(function(res) {
+  if (res && res.gameInfo) {
+    handleGameStateChange(res.gameInfo);
+  }
+});
+
 // Aquí irá el resto del código que moveremos después
-// (registerEvents, unregisterEvents, setFeatures, etc.) 
+// (Exposición de funciones en window, intervalos de actualización forzada, etc.) 
