@@ -71,9 +71,10 @@
 
   <!-- SISTEMA INTEGRADO DE CAPTURA DE EVENTOS Y GESTIÓN DE DATOS -->
   <script src="game-data-manager.js"></script>
+  <script src="in_game_utils.js"></script>
   <script>
     // ---- GESTOR CENTRALIZADO DE DATOS DEL JUEGO ----
-    // const gameDataManager = { ... }; // <--- ESTE BLOQUE GRANDE (líneas 74-237) SE HA MOVIDO a game-data-manager.js
+    // const gameDataManager = { ... }; // <--- Definición movida a game-data-manager.js
 
     // Crear estilos para la animación de parpadeo
     const style = document.createElement('style');
@@ -120,35 +121,10 @@
     const eventsLog = document.getElementById('eventsLog');
     const infoLog = document.getElementById('infoLog');
     
-    // Función para añadir a los logs
-    function addToLog(logElement, data, highlight = false) {
-      if (!logElement) return;
-      
-      const pre = document.createElement('pre');
-      pre.textContent = JSON.stringify(data, null, 2);
-      
-      if (highlight) {
-        pre.className = 'highlight';
-      }
-      
-      logElement.appendChild(pre);
-      logElement.scrollTop = logElement.scrollHeight;
-      
-      // Limitar el número de logs
-      while (logElement.childElementCount > 50) {
-        logElement.removeChild(logElement.firstChild);
-      }
-    }
-    
-    // Formatear tiempo de juego
-    function formatGameTime(timeInSeconds) {
-      const minutes = Math.floor(timeInSeconds / 60);
-      const seconds = timeInSeconds % 60;
-      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-    
-    // Exponer globalmente para que las pestañas puedan usarlo
-    window.formatGameTime = formatGameTime;
+    // ---- Funciones de utilidad movidas a in_game_utils.js ----
+    // function addToLog(logElement, data, highlight = false) { ... }
+    // function formatGameTime(timeInSeconds) { ... }
+    // window.formatGameTime = formatGameTime; // <-- Eliminado, parece innecesario
     
     // ---- MANEJADORES DE EVENTOS DE OVERWOLF ----
     
