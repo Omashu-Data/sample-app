@@ -231,7 +231,10 @@ function onInfoUpdates(info) {
 
 // Manejar nuevos eventos
 function onNewEvents(e) {
-  // << CAMBIO: Log recursivo con JSON.stringify >>
+  // << NUEVO LOG DE DISPARO >>
+  console.log(`[onNewEvents] Listener triggered! Received batch with ${e?.events?.length ?? 0} event(s).`); 
+  
+  // Log recursivo con JSON.stringify 
   console.log('[onNewEvents] Full Recursive GEP Event Data:', JSON.stringify(e, null, 2));
   // Ya no necesitamos el log anterior: console.log('[onNewEvents] Raw event data:', e);
   
@@ -409,6 +412,18 @@ function fetchLiveClientData() {
         assign(updates.match, 'gold', currentGold ? Number(currentGold) : 0); 
         // console.log(`[fetchLiveClientData] Gold source: activePlayer.currentGold = ${activePlayer.currentGold}`); // Log de depuración opcional
         // ****************************
+
+        // <<<<< CÓDIGO AÑADIDO PARA COPIAR CHAMPION STATS >>>>>
+        if (activePlayer.championStats) {
+          console.log("[fetchLiveClientData] Found championStats, assigning...");
+          Object.keys(activePlayer.championStats).forEach(statKey => {
+            // Usamos assign para copiar solo si el valor existe y es diferente
+            assign(updates.championStats, statKey, activePlayer.championStats[statKey]);
+          });
+        } else {
+           console.log("[fetchLiveClientData] No championStats found in activePlayer data.");
+        }
+        // <<<<< FIN CÓDIGO AÑADIDO >>>>>
       }
         
       if (data.gameData && data.gameData.gameTime) {
