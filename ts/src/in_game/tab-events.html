@@ -3,10 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/header.css">
-  <link rel="stylesheet" href="../css/ingame.css">
-  <link rel="stylesheet" href="../css/tabs.css">
   <style>
     #visible-events-log, #visible-info-log {
       height: 450px;
@@ -94,112 +90,149 @@
   </div>
   
   <script>
-    // Referencias a contenedores
-    const eventsLog = document.getElementById('visible-events-log');
-    const heartbeatIndicator = document.getElementById('heartbeat-indicator');
-    const lastUpdateTime = document.getElementById('last-update-time');
-    
-    let lastProcessedEventTimestamp = 0;
-    
-    // Función principal para actualizar la UI de esta pestaña
-    function updateUI(gameData) {
-      if (!gameData || !gameData.events) return;
+    if (typeof window.tabEventsInitialized === 'undefined') {
+      window.tabEventsInitialized = true;
+      console.log("[tab-events] Inicializando script por primera vez.");
 
-      const newEvents = gameData.events.filter(e => e.timestamp > lastProcessedEventTimestamp);
+      // Referencias a contenedores
+      const eventsLog = document.getElementById('visible-events-log');
+      const heartbeatIndicator = document.getElementById('heartbeat-indicator');
+      const lastUpdateTime = document.getElementById('last-update-time');
       
-      if (newEvents.length > 0) {
-        newEvents.sort((a, b) => a.timestamp - b.timestamp);
-        
-        newEvents.forEach(event => {
-          // Crear elemento pre para el evento
-          const line = document.createElement('pre');
-          // Intentar mostrar el evento de forma más legible
-          const time = new Date(event.timestamp).toLocaleTimeString();
-          let eventText = `[${time}] ${event.name || event.type || 'Evento'}`;
-          if (event.data && Object.keys(event.data).length > 0) {
-            // Excluir el objeto data completo si es muy grande o complejo
-            try {
-              const dataString = JSON.stringify(event.data);
-              if (dataString.length < 150) {
-                eventText += `: ${dataString}`;
-              } else {
-                 eventText += `: {...}`; // Indicar que hay datos pero son grandes
-              }
-            } catch (e) {
-              eventText += ": [Datos no serializables]";
-            }
-          } else if (event.name === 'kill') {
-            eventText += ` (Kills: ${gameData.match?.kills ?? '?'})`;
-          } else if (event.name === 'death') {
-            eventText += ` (Deaths: ${gameData.match?.deaths ?? '?'})`;
-          } else if (event.name === 'assist') {
-            eventText += ` (Assists: ${gameData.match?.assists ?? '?'})`;
+      let lastProcessedEventTimestamp = 0;
+      
+      // Función principal para actualizar la UI de esta pestaña
+      function updateUI(gameData) {
+        console.log("[tab-events] updateUI llamada. gameData recibido:", gameData ? 'Sí' : 'No'); // Log 1: Función llamada?
+        if (!gameData || !gameData.events) {
+          console.log("[tab-events] updateUI: Sin gameData o gameData.events."); // Log 2: Datos ausentes?
+          if (eventsLog && eventsLog.innerHTML === '') {
+            eventsLog.innerHTML = '<pre style="color:#aaa; text-align:center; margin-top: 50px;">Esperando eventos...</pre>';
           }
-          
-          line.textContent = eventText;
-          
-          // Resaltar eventos importantes
-          const highlightEvents = ['kill', 'death', 'assist', 'level', 'matchStart', 'matchEnd', 'ward_placed', 'turret_kill', 'dragon_kill', 'baron_kill', 'herald_kill'];
-          if (highlightEvents.includes(event.name) || highlightEvents.includes(event.type)) {
-            line.className = 'highlight';
-          }
-          
-          // Insertar en contenedor
-          eventsLog.appendChild(line);
-          
-          // Actualizar timestamp del último evento procesado
-          lastProcessedEventTimestamp = Math.max(lastProcessedEventTimestamp, event.timestamp);
-        });
+          return;
+        }
 
-        // Limitar tamaño del log
-        while (eventsLog.childNodes.length > 150) {
-          eventsLog.removeChild(eventsLog.firstChild);
+        if (eventsLog && eventsLog.firstChild?.textContent === 'Esperando eventos...') {
+            eventsLog.innerHTML = ''; 
+        }
+
+        console.log(`[tab-events] updateUI: gameData.events tiene ${gameData.events.length} eventos. Último procesado: ${lastProcessedEventTimestamp}`); // Log 3: Cuántos eventos hay?
+
+        const newEvents = gameData.events.filter(e => e.timestamp > lastProcessedEventTimestamp);
+        
+        console.log(`[tab-events] updateUI: Encontrados ${newEvents.length} nuevos eventos.`); // Log 4: Cuántos nuevos?
+        
+        if (newEvents.length > 0) {
+          newEvents.sort((a, b) => a.timestamp - b.timestamp);
+          
+          newEvents.forEach((event, index) => {
+            console.log(`[tab-events] Procesando nuevo evento #${index + 1}:`, event); // Log 5: Procesando evento?
+            // Crear elemento pre para el evento
+            const line = document.createElement('pre');
+            // Intentar mostrar el evento de forma más legible
+            const time = new Date(event.timestamp).toLocaleTimeString();
+            let eventText = `[${time}] ${event.name || event.type || 'Evento'}`;
+            if (event.data && Object.keys(event.data).length > 0) {
+              // Excluir el objeto data completo si es muy grande o complejo
+              try {
+                const dataString = JSON.stringify(event.data);
+                if (dataString.length < 150) {
+                  eventText += `: ${dataString}`;
+                } else {
+                  eventText += `: {...}`; // Indicar que hay datos pero son grandes
+                }
+              } catch (e) {
+                eventText += ": [Datos no serializables]";
+              }
+            } else if (event.name === 'kill') {
+              eventText += ` (Kills: ${gameData.match?.kills ?? '?'})`;
+            } else if (event.name === 'death') {
+              eventText += ` (Deaths: ${gameData.match?.deaths ?? '?'})`;
+            } else if (event.name === 'assist') {
+              eventText += ` (Assists: ${gameData.match?.assists ?? '?'})`;
+            }
+            
+            line.textContent = eventText;
+            console.log(`[tab-events] Creando elemento <pre> con texto: ${line.textContent}`); // Log 6: Texto del elemento
+            
+            // Resaltar eventos importantes
+            const highlightEvents = ['kill', 'death', 'assist', 'level', 'matchStart', 'matchEnd', 'ward_placed', 'turret_kill', 'dragon_kill', 'baron_kill', 'herald_kill'];
+            if (highlightEvents.includes(event.name) || highlightEvents.includes(event.type)) {
+              line.className = 'highlight';
+            }
+            
+            // Insertar en contenedor
+            if (eventsLog) {
+              eventsLog.appendChild(line);
+              console.log("[tab-events] Elemento <pre> añadido al eventsLog."); // Log 7: Añadido al DOM?
+            } else {
+              console.error("[tab-events] eventsLog no encontrado!");
+            }
+            
+            // Actualizar timestamp del último evento procesado
+            lastProcessedEventTimestamp = Math.max(lastProcessedEventTimestamp, event.timestamp);
+          });
+
+          // Limitar tamaño del log
+          while (eventsLog && eventsLog.childNodes.length > 150) {
+            eventsLog.removeChild(eventsLog.firstChild);
+          }
+          
+          // Autoscroll
+          if(eventsLog) {
+            eventsLog.scrollTop = eventsLog.scrollHeight;
+          }
+          
+          // Actualizar estado de depuración
+          updateDebugStatus(newEvents.length);
+        } else {
+            console.log("[tab-events] No hay nuevos eventos que procesar."); // Log 8: No hay nuevos eventos
+        }
+      }
+      
+      // Función para actualizar estado de depuración
+      function updateDebugStatus(eventsAdded = 0) {
+        // Actualizar indicador de heartbeat
+        if(heartbeatIndicator) {
+          heartbeatIndicator.style.backgroundColor = '#00ff00';
+          setTimeout(() => {
+            heartbeatIndicator.style.backgroundColor = 'gray';
+          }, 500);
         }
         
-        // Autoscroll
-        eventsLog.scrollTop = eventsLog.scrollHeight;
-        
-        // Actualizar estado de depuración
-        updateDebugStatus(newEvents.length);
+        // Actualizar timestamp
+        if(lastUpdateTime) {
+          const now = new Date();
+          const timeStr = now.toLocaleTimeString();
+          lastUpdateTime.textContent = `${timeStr} (+${eventsAdded} eventos)`;
+        }
       }
-    }
-    
-    // Función para actualizar estado de depuración
-    function updateDebugStatus(eventsAdded = 0) {
-      // Actualizar indicador de heartbeat
-      heartbeatIndicator.style.backgroundColor = '#00ff00';
-      setTimeout(() => {
-        heartbeatIndicator.style.backgroundColor = 'gray';
-      }, 500);
       
-      // Actualizar timestamp
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString();
-      lastUpdateTime.textContent = `${timeStr} (+${eventsAdded} eventos)`;
-    }
-    
-    // --- INICIALIZACIÓN Y SUSCRIPCIÓN ---
-    console.log("[tab-events] Script cargado y ejecutándose.");
-    try {
-      if (window.parent && typeof window.parent.subscribeToGameData === 'function') {
-        console.log("[tab-events] Suscribiendo a gameDataManager...");
-        window.parent.subscribeToGameData(updateUI);
-      } else {
-        console.error("[tab-events] No se pudo encontrar window.parent.subscribeToGameData.");
-      }
+      // --- INICIALIZACIÓN Y SUSCRIPCIÓN ---
+      console.log("[tab-events] Script cargado y ejecutándose.");
+      try {
+        if (window.parent && typeof window.parent.subscribeToGameData === 'function') {
+          console.log("[tab-events] Suscribiendo a gameDataManager...");
+          window.parent.subscribeToGameData(updateUI);
+        } else {
+          console.error("[tab-events] No se pudo encontrar window.parent.subscribeToGameData.");
+        }
 
-      if (window.parent && typeof window.parent.getGameData === 'function') {
-        const initialData = window.parent.getGameData();
-        console.log("[tab-events] Aplicando datos iniciales:", initialData);
-        // Resetear timestamp para procesar todos los eventos iniciales
-        lastProcessedEventTimestamp = 0;
-        updateUI(initialData);
-      } else {
-        console.error("[tab-events] No se pudo encontrar window.parent.getGameData.");
-        updateUI({ events: [] }); // Mostrar log vacío
+        if (window.parent && typeof window.parent.getGameData === 'function') {
+          const initialData = window.parent.getGameData();
+          console.log("[tab-events] Aplicando datos iniciales:", initialData);
+          // Resetear timestamp para procesar todos los eventos iniciales
+          lastProcessedEventTimestamp = 0;
+          updateUI(initialData);
+        } else {
+          console.error("[tab-events] No se pudo encontrar window.parent.getGameData.");
+          updateUI({ events: [] }); // Mostrar log vacío
+        }
+      } catch (error) {
+        console.error("[tab-events] Error durante inicialización/suscripción:", error);
       }
-    } catch (error) {
-      console.error("[tab-events] Error durante inicialización/suscripción:", error);
+    } else {
+      console.log("[tab-events] Script ya inicializado previamente, omitiendo redeclaración.");
     }
   </script>
 </body>

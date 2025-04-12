@@ -384,41 +384,30 @@ function fetchLiveClientData() {
       };
       
       if (data && data.activePlayer) {
-        assign(updates.summoner, 'name', data.activePlayer.summonerName);
-        assign(updates.summoner, 'level', data.activePlayer.level);
-        // Extraer championStats directamente si existe
-        if (data.activePlayer.championStats) {
-          // Copiar todas las stats relevantes
-          Object.keys(data.activePlayer.championStats).forEach(key => {
-              // Podríamos filtrar aquí si solo queremos algunas stats
-              assign(updates.championStats, key, data.activePlayer.championStats[key]);
-          });
+        const activePlayer = data.activePlayer;
+        assign(updates.summoner, 'name', activePlayer.summonerName);
+        assign(updates.summoner, 'level', activePlayer.level);
+        assign(updates.summoner, 'champion', activePlayer.championName);
+
+        // Usar datos de 'scores' si están disponibles en allPlayers
+        const activePlayerData = data.allPlayers?.find(p => p.summonerName === activePlayer.summonerName);
+        if (activePlayerData?.scores) {
+          const scores = activePlayerData.scores;
+          assign(updates.match, 'kills', scores.kills);
+          assign(updates.match, 'deaths', scores.deaths);
+          assign(updates.match, 'assists', scores.assists);
+          // Calcular CS combinando creepScore y neutralMinionsKilled si existen
+          const cs = (scores.creepScore ?? 0);
+          // const cs = (scores.creepScore ?? 0) + (activePlayer.championStats?.neutralMinionsKilled ?? 0); // Revisar si neutralMinionsKilled está en champStats
+          assign(updates.match, 'cs', cs); 
         }
         
-        // Buscar datos del jugador activo en allPlayers para más detalles (KDA, CS, Gold)
-        if (data.allPlayers && data.activePlayer.summonerName) {
-          const activePlayerData = data.allPlayers.find(p => 
-            p.summonerName === data.activePlayer.summonerName
-          );
-          
-          if (activePlayerData) {
-            assign(updates.summoner, 'champion', activePlayerData.championName);
-            
-            if (activePlayerData.scores) {
-              assign(updates.match, 'kills', activePlayerData.scores.kills);
-              assign(updates.match, 'deaths', activePlayerData.scores.deaths);
-              assign(updates.match, 'assists', activePlayerData.scores.assists);
-              const totalCS = (activePlayerData.scores.creepScore || 0) + (activePlayerData.scores.neutralMinionKills || 0);
-              assign(updates.match, 'cs', totalCS);
-              assign(updates.match, 'gold', Math.round(activePlayerData.scores.currentGold || 0));
-            }
-          }
-        } else {
-            // Fallback: Usar championStats del activePlayer si allPlayers no está o falta summonerName
-            if (data.activePlayer.championStats) {
-                assign(updates.match, 'gold', Math.round(data.activePlayer.championStats.currentGold || 0));
-            }
-        }
+        // ****** CORRECCIÓN ORO ******
+        // Leer el oro directamente desde activePlayer, no desde activePlayerData.scores
+        const currentGold = activePlayer.currentGold;
+        assign(updates.match, 'gold', currentGold ? Number(currentGold) : 0); 
+        // console.log(`[fetchLiveClientData] Gold source: activePlayer.currentGold = ${activePlayer.currentGold}`); // Log de depuración opcional
+        // ****************************
       }
         
       if (data.gameData && data.gameData.gameTime) {
