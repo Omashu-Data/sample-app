@@ -41,415 +41,199 @@ function onError(info) {
 
 // Manejar actualizaciones de información
 function onInfoUpdates(info) {
-  addToLog(infoLog, info);
-  console.log("Recibida actualización de info:", info);
-  
-  // Enviar info a la pestaña de eventos
-  // COMENTADO/ELIMINADO: sendInfoToTabEvents(info);
+  // Loguear la info cruda recibida
+  console.log("[in_game_listeners] onInfoUpdates raw data:", JSON.stringify(info));
+  // addToLog(infoLog, info); // Opcional: Loguear al div oculto
   
   // NUEVO: Analizar estructura de datos GEP
-  analizarEstructuraGEP(info);
+  // analizarEstructuraGEP(info); // Descomentar si necesitas el keyRegistry
   
   try {
+    // Objeto para acumular todas las actualizaciones de esta llamada
     const updates = {
       summoner: {},
       match: {},
       combat: {},
       vision: {},
       objectives: {},
-      items: {},
-      teamStats: {},
-      events: []
+      // No añadimos events aquí, eso viene de onNewEvents
+    };
+    let dataChanged = false; // Flag para ver si algo cambió
+
+    // Helper para asignar si el valor es diferente
+    const assign = (target, key, value) => {
+      if (value !== undefined && target[key] !== value) {
+        target[key] = value;
+        dataChanged = true;
+        console.log(`[in_game_listeners] Assigning ${key} = ${value} to updates.${Object.keys(updates).find(k => updates[k] === target)}`);
+      }
     };
     
-    // Actualizar datos del invocador
+    // 1. Procesar info.summoner_info
     if (info.summoner_info) {
-      if (info.summoner_info.name) {
-        updates.summoner.name = info.summoner_info.name;
-      }
-      if (info.summoner_info.champion) {
-        updates.summoner.champion = info.summoner_info.champion;
-      }
-      if (info.summoner_info.position) {
-        updates.summoner.position = info.summoner_info.position;
-      }
-      if (info.summoner_info.team) {
-        updates.summoner.team = info.summoner_info.team;
-      }
+      assign(updates.summoner, 'name', info.summoner_info.name);
+      assign(updates.summoner, 'champion', info.summoner_info.champion);
+      assign(updates.summoner, 'position', info.summoner_info.position);
+      assign(updates.summoner, 'team', info.summoner_info.team);
     }
     
-    // Actualizar nivel
-    if (info.level) {
-      updates.summoner.level = parseInt(info.level) || gameDataManager.currentData.summoner.level;
+    // 2. Procesar info.level (Nivel del jugador)
+    if (info.level !== undefined) {
+      assign(updates.summoner, 'level', parseInt(info.level) || undefined);
     }
     
-    // Actualizar CS (minions)
+    // 3. Procesar info.minions (CS)
     if (info.minions) {
-      let cs = gameDataManager.currentData.match.cs;
-      if (info.minions.minionKills) {
-        cs = parseInt(info.minions.minionKills) || cs;
-      }
-      if (info.minions.neutralMinionKills) {
-        cs += parseInt(info.minions.neutralMinionKills) || 0;
-      }
-      updates.match.cs = cs;
+      const totalCS = (parseInt(info.minions.minionKills) || 0) + (parseInt(info.minions.neutralMinionKills) || 0);
+      console.log(`[in_game_listeners] Raw CS data: minionKills=${info.minions.minionKills}, neutralMinionKills=${info.minions.neutralMinionKills}, Calculated=${totalCS}`);
+      assign(updates.match, 'cs', totalCS);
     }
     
-    // Actualizar oro
-    if (info.gold) {
-      updates.match.gold = parseInt(info.gold) || gameDataManager.currentData.match.gold;
+    // 4. Procesar info.gold
+    if (info.gold !== undefined) {
+      console.log(`[in_game_listeners] Raw Gold data (info.gold): ${info.gold}`);
+      assign(updates.match, 'gold', parseInt(info.gold) || undefined);
     }
     
-    // Actualizar modo de juego
+    // 5. Procesar info.gameMode
     if (info.gameMode) {
-      updates.match.gameMode = info.gameMode;
+      assign(updates.match, 'gameMode', info.gameMode);
     }
     
-    // Actualizar tiempo de juego
-    if (info.counters && info.counters.match_clock) {
-      updates.match.gameTime = parseInt(info.counters.match_clock) || gameDataManager.currentData.match.gameTime;
+    // 6. Procesar info.counters (Tiempo de juego)
+    if (info.counters?.match_clock !== undefined) {
+      assign(updates.match, 'gameTime', parseInt(info.counters.match_clock) || undefined);
     }
     
-    // Actualizar KDA
-    if (info.kill && info.kill.kills) {
-      updates.match.kills = parseInt(info.kill.kills);
-      
-      // Registrar evento de kill
-      updates.events.push({
-        type: 'kill',
-        timestamp: Date.now(),
-        data: { kills: updates.match.kills }
-      });
+    // 7. Procesar info.kill / info.death / info.assist (KDA - a menudo actualizados por eventos, pero GEP puede enviarlos)
+    if (info.kill?.kills !== undefined) {
+      assign(updates.match, 'kills', parseInt(info.kill.kills) || undefined);
     }
-    
-    if (info.death && info.death.deaths) {
-      updates.match.deaths = parseInt(info.death.deaths);
-      
-      // Registrar evento de muerte
-      updates.events.push({
-        type: 'death',
-        timestamp: Date.now(),
-        data: { deaths: updates.match.deaths }
-      });
+    if (info.death?.deaths !== undefined) {
+      assign(updates.match, 'deaths', parseInt(info.death.deaths) || undefined);
     }
-    
-    if (info.assist && info.assist.assists) {
-      updates.match.assists = parseInt(info.assist.assists);
-      
-      // Registrar evento de asistencia
-      updates.events.push({
-        type: 'assist',
-        timestamp: Date.now(),
-        data: { assists: updates.match.assists }
-      });
+     if (info.assist?.assists !== undefined) {
+      assign(updates.match, 'assists', parseInt(info.assist.assists) || undefined);
     }
-    
-    // NUEVO: Procesar estadísticas de equipo
-    if (info.teams) {
-      try {
-        const teams = JSON.parse(info.teams);
-        // Encontrar equipo del jugador
-        const playerTeam = gameDataManager.currentData.summoner.team;
-        if (playerTeam && teams[playerTeam]) {
-          updates.teamStats = {
-            totalKills: teams[playerTeam].kills || 0,
-            totalDeaths: teams[playerTeam].deaths || 0,
-            totalObjectives: (teams[playerTeam].objectives || 0)
-          };
-        }
-      } catch (e) {
-        console.error("Error al parsear datos de equipos:", e);
-      }
-    }
-    
-    // NUEVO: Procesar estadísticas de daño
+
+    // 8. Procesar info.damage (Datos de combate)
     if (info.damage) {
-      try {
-        updates.combat = updates.combat || {};
-        updates.combat.damageDealt = parseInt(info.damage.total) || 0;
-      } catch (e) {
-        console.error("Error al procesar datos de daño:", e);
-      }
+       console.log(`[in_game_listeners] Raw Damage data:`, info.damage); // Log the whole damage object
+       assign(updates.combat, 'damageDealt', parseInt(info.damage.total_damage_dealt) || undefined);
+       assign(updates.combat, 'damageDealtToChampions', parseInt(info.damage.total_damage_dealt_to_champions) || undefined);
+       assign(updates.combat, 'damageTaken', parseInt(info.damage.total_damage_taken) || undefined);
+       assign(updates.combat, 'damageSelfMitigated', parseInt(info.damage.total_damage_self_mitigated) || undefined);
+       assign(updates.combat, 'damageToObjectives', parseInt(info.damage.total_damage_dealt_to_objectives) || undefined);
+       const buildingDmg = parseInt(info.damage.total_damage_dealt_to_buildings ?? info.damage.total_damage_dealt_to_turrets) || undefined;
+       assign(updates.combat, 'damageToBuildings', buildingDmg);
     }
     
-    // NUEVO: Procesar estadísticas de curación
-    if (info.heal) {
-      try {
-        updates.combat = updates.combat || {};
-        updates.combat.healing = parseInt(info.heal.total) || 0;
-      } catch (e) {
-        console.error("Error al procesar datos de curación:", e);
-      }
+    // 9. Procesar info.heal (Curación)
+    if (info.heal?.total_heal !== undefined) {
+       console.log(`[in_game_listeners] Raw Heal data (info.heal.total_heal): ${info.heal.total_heal}`);
+       assign(updates.combat, 'healingDone', parseInt(info.heal.total_heal) || undefined);
     }
-    
-    // NUEVO: Procesar wards
+
+    // 10. Procesar info.ward (Visión)
     if (info.ward) {
-      try {
-        updates.vision = updates.vision || {};
-        if (info.ward.placed) {
-          updates.vision.wardsPlaced = parseInt(info.ward.placed) || 0;
-          
-          // Registrar evento de ward colocada
-          if (updates.vision.wardsPlaced > gameDataManager.currentData.vision.wardsPlaced) {
-            updates.events.push({
-              type: 'ward_placed',
-              timestamp: Date.now(),
-              data: { wardsPlaced: updates.vision.wardsPlaced }
-            });
-          }
-        }
-        if (info.ward.destroyed) {
-          updates.vision.wardsDestroyed = parseInt(info.ward.destroyed) || 0;
-        }
-      } catch (e) {
-        console.error("Error al procesar datos de wards:", e);
-      }
+        console.log(`[in_game_listeners] Raw Ward data:`, info.ward); // Log the whole ward object
+        assign(updates.vision, 'wardsPlaced', parseInt(info.ward.placed) || undefined);
+        assign(updates.vision, 'wardsDestroyed', parseInt(info.ward.destroyed) || undefined);
     }
-    
-    // NUEVO: Procesar objetivos
+
+    // 11. Procesar info.objective (Objetivos)
     if (info.objective) {
-      try {
-        updates.objectives = updates.objectives || {};
-        
-        // Detectar cambios en objetivos específicos
-        const objTypes = {
-          'turret': 'turretKills',
-          'inhibitor': 'inhibitorKills',
-          'dragon': 'dragonKills',
-          'baron': 'baronKills',
-          'herald': 'heraldKills'
-        };
-        
-        for (const [type, field] of Object.entries(objTypes)) {
-          if (info.objective[type]) {
-            updates.objectives[field] = parseInt(info.objective[type]) || 0;
-            
-            // Si ha aumentado, registrar evento
-            if (updates.objectives[field] > (gameDataManager.currentData.objectives[field] || 0)) {
-              updates.events.push({
-                type: `${type}_kill`,
-                timestamp: Date.now(),
-                data: { [field]: updates.objectives[field] }
-              });
-            }
-          }
-        }
-      } catch (e) {
-        console.error("Error al procesar datos de objetivos:", e);
+      assign(updates.objectives, 'turretKills', parseInt(info.objective.turret) || undefined);
+      assign(updates.objectives, 'inhibitorKills', parseInt(info.objective.inhibitor) || undefined);
+      assign(updates.objectives, 'dragonKills', parseInt(info.objective.dragon) || undefined);
+      assign(updates.objectives, 'baronKills', parseInt(info.objective.baron) || undefined);
+      assign(updates.objectives, 'heraldKills', parseInt(info.objective.herald) || undefined);
+       // Si no obtuvimos visión de info.ward, intentar desde aquí
+      if (updates.vision.wardsPlaced === undefined) {
+          assign(updates.vision, 'wardsPlaced', parseInt(info.objective.wardPlaced) || undefined);
+      }
+      if (updates.vision.wardsDestroyed === undefined) {
+          assign(updates.vision, 'wardsDestroyed', parseInt(info.objective.wardKilled) || undefined);
       }
     }
-    
-    // Procesar datos de live_client_data
+
+    // 12. Procesar info.live_client_data (Datos de la API Live Client)
     if (info.live_client_data) {
       // Datos del jugador activo
       if (info.live_client_data.active_player) {
         try {
           const player = JSON.parse(info.live_client_data.active_player);
-          
-          if (player.summonerName) {
-            updates.summoner.name = player.summonerName;
-          }
-          
-          if (player.level) {
-            updates.summoner.level = player.level;
-          }
-          
+          assign(updates.summoner, 'name', player.summonerName);
+          assign(updates.summoner, 'level', player.level);
           if (player.championStats) {
-            updates.match.gold = Math.round(player.championStats.currentGold || gameDataManager.currentData.match.gold);
+            assign(updates.match, 'gold', Math.round(parseFloat(player.championStats.currentGold) || 0));
           }
-          
-          // NUEVO: Procesar datos de inventario
-          if (player.items) {
-            updates.items = updates.items || {};
-            updates.items.inventory = player.items.map(item => ({
-              id: item.itemID,
-              name: item.displayName,
-              slot: item.slot
-            }));
-          }
+          // Podríamos extraer items aquí si fuera necesario
+          // updates.items = player.items?.map(...) ?? [];
         } catch (e) {
-          console.log("Error al parsear active_player:", e);
+          console.warn("[in_game_listeners] Error parseando active_player:", e);
         }
       }
-      
       // Datos del juego
       if (info.live_client_data.game_data) {
         try {
           const gameInfo = JSON.parse(info.live_client_data.game_data);
-          
-          if (gameInfo.gameTime) {
-            updates.match.gameTime = Math.floor(parseFloat(gameInfo.gameTime));
-          }
-          
-          if (gameInfo.gameMode) {
-            updates.match.gameMode = gameInfo.gameMode;
-          }
+          assign(updates.match, 'gameTime', Math.floor(parseFloat(gameInfo.gameTime) || 0));
+          assign(updates.match, 'gameMode', gameInfo.gameMode);
         } catch (e) {
-          console.log("Error al parsear game_data:", e);
+          console.warn("[in_game_listeners] Error parseando game_data:", e);
         }
       }
-      
-      // Actualizar eventos del juego
+      // Eventos del juego (live client) - Podrían procesarse aquí o esperar a onNewEvents
       if (info.live_client_data.events) {
-        try {
-          const events = JSON.parse(info.live_client_data.events);
-          
-          if (events && events.Events) {
-            events.Events.forEach(event => {
-              // Procesar eventos de asesinato
-              if (event.EventName === "ChampionKill") {
-                const playerName = gameDataManager.currentData.summoner.name;
-                
-                if (event.KillerName === playerName) {
-                  updates.match.kills = (updates.match.kills !== undefined ? 
-                                      updates.match.kills : gameDataManager.currentData.match.kills) + 1;
-                                      
-                  updates.events.push({
-                    type: 'kill',
-                    timestamp: Date.now(),
-                    data: { 
-                      killer: event.KillerName,
-                      victim: event.VictimName
-                    }
-                  });
-                }
-                
-                if (event.VictimName === playerName) {
-                  updates.match.deaths = (updates.match.deaths !== undefined ? 
-                                       updates.match.deaths : gameDataManager.currentData.match.deaths) + 1;
-                                       
-                  updates.events.push({
-                    type: 'death',
-                    timestamp: Date.now(),
-                    data: { 
-                      killer: event.KillerName,
-                      victim: event.VictimName
-                    }
-                  });
-                }
-                
-                if (event.Assisters && event.Assisters.includes(playerName)) {
-                  updates.match.assists = (updates.match.assists !== undefined ? 
-                                        updates.match.assists : gameDataManager.currentData.match.assists) + 1;
-                                        
-                  updates.events.push({
-                    type: 'assist',
-                    timestamp: Date.now(),
-                    data: { 
-                      killer: event.KillerName,
-                      victim: event.VictimName,
-                      assister: playerName
-                    }
-                  });
-                }
-              }
-              
-              // NUEVO: Procesar eventos de ward
-              else if (event.EventName === "WardPlaced") {
-                if (event.WardType && event.PlacerName === gameDataManager.currentData.summoner.name) {
-                  updates.vision = updates.vision || {};
-                  updates.vision.wardsPlaced = (updates.vision.wardsPlaced || 
-                                             gameDataManager.currentData.vision.wardsPlaced || 0) + 1;
-                                             
-                  if (event.WardType.includes("Control")) {
-                    updates.vision.controlWards = (updates.vision.controlWards || 
-                                                gameDataManager.currentData.vision.controlWards || 0) + 1;
-                  }
-                  
-                  updates.events.push({
-                    type: 'ward_placed',
-                    timestamp: Date.now(),
-                    data: { 
-                      type: event.WardType,
-                      placer: event.PlacerName
-                    }
-                  });
-                }
-              }
-              
-              // NUEVO: Procesar eventos de objetivos
-              else if (event.EventName === "DragonKill" || 
-                     event.EventName === "HeraldKill" || 
-                     event.EventName === "BaronKill") {
-                const objectiveType = event.EventName.replace('Kill', '').toLowerCase();
-                const field = `${objectiveType}Kills`;
-                
-                // Si el jugador o su equipo participó
-                const team = gameDataManager.currentData.summoner.team;
-                if (event.KillerName.includes(team)) {
-                  updates.objectives = updates.objectives || {};
-                  updates.objectives[field] = (updates.objectives[field] || 
-                                           gameDataManager.currentData.objectives[field] || 0) + 1;
-                                           
-                  updates.events.push({
-                    type: `${objectiveType}_kill`,
-                    timestamp: Date.now(),
-                    data: { 
-                      team: event.KillerName,
-                      type: objectiveType
-                    }
-                  });
-                }
-              }
-              
-              // NUEVO: Procesar eventos de torreta
-              else if (event.EventName === "TurretKilled") {
-                const playerName = gameDataManager.currentData.summoner.name;
-                const field = 'turretKills';
-                
-                if (event.KillerName === playerName || 
-                    (event.Assisters && event.Assisters.includes(playerName))) {
-                  updates.objectives = updates.objectives || {};
-                  updates.objectives[field] = (updates.objectives[field] || 
-                                           gameDataManager.currentData.objectives[field] || 0) + 1;
-                                           
-                  updates.events.push({
-                    type: 'turret_kill',
-                    timestamp: Date.now(),
-                    data: { 
-                      killer: event.KillerName,
-                      assisters: event.Assisters
-                    }
-                  });
-                }
-              }
-              
-              // Añadir el evento al registro general
-              updates.events.push({
-                type: 'game_event',
-                name: event.EventName,
-                timestamp: Date.now(),
-                data: event
-              });
-            });
-          }
-        } catch (e) {
-          console.log("Error al parsear eventos:", e);
-        }
+         // Podríamos parsear y añadir a updates.events si quisiéramos 
+         // O simplemente dejar que onNewEvents los maneje si GEP los reenvía.
+         // Por ahora, no los procesamos aquí para evitar duplicados si onNewEvents los recibe.
+         console.log("[in_game_listeners] Eventos de Live Client recibidos en onInfoUpdates, ignorando por ahora (manejados por onNewEvents?)");
       }
+      // Datos de todos los jugadores (live client)
+      if (info.live_client_data.all_players) {
+          try {
+              const allPlayers = JSON.parse(info.live_client_data.all_players);
+              // Podríamos extraer datos agregados o del equipo aquí si fuera necesario
+          } catch (e) {
+              console.warn("[in_game_listeners] Error parseando all_players:", e);
+          }
+      }
+    }
+
+    // 13. Procesar info.game_info (Datos adicionales del juego desde GEP)
+    if (info.game_info) {
+        console.log(`[in_game_listeners] Raw Game Info data:`, info.game_info); // Log the whole game_info object
+        assign(updates.match, 'gold', parseInt(info.game_info.gold) || undefined);
+        assign(updates.match, 'kills', parseInt(info.game_info.kills) || undefined);
+        assign(updates.match, 'deaths', parseInt(info.game_info.deaths) || undefined);
+        assign(updates.match, 'assists', parseInt(info.game_info.assists) || undefined);
+        assign(updates.match, 'doubleKills', parseInt(info.game_info.doubleKills) || undefined);
+        const totalCS = (parseInt(info.game_info.minionKills) || 0) + (parseInt(info.game_info.neutralMinionKills) || 0);
+        assign(updates.match, 'cs', totalCS);
+    }
+
+    // ---- FIN DEL PROCESAMIENTO ----
+
+    // Enviar la actualización COMPLETA al gameDataManager SI algo cambió
+    if (dataChanged) {
+      console.log("[in_game_listeners] Enviando updates a gameDataManager:", JSON.stringify(updates));
+      gameDataManager.updateData(updates);
+    } else {
+      console.log("[in_game_listeners] No data changed in this onInfoUpdates call.");
     }
     
-    // Actualizar datos centralizados si hay cambios
-    if (Object.keys(updates.summoner).length > 0 || 
-        Object.keys(updates.match).length > 0 || 
-        Object.keys(updates.combat).length > 0 || 
-        Object.keys(updates.vision).length > 0 || 
-        Object.keys(updates.objectives).length > 0 || 
-        Object.keys(updates.items).length > 0 || 
-        Object.keys(updates.teamStats).length > 0 || 
-        updates.events.length > 0) {
-      gameDataManager.updateData(updates);
-      
-      // Forzar actualización directa de la pestaña
-      // COMENTADO/ELIMINADO: forceUpdateOverviewTab();
-    }
   } catch (e) {
-    console.error("Error procesando datos:", e);
+    console.error("[in_game_listeners] Error fatal procesando onInfoUpdates:", e);
   }
 }
 
 // Manejar nuevos eventos
 function onNewEvents(e) {
+  // Log detallado del evento crudo
+  console.log("[onNewEvents] Raw event data:", JSON.stringify(e)); 
+  
   const isHighlight = e.events && e.events.some(event => 
     ['kill', 'death', 'assist', 'level', 'matchStart', 'matchEnd'].includes(event.name)
   );
@@ -531,6 +315,8 @@ function setFeatures() {
   console.log("Intentando establecer características:", features);
   
   overwolf.games.events.setRequiredFeatures(features, function(info) {
+    // AÑADIDO: Log para verificar el resultado de setRequiredFeatures
+    console.log("[setRequiredFeatures] Callback ejecutado. Success:", info.success, "Info:", JSON.stringify(info)); 
     if (!info.success) {
       console.log("No se pudieron establecer las características:", info.error);
       setTimeout(setFeatures, 2000);
@@ -569,56 +355,90 @@ function fetchLiveClientData() {
       console.log("Datos obtenidos de API:", data);
       
       // Analizar estructura de Live Client Data
-      analizarEstructuraLiveClientData(data);
+      // analizarEstructuraLiveClientData(data); // Descomentar si se usa keyRegistry
       
       const updates = {
         summoner: {},
-        match: {}
-        // Asegurarse de inicializar otros campos si se usan abajo
+        match: {},
+        championStats: {}, // Añadir para enviar stats del campeón
+        // Podríamos añadir combat/vision si la API los proporcionara directamente
+      };
+      let dataChanged = false; // Flag para enviar solo si hay cambios
+      
+      // Helper para asignar si el valor es diferente
+      const assign = (target, key, value) => {
+        // Intenta convertir a número si es posible
+        let processedValue = value;
+        if (typeof value === 'string') {
+          const parsed = parseFloat(value);
+          if (!isNaN(parsed)) {
+            processedValue = parsed;
+          }
+        }
+
+        if (processedValue !== undefined && target[key] !== processedValue) {
+          target[key] = processedValue;
+          dataChanged = true;
+          console.log(`[fetchLiveClientData] Assigning ${key} = ${processedValue} to updates`);
+        }
       };
       
       if (data && data.activePlayer) {
-        if (data.activePlayer.summonerName) {
-          updates.summoner.name = data.activePlayer.summonerName;
+        assign(updates.summoner, 'name', data.activePlayer.summonerName);
+        assign(updates.summoner, 'level', data.activePlayer.level);
+        // Extraer championStats directamente si existe
+        if (data.activePlayer.championStats) {
+          // Copiar todas las stats relevantes
+          Object.keys(data.activePlayer.championStats).forEach(key => {
+              // Podríamos filtrar aquí si solo queremos algunas stats
+              assign(updates.championStats, key, data.activePlayer.championStats[key]);
+          });
         }
         
-        if (data.activePlayer.level) {
-          updates.summoner.level = data.activePlayer.level;
-        }
-        
-        // Buscar datos del jugador activo en allPlayers para más detalles
-        if (data.allPlayers) {
+        // Buscar datos del jugador activo en allPlayers para más detalles (KDA, CS, Gold)
+        if (data.allPlayers && data.activePlayer.summonerName) {
           const activePlayerData = data.allPlayers.find(p => 
             p.summonerName === data.activePlayer.summonerName
           );
           
           if (activePlayerData) {
-            updates.summoner.champion = activePlayerData.championName || '';
+            assign(updates.summoner, 'champion', activePlayerData.championName);
             
             if (activePlayerData.scores) {
-              updates.match.kills = activePlayerData.scores.kills || 0;
-              updates.match.deaths = activePlayerData.scores.deaths || 0;
-              updates.match.assists = activePlayerData.scores.assists || 0;
-              updates.match.cs = 
-                (activePlayerData.scores.creepScore || 0) + 
-                (activePlayerData.scores.neutralMinionsKilled || 0);
-              updates.match.gold = Math.round(activePlayerData.scores.currentGold || 0);
+              assign(updates.match, 'kills', activePlayerData.scores.kills);
+              assign(updates.match, 'deaths', activePlayerData.scores.deaths);
+              assign(updates.match, 'assists', activePlayerData.scores.assists);
+              const totalCS = (activePlayerData.scores.creepScore || 0) + (activePlayerData.scores.neutralMinionKills || 0);
+              assign(updates.match, 'cs', totalCS);
+              assign(updates.match, 'gold', Math.round(activePlayerData.scores.currentGold || 0));
             }
           }
+        } else {
+            // Fallback: Usar championStats del activePlayer si allPlayers no está o falta summonerName
+            if (data.activePlayer.championStats) {
+                assign(updates.match, 'gold', Math.round(data.activePlayer.championStats.currentGold || 0));
+            }
         }
       }
         
       if (data.gameData && data.gameData.gameTime) {
-        updates.match.gameTime = Math.floor(data.gameData.gameTime);
+        assign(updates.match, 'gameTime', Math.floor(data.gameData.gameTime));
       }
       
       if (data.gameData && data.gameData.gameMode) {
-        updates.match.gameMode = data.gameData.gameMode;
+        assign(updates.match, 'gameMode', data.gameData.gameMode);
       }
       
       // Solo actualizar si hemos obtenido algún dato útil
-      if (Object.keys(updates.summoner).length > 0 || Object.keys(updates.match).length > 0) {
-         gameDataManager.updateData(updates);
+      if (dataChanged) {
+         console.log("[fetchLiveClientData] Enviando updates a gameDataManager:", JSON.stringify(updates));
+         // Limpiar objetos vacíos antes de enviar
+         if (Object.keys(updates.summoner).length === 0) delete updates.summoner;
+         if (Object.keys(updates.match).length === 0) delete updates.match;
+         if (Object.keys(updates.championStats).length === 0) delete updates.championStats; // Limpiar si está vacío
+          gameDataManager.updateData(updates);
+      } else {
+          console.log("[fetchLiveClientData] No data changed in this API call.");
       }
     })
     .catch(error => {

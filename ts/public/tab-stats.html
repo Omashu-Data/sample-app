@@ -90,6 +90,28 @@
             </div>
           </div>
           
+          <!-- NUEVO: Wards Destruidos -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(255, 87, 34, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 87, 34, 0.2), rgba(255, 87, 34, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 87, 34, 0.3);">
+              <img src="../../img/ward-destroyed-icon.svg" alt="Wards Destruidos" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(255, 87, 34, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Wards Destruidos</div>
+              <div id="stats-wards-destroyed" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #FF5722; text-shadow: 0 0 8px rgba(255, 87, 34, 0.5);">0</div>
+            </div>
+          </div>
+          
+          <!-- NUEVO: Double Kills -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(255, 193, 7, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);">
+               <img src="../../img/multikill-icon.svg" alt="Multi Kills" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(255, 193, 7, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Bajas Dobles</div>
+              <div id="stats-double-kills" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #FFC107; text-shadow: 0 0 8px rgba(255, 193, 7, 0.5);">0</div>
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -142,6 +164,220 @@
             </div>
           </div>
             
+          <!-- NUEVO: Daño Auto-Mitigado -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(3, 169, 244, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(3, 169, 244, 0.2), rgba(3, 169, 244, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(3, 169, 244, 0.3);">
+              <img src="../../img/shield-icon.svg" alt="Daño Mitigado" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(3, 169, 244, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Daño Mitigado</div>
+              <div id="stats-damage-self-mitigated" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #03A9F4; text-shadow: 0 0 8px rgba(3, 169, 244, 0.5);">0</div>
+            </div>
+          </div>
+          
+          <!-- NUEVO: Daño a Objetivos -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(156, 39, 176, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(156, 39, 176, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);">
+              <img src="../../img/objective-damage-icon.svg" alt="Daño a Objetivos" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(156, 39, 176, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Daño a Objetivos</div>
+              <div id="stats-objective-damage" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #9C27B0; text-shadow: 0 0 8px rgba(156, 39, 176, 0.5);">0</div>
+            </div>
+          </div>
+          
+          <!-- NUEVO: Daño a Edificios -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(156, 39, 176, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(156, 39, 176, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);">
+              <img src="../../img/building-damage-icon.svg" alt="Daño a Edificios" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(156, 39, 176, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Daño a Edificios</div>
+              <div id="stats-building-damage" class="stats-metric-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #9C27B0; text-shadow: 0 0 8px rgba(156, 39, 176, 0.5);">0</div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
+    <!-- NUEVA SECCIÓN: Estadísticas del Campeón -->
+    <div class="stats-section" style="background: linear-gradient(180deg, rgba(39, 22, 100, 0.8), rgba(19, 11, 55, 0.8)); border-radius: var(--border-radius-md); overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid rgba(109, 61, 255, 0.15); margin-top: var(--spacing-md);">
+      <div class="stats-section-header" style="padding: var(--spacing-sm) var(--spacing-md); border-bottom: 1px solid rgba(109, 61, 255, 0.15); background: rgba(109, 61, 255, 0.1);">
+        <h3 style="font-size: var(--font-size-md); color: var(--omashu-purple-light, #bc76ff); text-shadow: 0 0 5px rgba(188, 118, 255, 0.3); margin: 0; font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: 0.5px;">Estadísticas del Campeón</h3>
+      </div>
+      <div class="stats-section-content" style="padding: var(--spacing-md);">
+        <div class="stats-metrics-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md);">
+          <!-- Vida Actual / Máxima -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(76, 175, 80, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);">
+              <img src="../../img/health-icon.svg" alt="Vida" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(76, 175, 80, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Vida</div>
+              <div id="stats-champ-health" class="stats-metric-value health-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0 / 0</div>
+            </div>
+          </div>
+          <!-- Poder de Habilidad (AP) -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(33, 150, 243, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(33, 150, 243, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);">
+              <img src="../../img/ap-icon.svg" alt="AP" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(33, 150, 243, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Poder Habilidad</div>
+              <div id="stats-champ-ap" class="stats-metric-value ap-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0</div>
+            </div>
+          </div>
+          <!-- Daño de Ataque (AD) -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(255, 152, 0, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 152, 0, 0.2), rgba(255, 152, 0, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 152, 0, 0.3);">
+              <img src="../../img/ad-icon.svg" alt="AD" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(255, 152, 0, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Daño Ataque</div>
+              <div id="stats-champ-ad" class="stats-metric-value ad-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0</div>
+            </div>
+          </div>
+          <!-- Velocidad de Ataque -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(255, 235, 59, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 235, 59, 0.2), rgba(255, 235, 59, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 235, 59, 0.3);">
+              <img src="../../img/as-icon.svg" alt="AS" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(255, 235, 59, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Vel. Ataque</div>
+              <div id="stats-champ-as" class="stats-metric-value as-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0.00</div>
+            </div>
+          </div>
+          <!-- Armadura -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(158, 158, 158, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(158, 158, 158, 0.2), rgba(158, 158, 158, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(158, 158, 158, 0.3);">
+              <img src="../../img/armor-icon.svg" alt="Armadura" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(158, 158, 158, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Armadura</div>
+              <div id="stats-champ-armor" class="stats-metric-value armor-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0</div>
+            </div>
+          </div>
+          <!-- Resistencia Mágica -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(156, 39, 176, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(156, 39, 176, 0.2), rgba(156, 39, 176, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);">
+              <img src="../../img/mr-icon.svg" alt="MR" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(156, 39, 176, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Res. Mágica</div>
+              <div id="stats-champ-mr" class="stats-metric-value mr-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0</div>
+            </div>
+          </div>
+          <!-- Probabilidad de Crítico -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(244, 67, 54, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(244, 67, 54, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);">
+              <img src="../../img/crit-icon.svg" alt="Crit" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(244, 67, 54, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Prob. Crítico</div>
+              <div id="stats-champ-crit" class="stats-metric-value crit-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0%</div>
+            </div>
+          </div>
+          <!-- Velocidad de Movimiento -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(76, 175, 80, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);">
+              <img src="../../img/ms-icon.svg" alt="MS" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(76, 175, 80, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Vel. Movimiento</div>
+              <div id="stats-champ-ms" class="stats-metric-value ms-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0</div>
+            </div>
+          </div>
+          <!-- Tenacidad -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(121, 85, 72, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(121, 85, 72, 0.2), rgba(121, 85, 72, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(121, 85, 72, 0.3);">
+              <img src="../../img/tenacity-icon.svg" alt="Tenacidad" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(121, 85, 72, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Tenacidad</div>
+              <div id="stats-champ-tenacity" class="stats-metric-value tenacity-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0%</div>
+            </div>
+          </div>
+          <!-- Robo de Vida -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(233, 30, 99, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(233, 30, 99, 0.2), rgba(233, 30, 99, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(233, 30, 99, 0.3);">
+              <img src="../../img/lifesteal-icon.svg" alt="Robo Vida" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(233, 30, 99, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Robo de Vida</div>
+              <div id="stats-champ-lifesteal" class="stats-metric-value lifesteal-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0%</div>
+            </div>
+          </div>
+          <!-- Omnivamp -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(103, 58, 183, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(103, 58, 183, 0.2), rgba(103, 58, 183, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(103, 58, 183, 0.3);">
+              <img src="../../img/omnivamp-icon.svg" alt="Omnivamp" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(103, 58, 183, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Omnivamp</div>
+              <div id="stats-champ-omnivamp" class="stats-metric-value omnivamp-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0%</div>
+            </div>
+          </div>
+          <!-- NUEVO: Aceleración de Habilidad -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(0, 188, 212, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(0, 188, 212, 0.2), rgba(0, 188, 212, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(0, 188, 212, 0.3);">
+              <img src="../../img/ability-haste-icon.svg" alt="AH" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(0, 188, 212, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Acel. Habilidad</div>
+              <div id="stats-champ-ah" class="stats-metric-value ah-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #00BCD4;">0</div>
+            </div>
+          </div>
+          <!-- NUEVO: Penetración de Armadura % -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(255, 87, 34, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 87, 34, 0.2), rgba(255, 87, 34, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 87, 34, 0.3);">
+              <img src="../../img/armor-pen-icon.svg" alt="Pen Armor" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(255, 87, 34, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Pen. Armadura %</div>
+              <div id="stats-champ-armor-pen-percent" class="stats-metric-value pen-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #FF5722;">0%</div>
+            </div>
+          </div>
+          <!-- NUEVO: Penetración Mágica % -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(103, 58, 183, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(103, 58, 183, 0.2), rgba(103, 58, 183, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(103, 58, 183, 0.3);">
+              <img src="../../img/magic-pen-icon.svg" alt="Pen Magia" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(103, 58, 183, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Pen. Mágica %</div>
+              <div id="stats-champ-magic-pen-percent" class="stats-metric-value pen-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #673AB7;">0%</div>
+            </div>
+          </div>
+          <!-- NUEVO: Letalidad Física -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(255, 87, 34, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 87, 34, 0.2), rgba(255, 87, 34, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 87, 34, 0.3);">
+              <img src="../../img/lethality-icon.svg" alt="Letalidad" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(255, 87, 34, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Letalidad</div>
+              <div id="stats-champ-lethality" class="stats-metric-value pen-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #FF5722;">0</div>
+            </div>
+          </div>
+          <!-- NUEVO: Rango de Ataque -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(96, 125, 139, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(96, 125, 139, 0.2), rgba(96, 125, 139, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(96, 125, 139, 0.3);">
+              <img src="../../img/attack-range-icon.svg" alt="Rango" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(96, 125, 139, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Rango Ataque</div>
+              <div id="stats-champ-range" class="stats-metric-value range-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #607D8B;">0</div>
+            </div>
+          </div>
+          <!-- NUEVO: Poder Curación/Escudo -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(139, 195, 74, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(139, 195, 74, 0.2), rgba(139, 195, 74, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(139, 195, 74, 0.3);">
+              <img src="../../img/heal-shield-power-icon.svg" alt="Heal/Shield" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(139, 195, 74, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Poder Curación/Escudo</div>
+              <div id="stats-champ-heal-shield" class="stats-metric-value heal-shield-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #8BC34A;">0%</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -223,67 +459,133 @@
   function updateUI(gameData) {
     console.log("[tab-stats] updateUI llamada con datos:", gameData ? 'Presentes' : 'Ausentes');
     const data = gameData || {}; // Usar objeto vacío si no hay datos
-    ultimosDatos = JSON.parse(JSON.stringify(data)); // Guardar para exportar
+    // Guardar copia profunda solo si es necesario para exportar
+    // ultimosDatos = JSON.parse(JSON.stringify(data)); 
+    
+    // Optimización: Obtener todos los elementos una vez
+    const uiElements = {
+      playerName: document.getElementById('stats-player-name'),
+      matchType: document.getElementById('stats-match-type'),
+      gameTime: document.getElementById('stats-game-time'),
+      kills: document.getElementById('stats-kills'),
+      deaths: document.getElementById('stats-deaths'),
+      assists: document.getElementById('stats-assists'),
+      kdaRatio: document.getElementById('stats-kda-ratio'),
+      gold: document.getElementById('stats-gold'),
+      cs: document.getElementById('stats-cs'),
+      csPerMin: document.getElementById('stats-cs-per-min'),
+      wardsPlaced: document.getElementById('stats-wards-placed'),
+      wardsDestroyed: document.getElementById('stats-wards-destroyed'),
+      doubleKills: document.getElementById('stats-double-kills'),
+      totalDamage: document.getElementById('stats-total-damage'), // Corresponde a damageDealt
+      championDamage: document.getElementById('stats-champion-damage'), // Corresponde a damageDealtToChampions
+      totalHealing: document.getElementById('stats-total-healing'), // Corresponde a healingDone
+      damageTaken: document.getElementById('stats-damage-taken'),
+      damageSelfMitigated: document.getElementById('stats-damage-self-mitigated'),
+      objectiveDamage: document.getElementById('stats-objective-damage'), // Corresponde a damageToObjectives
+      buildingDamage: document.getElementById('stats-building-damage'), // Corresponde a damageToBuildings
+      tbody: document.getElementById('variables-body'),
+      plainTextOutput: document.getElementById('plain-text-variables-debug'),
+      // Nuevos elementos championStats
+      champHealth: document.getElementById('stats-champ-health'),
+      champAP: document.getElementById('stats-champ-ap'),
+      champAD: document.getElementById('stats-champ-ad'),
+      champAS: document.getElementById('stats-champ-as'),
+      champArmor: document.getElementById('stats-champ-armor'),
+      champMR: document.getElementById('stats-champ-mr'),
+      champCrit: document.getElementById('stats-champ-crit'),
+      champMS: document.getElementById('stats-champ-ms'),
+      champTenacity: document.getElementById('stats-champ-tenacity'),
+      champLifesteal: document.getElementById('stats-champ-lifesteal'),
+      champOmnivamp: document.getElementById('stats-champ-omnivamp'),
+      champAH: document.getElementById('stats-champ-ah'),
+      champArmorPenPercent: document.getElementById('stats-champ-armor-pen-percent'),
+      champMagicPenPercent: document.getElementById('stats-champ-magic-pen-percent'),
+      champLethality: document.getElementById('stats-champ-lethality'),
+      champRange: document.getElementById('stats-champ-range'),
+      champHealShield: document.getElementById('stats-champ-heal-shield'),
+      // Añadir más si se implementaron (CritDamage, Vamp, Regen, Recursos...)
+      champCritDamage: document.getElementById('stats-champ-crit-damage'), // Asumiendo que se añade este ID
+      champPhysicalVamp: document.getElementById('stats-champ-physical-vamp'), // Asumiendo que se añade este ID
+      champHealthRegen: document.getElementById('stats-champ-health-regen'), // Asumiendo que se añade este ID
+    };
 
-    // Elementos de la UI
-    const playerNameEl = document.getElementById('stats-player-name');
-    const matchTypeEl = document.getElementById('stats-match-type');
-    const gameTimeEl = document.getElementById('stats-game-time');
-    const killsEl = document.getElementById('stats-kills');
-    const deathsEl = document.getElementById('stats-deaths');
-    const assistsEl = document.getElementById('stats-assists');
-    const kdaRatioEl = document.getElementById('stats-kda-ratio');
-    const goldEl = document.getElementById('stats-gold');
-    const csEl = document.getElementById('stats-cs');
-    const csPerMinEl = document.getElementById('stats-cs-per-min');
-    const wardsEl = document.getElementById('stats-wards-placed');
-    const totalDamageEl = document.getElementById('stats-total-damage');
-    const championDamageEl = document.getElementById('stats-champion-damage');
-    const totalHealingEl = document.getElementById('stats-total-healing');
-    const damageTakenEl = document.getElementById('stats-damage-taken');
-    const tbody = document.getElementById('variables-body');
-    const plainTextOutput = document.getElementById('plain-text-variables-debug');
+    // Función helper para actualizar texto si existe el elemento y el dato
+    const updateText = (element, value, formatter = formatNumber) => {
+      if (element && value !== undefined && value !== null) {
+        element.textContent = formatter(value);
+      } else if (element) {
+        element.textContent = formatter(0); // O mostrar '-' o mantener el valor anterior?
+      }
+    };
 
     // --- Actualizar Encabezado ---
-    if (playerNameEl && data.summoner) playerNameEl.textContent = data.summoner.name || "Invocador";
-    if (matchTypeEl && data.match) matchTypeEl.textContent = data.match.gameMode || "Partida";
-    if (gameTimeEl && data.match?.gameTime !== undefined) {
-        gameTimeEl.textContent = window.parent?.formatGameTime ? window.parent.formatGameTime(data.match.gameTime) : "00:00";
-    } else if (gameTimeEl) {
-        gameTimeEl.textContent = "00:00";
-    }
+    updateText(uiElements.playerName, data.summoner?.name, val => val || "Invocador");
+    updateText(uiElements.matchType, data.match?.gameMode, val => val || "Partida");
+    updateText(uiElements.gameTime, data.match?.gameTime, window.parent?.formatGameTime ?? (secs => "::"));
 
     // --- Actualizar KDA ---
     const kills = data.match?.kills;
     const deaths = data.match?.deaths;
     const assists = data.match?.assists;
-    if (killsEl) killsEl.textContent = formatNumber(kills);
-    if (deathsEl) deathsEl.textContent = formatNumber(deaths);
-    if (assistsEl) assistsEl.textContent = formatNumber(assists);
-    if (kdaRatioEl) kdaRatioEl.textContent = calculateKDARatio(kills, deaths, assists);
+    updateText(uiElements.kills, kills);
+    updateText(uiElements.deaths, deaths);
+    updateText(uiElements.assists, assists);
+    updateText(uiElements.kdaRatio, calculateKDARatio(kills, deaths, assists), val => val); // KDA Ratio no usa formatNumber
 
     // --- Actualizar Recursos ---
-    if (goldEl && data.match) goldEl.textContent = formatNumber(data.match.gold);
+    updateText(uiElements.gold, data.match?.gold);
     const cs = data.match?.cs;
-    if (csEl) csEl.textContent = formatNumber(cs);
-    if (csPerMinEl && data.match?.gameTime > 0 && cs !== undefined) {
-        const csPerMinute = (cs / (data.match.gameTime / 60)).toFixed(1);
-        csPerMinEl.textContent = csPerMinute;
-    } else if (csPerMinEl) {
-        csPerMinEl.textContent = "0.0";
+    updateText(uiElements.cs, cs);
+    if (uiElements.csPerMin && data.match?.gameTime > 0 && cs !== undefined) {
+      const csPerMinute = (cs / (data.match.gameTime / 60)).toFixed(1);
+      uiElements.csPerMin.textContent = csPerMinute;
+    } else if (uiElements.csPerMin) {
+      uiElements.csPerMin.textContent = "0.0";
     }
-    const wardsPlaced = data.vision?.wardsPlaced ?? data.objectives?.wardPlaced;
-    if (wardsEl) wardsEl.textContent = formatNumber(wardsPlaced);
+    updateText(uiElements.wardsPlaced, data.vision?.wardsPlaced);
+    updateText(uiElements.wardsDestroyed, data.vision?.wardsDestroyed);
+    updateText(uiElements.doubleKills, data.match?.doubleKills);
 
-    // --- Actualizar Daño y Curación ---
-    if (totalDamageEl && data.combat) totalDamageEl.textContent = formatNumber(data.combat.damageDealt);
-    if (championDamageEl && data.combat) championDamageEl.textContent = formatNumber(data.combat.damageDealtToChampions ?? data.combat.totalDamageToChampions);
-    if (totalHealingEl && data.combat) totalHealingEl.textContent = formatNumber(data.combat.healing ?? data.combat.healingDone);
-    if (damageTakenEl && data.combat) damageTakenEl.textContent = formatNumber(data.combat.damageTaken);
+    // --- Actualizar Daño y Curación --- 
+    updateText(uiElements.totalDamage, data.combat?.damageDealt);
+    updateText(uiElements.championDamage, data.combat?.damageDealtToChampions);
+    updateText(uiElements.totalHealing, data.combat?.healingDone);
+    updateText(uiElements.damageTaken, data.combat?.damageTaken);
+    updateText(uiElements.damageSelfMitigated, data.combat?.damageSelfMitigated);
+    updateText(uiElements.objectiveDamage, data.combat?.damageToObjectives);
+    updateText(uiElements.buildingDamage, data.combat?.damageToBuildings);
 
-    // --- Actualizar Tabla de Variables y Debug ---
-    if (tbody) actualizarTablaHTML(tbody, data);
-    if (plainTextOutput) actualizarDebugTextoPlano(plainTextOutput, data);
+    // --- Actualizar Estadísticas del Campeón ---
+    const champStats = data.championStats;
+    if (uiElements.champHealth && champStats?.currentHealth !== undefined && champStats?.maxHealth !== undefined) {
+        uiElements.champHealth.textContent = `${formatNumber(champStats.currentHealth)} / ${formatNumber(champStats.maxHealth)}`;
+    }
+    updateText(uiElements.champAP, champStats?.abilityPower);
+    updateText(uiElements.champAD, champStats?.attackDamage);
+    updateText(uiElements.champAS, champStats?.attackSpeed, val => (val ?? 0).toFixed(2)); // Formato AS
+    updateText(uiElements.champArmor, champStats?.armor);
+    updateText(uiElements.champMR, champStats?.magicResist);
+    updateText(uiElements.champCrit, champStats?.critChance, val => `${formatNumber((val ?? 0) * 100)}%`); // Formato % Crit
+    updateText(uiElements.champMS, champStats?.moveSpeed);
+    updateText(uiElements.champTenacity, champStats?.tenacity, val => `${formatNumber((val ?? 0) * 100)}%`); // Formato % Tenacidad
+    updateText(uiElements.champLifesteal, champStats?.lifeSteal, val => `${formatNumber((val ?? 0) * 100)}%`); // Formato % Robo Vida
+    updateText(uiElements.champOmnivamp, champStats?.omnivamp, val => `${formatNumber((val ?? 0) * 100)}%`); // Formato % Omnivamp
+
+    // --- Actualizar Nuevas Estadísticas del Campeón ---
+    updateText(uiElements.champAH, champStats?.abilityHaste);
+    // Usar 'bonusArmorPenetrationPercent' o 'armorPenetrationPercent' - verificar cuál se usa
+    updateText(uiElements.champArmorPenPercent, champStats?.bonusArmorPenetrationPercent ?? champStats?.armorPenetrationPercent, val => `${formatNumber((val ?? 0) * 100)}%`);
+    // Usar 'bonusMagicPenetrationPercent' o 'magicPenetrationPercent'
+    updateText(uiElements.champMagicPenPercent, champStats?.bonusMagicPenetrationPercent ?? champStats?.magicPenetrationPercent, val => `${formatNumber((val ?? 0) * 100)}%`);
+    updateText(uiElements.champLethality, champStats?.physicalLethality);
+    updateText(uiElements.champRange, champStats?.attackRange);
+    updateText(uiElements.champHealShield, champStats?.healShieldPower, val => `${formatNumber((val ?? 0) * 100)}%`);
+
+    // --- Actualizar Tabla de Variables y Debug --- 
+    // (Solo si la pestaña está activa para optimizar? O si los datos cambiaron significativamente?)
+    if (uiElements.tbody) actualizarTablaHTML(uiElements.tbody, data);
+    if (uiElements.plainTextOutput) actualizarDebugTextoPlano(uiElements.plainTextOutput, data);
   }
 
   // Función auxiliar para generar filas de la tabla HTML
@@ -442,7 +744,7 @@
       const initialData = window.parent.getGameData();
       console.log("[tab-stats] Aplicando datos iniciales:", initialData);
       updateUI(initialData);
-    } else {
+         } else {
       console.error("[tab-stats] No se pudo encontrar window.parent.getGameData.");
       updateUI(null); // Pasar null explícitamente si no hay datos
     }
@@ -602,4 +904,52 @@
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
   }
+
+  /* Estilos para stats de campeón compactas */
+  .stats-metric.compact {
+    flex-direction: row;
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+
+  .stats-metric.compact .stats-metric-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .stats-metric.compact .stats-metric-icon img {
+     width: 18px;
+     height: 18px;
+  }
+
+  .stats-metric.compact .stats-metric-info {
+    text-align: left;
+  }
+
+  .stats-metric.compact .stats-metric-name {
+    font-size: var(--font-size-xs);
+    margin-bottom: 0;
+  }
+
+  .stats-metric.compact .stats-metric-value {
+    font-size: var(--font-size-md);
+    text-shadow: none;
+  }
+
+  /* Colores específicos para champion stats */
+  .health-value { color: var(--positive-color, #4caf50); }
+  .ap-value { color: #2196F3; } /* Azul */
+  .ad-value { color: #FF9800; } /* Naranja */
+  .as-value { color: #FFEB3B; } /* Amarillo */
+  .armor-value { color: #9E9E9E; } /* Gris */
+  .mr-value { color: #9C27B0; } /* Púrpura */
+  .crit-value { color: #f44336; } /* Rojo */
+  .ms-value { color: #4CAF50; } /* Verde */
+  .tenacity-value { color: #795548; } /* Marrón */
+  .lifesteal-value { color: #E91E63; } /* Rosa */
+  .omnivamp-value { color: #673AB7; } /* Púrpura Oscuro */
+  .ah-value { color: #00BCD4; } /* Cyan */
+  .pen-value { color: #FF5722; } /* Naranja Oscuro */
+  .range-value { color: #607D8B; } /* Azul Grisáceo */
+  .heal-shield-value { color: #8BC34A; } /* Verde Lima */
 </style> 
