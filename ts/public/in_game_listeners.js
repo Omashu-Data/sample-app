@@ -41,9 +41,9 @@ function onError(info) {
 
 // Manejar actualizaciones de información
 function onInfoUpdates(info) {
-  // Loguear la info cruda recibida
-  console.log("[in_game_listeners] onInfoUpdates raw data:", JSON.stringify(info));
-  // addToLog(infoLog, info); // Opcional: Loguear al div oculto
+  // << CAMBIO: Log recursivo con JSON.stringify >>
+  console.log('[onInfoUpdates] Full Recursive GEP Data:', JSON.stringify(info, null, 2)); 
+  // Ya no necesitamos el log anterior: console.log('[in_game_listeners] onInfoUpdates raw data:', info);
   
   // NUEVO: Analizar estructura de datos GEP
   // analizarEstructuraGEP(info); // Descomentar si necesitas el keyRegistry
@@ -231,8 +231,9 @@ function onInfoUpdates(info) {
 
 // Manejar nuevos eventos
 function onNewEvents(e) {
-  // Log detallado del evento crudo
-  console.log("[onNewEvents] Raw event data:", JSON.stringify(e)); 
+  // << CAMBIO: Log recursivo con JSON.stringify >>
+  console.log('[onNewEvents] Full Recursive GEP Event Data:', JSON.stringify(e, null, 2));
+  // Ya no necesitamos el log anterior: console.log('[onNewEvents] Raw event data:', e);
   
   const isHighlight = e.events && e.events.some(event => 
     ['kill', 'death', 'assist', 'level', 'matchStart', 'matchEnd'].includes(event.name)
