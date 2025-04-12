@@ -87,181 +87,130 @@
     <!-- Columna de Eventos -->
     <div class="events__log-column">
       <div class="events__logs-header">
-        <div class="events__logs-title">Eventos</div>
+        <div class="events__logs-title">Registro de Eventos</div>
       </div>
       <div id="visible-events-log"></div>
-    </div>
-    
-    <!-- Columna de Actualizaciones de Info -->
-    <div class="events__log-column">
-      <div class="events__logs-header">
-        <div class="events__logs-title">Actualizaciones de Info</div>
-      </div>
-      <div id="visible-info-log"></div>
     </div>
   </div>
   
   <script>
     // Referencias a contenedores
     const eventsLog = document.getElementById('visible-events-log');
-    const infoLog = document.getElementById('visible-info-log');
     const heartbeatIndicator = document.getElementById('heartbeat-indicator');
     const lastUpdateTime = document.getElementById('last-update-time');
     
-    // Contadores
-    let totalEventsSynced = 0;
-    let totalInfoSynced = 0;
+    let lastProcessedEventTimestamp = 0;
     
-    // Conjunto para evitar duplicados
-    let processedEventTexts = new Set();
-    let processedInfoTexts = new Set();
-    
-    // Funciones para añadir datos a los logs (estas funciones serán llamadas desde eventos-fix.js)
-    window.addEventToVisibleLog = function(eventData) {
-      try {
-        // Convertir a texto para comparación
-        const eventText = JSON.stringify(eventData);
+    // Función principal para actualizar la UI de esta pestaña
+    function updateUI(gameData) {
+      if (!gameData || !gameData.events) return;
+
+      const newEvents = gameData.events.filter(e => e.timestamp > lastProcessedEventTimestamp);
+      
+      if (newEvents.length > 0) {
+        newEvents.sort((a, b) => a.timestamp - b.timestamp);
         
-        // Verificar si ya procesamos este evento
-        if (!processedEventTexts.has(eventText)) {
-          processedEventTexts.add(eventText);
-          
-          // Crear elemento
+        newEvents.forEach(event => {
+          // Crear elemento pre para el evento
           const line = document.createElement('pre');
-          line.textContent = JSON.stringify(eventData, null, 2);
+          // Intentar mostrar el evento de forma más legible
+          const time = new Date(event.timestamp).toLocaleTimeString();
+          let eventText = `[${time}] ${event.name || event.type || 'Evento'}`;
+          if (event.data && Object.keys(event.data).length > 0) {
+            // Excluir el objeto data completo si es muy grande o complejo
+            try {
+              const dataString = JSON.stringify(event.data);
+              if (dataString.length < 150) {
+                eventText += `: ${dataString}`;
+              } else {
+                 eventText += `: {...}`; // Indicar que hay datos pero son grandes
+              }
+            } catch (e) {
+              eventText += ": [Datos no serializables]";
+            }
+          } else if (event.name === 'kill') {
+            eventText += ` (Kills: ${gameData.match?.kills ?? '?'})`;
+          } else if (event.name === 'death') {
+            eventText += ` (Deaths: ${gameData.match?.deaths ?? '?'})`;
+          } else if (event.name === 'assist') {
+            eventText += ` (Assists: ${gameData.match?.assists ?? '?'})`;
+          }
           
-          // Verificar si es un evento importante
-          const isHighlight = eventData.events && eventData.events.some(evt => 
-            ['kill', 'death', 'assist', 'level', 'matchStart', 'matchEnd'].includes(evt.name)
-          );
+          line.textContent = eventText;
           
-          if (isHighlight) {
+          // Resaltar eventos importantes
+          const highlightEvents = ['kill', 'death', 'assist', 'level', 'matchStart', 'matchEnd', 'ward_placed', 'turret_kill', 'dragon_kill', 'baron_kill', 'herald_kill'];
+          if (highlightEvents.includes(event.name) || highlightEvents.includes(event.type)) {
             line.className = 'highlight';
           }
           
           // Insertar en contenedor
           eventsLog.appendChild(line);
           
-          // Limitar tamaño
-          while (eventsLog.childNodes.length > 100) {
-            eventsLog.removeChild(eventsLog.firstChild);
-          }
-          
-          // Autoscroll
-          eventsLog.scrollTop = eventsLog.scrollHeight;
-          
-          // Actualizar contador y timestamp
-          totalEventsSynced++;
-          updateDebugStatus();
-          
-          console.log("[EVENTOS-PESTAÑA] Evento agregado:", eventData);
-          return true;
+          // Actualizar timestamp del último evento procesado
+          lastProcessedEventTimestamp = Math.max(lastProcessedEventTimestamp, event.timestamp);
+        });
+
+        // Limitar tamaño del log
+        while (eventsLog.childNodes.length > 150) {
+          eventsLog.removeChild(eventsLog.firstChild);
         }
         
-        return false;
-      } catch (error) {
-        console.warn("[EVENTOS-PESTAÑA] Error añadiendo evento:", error);
-        return false;
-      }
-    };
-    
-    window.addInfoToVisibleLog = function(infoData) {
-      try {
-        // Convertir a texto para comparación
-        const infoText = JSON.stringify(infoData);
+        // Autoscroll
+        eventsLog.scrollTop = eventsLog.scrollHeight;
         
-        // Verificar si ya procesamos esta info
-        if (!processedInfoTexts.has(infoText)) {
-          processedInfoTexts.add(infoText);
-          
-          // Crear elemento
-          const line = document.createElement('pre');
-          line.textContent = JSON.stringify(infoData, null, 2);
-          
-          // Insertar en contenedor
-          infoLog.appendChild(line);
-          
-          // Limitar tamaño
-          while (infoLog.childNodes.length > 100) {
-            infoLog.removeChild(infoLog.firstChild);
-          }
-          
-          // Autoscroll
-          infoLog.scrollTop = infoLog.scrollHeight;
-          
-          // Actualizar contador y timestamp
-          totalInfoSynced++;
-          updateDebugStatus();
-          
-          console.log("[EVENTOS-PESTAÑA] Info agregada:", infoData);
-          return true;
-        }
-        
-        return false;
-      } catch (error) {
-        console.warn("[EVENTOS-PESTAÑA] Error añadiendo info:", error);
-        return false;
+        // Actualizar estado de depuración
+        updateDebugStatus(newEvents.length);
       }
-    };
+    }
     
     // Función para actualizar estado de depuración
-    function updateDebugStatus() {
+    function updateDebugStatus(eventsAdded = 0) {
       // Actualizar indicador de heartbeat
       heartbeatIndicator.style.backgroundColor = '#00ff00';
       setTimeout(() => {
         heartbeatIndicator.style.backgroundColor = 'gray';
       }, 500);
       
-      // Actualizar timestamp y contadores
+      // Actualizar timestamp
       const now = new Date();
-      const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
-                      now.getMinutes().toString().padStart(2, '0') + ':' + 
-                      now.getSeconds().toString().padStart(2, '0');
-      lastUpdateTime.textContent = `${timeStr} - Eventos: ${totalEventsSynced}, Info: ${totalInfoSynced}`;
+      const timeStr = now.toLocaleTimeString();
+      lastUpdateTime.textContent = `${timeStr} (+${eventsAdded} eventos)`;
     }
     
-    // Listener para eventos personalizados
-    document.addEventListener('sync-event-to-tab', (e) => {
-      console.log("[EVENTOS-PESTAÑA] Evento personalizado recibido:", e.detail);
-      if (e.detail && e.detail.eventData) {
-        window.addEventToVisibleLog(e.detail.eventData);
-      }
-    });
-    
-    document.addEventListener('sync-info-to-tab', (e) => {
-      console.log("[EVENTOS-PESTAÑA] Info personalizada recibida:", e.detail);
-      if (e.detail && e.detail.infoData) {
-        window.addInfoToVisibleLog(e.detail.infoData);
-      }
-    });
-    
-    // Iniciar comprobación de latido para mostrar que la página está viva
+    // Iniciar comprobación de latido visual (opcional, para ver si la página está activa)
+    /*
     setInterval(() => {
       heartbeatIndicator.style.backgroundColor = '#ff9800';
       setTimeout(() => {
         heartbeatIndicator.style.backgroundColor = 'gray';
       }, 200);
     }, 5000);
-    
-    // Notificar que la pestaña está cargada
-    console.log("[EVENTOS-PESTAÑA] Pestaña de eventos inicializada");
-    
-    // Verificar el origen y asegurar que estamos listos para recibir eventos
-    window.addEventListener('message', (event) => {
-      try {
-        if (event.data) {
-          if (event.data.eventData) {
-            window.addEventToVisibleLog(event.data.eventData);
-          } else if (event.data.infoData) {
-            window.addInfoToVisibleLog(event.data.infoData);
-          }
-        }
-      } catch (e) {
-        console.warn("[EVENTOS-PESTAÑA] Error procesando mensaje:", e);
+    */
+
+    // --- INICIALIZACIÓN Y SUSCRIPCIÓN ---
+    console.log("[tab-events] Script cargado y ejecutándose.");
+    try {
+      if (window.parent && typeof window.parent.subscribeToGameData === 'function') {
+        console.log("[tab-events] Suscribiendo a gameDataManager...");
+        window.parent.subscribeToGameData(updateUI);
+      } else {
+        console.error("[tab-events] No se pudo encontrar window.parent.subscribeToGameData.");
       }
-    });
+
+      if (window.parent && typeof window.parent.getGameData === 'function') {
+        const initialData = window.parent.getGameData();
+        console.log("[tab-events] Aplicando datos iniciales:", initialData);
+        // Resetear timestamp para procesar todos los eventos iniciales
+        lastProcessedEventTimestamp = 0;
+        updateUI(initialData);
+      } else {
+        console.error("[tab-events] No se pudo encontrar window.parent.getGameData.");
+        updateUI({ events: [] }); // Mostrar log vacío
+      }
+    } catch (error) {
+      console.error("[tab-events] Error durante inicialización/suscripción:", error);
+    }
   </script>
-  <!-- Script para sincronizar la pestaña eventos con la ventana "eventos de lol" -->
-  <script src="eventos-fix.js"></script>
 </body>
 </html> 

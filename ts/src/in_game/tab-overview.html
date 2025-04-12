@@ -172,7 +172,8 @@
     // Actualizar info partida
     if (gameData.match) {
       if (gameTimeEl && gameData.match.gameTime !== undefined) {
-        gameTimeEl.textContent = formatGameTime(gameData.match.gameTime);
+        // Usar la función global formateadora
+        gameTimeEl.textContent = window.parent.formatGameTime ? window.parent.formatGameTime(gameData.match.gameTime) : "00:00";
       }
       currentKills = gameData.match.kills ?? 0;
       if (kdaKillsEl) kdaKillsEl.textContent = currentKills;
@@ -208,63 +209,40 @@
     });
   }
 
-  // Inicialización
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log("[overview-IIFE] Tab-overview cargado, suscribiendo...");
-    try {
-      // Encontrar el elemento de la pestaña ACTUAL (importante dentro de la IIFE)
-      // Asumiendo que el script está dentro del div principal o podemos encontrarlo
-      const thisScriptElement = document.currentScript;
-      const tabElement = thisScriptElement ? thisScriptElement.closest('.overview-tab-content') : document.getElementById('overview-tab'); // Ajustar selector si es necesario
-      
-      if (!tabElement) {
-        console.error("[overview-IIFE] No se pudo encontrar el elemento raíz de la pestaña.");
-        // Intentar buscar por ID como fallback, aunque puede no ser fiable si se carga múltiples veces
-        const fallbackTabElement = document.getElementById('overview-tab');
-        if (fallbackTabElement) {
-            console.warn("[overview-IIFE] Usando fallback getElementById('overview-tab')");
-            // Adjuntar la función al elemento encontrado
-            fallbackTabElement.updateUIFunction = updateUI;
-        } else {
-            return; // No podemos continuar sin el elemento
-        }
-      } else {
-         // Adjuntar la función updateUI LOCAL al elemento de la pestaña
-         tabElement.updateUIFunction = updateUI;
-         console.log("[overview-IIFE] updateUI adjuntada al elemento de la pestaña.");
-      }
+  // --- INICIALIZACIÓN Y SUSCRIPCIÓN ---
+  console.log("[tab-overview] Script cargado y ejecutándose.");
 
-      // Suscripción a datos
-      function subscribeToData() {
-        if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'function') {
-          console.log("[overview] Suscribiendo via window.gameDataManager");
-          window.gameDataManager.subscribe(updateUI);
-        } else {
-          overwolf.windows.getMainWindow(mainWindow => {
-            if (mainWindow && mainWindow.gameDataManager && typeof mainWindow.gameDataManager.subscribe === 'function') {
-              console.log("[overview] Suscribiendo via mainWindow.gameDataManager");
-              mainWindow.gameDataManager.subscribe(updateUI);
-            } else {
-              console.error("[overview] No se pudo encontrar gameDataManager para suscribir.");
-              // Reintentar suscripción después de un breve retraso
-              // setTimeout(subscribeToData, 2000);
-            }
-          });
-        }
-      }
-      subscribeToData();
-
-      // Aplicar estado inicial visual
-      updateUI({
-          summoner: { name: "Cargando...", position: "-" },
-          match: { gameTime: 0, kills: 0, deaths: 0, assists: 0, cs: 0 },
-          vision: { wardsPlaced: 0 }
-      });
-
-    } catch (e) {
-      console.error('[overview-IIFE] Error inicializando:', e);
+  try {
+    // 1. Suscribirse a los datos
+    if (window.parent && typeof window.parent.subscribeToGameData === 'function') {
+      console.log("[tab-overview] Suscribiendo a gameDataManager...");
+      window.parent.subscribeToGameData(updateUI);
+    } else {
+      console.error("[tab-overview] No se pudo encontrar window.parent.subscribeToGameData.");
+      // Podríamos añadir un reintento si fuera necesario
     }
+
+    // 2. Obtener y mostrar datos iniciales
+    if (window.parent && typeof window.parent.getGameData === 'function') {
+      const initialData = window.parent.getGameData();
+      console.log("[tab-overview] Aplicando datos iniciales:", initialData);
+      updateUI(initialData);
+    } else {
+      console.error("[tab-overview] No se pudo encontrar window.parent.getGameData.");
+      // Mostrar UI vacía o con estado "cargando"
+      updateUI({}); 
+    }
+    
+  } catch (error) {
+    console.error("[tab-overview] Error durante inicialización/suscripción:", error);
+  }
+
+  // Eliminar lógica antigua de DOMContentLoaded y adjuntar updateUIFunction
+  /* 
+  document.addEventListener('DOMContentLoaded', function() {
+    // ... código eliminado ...
   });
+  */
 
 })(); // Fin de IIFE
 </script>

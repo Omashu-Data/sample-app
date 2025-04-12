@@ -38,7 +38,7 @@ function onError(info) {
   addToLog(eventsLog, { type: 'error', info: info }, true);
   
   // Enviar error a la pestaña de eventos
-  sendEventToTabEvents({ type: 'error', info: info });
+  // COMENTADO/ELIMINADO: sendEventToTabEvents({ type: 'error', info: info });
 }
 
 // Manejar actualizaciones de información
@@ -47,7 +47,7 @@ function onInfoUpdates(info) {
   console.log("Recibida actualización de info:", info);
   
   // Enviar info a la pestaña de eventos
-  sendInfoToTabEvents(info);
+  // COMENTADO/ELIMINADO: sendInfoToTabEvents(info);
   
   // NUEVO: Analizar estructura de datos GEP
   analizarEstructuraGEP(info);
@@ -443,7 +443,7 @@ function onInfoUpdates(info) {
       gameDataManager.updateData(updates);
       
       // Forzar actualización directa de la pestaña
-      forceUpdateOverviewTab();
+      // COMENTADO/ELIMINADO: forceUpdateOverviewTab();
     }
   } catch (e) {
     console.error("Error procesando datos:", e);
@@ -459,7 +459,7 @@ function onNewEvents(e) {
   addToLog(eventsLog, e, isHighlight);
   
   // Enviar evento a la pestaña de eventos
-  sendEventToTabEvents(e);
+  // COMENTADO/ELIMINADO: sendEventToTabEvents(e);
   
   if (e.events) {
     const updates = {
@@ -546,7 +546,7 @@ function setFeatures() {
 // ---- LÓGICA DE ESTADO DEL JUEGO Y LIVE CLIENT API ----
 
 let lolDataInterval = null;
-let uiUpdateInterval = null;
+// ELIMINADO: let uiUpdateInterval = null;
 
 // Función para obtener datos de la API Live Client de LoL
 function fetchLiveClientData() {
@@ -650,13 +650,14 @@ function handleGameStateChange(gameInfo) {
       lolDataInterval = setInterval(fetchLiveClientData, 2000); // Actualizar cada 2 segundos
       
       // Iniciar intervalo de actualización de UI si no existe
-      if (!uiUpdateInterval) {
-        uiUpdateInterval = setInterval(function() {
-          forceUpdateActiveTab(); // Usamos la función que actualiza la pestaña activa
-          // Log de estado (opcional, puede ser muy verboso)
-          // console.log("UI Update Tick. Estado actual:", gameDataManager.getData());
-        }, 1000); // Actualizar UI cada segundo
-      }
+      // COMENTADO/ELIMINADO:
+      // if (!uiUpdateInterval) {
+      //   uiUpdateInterval = setInterval(function() {
+      //     forceUpdateActiveTab(); // Usamos la función que actualiza la pestaña activa
+      //     // Log de estado (opcional, puede ser muy verboso)
+      //     // console.log("UI Update Tick. Estado actual:", gameDataManager.getData());
+      //   }, 1000); // Actualizar UI cada segundo
+      // }
     }
   } else {
     // Si LoL no está corriendo y teníamos intervalo, detenerlo
@@ -668,10 +669,11 @@ function handleGameStateChange(gameInfo) {
       lolDataInterval = null;
       
       // Detener también el intervalo de UI
-      if (uiUpdateInterval) {
-        clearInterval(uiUpdateInterval);
-        uiUpdateInterval = null;
-      }
+      // COMENTADO/ELIMINADO:
+      // if (uiUpdateInterval) {
+      //   clearInterval(uiUpdateInterval);
+      //   uiUpdateInterval = null;
+      // }
     }
   }
 }
@@ -711,75 +713,7 @@ window.subscribeToGameData = function(callback) {
 };
 
 // NUEVO: Función auxiliar para actualizar una pestaña específica
-window.updateTabWithGameData = function(tabId) {
-  try {
-    console.log(`Intentando actualizar manualmente la pestaña ${tabId} con datos actuales`);
-    const tabPane = document.getElementById(tabId);
-    
-    if (!tabPane) {
-      console.error(`No se encontró la pestaña con ID ${tabId}`);
-      return false;
-    }
-    
-    const data = gameDataManager.getData();
-    
-    // Buscar la función updateUI dentro del contenido de la pestaña
-    const updateUIFn = tabPane.querySelector('script')?.textContent.includes('function updateUI') 
-      ? new Function('return ' + tabPane.querySelector('script')?.textContent)().updateUI 
-      : null;
-    
-    if (updateUIFn) {
-      console.log(`Se encontró updateUI en la pestaña ${tabId}, llamándola...`);
-      try {
-        updateUIFn(data);
-        return true;
-      } catch (e) {
-        console.error(`Error al llamar a updateUI en ${tabId}:`, e);
-      }
-    } else {
-      console.error(`No se encontró la función updateUI en la pestaña ${tabId}`);
-      
-      // Intento alternativo - buscar elementos directamente
-      const playerNameElement = tabPane.querySelector('#player-name');
-      const gameTimeElement = tabPane.querySelector('#game-time-value');
-      const killsElement = tabPane.querySelector('#kda-kills');
-      const deathsElement = tabPane.querySelector('#kda-deaths');
-      const assistsElement = tabPane.querySelector('#kda-assists');
-      
-      let updated = false;
-      
-      if (playerNameElement && data.summoner && data.summoner.name) {
-        playerNameElement.textContent = data.summoner.name;
-        updated = true;
-      }
-      
-      if (gameTimeElement && data.match && data.match.gameTime !== undefined) {
-        gameTimeElement.textContent = formatGameTime(data.match.gameTime);
-        updated = true;
-      }
-      
-      if (killsElement && data.match) {
-        killsElement.textContent = data.match.kills || '0';
-        updated = true;
-      }
-      
-      if (deathsElement && data.match) {
-        deathsElement.textContent = data.match.deaths || '0';
-        updated = true;
-      }
-      
-      if (assistsElement && data.match) {
-        assistsElement.textContent = data.match.assists || '0';
-        updated = true;
-      }
-      
-      return updated;
-    }
-  } catch (e) {
-    console.error(`Error general al actualizar la pestaña ${tabId}:`, e);
-    return false;
-  }
-};
+// COMENTADO/ELIMINADO: window.updateTabWithGameData = function(tabId) { ... }
 
 // Listener para recibir mensajes de actualización de datos
 window.addEventListener('message', function(event) {
@@ -805,550 +739,10 @@ window.debugGameData = function() {
 };
 
 // NUEVO: Función para actualizar forzadamente la pestaña de resumen
-function forceUpdateOverviewTab() {
-  console.log("Forzando actualización de la pestaña de resumen");
-  
-  // Verificar si tenemos datos válidos
-  if (!gameDataManager.currentData.summoner.name) {
-    console.log("No hay datos de jugador todavía, no actualizamos");
-    return;
-  }
-  
-  // Buscar la pestaña de resumen
-  const overviewTab = document.getElementById('overview-tab');
-  if (!overviewTab) {
-    console.log("Pestaña de resumen no encontrada");
-    return;
-  }
-  
-  // ----- CAMBIO IMPORTANTE ------
-  // Usamos el mismo patrón que en components-loader.js para encontrar la función updateUI
-  
-  // Obtener los datos actuales del juego
-  const data = gameDataManager.getData();
-  
-  // Método 1: Buscar la función updateUI adjunta al elemento de pestaña
-  if (overviewTab.updateUIFunction && typeof overviewTab.updateUIFunction === 'function') {
-    console.log("Usando función updateUI adjunta al elemento 'overview-tab'");
-    overviewTab.updateUIFunction(data);
-    return;
-  }
-  
-  // Método 2: Buscar en el objeto tabUpdateFunctions
-  if (window.tabUpdateFunctions && window.tabUpdateFunctions['overview-tab'] && 
-      typeof window.tabUpdateFunctions['overview-tab'] === 'function') {
-    console.log("Usando función updateUI desde tabUpdateFunctions['overview-tab']");
-    window.tabUpdateFunctions['overview-tab'](data);
-    return;
-  }
-  
-  // Método 3: Buscar en nombres de función específicos por tab
-  if (window._overviewUpdateUI && typeof window._overviewUpdateUI === 'function') {
-    console.log("Usando función específica window._overviewUpdateUI");
-    window._overviewUpdateUI(data);
-    return;
-  }
-  
-  // Método 4: Como fallback intentar window.updateUI global
-  if (typeof window.updateUI === 'function') {
-    console.log("Fallback: Usando window.updateUI global");
-    window.updateUI(data);
-    return;
-  }
-  
-  // Método 5: Intentar encontrar updateUI dentro del tab
-  const updateUIScripts = overviewTab.querySelectorAll('script');
-  let tabUpdateUI = null;
-  
-  for (const script of updateUIScripts) {
-    if (script.textContent.includes('function updateUI')) {
-      try {
-        // Ejecutar el script para acceder a la función
-        const scriptFunc = new Function(`
-          let updateUI;
-          ${script.textContent}
-          return updateUI;
-        `);
-        tabUpdateUI = scriptFunc();
-        break;
-      } catch (e) {
-        console.error("Error extrayendo updateUI del script:", e);
-      }
-    }
-  }
-  
-  if (typeof tabUpdateUI === 'function') {
-    console.log("Usando updateUI encontrada en el tab");
-    tabUpdateUI(data);
-    return;
-  }
-  
-  // Método 6: Buscar window.frames[0].updateUI
-  try {
-    if (overviewTab.querySelector('iframe') && 
-        typeof overviewTab.querySelector('iframe').contentWindow.updateUI === 'function') {
-      console.log("Usando updateUI del iframe");
-      overviewTab.querySelector('iframe').contentWindow.updateUI(data);
-      return;
-    }
-  } catch (e) {
-    console.log("No se pudo acceder a updateUI del iframe:", e);
-  }
-  
-  // Fallback: Actualización manual si no encontramos updateUI
-  console.log("No se encontró ninguna función updateUI, actualizando elementos manualmente");
-  
-  // Buscar los elementos dentro de la pestaña
-  const playerNameElement = overviewTab.querySelector('#player-name');
-  const gameTimeElement = overviewTab.querySelector('#game-time-value');
-  const killsElement = overviewTab.querySelector('#kda-kills');
-  const deathsElement = overviewTab.querySelector('#kda-deaths');
-  const assistsElement = overviewTab.querySelector('#kda-assists');
-  
-  // Actualizar elementos manualmente como ultimo recurso
-  try {
-    // Actualizar nombre
-    if (playerNameElement) {
-      playerNameElement.textContent = data.summoner.name || "Desconocido";
-      console.log("Nombre actualizado a:", data.summoner.name);
-    }
-    
-    // Actualizar tiempo
-    if (gameTimeElement) {
-      const formattedTime = formatGameTime(data.match.gameTime);
-      gameTimeElement.textContent = formattedTime;
-      console.log("Tiempo actualizado a:", formattedTime);
-    }
-    
-    // Actualizar KDA
-    if (killsElement) {
-      killsElement.textContent = data.match.kills || "0";
-    }
-    if (deathsElement) {
-      deathsElement.textContent = data.match.deaths || "0";
-    }
-    if (assistsElement) {
-      assistsElement.textContent = data.match.assists || "0";
-    }
-    
-    // También actualizamos los elementos de retos como fallback
-    const challengeKillsElement = overviewTab.querySelector('#challenge-kills-value');
-    const challengeWardsElement = overviewTab.querySelector('#challenge-wards-value');
-    const challengeCSElement = overviewTab.querySelector('#challenge-cs-value');
-    
-    if (challengeKillsElement && data.match) {
-      challengeKillsElement.textContent = (data.match.kills || 0) + "/3";
-    }
-    
-    if (challengeWardsElement && data.vision) {
-      challengeWardsElement.textContent = (data.vision.wardsPlaced || 0) + "/5";
-    }
-    
-    if (challengeCSElement && data.match && data.match.cs !== undefined && data.match.gameTime !== undefined) {
-      const gameTimeInMinutes = Math.max(data.match.gameTime / 60, 1);
-      const csPerMinute = (data.match.cs / gameTimeInMinutes).toFixed(1);
-      challengeCSElement.textContent = csPerMinute + "/8";
-    }
-    
-    console.log("Actualización manual completada");
-  } catch (e) {
-    console.error("Error actualizando elementos:", e);
-  }
-}
+// COMENTADO/ELIMINADO: function forceUpdateOverviewTab() { ... }
 
 // NUEVA FUNCIÓN: Actualiza cualquier pestaña activa (no solo overview)
-function forceUpdateActiveTab() {
-  try {
-    // Obtener la pestaña activa
-    const activeTab = document.querySelector('.tabs__pane--active');
-    if (!activeTab || !activeTab.id) {
-      console.log("No se encontró pestaña activa para actualizar");
-      return;
-    }
-    
-    // No hacer nada si ya es la pestaña overview (para evitar duplicación)
-    if (activeTab.id === 'overview-tab') {
-      // Ya se actualiza con forceUpdateOverviewTab
-      return;
-    }
-    
-    console.log(`Forzando actualización de pestaña activa: ${activeTab.id}`);
-    
-    // Obtener los datos actuales
-    const data = gameDataManager.getData();
-    console.log(`Datos enviados a ${activeTab.id}:`, {
-      summoner: data.summoner ? data.summoner.name : "no disponible",
-      gameTime: data.match ? data.match.gameTime : "no disponible",
-      kda: data.match ? `${data.match.kills}/${data.match.deaths}/${data.match.assists}` : "no disponible"
-    });
-    
-    let updateSuccess = false;
-    
-    // Método 1: Buscar la función updateUI adjunta al elemento de pestaña
-    if (activeTab.updateUIFunction && typeof activeTab.updateUIFunction === 'function') {
-      console.log(`Usando función updateUI adjunta al elemento ${activeTab.id}`);
-      try {
-        activeTab.updateUIFunction(data);
-        updateSuccess = true;
-      } catch (e) {
-        console.error(`Error al llamar updateUIFunction en ${activeTab.id}:`, e);
-      }
-    }
-    
-    // Método 2: Buscar en el objeto tabUpdateFunctions
-    if (!updateSuccess && window.tabUpdateFunctions && window.tabUpdateFunctions[activeTab.id] && 
-        typeof window.tabUpdateFunctions[activeTab.id] === 'function') {
-      console.log(`Usando función updateUI desde tabUpdateFunctions['${activeTab.id}']`);
-      try {
-        window.tabUpdateFunctions[activeTab.id](data);
-        updateSuccess = true;
-      } catch (e) {
-        console.error(`Error al llamar tabUpdateFunctions['${activeTab.id}']:`, e);
-      }
-    }
-    
-    // Método 3: Buscar en nombres de función específicos por tab
-    if (!updateSuccess) {
-      const tabName = activeTab.id.replace('-tab', '');
-      const specificFunctionName = `_${tabName}UpdateUI`;
-      if (window[specificFunctionName] && typeof window[specificFunctionName] === 'function') {
-        console.log(`Usando función específica window.${specificFunctionName}`);
-        try {
-          window[specificFunctionName](data);
-          updateSuccess = true;
-        } catch (e) {
-          console.error(`Error al llamar ${specificFunctionName}:`, e);
-        }
-      }
-    }
-    
-    // Método 4: Como fallback intentar window.updateUI global
-    if (!updateSuccess && typeof window.updateUI === 'function') {
-      console.log('Fallback: Usando window.updateUI global para actualizar');
-      try {
-        window.updateUI(data);
-        updateSuccess = true;
-      } catch (e) {
-        console.error(`Error al llamar window.updateUI:`, e);
-      }
-    }
-    
-    // Método 5: Extraer la función updateUI del script del tab
-    if (!updateSuccess) {
-      try {
-        console.log('Intentando extraer updateUI del script del tab');
-        const scripts = activeTab.querySelectorAll('script');
-        let updateUIFn = null;
-        
-        for (const script of scripts) {
-          if (script.textContent.includes('function updateUI')) {
-            try {
-              // Extraer la función
-              const scriptContent = script.textContent;
-              const fnMatch = scriptContent.match(/function\s+updateUI\s*\([^)]*\)\s*\{([\s\S]*?)\}/);
-              if (fnMatch) {
-                updateUIFn = new Function('gameData', fnMatch[1]);
-                break;
-              }
-            } catch (extractError) {
-              console.error('Error extrayendo updateUI:', extractError);
-            }
-          }
-        }
-        
-        if (typeof updateUIFn === 'function') {
-          console.log('Usando updateUI extraída del script');
-          updateUIFn(data);
-          updateSuccess = true;
-        }
-      } catch (scriptError) {
-        console.error('Error procesando scripts:', scriptError);
-      }
-    }
-    
-    // Método 6: Buscar elementos directamente como último recurso
-    if (!updateSuccess) {
-      console.log(`Actualizando manualmente elementos clave de ${activeTab.id}`);
-      
-      try {
-        // Elementos comunes que podrían existir en cualquier pestaña
-        const playerNameElements = activeTab.querySelectorAll('[id$="-player-name"], [id$="player-name"], [id="player-name"]');
-        const gameTimeElements = activeTab.querySelectorAll('[id$="-game-time"], [id$="game-time"], [id="game-time-value"]');
-        const killsElements = activeTab.querySelectorAll('[id$="-kills"], [id="kda-kills"], [id="stats-kills"]');
-        const deathsElements = activeTab.querySelectorAll('[id$="-deaths"], [id="kda-deaths"], [id="stats-deaths"]');
-        const assistsElements = activeTab.querySelectorAll('[id$="-assists"], [id="kda-assists"], [id="stats-assists"]');
-        
-        let updated = false;
-        
-        // Actualizar nombre del jugador
-        if (data.summoner && data.summoner.name) {
-          playerNameElements.forEach(el => {
-            el.textContent = data.summoner.name;
-            updated = true;
-          });
-        }
-        
-        // Actualizar tiempo de juego
-        if (data.match && data.match.gameTime !== undefined) {
-          const formattedTime = formatGameTime(data.match.gameTime);
-          gameTimeElements.forEach(el => {
-            el.textContent = formattedTime;
-            updated = true;
-          });
-        }
-        
-        // Actualizar KDA
-        if (data.match) {
-          if (data.match.kills !== undefined) {
-            killsElements.forEach(el => {
-              el.textContent = data.match.kills;
-              updated = true;
-            });
-          }
-          
-          if (data.match.deaths !== undefined) {
-            deathsElements.forEach(el => {
-              el.textContent = data.match.deaths;
-              updated = true;
-            });
-          }
-          
-          if (data.match.assists !== undefined) {
-            assistsElements.forEach(el => {
-              el.textContent = data.match.assists;
-              updated = true;
-            });
-          }
-        }
-        
-        // Para pestaña de estadísticas específicamente
-        if (activeTab.id === 'stats-tab') {
-          console.log('Aplicando actualizaciones específicas para stats-tab');
-          
-          // Oro
-          const goldElement = activeTab.querySelector('#stats-gold');
-          if (goldElement && data.match && data.match.gold !== undefined) {
-            const formattedGold = new Intl.NumberFormat('es-ES').format(data.match.gold);
-            goldElement.textContent = formattedGold;
-            updated = true;
-          } else if (goldElement && data.info && data.info.game_info && data.info.game_info.gold) {
-            const formattedGold = new Intl.NumberFormat('es-ES').format(data.info.game_info.gold);
-            goldElement.textContent = formattedGold;
-            updated = true;
-          }
-          
-          // CS
-          const csElement = activeTab.querySelector('#stats-cs');
-          if (csElement && data.match && data.match.cs !== undefined) {
-            csElement.textContent = data.match.cs;
-            updated = true;
-          } else if (csElement && data.info && data.info.game_info && data.info.game_info.minionKills) {
-            csElement.textContent = data.info.game_info.minionKills;
-            updated = true;
-          }
-          
-          // CS por minuto
-          const csPerMinElement = activeTab.querySelector('#stats-cs-per-min');
-          if (csPerMinElement) {
-            let cs = 0;
-            let gameTime = 0;
-            
-            if (data.match && data.match.cs !== undefined) {
-              cs = data.match.cs;
-            } else if (data.info && data.info.game_info && data.info.game_info.minionKills) {
-              cs = data.info.game_info.minionKills;
-            }
-            
-            if (data.match && data.match.gameTime !== undefined) {
-              gameTime = data.match.gameTime;
-            } else if (data.gameData && data.gameData.gameTime !== undefined) {
-              gameTime = data.gameData.gameTime;
-            }
-            
-            if (cs > 0 && gameTime > 0) {
-              const gameTimeInMinutes = Math.max(gameTime / 60, 1);
-              const csPerMinute = (cs / gameTimeInMinutes).toFixed(1);
-              csPerMinElement.textContent = csPerMinute;
-              updated = true;
-            }
-          }
-          
-          // Wards
-          const wardsElement = activeTab.querySelector('#stats-wards-placed');
-          if (wardsElement) {
-            let wardsPlaced = 0;
-            if (data.vision && data.vision.wardsPlaced !== undefined) {
-              wardsPlaced = data.vision.wardsPlaced;
-            } else if (data.ward && data.ward.placed !== undefined) {
-              wardsPlaced = data.ward.placed;
-            } else if (data.objectives && data.objectives.wardPlaced !== undefined) {
-              wardsPlaced = data.objectives.wardPlaced;
-            }
-            
-            wardsElement.textContent = wardsPlaced;
-            updated = true;
-          }
-          
-          // Daño
-          if (data.combat) {
-            const damageElements = {
-              'stats-total-damage': data.combat.damageDealt,
-              'stats-champion-damage': data.combat.damageDealtToChampions || data.combat.totalDamageToChampions,
-              'stats-damage-taken': data.combat.damageTaken,
-              'stats-total-healing': data.combat.healing || data.combat.healingDone
-            };
-            
-            for (const [id, value] of Object.entries(damageElements)) {
-              const element = activeTab.querySelector(`#${id}`);
-              if (element && value !== undefined) {
-                const formattedValue = new Intl.NumberFormat('es-ES').format(value);
-                element.textContent = formattedValue;
-                updated = true;
-              }
-            }
-          }
-          
-          updateSuccess = updated;
-        }
-      } catch (e) {
-        console.error("Error actualizando elementos manualmente:", e);
-      }
-    }
-    
-    // PASO ADICIONAL: Si es tab-stats, intentar actualizar la tabla de variables explícitamente
-    if (activeTab.id === 'stats-tab') {
-      console.log('Intentando actualizar tabla de variables específicamente');
-      
-      // Método 1: Usar la función actualizarTablaVariables adjunta al elemento del tab
-      if (activeTab.actualizarTablaVariables && typeof activeTab.actualizarTablaVariables === 'function') {
-        console.log('Usando activeTab.actualizarTablaVariables para actualizar la tabla');
-        try {
-          activeTab.actualizarTablaVariables(data);
-          return true;
-        } catch (e) {
-          console.error('Error llamando activeTab.actualizarTablaVariables:', e);
-        }
-      }
-      
-      // Método 2: Buscar la función actualizarTablaVariables en el script
-      try {
-        const scripts = activeTab.querySelectorAll('script');
-        let actualizarTablaVariablesFn = null;
-        
-        for (const script of scripts) {
-          if (script.textContent.includes('function actualizarTablaVariables')) {
-            try {
-              // Extraer la función
-              const scriptContent = script.textContent;
-              const fnMatch = scriptContent.match(/function\s+actualizarTablaVariables\s*\([^)]*\)\s*\{([\s\S]*?)\}/);
-              if (fnMatch) {
-                actualizarTablaVariablesFn = new Function('gameData', fnMatch[1]);
-                break;
-              }
-            } catch (extractError) {
-              console.error('Error extrayendo actualizarTablaVariables:', extractError);
-            }
-          }
-        }
-        
-        if (actualizarTablaVariablesFn) {
-          console.log('Llamando a actualizarTablaVariables extraída del script');
-          actualizarTablaVariablesFn(data);
-          } else {
-          console.log('No se encontró la función actualizarTablaVariables en el script');
-          
-          // Método 3: Actualizar el contenido del tbody directamente
-          const tbody = activeTab.querySelector('#variables-body');
-          if (tbody) {
-            console.log('Actualizando tabla de variables manualmente');
-            
-            // Limpiar tabla y añadir mensaje de actualización en proceso
-            tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px;">Actualizando variables...</td></tr>';
-            
-            // Timeout corto para dar tiempo a que el mensaje se muestre
-            setTimeout(() => {
-              try {
-                // Intentar generar filas básicas para la tabla
-                tbody.innerHTML = '';
-                let rowCount = 0;
-                
-                function generateTableRows(obj, prefix = '') {
-                  if (!obj || typeof obj !== 'object') return 0;
-                  
-                  const keys = Object.keys(obj).sort();
-                  for (const key of keys) {
-                    if (rowCount >= 100) break; // Limitar a 100 filas
-                    
-                    const value = obj[key];
-                    const fullName = prefix ? `${prefix}.${key}` : key;
-                    
-                    const row = document.createElement('tr');
-                    row.style.borderBottom = '1px solid #333';
-                    
-                    const nameCell = document.createElement('td');
-                    nameCell.style.padding = '6px';
-                    nameCell.style.fontWeight = 'bold';
-                    nameCell.textContent = fullName;
-                    
-                    const valueCell = document.createElement('td');
-                    valueCell.style.padding = '6px';
-                    
-                    if (value === null) {
-                      valueCell.textContent = 'null';
-                      valueCell.style.color = '#888';
-                    } else if (value === undefined) {
-                      valueCell.textContent = 'undefined';
-                      valueCell.style.color = '#888';
-                    } else if (typeof value === 'object') {
-                      if (Array.isArray(value)) {
-                        valueCell.textContent = `Array[${value.length}]`;
-                        valueCell.style.color = '#5F9EA0';
-                      } else {
-                        valueCell.textContent = `Object{${Object.keys(value).length} props}`;
-                        valueCell.style.color = '#7B68EE';
-                      }
-                      // No procesamos recursivamente para simplificar
-                    } else {
-                      valueCell.textContent = String(value);
-                      if (typeof value === 'boolean') {
-                        valueCell.style.color = value ? '#4CAF50' : '#F44336';
-                      } else if (typeof value === 'number') {
-                        valueCell.style.color = '#03A9F4';
-                      }
-                    }
-                    
-                    row.appendChild(nameCell);
-                    row.appendChild(valueCell);
-                    tbody.appendChild(row);
-                    rowCount++;
-                  }
-                  
-                  return rowCount;
-                }
-                
-                generateTableRows(data);
-                
-                if (rowCount === 0) {
-                  tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px;">No se encontraron variables para mostrar</td></tr>';
-                }
-            } catch (e) {
-                console.error('Error al generar filas de la tabla:', e);
-                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; padding: 20px; color: #FF5555;">Error al procesar variables: ${e.message}</td></tr>`;
-              }
-            }, 50);
-          }
-        }
-      } catch (e) {
-        console.error('Error general actualizando tabla de variables:', e);
-      }
-    }
-    
-    return updateSuccess;
-  } catch (e) {
-    console.error("Error general en forceUpdateActiveTab:", e);
-    return false;
-  }
-}
+// COMENTADO/ELIMINADO: function forceUpdateActiveTab() { ... }
 
 console.log('Sistema integrado de captura de eventos y gestión de datos inicializado. Versión: 2.0');
 
@@ -1939,97 +1333,7 @@ analizarEstructuraLiveClientData = function(data) {
 window.keysRegistrar = keysRegistrar;
 
 // Función para enviar evento a la pestaña de eventos
-function sendEventToTabEvents(eventData) {
-  try {
-    // Forma 1: Buscar elemento de la pestaña directamente
-    const eventsTab = document.getElementById('events-tab');
-    if (eventsTab && typeof eventsTab.addEventToVisibleLog === 'function') {
-      eventsTab.addEventToVisibleLog(eventData);
-      return true;
-    }
-    
-    // Forma 2: Buscar la función global en el iframe
-    const eventsIframe = document.querySelector('iframe[src*="tab-events.html"]');
-    if (eventsIframe && eventsIframe.contentWindow) {
-      try {
-        // Intentar mediante la función adjunta al elemento iframe
-        if (typeof eventsIframe.addEventToVisibleLog === 'function') {
-          eventsIframe.addEventToVisibleLog(eventData);
-          return true;
-        }
-        
-        // Intentar mediante la función global en el contentWindow
-        if (typeof eventsIframe.contentWindow.addEventToVisibleLog === 'function') {
-          eventsIframe.contentWindow.addEventToVisibleLog(eventData);
-          return true;
-        }
-      } catch (iframeError) {
-        console.warn("Error accediendo a iframe:", iframeError);
-      }
-    }
-    
-    // Forma 3: Intentar a través de mensajes
-    const tabs = document.querySelectorAll('.tab-content');
-    for (let i = 0; i < tabs.length; i++) {
-      const tab = tabs[i];
-      if (tab.id === 'events-tab' || (tab.querySelector && tab.querySelector('iframe[src*="tab-events.html"]'))) {
-        // Intentar crear un evento personalizado
-        const updateEvent = new CustomEvent('event-update', { detail: eventData });
-        tab.dispatchEvent(updateEvent);
-      }
-    }
-    
-    return false;
-  } catch (error) {
-    console.error("Error al enviar evento a la pestaña:", error);
-    return false;
-  }
-}
+// COMENTADO/ELIMINADO: function sendEventToTabEvents(eventData) { ... }
 
 // Función para enviar info a la pestaña de eventos
-function sendInfoToTabEvents(infoData) {
-  try {
-    // Forma 1: Buscar elemento de la pestaña directamente
-    const eventsTab = document.getElementById('events-tab');
-    if (eventsTab && typeof eventsTab.addInfoToVisibleLog === 'function') {
-      eventsTab.addInfoToVisibleLog(infoData);
-      return true;
-    }
-    
-    // Forma 2: Buscar la función global en el iframe
-    const eventsIframe = document.querySelector('iframe[src*="tab-events.html"]');
-    if (eventsIframe && eventsIframe.contentWindow) {
-      try {
-        // Intentar mediante la función adjunta al elemento iframe
-        if (typeof eventsIframe.addInfoToVisibleLog === 'function') {
-          eventsIframe.addInfoToVisibleLog(infoData);
-          return true;
-        }
-        
-        // Intentar mediante la función global en el contentWindow
-        if (typeof eventsIframe.contentWindow.addInfoToVisibleLog === 'function') {
-          eventsIframe.contentWindow.addInfoToVisibleLog(infoData);
-          return true;
-        }
-      } catch (iframeError) {
-        console.warn("Error accediendo a iframe:", iframeError);
-      }
-    }
-    
-    // Forma 3: Intentar a través de mensajes
-    const tabs = document.querySelectorAll('.tab-content');
-    for (let i = 0; i < tabs.length; i++) {
-      const tab = tabs[i];
-      if (tab.id === 'events-tab' || (tab.querySelector && tab.querySelector('iframe[src*="tab-events.html"]'))) {
-        // Intentar crear un evento personalizado
-        const updateEvent = new CustomEvent('info-update', { detail: infoData });
-        tab.dispatchEvent(updateEvent);
-      }
-    }
-    
-    return false;
-  } catch (error) {
-    console.error("Error al enviar info a la pestaña:", error);
-    return false;
-  }
-} 
+// COMENTADO/ELIMINADO: function sendInfoToTabEvents(infoData) { ... } 

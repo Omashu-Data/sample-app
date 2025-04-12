@@ -171,54 +171,28 @@ function loadTabContent(tabId) {
       // Insertar el HTML
       tabPane.innerHTML = html;
       console.log(`Contenido HTML cargado exitosamente para ${tabId}`);
-      
-      // Si es la pestaña de resumen, aplicar datos inmediatamente
-      if (tabId === 'overview-tab') {
-        // Asegurarnos de que el elemento está listo antes de actualizarlo
-        setTimeout(() => {
-          try {
-            // Actualizar directamente los elementos principales
-            directUpdateTab(tabId);
-            
-            // Crear un script simple para manejar futuras actualizaciones
-            const script = document.createElement('script');
-            script.textContent = `
-              (function() {
-                // Función para recibir actualizaciones centralizadas
-                window.receiveGameData = function(data) {
-                  console.log('${tabId}: Recibiendo actualización directa');
-                  if (typeof updateUI === 'function') {
-                    updateUI(data);
-                  } else {
-                    console.warn('No se encontró función updateUI en ${tabId}');
-                  }
-                };
-                
-                // Registrar que el tab está listo para recibir datos
-                if (window.parent && window.parent.registerTabReady) {
-                  window.parent.registerTabReady('${tabId}');
-                }
-                
-                console.log('${tabId}: Preparado para recibir datos');
-              })();
-            `;
-            tabPane.appendChild(script);
-            
-            // Establecer un timer para actualizar periódicamente
-            if (!window._tabUpdateTimers) window._tabUpdateTimers = {};
-            if (window._tabUpdateTimers[tabId]) clearInterval(window._tabUpdateTimers[tabId]);
-            
-            window._tabUpdateTimers[tabId] = setInterval(() => {
-              directUpdateTab(tabId);
-            }, 1000);
-            
-            console.log(`Tab ${tabId} configurado para actualizaciones automáticas`);
-          } catch (e) {
-            console.error(`Error inicializando tab ${tabId}:`, e);
-          }
-        }, 200);
-      }
-      
+
+      // --- Ejecutar scripts dentro del HTML cargado --- 
+      const scripts = tabPane.querySelectorAll('script');
+      scripts.forEach(oldScript => {
+        const newScript = document.createElement('script');
+        
+        // Copiar atributos (importante para type="module", src, etc.)
+        Array.from(oldScript.attributes).forEach(attr => {
+          newScript.setAttribute(attr.name, attr.value);
+        });
+        
+        // Copiar contenido para scripts inline
+        if (oldScript.textContent) {
+          newScript.textContent = oldScript.textContent;
+        }
+        
+        // Reemplazar el script viejo por el nuevo para ejecutarlo
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+        console.log(`Script ejecutado para ${tabId}:`, newScript.src || 'inline script');
+      });
+      // --- Fin de ejecución de scripts ---
+
       // Disparar evento para notificar que el contenido se ha cargado
       const event = new CustomEvent('tabContentLoaded', { detail: { tabId } });
       document.dispatchEvent(event);

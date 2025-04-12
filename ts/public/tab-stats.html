@@ -201,646 +201,269 @@
 
 <script>
 (function() { // Inicio de IIFE
-  // Todo el código JS existente de la pestaña va aquí dentro
 
-  // Función para formatear el tiempo de juego - misma que en tab-overview.html
-  function formatGameTime(seconds) {
-    if (!seconds && seconds !== 0) return "00:00";
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  }
+  // --- Funciones Locales ---
+  // function formatGameTime(seconds) { ... } // Eliminada, usar window.parent.formatGameTime
 
-  // Función para formatear números grandes con separadores de mil
   function formatNumber(num) {
-    return new Intl.NumberFormat('es-ES').format(num);
+    return new Intl.NumberFormat('es-ES').format(num ?? 0); // Añadir ?? 0 para seguridad
   }
 
-  // Función para calcular el ratio KDA
   function calculateKDARatio(kills, deaths, assists) {
-    if (deaths === 0) return ((kills + assists) > 0 ? "Perfect" : "0.0");
-    return ((kills + assists) / deaths).toFixed(1);
+    const k = kills ?? 0;
+    const d = deaths ?? 0;
+    const a = assists ?? 0;
+    if (d === 0) return ((k + a) > 0 ? "Perfect" : "0.0");
+    return ((k + a) / d).toFixed(1);
   }
   
-  // Variables para seguimiento de datos
   let ultimosDatos = {};
-  // let variablesFiltradas = false; // Ya no es necesario si no filtramos
-  
-  // Función para actualizar la tabla de variables (ahora local a la IIFE)
-  function actualizarTablaVariables(gameData) {
-    // DEBUG: Loguear inicio de la función de tabla
-    console.log("[TABLA | actualizarTablaVariables] Iniciando con datos:", gameData ? 'Datos presentes' : 'Datos ausentes');
-    
-    // Referencia al contenedor de texto plano para debug
+
+  // Función principal para actualizar TODA la UI de la pestaña Stats
+  function updateUI(gameData) {
+    console.log("[tab-stats] updateUI llamada con datos:", gameData ? 'Presentes' : 'Ausentes');
+    const data = gameData || {}; // Usar objeto vacío si no hay datos
+    ultimosDatos = JSON.parse(JSON.stringify(data)); // Guardar para exportar
+
+    // Elementos de la UI
+    const playerNameEl = document.getElementById('stats-player-name');
+    const matchTypeEl = document.getElementById('stats-match-type');
+    const gameTimeEl = document.getElementById('stats-game-time');
+    const killsEl = document.getElementById('stats-kills');
+    const deathsEl = document.getElementById('stats-deaths');
+    const assistsEl = document.getElementById('stats-assists');
+    const kdaRatioEl = document.getElementById('stats-kda-ratio');
+    const goldEl = document.getElementById('stats-gold');
+    const csEl = document.getElementById('stats-cs');
+    const csPerMinEl = document.getElementById('stats-cs-per-min');
+    const wardsEl = document.getElementById('stats-wards-placed');
+    const totalDamageEl = document.getElementById('stats-total-damage');
+    const championDamageEl = document.getElementById('stats-champion-damage');
+    const totalHealingEl = document.getElementById('stats-total-healing');
+    const damageTakenEl = document.getElementById('stats-damage-taken');
+    const tbody = document.getElementById('variables-body');
     const plainTextOutput = document.getElementById('plain-text-variables-debug');
-    if (plainTextOutput) {
-      // Limpiar solo el contenido, no el título
-      const titleElement = plainTextOutput.querySelector('h4');
-      plainTextOutput.innerHTML = ''; 
-      if (titleElement) plainTextOutput.appendChild(titleElement);
+
+    // --- Actualizar Encabezado ---
+    if (playerNameEl && data.summoner) playerNameEl.textContent = data.summoner.name || "Invocador";
+    if (matchTypeEl && data.match) matchTypeEl.textContent = data.match.gameMode || "Partida";
+    if (gameTimeEl && data.match?.gameTime !== undefined) {
+        gameTimeEl.textContent = window.parent?.formatGameTime ? window.parent.formatGameTime(data.match.gameTime) : "00:00";
+    } else if (gameTimeEl) {
+        gameTimeEl.textContent = "00:00";
     }
 
-    try {
-      // Guardar los datos para exportación
-      ultimosDatos = JSON.parse(JSON.stringify(gameData || {}));
-      
-      // Obtener el cuerpo de la tabla
-      const tbody = document.getElementById('variables-body');
-      if (!tbody) {
-        console.error("[TABLA] No se encontró el elemento #variables-body");
+    // --- Actualizar KDA ---
+    const kills = data.match?.kills;
+    const deaths = data.match?.deaths;
+    const assists = data.match?.assists;
+    if (killsEl) killsEl.textContent = formatNumber(kills);
+    if (deathsEl) deathsEl.textContent = formatNumber(deaths);
+    if (assistsEl) assistsEl.textContent = formatNumber(assists);
+    if (kdaRatioEl) kdaRatioEl.textContent = calculateKDARatio(kills, deaths, assists);
+
+    // --- Actualizar Recursos ---
+    if (goldEl && data.match) goldEl.textContent = formatNumber(data.match.gold);
+    const cs = data.match?.cs;
+    if (csEl) csEl.textContent = formatNumber(cs);
+    if (csPerMinEl && data.match?.gameTime > 0 && cs !== undefined) {
+        const csPerMinute = (cs / (data.match.gameTime / 60)).toFixed(1);
+        csPerMinEl.textContent = csPerMinute;
+    } else if (csPerMinEl) {
+        csPerMinEl.textContent = "0.0";
+    }
+    const wardsPlaced = data.vision?.wardsPlaced ?? data.objectives?.wardPlaced;
+    if (wardsEl) wardsEl.textContent = formatNumber(wardsPlaced);
+
+    // --- Actualizar Daño y Curación ---
+    if (totalDamageEl && data.combat) totalDamageEl.textContent = formatNumber(data.combat.damageDealt);
+    if (championDamageEl && data.combat) championDamageEl.textContent = formatNumber(data.combat.damageDealtToChampions ?? data.combat.totalDamageToChampions);
+    if (totalHealingEl && data.combat) totalHealingEl.textContent = formatNumber(data.combat.healing ?? data.combat.healingDone);
+    if (damageTakenEl && data.combat) damageTakenEl.textContent = formatNumber(data.combat.damageTaken);
+
+    // --- Actualizar Tabla de Variables y Debug ---
+    if (tbody) actualizarTablaHTML(tbody, data);
+    if (plainTextOutput) actualizarDebugTextoPlano(plainTextOutput, data);
+  }
+
+  // Función auxiliar para generar filas de la tabla HTML
+  function actualizarTablaHTML(tbody, gameData) {
+    if (!tbody) return;
+    tbody.innerHTML = ''; // Limpiar tabla
+    let rowCount = 0;
+
+    function generateTableRows(obj, prefix = '') {
+        if (!obj || typeof obj !== 'object' || rowCount >= 100) return;
+        // Añadimos un chequeo extra para evitar iterar sobre arrays grandes o muy anidados
+        if (Array.isArray(obj) && obj.length > 20) { // Limitar arrays grandes
+            console.warn(`[TableGen] Array grande (${prefix || 'root'}) omitido para renderizado.`);
         return;
       }
-      
-      // Limpiar contenido existente de la tabla
-      tbody.innerHTML = '';
-      
-      // Si no hay datos, mostrar mensaje en tabla y debug
-      if (!gameData || Object.keys(gameData).length === 0) {
-        const noDataHtml = `
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M8 15h8M9.5 9h.01M14.5 9h.01"></path>
-            </svg>
-            <div style="font-size: var(--font-size-md); color: var(--text-secondary); font-weight: var(--font-weight-medium);">
-              No hay datos disponibles del juego
-            </div>
-          </div>
-        `;
-        // Mensaje en tabla
-        const fila = document.createElement('tr');
-        const celda = document.createElement('td');
-        celda.colSpan = 2;
-        celda.style.textAlign = 'center';
-        celda.style.padding = '30px';
-        celda.innerHTML = noDataHtml;
-        fila.appendChild(celda);
-        tbody.appendChild(fila);
-        // Mensaje en debug
-        if(plainTextOutput) plainTextOutput.innerHTML += '<p style="color:#888;">No hay datos disponibles del juego.</p>';
-        console.error("[TABLA] No hay datos disponibles para mostrar");
-        return;
-      }
-      
-      // Variables destacadas (se mantienen para estilo)
-      const variablesDestacadas = [
-        'summoner.name', 'summoner.position', 'match.gameTime', 
-        'match.kills', 'match.deaths', 'match.assists', 
-        'match.cs', 'gold', 'match.gold', 'vision.wardsPlaced'
-      ];
-      
-      let filasProcesadas = 0;
-      const maxFilas = 500; // Límite para evitar sobrecarga
-
-      // Función recursiva para procesar todas las propiedades anidadas
-      function procesarObjeto(obj, prefijo = '') {
-        // DEBUG: Loguear entrada a procesarObjeto (DESCOMENTADO)
-        console.log(`[TABLA | procesarObjeto] Procesando prefijo: '${prefijo}', tipo: ${typeof obj}`);
-
-        if (!obj || typeof obj !== 'object' || filasProcesadas >= maxFilas) {
+        if (prefix.split('.').length > 6) { // Limitar profundidad
+            console.warn(`[TableGen] Profundidad excesiva (${prefix}) omitida.`);
           return;
         }
         
-        // Ordenar las claves alfabéticamente
-        const claves = Object.keys(obj).sort();
-        
-        for (const clave of claves) {
-          if (filasProcesadas >= maxFilas) break;
-          
-          const valor = obj[clave];
-          const nombreCompleto = prefijo ? `${prefijo}.${clave}` : clave;
-          
-          // DEBUG: Loguear cada clave/valor que se procesa (DESCOMENTADO)
-          console.log(`[TABLA | procesarObjeto]   - Clave: '${clave}', Ruta: '${nombreCompleto}', Tipo Valor: ${typeof valor}`);
+        const keys = Object.keys(obj).sort();
+        for (const key of keys) {
+            if (rowCount >= 100) break;
+            const value = obj[key];
+            const fullName = prefix ? `${prefix}.${key}` : key;
 
-          // --- Añadir ruta a texto plano para DEBUG ---
-          if (plainTextOutput) {
-             const p = document.createElement('p');
-             p.style.margin = '2px 0';
-             p.textContent = nombreCompleto;
-             plainTextOutput.appendChild(p);
-          }
-          // ---------------------------------------------
+            // Omitir ciertas claves internas o muy largas
+            if (key === 'listeners' || key === 'events') continue; 
+            if (fullName.length > 80) continue; 
 
-          // Verificar si es una variable destacada (solo para estilo)
-          const esDestacada = variablesDestacadas.includes(nombreCompleto);
-          
-          // Crear fila para esta propiedad
-          const fila = document.createElement('tr');
-          fila.style.borderBottom = '1px solid rgba(109, 61, 255, 0.1)';
-          
-          if (esDestacada) {
-            fila.style.background = 'rgba(109, 61, 255, 0.08)';
-          }
-          
-          // --- Celda para el nombre de la variable (RUTA COMPLETA) ---
-          const celdaNombre = document.createElement('td');
-          celdaNombre.style.padding = '8px 12px';
-          celdaNombre.style.wordBreak = 'break-all'; // Para rutas largas
-          
-          // Agregar icono (basado en la parte inicial de la ruta)
-          let iconoHTML = '';
-          const rutaInicial = nombreCompleto.split('.')[0];
-          if (rutaInicial === 'summoner') iconoHTML = '👤';
-          else if (rutaInicial === 'match') iconoHTML = '🎮';
-          else if (rutaInicial === 'vision' || rutaInicial === 'ward') iconoHTML = '👁️';
-          else if (rutaInicial === 'combat' || rutaInicial === 'damage' || rutaInicial === 'heal') iconoHTML = '⚔️';
-          else if (rutaInicial === 'gold' || rutaInicial === 'cs') iconoHTML = '💰';
-          else if (rutaInicial === 'live_client_data') iconoHTML = '⚡'; // Icono para Live Client Data
-          else if (rutaInicial === 'events') iconoHTML = '🔔'; // Icono para events array
-          else if (rutaInicial === 'objectives') iconoHTML = '🏰'; // Icono para objectives
-          
-          celdaNombre.innerHTML = `
-            <span style="opacity:0.7; margin-right:6px;">${iconoHTML}</span>
-            <span style="${esDestacada ? 'color:#bc76ff; font-weight:bold;' : ''}">${nombreCompleto}</span>
-          `;
-          
-          // --- Celda para el valor --- 
-          const celdaValor = document.createElement('td');
-          celdaValor.style.padding = '8px 12px';
-          
-          // Formatear el valor según su tipo
-          if (valor === null) {
-            celdaValor.innerHTML = '<span style="color:#888; font-style:italic;">null</span>';
-          } else if (valor === undefined) {
-            celdaValor.innerHTML = '<span style="color:#888; font-style:italic;">undefined</span>';
-          } else if (typeof valor === 'object') {
-            if (Array.isArray(valor)) {
-              // Formato para arrays
-              celdaValor.innerHTML = `<span class="valor-tag valor-array">
-                <svg width="14" height="14" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-                Array[${valor.length}]
-              </span>`;
-              // DEBUG: Loguear antes de la llamada recursiva para Array (DESCOMENTADO)
-              console.log(`[TABLA | procesarObjeto]     Recursión para Array: ${nombreCompleto}`);
-              // Llamada recursiva para los elementos del array (si no es muy grande)
-              if (valor.length < 20) { // Limitar recursión en arrays grandes
-                 // DEBUG: Log ANTES de recursión Array
-                 console.log(`[TABLA | recursión] ===> Llamando procesarObjeto para Array: ${nombreCompleto}`);
-                 try {
-                   procesarObjeto(valor, nombreCompleto);
-                   // DEBUG: Log DESPUÉS de recursión Array (éxito)
-                   console.log(`[TABLA | recursión] <=== Retorno procesarObjeto para Array: ${nombreCompleto}`);
-                 } catch (e) {
-                   // DEBUG: Log DESPUÉS de recursión Array (ERROR)
-                   console.error(`[TABLA | recursión] <=== ERROR en procesarObjeto para Array: ${nombreCompleto}`, e);
-                 }
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid #333';
+
+            const nameCell = document.createElement('td');
+            nameCell.style.padding = '6px';
+            nameCell.style.fontWeight = 'bold';
+            nameCell.style.wordBreak = 'break-all'; // Para nombres largos
+            nameCell.textContent = fullName;
+
+            const valueCell = document.createElement('td');
+            valueCell.style.padding = '6px';
+            valueCell.style.wordBreak = 'break-all'; // Para valores largos
+
+            if (value === null) {
+                valueCell.textContent = 'null';
+                valueCell.style.color = '#888';
+            } else if (value === undefined) {
+                valueCell.textContent = 'undefined';
+                valueCell.style.color = '#888';
+            } else if (typeof value === 'object') {
+                if (Array.isArray(value)) {
+                    // Mostrar solo longitud si es array
+                    valueCell.textContent = `Array[${value.length}]`;
+                    valueCell.style.color = '#5F9EA0';
+                    // No expandir arrays en la tabla por simplicidad
+                } else {
+                    // Mostrar tipo objeto y número de props
+                    valueCell.textContent = `Object{${Object.keys(value).length} props}`;
+                    valueCell.style.color = '#7B68EE';
+                    // Llamada recursiva para objetos anidados
+                    generateTableRows(value, fullName);
               }
             } else {
-              // Formato para objetos
-              celdaValor.innerHTML = `<span class="valor-tag valor-object">
-                 <svg width="14" height="14" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                 Object{${Object.keys(valor).length} props}
-              </span>`;
-              // DEBUG: Loguear antes de la llamada recursiva para Object (DESCOMENTADO)
-              // console.log(`[TABLA | procesarObjeto]     Recursión para Object: ${nombreCompleto}`);
-              
-              // Llamada recursiva para las propiedades del objeto
-              // DEBUG: Log ANTES de recursión Object
-              console.log(`[TABLA | recursión] ===> Llamando procesarObjeto para Object: ${nombreCompleto}`);
-              const clavesInternas = Object.keys(valor);
-              console.log(`[TABLA | recursión]       Claves internas para ${nombreCompleto}: ${clavesInternas.join(', ')}`);
-              try {
-                procesarObjeto(valor, nombreCompleto);
-                // DEBUG: Log DESPUÉS de recursión Object (éxito)
-                console.log(`[TABLA | recursión] <=== Retorno procesarObjeto para Object: ${nombreCompleto}`);
-              } catch (e) {
-                // DEBUG: Log DESPUÉS de recursión Object (ERROR)
-                console.error(`[TABLA | recursión] <=== ERROR en procesarObjeto para Object: ${nombreCompleto}`, e);
-              }
+                valueCell.textContent = String(value).substring(0, 100); // Limitar longitud string
+                 if (String(value).length > 100) valueCell.textContent += '...';
+                if (typeof value === 'boolean') {
+                    valueCell.style.color = value ? '#4CAF50' : '#F44336';
+                } else if (typeof value === 'number') {
+                    valueCell.style.color = '#03A9F4';
+                }
             }
-          } else {
-            // Para valores simples
-            if (typeof valor === 'boolean') {
-              const colorBool = valor ? '#4CAF50' : '#F44336';
-              const bgColorBool = valor ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)';
-              const borderColorBool = valor ? 'rgba(76, 175, 80, 0.2)' : 'rgba(244, 67, 54, 0.2)';
-              const iconBool = valor ? 
-                '<path d="M20 6L9 17l-5-5"></path>' : 
-                '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
-                
-              celdaValor.innerHTML = `<span class="valor-tag valor-boolean" style="background:${bgColorBool}; color:${colorBool}; border-color:${borderColorBool};">
-                <svg width="14" height="14" viewBox="0 0 24 24">${iconBool}</svg>
-                ${valor.toString()}
-              </span>`;
-            } else if (typeof valor === 'number') {
-              // Formato para números
-              celdaValor.innerHTML = `<span class="valor-tag valor-number" ${esDestacada ? 'style="font-weight:bold;"' : ''}>${valor.toString()}</span>`;
-            } else {
-              // Formato para strings y otros
-              celdaValor.innerHTML = `<span class="valor-tag valor-string" ${esDestacada ? 'style="color:#bc76ff; font-weight:bold;"' : ''}>${valor.toString()}</span>`;
-            }
-          }
-          
-          // Añadir celdas a la fila
-          fila.appendChild(celdaNombre);
-          fila.appendChild(celdaValor);
-          
-          // Añadir fila a la tabla
-          tbody.appendChild(fila);
-          filasProcesadas++; // Incrementar contador aquí
-        } // Fin del bucle for
-      } // Fin de procesarObjeto
-      
-      // Iniciar procesamiento
-      procesarObjeto(gameData);
-      console.log(`[TABLA | actualizarTablaVariables] Finalizado. Total filas tabla: ${tbody.childElementCount}, Filas procesadas: ${filasProcesadas}`); // Modificado log final
-      
-      // Añadir mensaje de límite si se alcanzó (tanto en tabla como en debug)
-      if (filasProcesadas >= maxFilas) {
-         const limitMsg = `Mostrando ${maxFilas} variables para mejorar rendimiento...`;
-         // Mensaje en tabla
-         const filaFinal = document.createElement('tr');
-         const celdaFinal = document.createElement('td');
-         celdaFinal.colSpan = 2;
-         celdaFinal.style.textAlign = 'center';
-         celdaFinal.style.padding = '10px';
-         celdaFinal.style.color = '#FF9800';
-         celdaFinal.style.fontStyle = 'italic';
-         celdaFinal.textContent = limitMsg;
-         filaFinal.appendChild(celdaFinal);
-         tbody.appendChild(filaFinal);
-         // Mensaje en debug
-         if(plainTextOutput) plainTextOutput.innerHTML += `<p style="color:#FF9800; font-style:italic;">${limitMsg}</p>`;
-      }
-      
-      // Mostrar mensaje si no hay variables después de procesar (tanto en tabla como en debug)
-      if (tbody.childElementCount === 0) { // Revisa si la tabla está vacía
-        const noVarsHtml = `
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-             <svg width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 15h8M9.5 9h.01M14.5 9h.01"/></svg>
-             <div style="font-size: var(--font-size-md); color: var(--text-secondary); font-weight: var(--font-weight-medium);">No se encontraron variables para mostrar</div>
-           </div>`;
-        // Mensaje en tabla
-        const fila = document.createElement('tr');
-        const celda = document.createElement('td');
-        celda.colSpan = 2;
-        celda.style.textAlign = 'center';
-        celda.style.padding = '30px';
-        celda.innerHTML = noVarsHtml;
-        fila.appendChild(celda);
-        tbody.appendChild(fila);
-        // Mensaje en debug
-        if(plainTextOutput) plainTextOutput.innerHTML += '<p style="color:#888;">No se encontraron variables para mostrar.</p>';
-      }
-    } catch (error) {
-      // ... (manejo de error existente)
-      console.error("[TABLA] Error al procesar la tabla de variables:", error);
-      // DEBUG: Loguear el error
-      console.log("[TABLA | actualizarTablaVariables] Error procesando tabla: ", error);
-      const tbody = document.getElementById('variables-body');
-      if (tbody) {
-        tbody.innerHTML = ''; // Limpiar antes de mostrar error
-        const fila = document.createElement('tr');
-        const celda = document.createElement('td');
-        celda.colSpan = 2;
-        celda.style.textAlign = 'center';
-        celda.style.padding = '30px';
-        celda.innerHTML = `
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F44336" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            <div style="font-size: var(--font-size-md); color: #F44336; font-weight: var(--font-weight-medium);">Error: ${error.message}</div>
-          </div>`;
-        fila.appendChild(celda);
-        tbody.appendChild(fila);
-        // Mensaje en debug
-        if(plainTextOutput) plainTextOutput.innerHTML += `<p style="color:#F44336;">Error procesando variables: ${error.message}</p>`;
-      }
+
+            row.appendChild(nameCell);
+            row.appendChild(valueCell);
+            tbody.appendChild(row);
+            rowCount++;
+        }
+    }
+
+    try {
+        generateTableRows(gameData);
+    } catch (e) {
+        console.error("[TableGen] Error generando filas:", e);
+        tbody.innerHTML = `<tr><td colspan="2" style="color: red;">Error al generar tabla: ${e.message}</td></tr>`;
+    }
+
+    if (rowCount === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px;">Esperando datos...</td></tr>';
     }
   }
 
-  // ========== FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN DE UI ========== (ahora local a la IIFE)
-  function updateUI(gameData) {
-    // DEBUG: Loguear los datos completos recibidos
-    console.log("[tab-stats | updateUI] Datos recibidos:", gameData ? JSON.stringify(gameData).substring(0, 300) + '...' : 'null/undefined');
-    console.log("[tab-stats | updateUI] Tipos de claves principales:", gameData ? Object.keys(gameData).map(k => `${k}: ${typeof gameData[k]}`) : 'N/A');
+  // Función auxiliar para actualizar el debug de texto plano
+  function actualizarDebugTextoPlano(outputElement, gameData) {
+      if (!outputElement) return;
+      const titleElement = outputElement.querySelector('h4');
+      outputElement.innerHTML = ''; // Limpiar contenido anterior
+      if (titleElement) outputElement.appendChild(titleElement); // Restaurar título
 
-    console.log("[tab-stats] Actualizando con datos:", {
-      summoner: gameData.summoner ? gameData.summoner.name : "no disponible",
-      gameTime: gameData.match ? gameData.match.gameTime : "no disponible",
-      kda: gameData.match ? `${gameData.match.kills}/${gameData.match.deaths}/${gameData.match.assists}` : "no disponible"
-    });
-    
-    // Datos crudos para depuración
-    console.log("[tab-stats] Estructura de datos completa:", JSON.stringify(gameData).substring(0, 500) + "...");
-    
-    // IMPORTANTE: Actualizar primero las variables principales
-    
-    // Información del jugador
-    if (gameData.summoner) {
-      document.getElementById('stats-player-name').textContent = gameData.summoner.name || "Invocador";
-    }
-    
-    // Tipo de partida y tiempo
-    if (gameData.match) {
-      if (gameData.match.gameMode) {
-        document.getElementById('stats-match-type').textContent = gameData.match.gameMode;
+      let paths = [];
+      function findPaths(obj, currentPath = '') {
+          if (!obj || typeof obj !== 'object' || currentPath.split('.').length > 6) return; // Limitar profundidad
+          Object.keys(obj).forEach(key => {
+              const newPath = currentPath ? `${currentPath}.${key}` : key;
+              // Omitir claves internas/largas también aquí
+               if (key === 'listeners' || key === 'events' || newPath.length > 80) return;
+              paths.push(newPath);
+              if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+                  findPaths(obj[key], newPath);
+              } else if (Array.isArray(obj[key]) && obj[key].length > 0 && typeof obj[key][0] === 'object') {
+                  findPaths(obj[key][0], `${newPath}[0]`);
+              }
+          });
       }
-      
-      if (gameData.match.gameTime !== undefined) {
-        document.getElementById('stats-game-time').textContent = formatGameTime(gameData.match.gameTime);
-      }
-      
-      // KDA - MISMO PATRÓN QUE TAB-OVERVIEW
-      document.getElementById('stats-kills').textContent = gameData.match.kills || 0;
-      document.getElementById('stats-deaths').textContent = gameData.match.deaths || 0;
-      document.getElementById('stats-assists').textContent = gameData.match.assists || 0;
-      
-      // Ratio KDA
-      const kills = parseInt(gameData.match.kills) || 0;
-      const deaths = parseInt(gameData.match.deaths) || 0;
-      const assists = parseInt(gameData.match.assists) || 0;
-      document.getElementById('stats-kda-ratio').textContent = calculateKDARatio(kills, deaths, assists);
-      
-      // CS y CS por minuto
-      if (gameData.match.cs !== undefined) {
-        document.getElementById('stats-cs').textContent = gameData.match.cs;
-        
-        if (gameData.match.gameTime !== undefined && gameData.match.gameTime > 0) {
-          const gameTimeInMinutes = Math.max(gameData.match.gameTime / 60, 1);
-          const csPerMinute = (gameData.match.cs / gameTimeInMinutes).toFixed(1);
-          document.getElementById('stats-cs-per-min').textContent = csPerMinute;
-        }
-      }
-      
-      // Oro - Verificar múltiples ubicaciones posibles
-      if (gameData.match.gold !== undefined) {
-        document.getElementById('stats-gold').textContent = formatNumber(gameData.match.gold);
-      } else if (gameData.gold !== undefined) {
-        console.log("Encontrado oro en gameData.gold en lugar de gameData.match.gold");
-        document.getElementById('stats-gold').textContent = formatNumber(gameData.gold);
-      }
-    }
-    
-    // Wards desde múltiples fuentes posibles
-    let wardsPlaced = 0;
-    if (gameData.ward && gameData.ward.placed !== undefined) {
-      wardsPlaced = parseInt(gameData.ward.placed) || 0;
-    } else if (gameData.vision && gameData.vision.wardsPlaced !== undefined) {
-      wardsPlaced = gameData.vision.wardsPlaced;
-    } else if (gameData.objectives && gameData.objectives.wardPlaced !== undefined) {
-      wardsPlaced = gameData.objectives.wardPlaced;
-    }
-    document.getElementById('stats-wards-placed').textContent = wardsPlaced;
-    
-    // Daño desde diferentes fuentes
-    if (gameData.combat) {
-      if (gameData.combat.damageDealt !== undefined) {
-        document.getElementById('stats-total-damage').textContent = formatNumber(gameData.combat.damageDealt);
-      }
-      
-      if (gameData.combat.totalDamageToChampions !== undefined) {
-        document.getElementById('stats-champion-damage').textContent = formatNumber(gameData.combat.totalDamageToChampions);
-      } else if (gameData.combat.damageDealtToChampions !== undefined) {
-        document.getElementById('stats-champion-damage').textContent = formatNumber(gameData.combat.damageDealtToChampions);
-      }
-      
-      if (gameData.combat.damageTaken !== undefined) {
-        document.getElementById('stats-damage-taken').textContent = formatNumber(gameData.combat.damageTaken);
-      }
-      
-      if (gameData.combat.healing !== undefined) {
-        document.getElementById('stats-total-healing').textContent = formatNumber(gameData.combat.healing);
-      } else if (gameData.combat.healingDone !== undefined) {
-        document.getElementById('stats-total-healing').textContent = formatNumber(gameData.combat.healingDone);
-      }
-    }
-    
-    // IMPORTANTE: Actualizar tabla de variables DESPUÉS de updateUI principal
-    // para que no interfiera con la actualización principal
-    setTimeout(function() {
       try {
-        // DEBUG: Confirmar llamada y datos pasados
-        console.log("[tab-stats | updateUI -> setTimeout] Llamando a actualizarTablaVariables con datos del juego:", gameData ? 'Datos presentes' : 'Datos ausentes');
-        actualizarTablaVariables(gameData);
+          findPaths(gameData);
+          paths.sort();
+          const pre = document.createElement('pre');
+          pre.textContent = paths.join('\n');
+          outputElement.appendChild(pre);
       } catch (e) {
-        console.error("Error al actualizar tabla de variables:", e);
-        // Esto no debe detener la actualización principal
+          console.error("[DebugText] Error generando rutas:", e);
+          outputElement.innerHTML += `<div style="color:red">Error: ${e.message}</div>`;
       }
-    }, 10);
   }
   
-  // Función para exportar datos a JSON (ahora local a la IIFE)
-  function exportarVariablesJSON() {
-    // Referencia al botón para mostrar estados
+  // --- Lógica de Exportación (sin cambios) --- 
     const btnExportar = document.getElementById('btn-exportar-vars');
-    
-    if (!ultimosDatos || Object.keys(ultimosDatos).length === 0) {
-      // Mostrar mensaje de error visual en el botón
-      const btnTextoOriginal = btnExportar.innerHTML;
-      btnExportar.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
-        Sin datos
-      `;
-      btnExportar.style.background = 'linear-gradient(135deg, #d32f2f, #f44336)';
-      
-      setTimeout(() => {
-        btnExportar.innerHTML = btnTextoOriginal;
-        btnExportar.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
-      }, 2000);
-      
-      return;
-    }
-    
-    try {
-      // Cambiar aspecto del botón para mostrar estado de carga
-      const btnTextoOriginal = btnExportar.innerHTML;
-      btnExportar.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite;">
-          <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
-        </svg>
-        Exportando...
-      `;
-      btnExportar.disabled = true;
-      btnExportar.style.opacity = '0.8';
-      
+  if (btnExportar) {
+      btnExportar.addEventListener('click', () => {
+          try {
       const jsonStr = JSON.stringify(ultimosDatos, null, 2);
-      
-      // Usar la API de Overwolf para guardar el archivo
-      const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
-      const fileName = `lol-variables-${timestamp}.json`;
-      const overwolfFileName = `${overwolf.io.paths.documents}\\Overwolf\\${fileName}`;
-      
-      // Método específico de Overwolf para escribir archivos
-      overwolf.io.writeFileContents(
-        overwolfFileName, 
-        jsonStr, 
-        "UTF8", 
-        true, 
-        (result) => {
-          if (result.success) {
-            // Mostrar notificación de éxito
-            overwolf.notifications.showToast({
-              header: "Variables exportadas",
-              message: `Guardado en: ${overwolfFileName}`,
-              duration: 5
-            });
-            
-            // Actualizar botón con confirmación visual
-            btnExportar.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5"></path>
-              </svg>
-              Exportado
-            `;
-            btnExportar.style.background = 'linear-gradient(135deg, #388e3c, #4caf50)';
-            
-            // Restaurar botón después de un tiempo
-            setTimeout(() => {
-              btnExportar.innerHTML = btnTextoOriginal;
-              btnExportar.disabled = false;
-              btnExportar.style.opacity = '1';
-              btnExportar.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
-            }, 2000);
-            
-            console.log(`Variables guardadas con éxito en: ${overwolfFileName}`);
-          } else {
-            console.error("Error al exportar variables:", result.error);
-            
-            // Mostrar error visualmente en el botón
-            btnExportar.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="15" y1="9" x2="9" y2="15"></line>
-                <line x1="9" y1="9" x2="15" y2="15"></line>
-              </svg>
-              Error
-            `;
-            btnExportar.style.background = 'linear-gradient(135deg, #d32f2f, #f44336)';
-            
-            // Mostrar alerta con el error completo
-            alert(`Error al exportar variables: ${result.error}`);
-            
-            // Restaurar botón después de un tiempo
-            setTimeout(() => {
-              btnExportar.innerHTML = btnTextoOriginal;
-              btnExportar.disabled = false;
-              btnExportar.style.opacity = '1';
-              btnExportar.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
-            }, 2000);
-          }
-        }
-      );
-    } catch (e) {
-      console.error("Error exportando datos:", e);
-      
-      // Mostrar error visualmente
-      btnExportar.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="15" y1="9" x2="9" y2="15"></line>
-          <line x1="9" y1="9" x2="15" y2="15"></line>
-        </svg>
-        Error
-      `;
-      btnExportar.style.background = 'linear-gradient(135deg, #d32f2f, #f44336)';
-      
-      // Mostrar alerta con el error
-      alert("Error al exportar datos: " + e.message);
-      
-      // Restaurar botón después de un tiempo
-      setTimeout(() => {
-        const btnTextoOriginal = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          Exportar JSON
-        `;
-        btnExportar.innerHTML = btnTextoOriginal;
-        btnExportar.disabled = false;
-        btnExportar.style.opacity = '1';
-        btnExportar.style.background = 'linear-gradient(135deg, #2e7d32, #43a047)';
-      }, 2000);
-    }
-  }
-
-  // Inicialización
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log("[stats-IIFE] Tab-stats cargado, iniciando...");
-    
-    try {
-      // Adjuntar eventos a los botones
-      const btnExportar = document.getElementById('btn-exportar-vars');
-      if (btnExportar) {
-        btnExportar.addEventListener('click', exportarVariablesJSON);
-      }
-      
-      // Encontrar el elemento de la pestaña ACTUAL
-      const thisScriptElement = document.currentScript;
-      const tabElement = thisScriptElement ? thisScriptElement.closest('.stats-container') : document.getElementById('stats-tab'); // Ajustar selector si es necesario
-      
-      if (!tabElement) {
-         console.error("[stats-IIFE] No se pudo encontrar el elemento raíz de la pestaña.");
-         // Intentar buscar por ID como fallback
-         const fallbackTabElement = document.getElementById('stats-tab');
-         if(fallbackTabElement) {
-             console.warn("[stats-IIFE] Usando fallback getElementById('stats-tab')");
-             fallbackTabElement.updateUIFunction = updateUI;
-             // Exponer la función actualizarTablaVariables para acceso directo (si se necesita)
-             fallbackTabElement.actualizarTablaVariables = actualizarTablaVariables;
-         } else {
-             return; // Salir si no se encuentra el elemento
-         }
-      } else {
-          // Adjuntar la función updateUI LOCAL al elemento de la pestaña
-          tabElement.updateUIFunction = updateUI;
-          // Exponer la función actualizarTablaVariables para acceso directo (si se necesita)
-          tabElement.actualizarTablaVariables = actualizarTablaVariables;
-          console.log("[stats-IIFE] updateUI y actualizarTablaVariables adjuntadas al elemento de la pestaña.");
-      }
-      
-      // Registrar globalmente (opcional, preferiblemente evitar)
-      // if (!window.tabUpdateFunctions) window.tabUpdateFunctions = {};
-      // window.tabUpdateFunctions['stats-tab'] = updateUI;
-      
-      // SUBSCRIPCIONES
-      function subscribeToData() {
-          // ... (código de suscripción existente, igual que en overview)
-          if (window.gameDataManager && typeof window.gameDataManager.subscribe === 'function') {
-            console.log("[stats-IIFE] Suscribiendo via window.gameDataManager");
-            window.gameDataManager.subscribe(updateUI);
-          } else {
-            overwolf.windows.getMainWindow(mainWindow => {
-              if (mainWindow && mainWindow.gameDataManager && typeof mainWindow.gameDataManager.subscribe === 'function') {
-                console.log("[stats-IIFE] Suscribiendo via mainWindow.gameDataManager");
-                mainWindow.gameDataManager.subscribe(updateUI);
-              } else {
-                console.error("[stats-IIFE] No se pudo encontrar gameDataManager para suscribir.");
-              }
-            });
-          }
-      }
-      subscribeToData();
-      
-      // FORZAR ACTUALIZACIÓN INICIAL SI ES NECESARIO
-      // (El código existente para forzar ya no debería ser necesario si la suscripción funciona)
-      // console.log("Llamando a forceUpdateActiveTab para actualizar inmediatamente");
-      // if (window.forceUpdateActiveTab) { window.forceUpdateActiveTab(); }
-      
-      // Datos iniciales de test (solo si la suscripción tarda)
-      console.log("[stats-IIFE] Llamando a updateUI directamente con datos de prueba iniciales");
-      updateUI({
-        summoner: { name: "Cargando...", position: "-" },
-        match: { gameMode: "-", gameTime: 0, kills: 0, deaths: 0, assists: 0, cs: 0, gold: 0 },
-        vision: { wardsPlaced: 0 },
-        combat: { damageDealt: 0, damageDealtToChampions: 0, damageTaken: 0, healing: 0 }
+              const blob = new Blob([jsonStr], {type: 'application/json'});
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `stats-data-${new Date().toISOString().replace(/:/g, '-')}.json`; // Nombre de archivo mejorado
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+          } catch (e) { console.error("Error exportando JSON:", e); }
       });
-      
-    } catch (e) {
-      console.error('[stats-IIFE] Error al inicializar:', e);
+  } else { console.warn("Botón de exportar no encontrado"); }
+
+  // --- INICIALIZACIÓN Y SUSCRIPCIÓN ---
+  console.log("[tab-stats] Script cargado y ejecutándose.");
+  try {
+    if (window.parent && typeof window.parent.subscribeToGameData === 'function') {
+      console.log("[tab-stats] Suscribiendo a gameDataManager...");
+      window.parent.subscribeToGameData(updateUI);
+          } else {
+      console.error("[tab-stats] No se pudo encontrar window.parent.subscribeToGameData.");
     }
-  });
-  
-  // Ya no necesitamos la referencia global window._statsUpdateUI
-  // window._statsUpdateUI = updateUI;
+
+    if (window.parent && typeof window.parent.getGameData === 'function') {
+      const initialData = window.parent.getGameData();
+      console.log("[tab-stats] Aplicando datos iniciales:", initialData);
+      updateUI(initialData);
+    } else {
+      console.error("[tab-stats] No se pudo encontrar window.parent.getGameData.");
+      updateUI(null); // Pasar null explícitamente si no hay datos
+    }
+  } catch (error) {
+    console.error("[tab-stats] Error durante inicialización/suscripción:", error);
+  }
 
 })(); // Fin de IIFE
+
+// --- CÓDIGO OBSOLETO ELIMINADO ---
+/*
+// Función global obsoleta
+function updateUI(gameData) { 
+  // ... 
+}
+
+// Función antigua actualizarTablaVariables
+function actualizarTablaVariables(gameData) {
+  // ...
+}
+*/
 </script>
 
 <!-- Estilos movidos fuera y después del script -->
