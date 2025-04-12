@@ -378,8 +378,96 @@
               <div id="stats-champ-heal-shield" class="stats-metric-value heal-shield-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #8BC34A;">0%</div>
             </div>
           </div>
-        </div>
-      </div>
+          
+           <!-- NUEVO: Regeneración de Vida -->
+           <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(76, 175, 80, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);">
+              <img src="../../img/hp-regen-icon.svg" alt="Regen Vida" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(76, 175, 80, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Regen. Vida (/5s)</div>
+              <div id="stats-champ-health-regen" class="stats-metric-value health-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0.0</div>
+            </div>
+          </div>
+          
+          <!-- NUEVO: Daño Crítico (%) -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(244, 67, 54, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(244, 67, 54, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);">
+              <img src="../../img/crit-damage-icon.svg" alt="Crit DMG" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(244, 67, 54, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Daño Crítico</div>
+              <div id="stats-champ-crit-damage" class="stats-metric-value crit-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">+0%</div>
+            </div>
+          </div>
+          
+          <!-- NUEVO: Penetración Armadura Plana -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(255, 87, 34, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(255, 87, 34, 0.2), rgba(255, 87, 34, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 87, 34, 0.3);">
+              <img src="../../img/armor-pen-flat-icon.svg" alt="Pen Armor Flat" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(255, 87, 34, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Pen. Armadura Plana</div>
+              <div id="stats-champ-armor-pen-flat" class="stats-metric-value pen-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #FF5722;">0</div>
+            </div>
+          </div>
+          
+          <!-- NUEVO: Penetración Mágica Plana -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(103, 58, 183, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(103, 58, 183, 0.2), rgba(103, 58, 183, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(103, 58, 183, 0.3);">
+              <img src="../../img/magic-pen-flat-icon.svg" alt="Pen Magic Flat" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(103, 58, 183, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Pen. Mágica Plana</div>
+              <div id="stats-champ-magic-pen-flat" class="stats-metric-value pen-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #673AB7;">0</div>
+            </div>
+          </div>
+
+          <!-- NUEVO: Vampirismo Físico -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(233, 30, 99, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(233, 30, 99, 0.2), rgba(233, 30, 99, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(233, 30, 99, 0.3);">
+              <img src="../../img/physical-vamp-icon.svg" alt="Phys Vamp" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(233, 30, 99, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Vampirismo Físico</div>
+              <div id="stats-champ-physical-vamp" class="stats-metric-value lifesteal-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0%</div>
+            </div>
+          </div>
+
+          <!-- NUEVO: Vampirismo de Hechizo -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(103, 58, 183, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(103, 58, 183, 0.2), rgba(103, 58, 183, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(103, 58, 183, 0.3);">
+              <img src="../../img/spell-vamp-icon.svg" alt="Spell Vamp" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(103, 58, 183, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Vampirismo Hechizo</div>
+              <div id="stats-champ-spell-vamp" class="stats-metric-value omnivamp-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">0%</div>
+            </div>
+          </div>
+
+           <!-- NUEVO: Recurso (Actual/Max/Tipo) -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(3, 169, 244, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(3, 169, 244, 0.2), rgba(3, 169, 244, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(3, 169, 244, 0.3);">
+              <img id="stats-champ-resource-icon" src="../../img/mana-icon.svg" alt="Recurso" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(3, 169, 244, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div id="stats-champ-resource-name" class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Maná</div>
+              <div id="stats-champ-resource" class="stats-metric-value resource-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #03A9F4;">0 / 0</div>
+            </div>
+          </div>
+
+          <!-- NUEVO: Regeneración de Recurso -->
+          <div class="stats-metric" style="background: rgba(19, 11, 55, 0.4); border-radius: var(--border-radius-md); padding: var(--spacing-sm); display: flex; align-items: center; gap: var(--spacing-sm); transition: transform 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); border-left: 3px solid rgba(3, 169, 244, 0.8);">
+            <div class="stats-metric-icon" style="width: 40px; height: 40px; background: linear-gradient(135deg, rgba(3, 169, 244, 0.2), rgba(3, 169, 244, 0.05)); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px rgba(3, 169, 244, 0.3);">
+              <img id="stats-champ-resource-regen-icon" src="../../img/mana-regen-icon.svg" alt="Regen Recurso" style="width: 24px; height: 24px; filter: drop-shadow(0 0 3px rgba(3, 169, 244, 0.5));"/>
+            </div>
+            <div class="stats-metric-info" style="flex-grow: 1;">
+              <div id="stats-champ-resource-regen-name" class="stats-metric-name" style="color: var(--text-secondary, rgba(255,255,255,0.65)); font-size: var(--font-size-sm); margin-bottom: 2px;">Regen. Maná (/5s)</div>
+              <div id="stats-champ-resource-regen" class="stats-metric-value resource-value" style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: #03A9F4;">0.0</div>
+            </div>
+          </div>
+         </div>
+       </div>
     </div>
     
     <!-- NUEVA SECCIÓN: TABLA DE VARIABLES -->
@@ -507,7 +595,7 @@
       // Añadir más si se implementaron (CritDamage, Vamp, Regen, Recursos...)
       champCritDamage: document.getElementById('stats-champ-crit-damage'), // Asumiendo que se añade este ID
       champPhysicalVamp: document.getElementById('stats-champ-physical-vamp'), // Asumiendo que se añade este ID
-      champHealthRegen: document.getElementById('stats-champ-health-regen'), // Asumiendo que se añade este ID
+      champHealthRegen: document.getElementById('stats-champ-health-regen') // Asumiendo que se añade este ID
     };
 
     // Función helper para actualizar texto si existe el elemento y el dato
@@ -599,8 +687,8 @@
         // Añadimos un chequeo extra para evitar iterar sobre arrays grandes o muy anidados
         if (Array.isArray(obj) && obj.length > 20) { // Limitar arrays grandes
             console.warn(`[TableGen] Array grande (${prefix || 'root'}) omitido para renderizado.`);
-        return;
-      }
+          return;
+        }
         if (prefix.split('.').length > 6) { // Limitar profundidad
             console.warn(`[TableGen] Profundidad excesiva (${prefix}) omitida.`);
           return;
@@ -641,14 +729,14 @@
                     valueCell.textContent = `Array[${value.length}]`;
                     valueCell.style.color = '#5F9EA0';
                     // No expandir arrays en la tabla por simplicidad
-                } else {
+            } else {
                     // Mostrar tipo objeto y número de props
                     valueCell.textContent = `Object{${Object.keys(value).length} props}`;
                     valueCell.style.color = '#7B68EE';
                     // Llamada recursiva para objetos anidados
                     generateTableRows(value, fullName);
-              }
-            } else {
+            }
+          } else {
                 valueCell.textContent = String(value).substring(0, 100); // Limitar longitud string
                  if (String(value).length > 100) valueCell.textContent += '...';
                 if (typeof value === 'boolean') {
@@ -736,7 +824,7 @@
     if (window.parent && typeof window.parent.subscribeToGameData === 'function') {
       console.log("[tab-stats] Suscribiendo a gameDataManager...");
       window.parent.subscribeToGameData(updateUI);
-          } else {
+         } else {
       console.error("[tab-stats] No se pudo encontrar window.parent.subscribeToGameData.");
     }
 
@@ -744,7 +832,7 @@
       const initialData = window.parent.getGameData();
       console.log("[tab-stats] Aplicando datos iniciales:", initialData);
       updateUI(initialData);
-         } else {
+          } else {
       console.error("[tab-stats] No se pudo encontrar window.parent.getGameData.");
       updateUI(null); // Pasar null explícitamente si no hay datos
     }
@@ -952,4 +1040,6 @@
   .pen-value { color: #FF5722; } /* Naranja Oscuro */
   .range-value { color: #607D8B; } /* Azul Grisáceo */
   .heal-shield-value { color: #8BC34A; } /* Verde Lima */
+  /* Color para recurso */
+  .resource-value { color: #03A9F4; }
 </style> 
