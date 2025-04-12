@@ -37,8 +37,6 @@ function onError(info) {
   console.error("Error:", info);
   addToLog(eventsLog, { type: 'error', info: info }, true);
   
-  // Enviar error a la pestaña de eventos
-  // COMENTADO/ELIMINADO: sendEventToTabEvents({ type: 'error', info: info });
 }
 
 // Manejar actualizaciones de información
@@ -1331,9 +1329,3 @@ analizarEstructuraLiveClientData = function(data) {
 
 // Exponer el registrador globalmente
 window.keysRegistrar = keysRegistrar;
-
-// Función para enviar evento a la pestaña de eventos
-// COMENTADO/ELIMINADO: function sendEventToTabEvents(eventData) { ... }
-
-// Función para enviar info a la pestaña de eventos
-// COMENTADO/ELIMINADO: function sendInfoToTabEvents(infoData) { ... } 
