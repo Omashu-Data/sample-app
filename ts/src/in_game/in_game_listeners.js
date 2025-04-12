@@ -30,6 +30,12 @@ const features = [
 const eventsLog = document.getElementById('eventsLog');
 const infoLog = document.getElementById('infoLog');
 
+// ---- ACUMULADORES DE DAÑO ----
+let accumulatedDamageDealt = 0;
+let accumulatedDamageToChampions = 0;
+let accumulatedDamageTaken = 0;
+// Podríamos añadir más si fuera necesario (mágico, físico, etc.)
+
 // ---- MANEJADORES DE EVENTOS DE OVERWOLF ----
 
 // Manejar errores
@@ -231,62 +237,127 @@ function onInfoUpdates(info) {
 
 // Manejar nuevos eventos
 function onNewEvents(e) {
-  // << NUEVO LOG DE DISPARO >>
+  // Log de disparo
   console.log(`[onNewEvents] Listener triggered! Received batch with ${e?.events?.length ?? 0} event(s).`); 
   
-  // Log recursivo con JSON.stringify 
+  // Log recursivo completo
   console.log('[onNewEvents] Full Recursive GEP Event Data:', JSON.stringify(e, null, 2));
-  // Ya no necesitamos el log anterior: console.log('[onNewEvents] Raw event data:', e);
   
-  const isHighlight = e.events && e.events.some(event => 
-    ['kill', 'death', 'assist', 'level', 'matchStart', 'matchEnd'].includes(event.name)
-  );
-  
-  addToLog(eventsLog, e, isHighlight);
-  
-  // Enviar evento a la pestaña de eventos
-  // COMENTADO/ELIMINADO: sendEventToTabEvents(e);
-  
-  if (e.events) {
+  // Procesar eventos si existen
+  if (e.events && Array.isArray(e.events)) {
+    let damageDataChanged = false; // Flag específico para daño
     const updates = {
+      // Mantenemos la estructura para otros eventos si los hubiera
       summoner: {},
       match: {},
       objectives: {},
-      events: []
+      combat: {}, // Objeto para enviar los acumulados de daño
+      events: [] // Para la pestaña de eventos
     };
     
     e.events.forEach(event => {
+      // Añadir evento al log de la pestaña de eventos
       updates.events.push({
         name: event.name,
         data: event.data,
-        timestamp: new Date().getTime()
+        timestamp: new Date().getTime() 
       });
-      
-      switch (event.name) {
-        case 'kill':
-          updates.match.kills = gameDataManager.currentData.match.kills + 1;
-          break;
-        case 'death':
-          updates.match.deaths = gameDataManager.currentData.match.deaths + 1;
-          break;
-        case 'assist':
-          updates.match.assists = gameDataManager.currentData.match.assists + 1;
-          break;
-        case 'level':
-          if (event.data && event.data.level) {
-            updates.summoner.level = parseInt(event.data.level);
-          }
-          break;
-        case 'matchStart':
-          updates.match.kills = 0;
-          updates.match.deaths = 0;
-          updates.match.assists = 0;
-          updates.match.cs = 0;
-          break;
+
+      // Acumular daño
+      const damageValue = event.data ? parseFloat(event.data) : 0;
+
+      if (!isNaN(damageValue)) {
+        switch (event.name) {
+          // Daño Infligido (Total)
+          case 'physical_damage_dealt_player':
+          case 'magic_damage_dealt_player':
+          case 'true_damage_dealt_player':
+            accumulatedDamageDealt += damageValue;
+            damageDataChanged = true;
+            console.log(`[onNewEvents] Accumulated Damage Dealt: ${accumulatedDamageDealt} (+${damageValue} from ${event.name})`);
+            break;
+            
+          // Daño Infligido (a Campeones)
+          case 'physical_damage_dealt_to_champions':
+          case 'magic_damage_dealt_to_champions':
+          case 'true_damage_dealt_to_champions':
+            accumulatedDamageToChampions += damageValue;
+            damageDataChanged = true;
+             console.log(`[onNewEvents] Accumulated Damage To Champs: ${accumulatedDamageToChampions} (+${damageValue} from ${event.name})`);
+            break;
+
+          // Daño Recibido
+          case 'physical_damage_taken':
+          case 'magic_damage_taken':
+          case 'true_damage_taken':
+            accumulatedDamageTaken += damageValue;
+            damageDataChanged = true;
+             console.log(`[onNewEvents] Accumulated Damage Taken: ${accumulatedDamageTaken} (+${damageValue} from ${event.name})`);
+            break;
+            
+          // --- Procesar otros eventos que afectan KDA/Nivel ---
+          case 'kill':
+            // Asumimos que K/D/A se actualizan más fiablemente por Live Client API o onInfoUpdates
+            // Si quisiéramos, podríamos parsear event.data aquí para 'count'
+            // const killData = JSON.parse(event.data); updates.match.kills = parseInt(killData.count);
+            break;
+          case 'death':
+            // updates.match.deaths = gameDataManager.currentData.match.deaths + 1;
+            break;
+          case 'assist':
+            // updates.match.assists = gameDataManager.currentData.match.assists + 1;
+            break;
+          case 'level':
+            // if (event.data && !isNaN(parseInt(event.data))) { // A veces data es solo el nivel
+            //   updates.summoner.level = parseInt(event.data);
+            // } else if (event.data && event.data.level) { // A veces es un objeto
+            //    updates.summoner.level = parseInt(event.data.level);
+            // }
+            break;
+           case 'matchStart':
+             // Resetear acumuladores al inicio de partida
+             accumulatedDamageDealt = 0;
+             accumulatedDamageToChampions = 0;
+             accumulatedDamageTaken = 0;
+             damageDataChanged = true; // Forzar envío de ceros
+             console.log("[onNewEvents] Match Start detected, resetting damage accumulators.");
+             // Podríamos resetear KDA aquí también si no confiamos en otras fuentes
+             // updates.match.kills = 0; updates.match.deaths = 0; updates.match.assists = 0;
+            break;
+        }
       }
     });
     
-    gameDataManager.updateData(updates);
+    // Si hubo cambios en el daño acumulado, añadirlo a updates
+    if (damageDataChanged) {
+      updates.combat.damageDealt = Math.round(accumulatedDamageDealt); // Enviar valor acumulado
+      updates.combat.damageDealtToChampions = Math.round(accumulatedDamageToChampions);
+      updates.combat.damageTaken = Math.round(accumulatedDamageTaken);
+    }
+
+    // Limpiar objetos vacíos antes de enviar (excepto events)
+    if (Object.keys(updates.summoner).length === 0) delete updates.summoner;
+    if (Object.keys(updates.match).length === 0) delete updates.match;
+    if (Object.keys(updates.objectives).length === 0) delete updates.objectives;
+    if (Object.keys(updates.combat).length === 0) delete updates.combat;
+    
+    // Enviar actualizaciones si hay algo que enviar (eventos o datos cambiados)
+    if (updates.events.length > 0 || damageDataChanged /* || otros flags de cambio */) {
+        // No enviar el array de events si está vacío y no hubo otros cambios
+       if (updates.events.length === 0 && !damageDataChanged /* && !otros flags */) {
+           console.log("[onNewEvents] No relevant data or events to send.");
+       } else {
+           // Si solo hay eventos, quitar los otros objetos vacíos
+           if (updates.events.length > 0 && !damageDataChanged /* && !otros flags */) {
+                delete updates.summoner;
+                delete updates.match;
+                delete updates.objectives;
+                delete updates.combat;
+           }
+           console.log("[onNewEvents] Enviando updates a gameDataManager:", JSON.stringify(updates));
+           gameDataManager.updateData(updates);
+       }
+    }
   }
 }
 
@@ -1154,3 +1225,9 @@ analizarEstructuraLiveClientData = function(data) {
 
 // Exponer el registrador globalmente
 window.keysRegistrar = keysRegistrar;
+
+// Asegúrate de que las variables acumuladoras se inicialicen a 0 cuando el script se carga por primera vez.
+accumulatedDamageDealt = 0;
+accumulatedDamageToChampions = 0;
+accumulatedDamageTaken = 0;
+console.log("Damage accumulators initialized.");
