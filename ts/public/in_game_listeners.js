@@ -1695,6 +1695,11 @@ const keysRegistrar = {
   
   // Crear y actualizar panel visual
   updatePanel: function() {
+    // --- DESACTIVACIÓN DEL PANEL VISUAL ---
+    // Para reactivar el panel, elimina la siguiente línea ("return;")
+    return;
+    // ---------------------------------------
+
     let panel = document.getElementById('keys-panel');
     
     if (!panel) {
